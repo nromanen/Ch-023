@@ -1,0 +1,81 @@
+body {
+	/*padding-top: 70px;*/
+	padding-bottom: 70px;
+}
+
+.copyright {
+	vertical-align: bottom;
+}
+
+.user-info-name {
+	font-family: 'Arial';
+	font-weight: bold;
+	color: #888;
+	text-shadow: 1px 2px #ccc;
+}
+
+#menu {
+	margin: 0 auto;
+	margin-bottom: 20px;
+	width: 1172px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+#main_container {
+	width: 1172px;
+	margin: 0 auto;
+}
+
+#content {
+	padding-right: 0px;
+}
+
+#footer {
+	width: 100%;
+	height: 40px;
+	border-top: 2px solid #E3E3E3;
+	background-color: #F5F5F5;
+	padding-top: 14px;
+}
+
+.flag_icon {
+	width: 20px;
+	height: 20px;
+}
+
+#header {
+	width: 1170px;
+	height: 133px;
+	padding: 10px;
+	text-align: right;
+}
+
+.team_valid_icon {
+	width: 24px;
+}
+
+.fl-right {
+	float: right;
+}
+
+.fl-left {
+	float: left;
+}
+
+.file-link {
+	margin-bottom: 15px;
+	font-size: medium;
+}
+
+.delete_file {
+	margin: 5px 0 10px 10px;
+}
+
+.width-100 {
+	width: 100%;
+}
+
+.language_toggle {
+	cursor: pointer;
+}

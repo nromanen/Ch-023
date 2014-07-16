@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<!-- CONSOLE appender -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- FILE Appender for administrator needs -->
+	<appender name="admin" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="${catalina.home}/webapps/Carting/resources/logs/admin/admin_log.log " />
+		<param name="MaxFileSize" value="20MB" />
+		<param name="Encoding" value="UTF-8" />
+		<!-- Keep one backup file -->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%p: %d{yyyy-MM-dd HH:mm:ss} -  %m%n" />
+		</layout>
+	</appender> 
+	
+	<!-- FILE Appender for developer needs -->
+	<appender name="dev" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="${catalina.home}/webapps/Carting/resources/logs/developers/dev_log.log " />
+        <param name="MaxFileSize" value="5MB" />
+        <param name="MaxBackupIndex" value="3" />
+        <param name="Encoding" value="UTF-8" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %p %c{4} - %m%n" />
+        </layout>
+    </appender>
+    
+    <!-- FILE Appender for recording logs of all package -->
+    <appender name="general" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/webapps/Carting/resources/logs/general/gen_log.log " />
+        <param name="MaxFileSize" value="5MB" />
+        <param name="MaxBackupIndex" value="3" />
+        <param name="Encoding" value="UTF-8" />
+        <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %p %c{4} - %m%n"/>
+        </layout>           
+     </appender>
+	
+	<!-- Application Loggers -->
+	<logger name="net.carting">
+		<level value="info" />
+		<appender-ref ref="admin" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="warn" />
+		<appender-ref ref="dev" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="warn" />
+		<appender-ref ref="dev" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="warn" />
+		<appender-ref ref="dev" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="warn" />
+		<appender-ref ref="dev" />
+	</logger>
+	
+	<logger name="org.hibernate">
+		<level value="warn" />
+		<appender-ref ref="dev" />
+	</logger>
+	
+	<!-- Root Logger -->
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="console" />
+		<appender-ref ref="general" />
+	</root>
+	
+</log4j:configuration>
