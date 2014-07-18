@@ -81,7 +81,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="Enter secretary name" id="secretaryName"
 			name="secretaryName" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}.{1,100}"
+			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}"
 			data-error="Example: John Watson" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -103,7 +103,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="Enter director name" id="directorName"
 			name="directorName" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}.{1,100}"
+			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}"
 			data-error="Example: John Watson" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -121,6 +121,7 @@
 
 	<br>
 	<input type="submit" class="btn btn-success" value="Add" id="add_competition">
+	<input type="button" class="btn btn-default" value="Cancel" id="cancel_add_competition">
 	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader">
 	<br>
 		

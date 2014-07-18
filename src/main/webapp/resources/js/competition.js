@@ -173,47 +173,60 @@ $(document).ready(function(){
 
 	});
 	
-	$.fn.bootstrapSwitch.defaults.size = 'normal';
-	$.fn.bootstrapSwitch.defaults.onColor = 'success';
-	$.fn.bootstrapSwitch.defaults.offColor = 'danger';
-	$("#enabled").bootstrapSwitch();	
-	$('#enabled').on('switchChange.bootstrapSwitch', function(event, state) {
-		var enabled = state;
-		var competition_id = $('#competition_id').val();
-		var json = { "enabled" : enabled, "competitionId" : competition_id };
-		$.ajax({
-	        url: $("#enable_url").val(),
-	        data: JSON.stringify(json),
-	        contentType: 'application/json',
-	        type: "POST",
-	        success: function(response) {
-	        	if(response != "success"){
-	        		alert("Error");
-	        	}
-	        }
-	    });
-	});
+	// check if current page contains switcher
+	if ($.fn.bootstrapSwitch != undefined) {			
+		$.fn.bootstrapSwitch.defaults.size = 'normal';
+		$.fn.bootstrapSwitch.defaults.onColor = 'success';
+		$.fn.bootstrapSwitch.defaults.offColor = 'danger';
+		$("#enabled").bootstrapSwitch();	
+		$('#enabled').on('switchChange.bootstrapSwitch', function(event, state) {
+			var enabled = state;
+			var competition_id = $('#competition_id').val();
+			var json = { "enabled" : enabled, "competitionId" : competition_id };
+			$.ajax({
+		        url: $("#enable_url").val(),
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {
+		        	if(response != "success"){
+		        		alert("Error");
+		        	}
+		        }
+		    });
+		});	
+	}
 	
-	var minutes = 1000*60;
-	var hours = minutes*60;
-	var days = hours*24;
-	
-	var startDate = new Date($("#start_date").html().trim());
-	var endDate = new Date($("#end_date").html().trim());
-	var dayDiff	= new Date(startDate);
-	dayDiff.addDays(Math.round((endDate - startDate)/days));
-	
-	$('#competition_calendar').pickmeup({
-		format  : 'Y-m-d',
-		flat : true,
-		date : [ startDate, dayDiff],
-		mode : 'range',
-	});
+	// check if current page contains start_element
+	if ($("#start_date").html() != undefined) {
+			
+		var minutes = 1000*60;
+		var hours = minutes*60;
+		var days = hours*24;
+		
+		var startDate = new Date($("#start_date").html().trim());
+		var endDate = new Date($("#end_date").html().trim());
+		var dayDiff	= new Date(startDate);
+		dayDiff.addDays(Math.round((endDate - startDate)/days));
+		
+		$('#competition_calendar').pickmeup({
+			format  : 'Y-m-d',
+			flat : true,
+			date : [ startDate, dayDiff],
+			mode : 'range',
+		});
+	}	
 	    
 	jQuery(function($){
 		$('tbody tr[data-href]').addClass('clickable').click( function() {
 			window.location = $(this).attr('data-href');
 		});
+	});
+
+	// Event for Cancel button on "add competittion" page
+    $('#cancel_add_competition').click(function(){
+        parent.history.back();                
+        return false;
 	});
 	
 });
