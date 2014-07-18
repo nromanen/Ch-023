@@ -80,13 +80,13 @@
 		<put-attribute name="content" value="/WEB-INF/views/race_results.jsp" />
 	</definition>
 
-	<!-- Competiton -->
-	<definition name="competition_add" extends="base-template">
-		<put-attribute name="title" value="New Competition" />
+	<!-- Competition views -->
+	<definition name="competition_add_edit" extends="base-template">
+		<put-attribute name="title" value="Competition Add / Edit" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_add.jsp" />
+			value="/WEB-INF/views/competition/competition_add_edit.jsp" />
 	</definition>
-
+	
 	<definition name="competition" extends="base-template">
 		<put-attribute name="title" value="Competition" />
 		<put-attribute name="content"
@@ -97,12 +97,6 @@
 		<put-attribute name="title" value="Competitions" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/competition/competitions.jsp" />
-	</definition>
-
-	<definition name="competition_edit" extends="base-template">
-		<put-attribute name="title" value="Edit Competition" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_edit.jsp" />
 	</definition>
 
 	<definition name="competition_carclass" extends="base-template">
