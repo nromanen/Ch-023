@@ -242,7 +242,7 @@
 	</div>
 </div>
 
-<p><span class="glyphicon glyphicon-minus"></span>  - means that document or is missing or unapproved
-<p><span class="glyphicon glyphicon-plus"></span>  - means that document is approved
-<p><span class="glyphicon glyphicon-paperclip"></span>  - means that document is present
-<p><span class="glyphicon glyphicon-eye-open"></span>  - means that document was checked by administrator
+<p><span class="glyphicon glyphicon-minus"></span>  - <spring:message code="label.document_missing_or_unapproved" />
+<p><span class="glyphicon glyphicon-plus"></span>  - <spring:message code="label.document_is_approved" />
+<p><span class="glyphicon glyphicon-paperclip"></span>  - <spring:message code="label.document_is_present" />
+<p><span class="glyphicon glyphicon-eye-open"></span>  - <spring:message code="label.document_checked_by_administrator" />

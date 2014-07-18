@@ -13,7 +13,7 @@
 	<table class="width-100">
 		<tr>
 			<td>
-				<h2 class="user-info-name">Class "${carClassCompetition.carClass.name}"</h2>
+				<h2 class="user-info-name"><spring:message code="label.car_class" /> "${carClassCompetition.carClass.name}"</h2>
 			</td>
 			<c:if test="${authority.equals('ROLE_ADMIN')}">
 			<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
@@ -27,29 +27,29 @@
 		</tr>
 	</table>
 
-	<div><label class="text-info">Competition name:&nbsp;</label>${carClassCompetition.competition.name}</div>
-	<div><label class="text-info">First Race Time:&nbsp;</label>
+	<div><label class="text-info"><spring:message code="label.competition_name" />&nbsp;</label>${carClassCompetition.competition.name}</div>
+	<div><label class="text-info"><spring:message code="label.competition.first_race_date" />&nbsp;</label>
 		<fmt:formatDate value="${carClassCompetition.firstRaceTime}" pattern="HH:mm" />&nbsp;
 		<fmt:formatDate value="${carClassCompetition.competition.firstRaceDate}" pattern="dd-MM-yyyy" />
 	</div>
-	<div><label class="text-info">Second Race Time:&nbsp;</label>
+	<div><label class="text-info"><spring:message code="label.competition.second_race_date" />&nbsp;</label>
 		<fmt:formatDate value="${carClassCompetition.secondRaceTime}" pattern="HH:mm" />&nbsp;
 		<fmt:formatDate value="${carClassCompetition.competition.secondRaceDate}" pattern="dd-MM-yyyy" />
 	</div>
-	<div><label class="text-info">Lap Count:&nbsp;</label>${carClassCompetition.circleCount}</div>
-	<div><label class="text-info">Percentage Offset:&nbsp;</label>${carClassCompetition.percentageOffset}%</div>
-	<div><label class="text-info">Age limit:&nbsp;</label>${carClassCompetition.carClass.lowerYearsLimit}-${carClassCompetition.carClass.upperYearsLimit}</div>
+	<div><label class="text-info"><spring:message code="label.competition.lap_count" />&nbsp;</label>${carClassCompetition.circleCount}</div>
+	<div><label class="text-info"><spring:message code="label.competition.percentage_offset" />&nbsp;</label>${carClassCompetition.percentageOffset}%</div>
+	<div><label class="text-info"><spring:message code="label.age_limit" />&nbsp;</label>${carClassCompetition.carClass.lowerYearsLimit}-${carClassCompetition.carClass.upperYearsLimit}</div>
 	<br>
 
 	<div class="panel panel-primary">
 		 <div class="panel-heading" style="height: 50px;"> 	
-		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;">Registered racers</div>
+		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.registered_racers" /></div>
 			<c:if test="${authority.equals('ROLE_TEAM_LEADER')}">
 				<c:if test="${!empty racerCarClassCompetitionNumberList}">
 					<div class="btn-group" style="float: right;">
 						<input type="hidden" value="team${teamByLeader.id}" id="team_id">
-						<a href="#" class="btn btn-default btn-sm" id="my_team">My team</a>
-						<a href="#" class="btn btn-default btn-sm active" id="all_teams">All</a>	
+						<a href="#" class="btn btn-default btn-sm" id="my_team"><spring:message code="label.my_team" /></a>
+						<a href="#" class="btn btn-default btn-sm active" id="all_teams"><spring:message code="label.all_teams" /></a>	
 					</div>
 				</c:if>
 			</c:if>
@@ -60,8 +60,8 @@
 					<table class="table table-hover table-bordered" id="racers_table" style="text-align: center;">
 						<thead class="well">
 							<th style="text-align: center;">№</th>
-							<th style="text-align: center;">Racer</th>
-							<th style="text-align: center;">Number</th>
+							<th style="text-align: center;"><spring:message code="label.racer" /></th>
+							<th style="text-align: center;"><spring:message code="label.number" /></th>
 							<c:if test="${authority.equals('ROLE_TEAM_LEADER') && carClassCompetition.competition.enabled }">
 								<th style="text-align: center;">&nbsp;</th>
 							</c:if>
@@ -99,12 +99,12 @@
 						</tbody>
 					</table>
 					<div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
-						There are no racers from your team.
+						<spring:message code="label.there_are_no_racers_from_your_team" />
 					</div>
 				</c:when>
 				<c:otherwise>
 					<div class="alert alert-danger" style="margin-top: 10px; margin-left: 5px;">
-						Racers list for this class is empty!
+						<spring:message code="label.racers_list_for_this_class_is_empty" />
 					</div>
 				</c:otherwise>
 			</c:choose>
@@ -121,22 +121,22 @@
 	<div class="modal-dialog" style="margin-top: 15%;">
 		<div class="modal-content">
 			<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
-				<h4 class="modal-title">Unregister racer from car class</h4>
+				<h4 class="modal-title"><spring:message code="label.unregister_racer_from_car_class" /></h4>
 			</div>
 			<div class="modal-body">
-				<label class="text-info">Are you sure you want to unregister <span id="racer_name"></span> from this car class?&nbsp;</label>
+				<label class="text-info"><spring:message code="label.unregister_confirm" /> <span id="racer_name"></span> <spring:message code="label.from_class" />&nbsp;</label>
 				<input type="hidden" id="unreg_racer_url" value="<c:url value="/carclass/${carClassCompetition.id}/unregisterRacer" />">
 				<input type="hidden" id="unreg_racer_id" value="<c:url value="" />">
 				<br><br>
 				<div class="alert alert-danger" id="unreg_error"
 					style="display: none; padding: 0px 0px 0px 10px; height: 25px;">
-					You can't unregister this racer because he participated in races.
+					<spring:message code="label.unregister_failed" />
 				</div>
 				<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_unreg">	
 			</div>
 			<div class="modal-footer">					       		
-				<button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>
-				<button class="btn btn-danger" type="button" id="unreg_racer">Unregister</button>
+				<button class="btn btn-primary" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
+				<button class="btn btn-danger" type="button" id="unreg_racer"><spring:message code="label.unregister" /></button>
 			</div>
 		</div>
 	</div>
@@ -148,16 +148,16 @@
 		<div class="modal-dialog" style="margin-top: 15%;">
 			<div class="modal-content">
 					<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Register racer on car class</h4>
+						<h4 class="modal-title"><spring:message code="label.register_racer_on_car_class" /></h4>
 					</div>
 					<div class="modal-body">						
 						<input type="hidden" id="reg_racer_url" value="<c:url value="/carclass/${carClassCompetition.id}/registerRacer" />">
 						<input type="hidden" id="reg_racer_get_number_url" value="<c:url value="/carclass/getRacerNumber" />">
 						<input type="hidden" id="reg_racer_carclass_id" value="${carClassCompetition.carClass.id}">
 						
-						<label class="text-info">Racer from your team:&nbsp;</label>					
+						<label class="text-info"><spring:message code="label.racer_from_your_team" />&nbsp;</label>					
 						<select class="form-control span6" id="reg_racer_id">
-							<option value="">Choose racer from your team</option>
+							<option value=""><spring:message code="label.choose_racer_from_your_team" /></option>
 							<c:if test="${(!empty teamByLeader.racers)}">
 								<c:forEach items="${teamByLeader.racers}" var="racer">
 									<c:choose>
@@ -172,18 +172,18 @@
 							</c:if>
 						</select><br>
 						
-						<label class="text-info">Racer number in car class:&nbsp;</label>					
+						<label class="text-info"><spring:message code="label.racer_number_in_car_class" />&nbsp;</label>					
 						<input type="text" class="form-control" id="reg_racer_number" disabled value="" />
 						
 						<br>
 						<div class="alert alert-danger" id="reg_racer_empty"
-							style="display: none; padding: 0px 0px 0px 10px; height: 25px;">Select racer please!</div>
+							style="display: none; padding: 0px 0px 0px 10px; height: 25px;"><spring:message code="label.select_racer" /></div>
 						
 						<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_reg">	
 					</div>
 					<div class="modal-footer">					       		
-						<button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-success" type="button" id="reg_racer">Register</button>
+						<button class="btn btn-primary" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
+						<button class="btn btn-success" type="button" id="reg_racer"><spring:message code="label.register" /></button>
 					</div>
 			</div>
 		</div>
@@ -196,10 +196,10 @@
 		<c:if test="${!empty absoluteResultsList}">
 			<div class="panel panel-primary">
 					<div class="panel-heading" style="height: 50px;"> 	
-		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;">Summary results</div>
+		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.summary_results" /></div>
 					<c:if test="${authority.equals('ROLE_ADMIN')}">
 						<div class="btn-group" style="float: right;">
-							<a href='<c:url value="/carclass/${carClassCompetition.id}/editSummaryResults" />' class="btn btn-info " id="edit_results_button">Edit</a>
+							<a href='<c:url value="/carclass/${carClassCompetition.id}/editSummaryResults" />' class="btn btn-info " id="edit_results_button"><spring:message code="label.edit" /></a>
 						</div>
 					</c:if>
 			</div>
@@ -207,11 +207,11 @@
 				<div class="panel-body" style="padding: 0px;">
 				<table id="abs-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
-									<th style="text-align: center;">Place</th>
-									<th style="text-align: center;">CarNumber</th>
-									<th style="text-align: center;">Racer</th>
-									<th style="text-align: center;">Summary points</th>
-									<th style="text-align: center;">Comment</th>
+									<th style="text-align: center;"><spring:message code="label.competition.place" /></th>
+									<th style="text-align: center;"><spring:message code="label.car_number" /></th>
+									<th style="text-align: center;"><spring:message code="label.racer" /></th>
+									<th style="text-align: center;"><spring:message code="label.summary_results_editing_summarypoints" /></th>
+									<th style="text-align: center;"><spring:message code="label.summary_results_editing_comment" /></th>
 								</thead>
 								<tbody>
 									<c:if test="${!empty absoluteResultsList}">
@@ -247,12 +247,12 @@
 						<div class="panel-heading" style="height: 50px;"> 	
 							<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
 								<a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race${status.index+1}">
-								Race #${ status.index+1} results
+								<spring:message code="label.race" /> #${ status.index+1} <spring:message code="label.results" />
 								</a>
 							</div>
 							<c:if test="${authority.equals('ROLE_ADMIN')}">
 								<div class="btn-group" style="float: right;">
-									<a href='<c:url value="/carclass/${carClassCompetition.id}/race/${status.index+1}/edit" />' class="btn btn-info " id="edit_raceresults_button">Edit</a>
+									<a href='<c:url value="/carclass/${carClassCompetition.id}/race/${status.index+1}/edit" />' class="btn btn-info " id="edit_raceresults_button"><spring:message code="label.edit" /></a>
 								</div>
 							</c:if>
 						</div>
@@ -267,7 +267,7 @@
 									<tbody>
 										<c:forEach items="${chessRollsList[status.index]}" var="circle" varStatus="loop">
 											<tr>
-												<td><strong>Lap ${loop.index+1}:</strong> ${circle}</td>
+												<td><strong><spring:message code="label.lap" /> ${loop.index+1}:</strong> ${circle}</td>
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -276,11 +276,11 @@
 				
 							<table id="res-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
-									<th style="text-align: center;">Place</th>
-									<th style="text-align: center;">CarNumber</th>
-									<th style="text-align: center;">Racer</th>
-									<th style="text-align: center;">Full laps</th>
-									<th style="text-align: center;">Points</th>
+									<th style="text-align: center;"><spring:message code="label.competition.place" /></th>
+									<th style="text-align: center;"><spring:message code="label.car_number" /></th>
+									<th style="text-align: center;"><spring:message code="label.racer" /></th>
+									<th style="text-align: center;"><spring:message code="label.full_laps" /></th>
+									<th style="text-align: center;"><spring:message code="label.points" /></th>
 								</thead>
 								<tbody>
 									<c:if test="${!empty raceResultsList}">

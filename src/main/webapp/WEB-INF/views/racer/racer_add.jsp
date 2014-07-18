@@ -24,7 +24,7 @@
 		<label class="text-info"><spring:message code="label.firstname" /><span class="text-danger">*</span>:&nbsp;</label> <input type="text"
 			class="form-control" placeholder="<spring:message code="placeholder.firstname" />" id="first_name"
 			required pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}"
-			data-error=<spring:message code="dataerror.firstname" /> />
+			data-error="<spring:message code="dataerror.firstname" />" />
 		<div class="help-block with-errors"></div>
 	</div>
 
@@ -91,8 +91,8 @@
 	</div>
 	<input type="hidden" id="car_classes_id">
 	<input type="hidden" id="car_classes_numbers">
-	<input type="button" class="btn btn-primary" value="Add Class" id="add_class_modal">
-	<input type="button" class="btn btn-danger" value="Delete Classes" id="delete_classes">
+	<input type="button" class="btn btn-primary" value="<spring:message code="label.add_car_class" />" id="add_class_modal">
+	<input type="button" class="btn btn-danger" value="<spring:message code="label.delete_car_class" />" id="delete_classes">
 	<br><br>
 
 

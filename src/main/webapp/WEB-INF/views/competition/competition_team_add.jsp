@@ -118,7 +118,7 @@
 		<br>
 		<div class="alert alert-warning">
 			<strong><spring:message code="label.warning" /></strong>
-			<spring:message code="competition_closed_for_registration" />
+			<spring:message code="message.competition_closed_for_registration" />
 		</div>
 	</c:when>
 </c:choose>
