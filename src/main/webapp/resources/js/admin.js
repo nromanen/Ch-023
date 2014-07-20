@@ -107,7 +107,35 @@ $(document).ready(function(){
 			$("#change_perental_permission_years_btn").removeAttr("disabled");
 		}
 	});
-	
+
+	$(".points").keyup(function () {
+		var valid = validPoints();
+
+		if (valid) {
+			$("#edit_place").removeAttr("disabled");
+		} else {
+			$("#edit_place").attr("disabled", "disabled");
+		}
+
+	});	
+
+	function validPoints() {
+		var valid = true;
+
+		$(".points").each(function (i){
+			var points = $(this).val();
+			if(!numberTest(points)) {
+				valid = false;
+			}
+			if (points.length == 1) {
+				if (points[0] === "-") {
+					valid = false;
+				}
+			}
+		});	
+		return valid;		
+	}
+
 	$("#change_perental_permission_years_btn").click(function(){
 		var url = $("#change_perental_permission_years_url").val();
 		var json = { "perentalPermissionYears" : $('#perental_permission_years').val() };
@@ -148,21 +176,26 @@ $(document).ready(function(){
 	function editPointsByPlaces(pointsStr){
 		var url = $("#admin_url").val() + "/changePointsByPlaces";
 		var json = { "pointsByPlaces" : pointsStr };	
-		$.ajax({
-	        url: url,
-	        data: JSON.stringify(json),
-	        contentType: 'application/json',
-	        type: "POST",
-	        success: function(response) {
-	        	if(response == "success"){
-	        		$('#edit_place_success').css("display", "block").hide().fadeIn();
-					$('#edit_place_success').delay(2000).fadeOut('slow');
-	        	} else {
-	        		$('#edit_place_error').css("display", "block").hide().fadeIn();
-					$('#edit_place_error').delay(2000).fadeOut('slow');
-	        	}
-	        }
-	    });	
+		if (validPoints()) {
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {
+		        	if(response == "success"){
+		        		$('#edit_place_success').css("display", "block").hide().fadeIn();
+						$('#edit_place_success').delay(2000).fadeOut('slow');
+		        	} else {
+		        		$('#edit_place_error').css("display", "block").hide().fadeIn();
+						$('#edit_place_error').delay(2000).fadeOut('slow');
+		        	}
+		        }
+		    });	
+		} else {
+    		$('#edit_place_error').css("display", "block").hide().fadeIn();
+			$('#edit_place_error').delay(2000).fadeOut('slow');			
+		}
 	}
 	
 	$("#edit_place").click(function(){

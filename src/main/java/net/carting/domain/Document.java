@@ -152,21 +152,21 @@ public class Document {
 		String stringDocumentType;
 		switch (this.type) {
 		case TYPE_RACER_LICENCE:
-			stringDocumentType = "Ліцензія гонщика";
-			break;
-		case TYPE_RACER_INSURANCE:
-			stringDocumentType = "Страховка гонщика";
-			break;
-		case TYPE_RACER_MEDICAL_CERTIFICATE:
-			stringDocumentType = "Медичний сертифікат гонщика";
-			break;
-		case TYPE_RACER_PERENTAL_PERMISSIONS:
-			stringDocumentType = "Батьківський дозвіл гонщика";
-			break;
-		default:
-			stringDocumentType = "invalidDocumentType";
-			break;
-		}
+            stringDocumentType = "Racer's license";
+            break;
+            case TYPE_RACER_INSURANCE:
+                stringDocumentType = "Racer's insurance";
+                break;
+            case TYPE_RACER_MEDICAL_CERTIFICATE:
+                stringDocumentType = "Racer's medical certificate";
+                break;
+            case TYPE_RACER_PERENTAL_PERMISSIONS:
+                stringDocumentType = "Racer's parental permission";
+                break;
+            default:
+                stringDocumentType = "invalidDocumentType";
+                break;
+        }
 		return stringDocumentType;
 	}
 

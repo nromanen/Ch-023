@@ -7,7 +7,6 @@
 <link href="<c:url value="/resources/style/bootstrap/css/bootstrap-switch.min.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/js/lib/bootbox.js" />"></script>
 <script type='text/javascript' src='<c:url value="/resources/style/bootstrap/js/bootstrap-switch.min.js" />'></script>
-<script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/admin.js" />'></script>
 
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 20px 40px;">
@@ -112,7 +111,7 @@
 	<div style="height: 50px;">
 		<input type="text" class="form-control" value="${adminSettings.parentalPermissionYears}" 
 			   style="width: 150px; float: left; margin-right: 10px;" id="perental_permission_years" 
-			   placeholder="<spring:message code="placeholder.perental_permission_years" />" >
+			   placeholder="<spring:message code="placeholder.perental_permission_years"/>" >
 		<input type="hidden" id="change_perental_permission_years_url" value="<c:url value="/admin/changePerentalPermissionYears" />">
 		<button class="btn btn-primary" type="button" id="change_perental_permission_years_btn">
 			<spring:message code="label.accept" />
@@ -165,41 +164,46 @@
 	<br><label class="text-info" style="font-size: 20px;">
 		5.&nbsp;<spring:message code="label.admin_points_by_places" />:
 	</label>
-	<div class="text-center" style="width: 100%;">
-		<table id="points_table" class="table table-hover text-center" 
-			   style="cursor: pointer; width: 50%; margin: 0 auto 10px;">
-			<tr class="warning" style="font-weight: bolder;">
-				<td><spring:message code="label.place" /></td>
-				<td><spring:message code="label.points" /></td>
-			</tr>	
-			<% int count = 1; %>
-			<c:forEach items="${pointsByPlacesList}" var="pointsByPlace">
-				<tr>
-					<td><%= count %></td>
-					<td><input type="text" class="points" style="width: 100px;" value="${pointsByPlace}"></td>
-				</tr>
-				<% count++; %>
-			</c:forEach>			
-		</table>
-		<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
-		<button type="button" class="btn btn-primary" id="add_place">
-			<spring:message code="label.add" />
-		</button>
-		<button type="button" class="btn btn-danger" id="delete_place">
-			<spring:message code="label.delete_last" />
-		</button>
-		<button type="button" class="btn btn-success" id="edit_place">
-			<spring:message code="label.accept_changes" />
-		</button>
-		<div class="alert alert-success" id="edit_place_success"
-			 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-			 <spring:message code="label.data_save_success" />!
+	<form data-toggle="validator" role="form">
+		<div class="text-center" style="width: 100%;">
+				<table id="points_table" class="table table-hover text-center" 
+					   style="cursor: pointer; width: 50%; margin: 0 auto 10px;">
+					<tr class="warning" style="font-weight: bolder;">
+						<td><spring:message code="label.place" /></td>
+						<td><spring:message code="label.points" /></td>
+					</tr>	
+					<% int count = 1; %>
+					<c:forEach items="${pointsByPlacesList}" var="pointsByPlace">
+						<tr>
+							<td><%= count %></td>
+							<td><input type="text" class="points" style="width: 100px;" 
+								value="${pointsByPlace}" 
+								required pattern="^[0-9]+$" required>
+					   		</td>
+						</tr>
+						<% count++; %>
+					</c:forEach>			
+				</table>
+			<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
+			<button type="button" class="btn btn-primary" id="add_place">
+				<spring:message code="label.add" />
+			</button>
+			<button type="button" class="btn btn-danger" id="delete_place">
+				<spring:message code="label.delete_last" />
+			</button>
+			<button type="button" class="btn btn-success" id="edit_place">
+				<spring:message code="label.accept_changes" />
+			</button>
+			<div class="alert alert-success" id="edit_place_success"
+				 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+				 <spring:message code="label.data_save_success" />!
+			</div>
+			<div class="alert alert-danger" id="edit_place_error"
+				 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+				 <spring:message code="label.data_save_error" />!
+			</div>
 		</div>
-		<div class="alert alert-danger" id="edit_place_error"
-			 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-			 <spring:message code="label.data_save_error" />!
-		</div>
-	</div>
+	</form>
 </div>
 
 <!-- Add car class modal -->
