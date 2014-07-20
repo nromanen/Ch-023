@@ -138,6 +138,7 @@
 			<td class="text-center">&nbsp;</td>
 		</tr>
 		<% int number = 1; %>
+		<input type="hidden" id="carclass_delete_id" value="">
 		<c:forEach items="${carClassList}" var="carClass">
 			<tr>
 				<td><%= number %></td>
@@ -148,8 +149,13 @@
 					<div class="btn-group btn-group-xs">
 						<a href='#' class="btn btn-info edit_carclass_btn" id="edit${carClass.id}">
 							<spring:message code="label.edit" />
-						</a>
+						</a>						
 					</div>
+					<div class="btn-group btn-group-xs">
+						<a href='#' class="btn btn-danger delete_carclass_btn" id="delete${carClass.id}">
+							<spring:message code="label.delete" />
+						</a>	
+					</div>					
 				</td>
 			</tr>
 			<% number++; %>
@@ -160,6 +166,10 @@
 			<spring:message code="label.add_car_class" />
 		</button>
 	</div>
+	<div class="alert alert-danger" id="delete_place_error"
+		 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+		 <spring:message code="dataerror.carclass_delete" />
+	</div>	
 	
 	<br><label class="text-info" style="font-size: 20px;">
 		5.&nbsp;<spring:message code="label.admin_points_by_places" />:
@@ -206,6 +216,27 @@
 	</form>
 </div>
 
+
+
+
+<!-- Delete car class modal -->
+<div id="carclass_delete_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"><spring:message code="label.delete_car_class" /></h4>
+      </div>
+      <div class="modal-body">
+        <p><spring:message code="label.delete_car_class_сonfirm" /></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="label.cancel" /></button>
+        <button type="button" class="btn btn-danger" id="carclass_delete_confirm"><spring:message code="label.accept" /></button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Add car class modal -->
 <div class="modal fade" id="add_carclass_modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" style="margin-top: 5%;">

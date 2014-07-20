@@ -16,4 +16,6 @@ public interface CarClassDAO {
 
     public void deleteCarClass(CarClass carClass);
 
+    public void deleteCarClassById(int id);
+
 }

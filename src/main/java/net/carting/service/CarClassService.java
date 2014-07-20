@@ -16,4 +16,6 @@ public interface CarClassService {
 
 	public void deleteCarClass(CarClass carClass);
 
+    public void deleteCarClassById(int id);
+
 }

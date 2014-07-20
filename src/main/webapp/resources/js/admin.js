@@ -121,7 +121,6 @@ $(document).ready(function(){
 
 	function validPoints() {
 		var valid = true;
-
 		$(".points").each(function (i){
 			var points = $(this).val();
 			if(!numberTest(points)) {
@@ -131,6 +130,9 @@ $(document).ready(function(){
 				if (points[0] === "-") {
 					valid = false;
 				}
+			}
+			if (points.length < 1) {
+				valid = false;
 			}
 		});	
 		return valid;		
@@ -197,6 +199,35 @@ $(document).ready(function(){
 			$('#edit_place_error').delay(2000).fadeOut('slow');			
 		}
 	}
+
+	$('.delete_carclass_btn').click(function(){
+		$('#carclass_delete_id').val($(this).attr("id").replace("delete", ""));
+		$('#carclass_delete_modal').modal();
+		return false;
+	});
+
+	$("#carclass_delete_confirm").click(function(){
+		var id = $('#carclass_delete_id').val();
+		var url = $("#admin_url").val() + "/deleteCarClass";
+		var json = { "id" : id };
+		$.ajax({
+	        url: url,
+	        data: JSON.stringify(json),
+	        contentType: 'application/json',
+	        type: "POST",
+	        success: function(response) {
+	        	if (response === "success") {
+	        		location.reload();
+	        	} else {
+	        		console.log(response);
+		    		$('#delete_place_error').css("display", "block").hide().fadeIn();
+					$('#delete_place_error').delay(2000).fadeOut('slow');	
+	        	}
+	        }
+	    });
+	    $('#carclass_delete_modal').modal('hide');
+		return false;
+	});
 	
 	$("#edit_place").click(function(){
 		var pointsStr = getPointsString();

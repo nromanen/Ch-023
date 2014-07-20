@@ -39,4 +39,10 @@ public class CarClassDAOImpl implements CarClassDAO {
 
     }
 
+    @Override
+    public void deleteCarClassById(int id) {
+        CarClass carClass = (CarClass) sessionFactory.getCurrentSession().load(CarClass.class, id);
+        sessionFactory.getCurrentSession().delete(carClass);
+    }
+
 }

@@ -76,6 +76,25 @@ public class AdminController {
 		LOG.info("Admin has edited car class " + carClass.getName() + " (id = " + carClass.getId() + ")");
 		return "success";
 	}
+
+    @RequestMapping(value = "/deleteCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody
+    String deleteCarClassAction(@RequestBody Map<String, Object> map) {
+        String result = "success";
+        int id = Integer.parseInt(map.get("id").toString());
+        try {
+            carClassService.deleteCarClassById(id);
+            LOG.info("Admin has deleted car class with id = " + id);
+        } catch (Exception e) {
+            System.out.println("####################");
+            System.out.println(e.getMessage());
+            System.out.println("####################");
+            LOG.error("Admin hasn't deleted car class with id = " + id);
+            result = "fail";
+        }
+
+        return result;
+    }
 	
 	@RequestMapping(value = "/changePerentalPermissionYears", method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody
