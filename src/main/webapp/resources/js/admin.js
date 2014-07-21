@@ -96,7 +96,7 @@ $(document).ready(function(){
 	});
 	
 	function numberTest(value){
-		return /^-{0,1}\d+\d*$/.test(value);
+		return /^-?\d+$/.test(value);
 	}
 
 	function ageTest(value) {
