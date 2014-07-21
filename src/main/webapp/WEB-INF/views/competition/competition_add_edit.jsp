@@ -11,14 +11,35 @@
 <script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />' charset="UTF-8"></script>
 <script type='text/javascript' src='<c:url value="/resources/js/competition.js" />'></script>
 
-<h2 class="user-info-name">Edit competition</h2>
 
-<form class="well" method="post" action="<c:url value="/competition/editAction" />"
-	data-toggle="validator" role="form" name="editedCompetition" id="edited_competition">
+<c:choose>
+	<c:when test="${competition ne null}">
+		<h2 class="user-info-name">Edit competition</h2>
+	</c:when>
+	<c:otherwise>
+		<h2 class="user-info-name">Add competition</h2>
+	</c:otherwise>
+</c:choose>
+
+
+	<c:choose> 
+		<c:when test="${competition ne null}">			
+			<form class="well" method="post" action="<c:url value="/competition/editAction" />"
+				data-toggle="validator" role="form" name="editedCompetition" id="edited_competition">			
+		</c:when> 
+		<c:otherwise>
+			<form class="well" method="post" action="<c:url value="/competition/addCompetition" />"
+				data-toggle="validator" role="form" name="newCompetition" id="new_competition">
+		</c:otherwise> 
+	</c:choose>
+	
+
 		
 	<p style="margin-top: 15px;">
 	
-	<input type="hidden" id="id" name="id" value="${competition.id}">
+	<c:if test="${competition ne null}">
+		<input type="hidden" id="id" name="id" value="${competition.id}">
+	</c:if>
 	
 	<div class="form-group">
 		<label class="text-info">Name<span class="text-danger">*</span>:&nbsp;
@@ -90,7 +111,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="Enter secretary name" id="secretaryName"
 			name="secretaryName" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}.{1,100}"
+			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-\.]{1,100}"
 			data-error="Example: John Watson"
 			value="${competition.secretaryName}" />
 		<div class="help-block with-errors"></div>
@@ -114,7 +135,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="Enter director name" id="directorName"
 			name="directorName" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}.{1,100}"
+			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-\.]{1,100}"
 			data-error="Example: John Watson" value="${competition.directorName}" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -132,10 +153,18 @@
 	</div>
 	
 	<br>
-	<input type="submit" class="btn btn-success" value="Accept"
-		id="edit_competition"> <img
-		src='<c:url value="/resources/img/ajax-loader.gif" />'
-		style="display: none;" id="ajax_loader">
+	<c:choose> 
+		<c:when test="${competition ne null}">
+			<input type="submit" class="btn btn-success" value="Save changes" id="edit_competition">
+		</c:when> 
+		<c:otherwise>
+			<input type="submit" class="btn btn-success" value="Add" id="add_competition">
+		</c:otherwise> 
+	</c:choose>
+	
+	
+	<input type="button" class="btn btn-default" value="Cancel" id="cancel_add_competition"> 
+	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">
 	<br>
 		
 </form>

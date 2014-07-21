@@ -91,7 +91,7 @@ public class CompetitionController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView addCompetitionPage(Model model) {
-		return new ModelAndView("competition_add");
+		return new ModelAndView("competition_add_edit");
 	}
 
 	@RequestMapping(value = "/addCompetition", method = RequestMethod.POST)
@@ -121,7 +121,7 @@ public class CompetitionController {
 			@PathVariable("id") int id) {
 		Competition competition = competitionService.getCompetitionById(id);
 		model.addAttribute("competition", competition);
-		return new ModelAndView("competition_edit");
+		return new ModelAndView("competition_add_edit");
 	}
 
 	@RequestMapping(value = "/editAction", method = RequestMethod.POST)
