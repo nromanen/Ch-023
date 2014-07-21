@@ -41,7 +41,7 @@ $(document).ready(function(){
 		var monthTwo = dateTwo[1];
 		var dayTwo = dateTwo[2];
 		var secondDate = new Date(yearTwo, monthTwo, dayTwo);		
-		console.log("Comparing: " + firstDate + " and " + secondDate);
+
 		if (firstDate >= secondDate) {
 			return true;
 		} else {
@@ -60,36 +60,28 @@ $(document).ready(function(){
 
 		// Begin date must be <= End date
 		var validBegin = compareDate(dEnd, dBegin);
-		console.log("dEnd >= dBegin: " + validBegin);
 		
 		// First race date must be >= Begin date
 		var validFirstBegin = compareDate(firstRace, dBegin);
-		console.log("firstRace >= dBegin: " + validFirstBegin);
 		
 		// First race date must be <= End date
 		var validFirstEnd = compareDate(dEnd, firstRace);
-		console.log("dEnd >= firstRace: " + validFirstEnd);
 		
 		// Second race date must be >= First date race
 		var validRace = compareDate(secondRace, firstRace);
-		console.log("secondRace >= firstRace: " + validRace);
 		
 		// Second race date must be >= Begin date
 		var validSecondBegin = compareDate(secondRace, dBegin);
-		console.log("secondRace >= dBegin: " + validSecondBegin);
 		
 		// Second race date must be <= End date
 		var validSecondEnd = compareDate(dEnd, secondRace);		
-		console.log("dEnd >= secondRace: " + validSecondEnd);
 		
 		//	Check everything together
 		var validDates = validBegin && validFirstBegin && validFirstEnd && validRace && validSecondBegin && validSecondEnd;
-		console.log("Result: " + validDates);
+	    
 	    if (validDates) {
-	    	console.log("return true");
 	         return true;
 	    } else {
-	    	console.log("return false");
 			return false;
 		}
 	});
