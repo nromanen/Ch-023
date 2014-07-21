@@ -7,6 +7,8 @@ import net.carting.domain.Competition;
 public interface CompetitionDAO {
 			
 		public List<Competition> getAllCompetitions();
+		
+		public List<Competition> getAllEnabledCompetitions();
 
 	    public Competition getCompetitionById(int id);
 

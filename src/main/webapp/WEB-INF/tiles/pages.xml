@@ -112,18 +112,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/competition/competition_mandat.jsp" />
 	</definition>
-
-	<definition name="competition_carclass_results_add" extends="base-template">
+	
+	<definition name="competition_carclass_results_add_edit" extends="base-template">
 		<put-attribute name="title" value=" Add CarClass Results" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_carclass_results_add.jsp" />
-	</definition>
-
-	<definition name="competition_carclass_results_edit"
-		extends="base-template">
-		<put-attribute name="title" value="Edit Race information" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_carclass_results_edit.jsp" />
+			value="/WEB-INF/views/competition/competition_carclass_results_add_edit.jsp" />
 	</definition>
 
 	<definition name="competetition_carclass_absoluteresults_edit"
