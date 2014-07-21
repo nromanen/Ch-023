@@ -96,11 +96,15 @@ $(document).ready(function(){
 	});
 	
 	function numberTest(value){
-		return  /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
+		return /^-{0,1}\d+\d*$/.test(value);
+	}
+
+	function ageTest(value) {
+		return /^[1-9]{1}\d{0,1}$/.test(value);
 	}
 	
 	$("#perental_permission_years").keyup(function () {
-		if(!numberTest($(this).val())){ 
+		if(!ageTest($(this).val())){ 
 			$(this).val("");
 			$("#change_perental_permission_years_btn").attr("disabled", "disabled");
 		} else {
@@ -124,14 +128,6 @@ $(document).ready(function(){
 		$(".points").each(function (i){
 			var points = $(this).val();
 			if(!numberTest(points)) {
-				valid = false;
-			}
-			if (points.length == 1) {
-				if (points[0] === "-") {
-					valid = false;
-				}
-			}
-			if (points.length < 1) {
 				valid = false;
 			}
 		});	
@@ -248,7 +244,6 @@ $(document).ready(function(){
 	
 	$("#points_count").keyup(function () {
 		if(!numberTest($(this).val())){ 
-			$(this).val("");
 			$("#add_place_btn").attr("disabled", "disabled");
 		} else {
 			$("#add_place_btn").removeAttr("disabled");

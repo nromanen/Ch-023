@@ -15,7 +15,9 @@ public class CarClassDAOImpl implements CarClassDAO {
 
     @Override
     public List<CarClass> getAllCarClasses() {
-        return sessionFactory.getCurrentSession().createQuery("from CarClass")
+        return (List<CarClass>) sessionFactory
+                .getCurrentSession()
+                .createQuery("from CarClass")
                 .list();
     }
 
