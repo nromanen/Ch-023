@@ -119,8 +119,13 @@ public class CompetitionController {
 	public ModelAndView editCompetitionPage(Model model,
 			@PathVariable("id") int id) {
 		Competition competition = competitionService.getCompetitionById(id);
-		model.addAttribute("competition", competition);
-		return new ModelAndView("competition_add_edit");
+		
+		if (competition.isEnabled()) {
+			model.addAttribute("competition", competition);
+			return new ModelAndView("competition_add_edit");
+		} else {
+			return new ModelAndView("redirect:/competition/" + competition.getId());
+		}
 	}
 
 	@RequestMapping(value = "/editAction", method = RequestMethod.POST)

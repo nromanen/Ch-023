@@ -24,9 +24,12 @@
 		    <td style="width: 35%; padding: 15px 10px 0px 20px;">
 		    	<c:if test="${authority.equals('ROLE_ADMIN')}">
 			    	<div class="btn-group" style="float: right;">
-						<a href='<c:url value="/competition/edit/${competition.id}" />' class="btn btn-info">
-							<spring:message code="label.edit" />
-						</a>
+			    		<c:if test="${competition.enabled}">
+							<a href='<c:url value="/competition/edit/${competition.id}" />' class="btn btn-info">
+								<spring:message code="label.edit" />
+							</a>
+						</c:if>
+						
 						<a href="#" class="btn btn-danger" id="delete_competition_btn">
 							<spring:message code="label.delete" />
 						</a>
