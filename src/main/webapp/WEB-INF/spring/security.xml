@@ -16,10 +16,16 @@
 		<intercept-url pattern="/leader/edit/*" access="ROLE_TEAM_LEADER" />
 		<intercept-url pattern="/racer/add" access="ROLE_TEAM_LEADER" />
 		<intercept-url pattern="/racer/edit/*" access="ROLE_TEAM_LEADER" />
+		
+		<intercept-url pattern="/competition/add" access="ROLE_ADMIN" />
+		<intercept-url pattern="/competition/addCompetition" access="ROLE_ADMIN" />
+		<intercept-url pattern="/competition/edit/*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/competition/editAction" access="ROLE_ADMIN" />
 		<intercept-url pattern="/competition/teamRegistration"
 			access="ROLE_TEAM_LEADER" />
 		<intercept-url pattern="/competition/chooseCompetition"
 			access="ROLE_TEAM_LEADER" />
+		
 		<intercept-url pattern="/document/checkingDocuments/*"
 			access="ROLE_ADMIN" />
 		<intercept-url pattern="/document/chooseType" access="ROLE_TEAM_LEADER" />
