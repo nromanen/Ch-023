@@ -162,9 +162,12 @@
 		</c:otherwise> 
 	</c:choose>
 	
-	
 	<input type="button" class="btn btn-default" value="Cancel" id="cancel_add_competition"> 
-	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">
+	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">	
 	<br>
+	<div class="alert alert-danger" id="add_competition_error"
+		style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+		<spring:message code="dataerror.add_competition_date_error" />!
+	</div>	
 		
 </form>
