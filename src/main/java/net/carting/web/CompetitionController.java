@@ -26,6 +26,7 @@ import net.carting.service.RacerService;
 import net.carting.service.TeamInCompetitionService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
+import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import net.carting.util.DateUtil;
 
 @Controller
 @RequestMapping(value = "/competition")
@@ -203,7 +202,7 @@ public class CompetitionController {
 		String username = userService.getCurrentUserName();
 		Leader leader = leaderService.getLeaderByUserName(username);
 		if (teamService.isTeamByLeaderId(leader.getId())) {
-			map.put("competitionsList", competitionService.getAllCompetitions());
+			map.put("competitionsList", competitionService.getAllEnabledCompetitions());
 			return "choose_competition";
 		} else {
 			return "redirect:/index";
