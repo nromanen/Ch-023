@@ -15,7 +15,9 @@ public class CarClassDAOImpl implements CarClassDAO {
 
     @Override
     public List<CarClass> getAllCarClasses() {
-        return sessionFactory.getCurrentSession().createQuery("from CarClass")
+        return (List<CarClass>) sessionFactory
+                .getCurrentSession()
+                .createQuery("from CarClass")
                 .list();
     }
 
@@ -37,6 +39,12 @@ public class CarClassDAOImpl implements CarClassDAO {
     public void deleteCarClass(CarClass carClass) {
         sessionFactory.getCurrentSession().delete(carClass);
 
+    }
+
+    @Override
+    public void deleteCarClassById(int id) {
+        CarClass carClass = (CarClass) sessionFactory.getCurrentSession().load(CarClass.class, id);
+        sessionFactory.getCurrentSession().delete(carClass);
     }
 
 }

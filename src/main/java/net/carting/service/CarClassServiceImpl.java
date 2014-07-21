@@ -44,5 +44,11 @@ public class CarClassServiceImpl implements CarClassService {
 	public void deleteCarClass(CarClass carClass) {
 		carClassDAO.deleteCarClass(carClass);
 	}
-	
+
+    @Override
+    @Transactional
+    public void deleteCarClassById(int id) {
+        carClassDAO.deleteCarClassById(id);
+    }
+
 }

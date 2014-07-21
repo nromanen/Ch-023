@@ -15,6 +15,7 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,6 +77,21 @@ public class AdminController {
 		LOG.info("Admin has edited car class " + carClass.getName() + " (id = " + carClass.getId() + ")");
 		return "success";
 	}
+
+    @RequestMapping(value = "/deleteCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody
+    String deleteCarClassAction(@RequestBody Map<String, Object> map) {
+        String result = "success";
+        int id = Integer.parseInt(map.get("id").toString());
+        try {
+            carClassService.deleteCarClassById(id);
+            LOG.info("Admin has deleted car class with id = " + id);
+        } catch (ConstraintViolationException e) {
+            LOG.error("Admin hasn't deleted car class with id = " + id);
+            result = "fail";
+        }
+        return result;
+    }
 	
 	@RequestMapping(value = "/changePerentalPermissionYears", method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody

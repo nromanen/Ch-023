@@ -96,18 +96,44 @@ $(document).ready(function(){
 	});
 	
 	function numberTest(value){
-		return  /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
+		return /^-?\d+$/.test(value);
+	}
+
+	function ageTest(value) {
+		return /^[1-9]{1}\d{0,1}$/.test(value);
 	}
 	
 	$("#perental_permission_years").keyup(function () {
-		if(!numberTest($(this).val())){ 
+		if(!ageTest($(this).val())){ 
 			$(this).val("");
 			$("#change_perental_permission_years_btn").attr("disabled", "disabled");
 		} else {
 			$("#change_perental_permission_years_btn").removeAttr("disabled");
 		}
 	});
-	
+
+	$(".points").keyup(function () {
+		var valid = validPoints();
+
+		if (valid) {
+			$("#edit_place").removeAttr("disabled");
+		} else {
+			$("#edit_place").attr("disabled", "disabled");
+		}
+
+	});	
+
+	function validPoints() {
+		var valid = true;
+		$(".points").each(function (i){
+			var points = $(this).val();
+			if(!numberTest(points)) {
+				valid = false;
+			}
+		});	
+		return valid;		
+	}
+
 	$("#change_perental_permission_years_btn").click(function(){
 		var url = $("#change_perental_permission_years_url").val();
 		var json = { "perentalPermissionYears" : $('#perental_permission_years').val() };
@@ -148,22 +174,56 @@ $(document).ready(function(){
 	function editPointsByPlaces(pointsStr){
 		var url = $("#admin_url").val() + "/changePointsByPlaces";
 		var json = { "pointsByPlaces" : pointsStr };	
+		if (validPoints()) {
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {
+		        	if(response == "success"){
+		        		$('#edit_place_success').css("display", "block").hide().fadeIn();
+						$('#edit_place_success').delay(2000).fadeOut('slow');
+		        	} else {
+		        		$('#edit_place_error').css("display", "block").hide().fadeIn();
+						$('#edit_place_error').delay(2000).fadeOut('slow');
+		        	}
+		        }
+		    });	
+		} else {
+    		$('#edit_place_error').css("display", "block").hide().fadeIn();
+			$('#edit_place_error').delay(2000).fadeOut('slow');			
+		}
+	}
+
+	$('.delete_carclass_btn').click(function(){
+		$('#carclass_delete_id').val($(this).attr("id").replace("delete", ""));
+		$('#carclass_delete_modal').modal();
+		return false;
+	});
+
+	$("#carclass_delete_confirm").click(function(){
+		var id = $('#carclass_delete_id').val();
+		var url = $("#admin_url").val() + "/deleteCarClass";
+		var json = { "id" : id };
 		$.ajax({
 	        url: url,
 	        data: JSON.stringify(json),
 	        contentType: 'application/json',
 	        type: "POST",
 	        success: function(response) {
-	        	if(response == "success"){
-	        		$('#edit_place_success').css("display", "block").hide().fadeIn();
-					$('#edit_place_success').delay(2000).fadeOut('slow');
+	        	if (response === "success") {
+	        		location.reload();
 	        	} else {
-	        		$('#edit_place_error').css("display", "block").hide().fadeIn();
-					$('#edit_place_error').delay(2000).fadeOut('slow');
+	        		console.log(response);
+		    		$('#delete_place_error').css("display", "block").hide().fadeIn();
+					$('#delete_place_error').delay(2000).fadeOut('slow');	
 	        	}
 	        }
-	    });	
-	}
+	    });
+	    $('#carclass_delete_modal').modal('hide');
+		return false;
+	});
 	
 	$("#edit_place").click(function(){
 		var pointsStr = getPointsString();
@@ -184,7 +244,6 @@ $(document).ready(function(){
 	
 	$("#points_count").keyup(function () {
 		if(!numberTest($(this).val())){ 
-			$(this).val("");
 			$("#add_place_btn").attr("disabled", "disabled");
 		} else {
 			$("#add_place_btn").removeAttr("disabled");
