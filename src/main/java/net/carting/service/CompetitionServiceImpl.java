@@ -28,6 +28,12 @@ public class CompetitionServiceImpl implements CompetitionService  {
 	
 	@Override
 	@Transactional
+	public List<Competition> getAllEnabledCompetitions() {
+		return competitionDAO.getAllEnabledCompetitions();
+	}
+	
+	@Override
+	@Transactional
 	public List<Competition> getCompetitionsByYear(int year){
 		return competitionDAO.getCompetitionsByYear(year);
 	}

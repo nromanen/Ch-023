@@ -9,23 +9,24 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.Race;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
-import net.carting.domain.Race;
 import net.carting.service.CarClassCompetitionResultService;
+import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
 import net.carting.service.RaceService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerCarClassNumberService;
 import net.carting.service.RacerService;
 import net.carting.service.TeamInCompetitionService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
+import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import net.carting.util.DateUtil;
 
 @Controller
 @RequestMapping(value = "/carclass")
@@ -212,7 +211,7 @@ public class CarClassCompetitionController {
 		map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
 		map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
 		map.put("validNumbers",raceService.getNumbersArrayByCarClassCompetitionId(id));
-		return "competition_carclass_results_add";
+		return "competition_carclass_results_add_edit";
 	}
 	
 	@RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
@@ -241,7 +240,7 @@ public class CarClassCompetitionController {
 		map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
 		map.put("validNumbers",raceService.getNumbersArrayByCarClassCompetitionId(id));
 		
-		return "competition_carclass_results_edit";
+		return "competition_carclass_results_add_edit";
 	}
 	
 	@RequestMapping(value = "/{id}/race/{raceNumber}/editRace", method = RequestMethod.POST)

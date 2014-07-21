@@ -2,14 +2,12 @@ package net.carting.dao;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
+import net.carting.domain.Competition;
+
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import net.carting.domain.Competition;
 
 @Repository
 public class CompetitionDAOImpl implements CompetitionDAO{
@@ -22,6 +20,12 @@ public class CompetitionDAOImpl implements CompetitionDAO{
 	@Override
 	public List<Competition> getAllCompetitions() {
 		Query query = sessionFactory.getCurrentSession().createQuery("from Competition ORDER BY dateStart DESC");
+		return query.list();
+	}
+	
+	@Override
+	public List<Competition> getAllEnabledCompetitions() {
+		Query query = sessionFactory.getCurrentSession().createQuery("from Competition WHERE enabled = '1' ORDER BY dateStart DESC");
 		return query.list();
 	}
 	
