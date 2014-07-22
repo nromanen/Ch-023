@@ -28,7 +28,88 @@ $(document).ready(function(){
 		$('#delete_competition_modal').modal();
 		return false;
 	});
+
+	function compareDate(first, second) {
+		var dateOne = first.split('-');
+		var yearOne = dateOne[0];
+		var monthOne = dateOne[1];
+		var dayOne = dateOne[2];
+		var firstDate = new Date(yearOne, monthOne, dayOne);
+
+		var dateTwo = second.split('-');
+		var yearTwo = dateTwo[0];
+		var monthTwo = dateTwo[1];
+		var dayTwo = dateTwo[2];
+		var secondDate = new Date(yearTwo, monthTwo, dayTwo);		
+
+		if (firstDate >= secondDate) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	function validateDates(){
+		// Begin and end competition dates
+		var dBegin = $('#dateStart').val();
+		var dEnd = $('#dateEnd').val();
+
+		// First and second races date
+		var firstRace = $('#firstRaceDate').val();
+		var secondRace = $('#secondRaceDate').val();
+
+		// Begin date must be <= End date
+		var validBegin = compareDate(dEnd, dBegin);
+		
+		// First race date must be >= Begin date
+		var validFirstBegin = compareDate(firstRace, dBegin);
+		
+		// First race date must be <= End date
+		var validFirstEnd = compareDate(dEnd, firstRace);
+		
+		// Second race date must be >= First date race
+		var validRace = compareDate(secondRace, firstRace);
+		
+		// Second race date must be >= Begin date
+		var validSecondBegin = compareDate(secondRace, dBegin);
+		
+		// Second race date must be <= End date
+		var validSecondEnd = compareDate(dEnd, secondRace);		
+		
+		//	Check everything together
+		var validDates = validBegin && validFirstBegin && validFirstEnd && validRace && validSecondBegin && validSecondEnd;
+	    
+	    if (validDates) {
+	         return true;
+	    } else {
+			$('#add_competition_error').css("display", "inline-block").hide().fadeIn();
+			$('#add_competition_error').delay(2000).fadeOut('slow');	    	
+			return false;
+		}
+	}
+
+
+	$('#add_competition').click(function(){
+		if (!validateDates()) {
+			return false;
+		}
+		$.ajax({
+			url : "addCompetition",
+			type: "POST",
+			data : $('#new_competition').serialize(),
+			success: function(data)
+			{
+				if (data === "fail") {
+					$('#add_competition_error').css("display", "inline-block").hide().fadeIn();
+					$('#add_competition_error').delay(2000).fadeOut('slow');						
+				} else {
+					top.location=data;
+				}
+			}
+		});
+	});
+
+
 	$('#delete_competition').click(function(){
 		$("#ajax_loader_delete").css("display", "block");
 

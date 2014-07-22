@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <link href='<c:url value="/resources/style/datepicker.css" />' rel="stylesheet">
@@ -158,13 +158,16 @@
 			<input type="submit" class="btn btn-success" value="Save changes" id="edit_competition">
 		</c:when> 
 		<c:otherwise>
-			<input type="submit" class="btn btn-success" value="Add" id="add_competition">
+			<input type="button" class="btn btn-success" value="Add" id="add_competition">
 		</c:otherwise> 
 	</c:choose>
 	
-	
 	<input type="button" class="btn btn-default" value="Cancel" id="cancel_add_competition"> 
-	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">
+	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">	
 	<br>
+	<div class="alert alert-danger" id="add_competition_error"
+		style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+		<spring:message code="dataerror.competition_date" />
+	</div>	
 		
 </form>
