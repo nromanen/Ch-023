@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$(".datepicker").keydown(function(){
 		return false;
 	});
-	
+	$("#add_class").attr("disabled","disabled");
 	$('#new_racer').submit(function(){
 	    
 		$("#ajax_loader").css("display", "inline-block");
@@ -426,7 +426,8 @@ $(document).ready(function(){
 			car_classes_id += $("#car_class :selected").val();
 			
 			$("#car_class :selected").attr("disabled", "disabled");
-			
+			$('#car_class').val("");
+			$('#car_number').val("");
 			$("#car_classes_numbers").val(car_classes_numbers);
 			$("#car_classes").val(car_classes);
 			$("#car_classes_id").val(car_classes_id);																
