@@ -26,12 +26,14 @@ import net.carting.service.RacerService;
 import net.carting.service.TeamInCompetitionService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
+import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -94,11 +96,18 @@ public class CompetitionController {
 	}
 
 	@RequestMapping(value = "/addCompetition", method = RequestMethod.POST)
-	public String addCompetitionAction(
-			@ModelAttribute("newCompetition") Competition competition) {
+	public @ResponseBody
+    String addCompetitionAction(
+			@ModelAttribute("newCompetition") Competition competition, BindingResult result) {
+        CompetitionValidator validator = new CompetitionValidator();
+        validator.validate(competition, result);
+        if (result.hasErrors()) {
+            LOG.info("Admin failed adding new competition " + competition.getName() + " (id = " + competition.getId() + ")");
+            return  "fail";
+        }
 		competitionService.addCompetition(competition);
 		LOG.info("Admin has added new competition " + competition.getName() + " (id = " + competition.getId() + ")");
-		return "redirect:/competition/" + competition.getId();
+		return String.valueOf(competition.getId());
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = { "content-type=application/json" })

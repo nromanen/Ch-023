@@ -49,7 +49,7 @@ $(document).ready(function(){
 		}
 	}
 	
-	$("#new_competition").submit(function(e){
+	function validateDates(){
 		// Begin and end competition dates
 		var dBegin = $('#dateStart').val();
 		var dEnd = $('#dateEnd').val();
@@ -86,8 +86,28 @@ $(document).ready(function(){
 			$('#add_competition_error').delay(2000).fadeOut('slow');	    	
 			return false;
 		}
-	});
+	}
 
+
+	$('#add_competition').click(function(){
+		if (!validateDates()) {
+			return false;
+		}
+		$.ajax({
+			url : "addCompetition",
+			type: "POST",
+			data : $('#new_competition').serialize(),
+			success: function(data)
+			{
+				if (data === "fail") {
+					$('#add_competition_error').css("display", "inline-block").hide().fadeIn();
+					$('#add_competition_error').delay(2000).fadeOut('slow');						
+				} else {
+					top.location=data;
+				}
+			}
+		});
+	});
 
 
 	$('#delete_competition').click(function(){

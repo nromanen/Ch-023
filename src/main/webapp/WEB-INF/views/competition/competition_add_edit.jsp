@@ -158,7 +158,7 @@
 			<input type="submit" class="btn btn-success" value="Save changes" id="edit_competition">
 		</c:when> 
 		<c:otherwise>
-			<input type="submit" class="btn btn-success" value="Add" id="add_competition">
+			<input type="button" class="btn btn-success" value="Add" id="add_competition">
 		</c:otherwise> 
 	</c:choose>
 	
@@ -167,7 +167,7 @@
 	<br>
 	<div class="alert alert-danger" id="add_competition_error"
 		style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-		<spring:message code="dataerror.add_competition_date_error" />
+		<spring:message code="dataerror.competition_date" />
 	</div>	
 		
 </form>
