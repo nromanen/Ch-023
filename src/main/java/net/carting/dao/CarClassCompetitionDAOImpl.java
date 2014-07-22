@@ -1,20 +1,14 @@
 package net.carting.dao;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.HibernateException;
+import net.carting.domain.CarClassCompetition;
+
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.RacerCarClassNumber;
 
 @Repository
 public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO{
@@ -70,6 +64,16 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO{
 						  + "WHERE ccc.competition.id = :id "
 						  + "ORDER BY ccc.carClass.name");
 		query.setParameter("id", competitonId);
+		return query.list();
+	}
+	
+	@Override
+	public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId) {	
+		Query query = sessionFactory.getCurrentSession().
+				createQuery("FROM CarClassCompetition ccc "
+						  + "WHERE ccc.carClass.id = :id "
+						  + "ORDER BY ccc.carClass.name");
+		query.setParameter("id", carClassId);
 		return query.list();
 	}
 	
