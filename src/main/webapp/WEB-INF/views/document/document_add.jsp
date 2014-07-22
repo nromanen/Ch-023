@@ -138,14 +138,14 @@
 							<c:when test="${documentType==2 }">
 
 								<td class="text-center racer_checked"><input
-									type="checkbox" name="racer_id" value="${ racer.id }"></td>
+									type="checkbox" name="racer_id" value="${ racer.id }" required></td>
 
 
 							</c:when>
 							<c:when
 								test="${documentType==1|| documentType==3 || documentType==4 }">
 								<td class="text-center racer_checked"><input type="radio"
-									name="racer_id" value="${ racer.id }"></td>
+									name="racer_id" value="${ racer.id }" required></td>
 							</c:when>
 						</c:choose>
 					</tr>
