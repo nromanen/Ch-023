@@ -18,4 +18,6 @@ public interface CarClassCompetitionDAO {
 
     public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId);
     
+    public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId);
+    
 }
