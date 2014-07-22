@@ -8,8 +8,11 @@
 
 <link href='<c:url value="/resources/style/datepicker.css" />'
 	rel="stylesheet">
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/validator.js" />'></script>
+<link href='<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.min.css" />'
+	rel="stylesheet">
+		
+<!-- script type='text/javascript'
+	src='<c:url value="/resources/js/lib/validator.js" />'></script -->
 <script type='text/javascript'
 	src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
 <script type='text/javascript'
@@ -19,6 +22,9 @@
 	src='<c:url value="/resources/js/document.js" />'></script>
 <script type='text/javascript'
 	src='<c:url value="/resources/js/file-validation.js" />'></script>
+<script type='text/javascript'
+	src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
+	
 <div class="text-right">
 	<a href='<c:url value="/document/chooseType" />'
 		class="btn btn-primary right "><spring:message
@@ -43,19 +49,24 @@
 </h2>
 <form method="POST" class="well "
 	action="<c:url value="/document/addDocument" />"
-	data-toggle="validator" role="form" enctype="multipart/form-data"
+    role="form" enctype="multipart/form-data"
 	id="addDocument">
 
-	<input type="hidden" id="type" name="document_type"
-		value=${ documentType }> <br>
+	<input type="hidden" id="type" name="document_type" value=${ documentType }> <br>
+	
+	<!-- Date field  -->
 	<c:if test="${documentType==4 }">
 		<div class="form-group">
 			<label class="text-info"><spring:message
 					code="label.document_date_start" /><span class="text-danger">*</span>:&nbsp;
-			</label> <input type="text" class="form-control datepicker" name="start_date"
-				placeholder="<spring:message code="placeholder.date" />" required
-				pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
-				data-error="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
+			</label> 
+			<input type="text" class="form-control datepicker" name="start_date"
+				placeholder="<spring:message code="placeholder.date" />"
+				
+				data-bv-notempty="true"
+                data-bv-notempty-message="Can't be empty (move this hardcode to language file)"			
+				data-bv-date-format = "YYYY-MM-DD"
+				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 			<div class="help-block with-errors"></div>
 		</div>
 	</c:if>
@@ -63,14 +74,19 @@
 		<div class="form-group">
 			<label class="text-info"><spring:message
 					code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;
-			</label> <input type="text" class="form-control datepicker"
-				name="finish_date"
-				placeholder="<spring:message code="placeholder.date" />" required
-				pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
-				data-error="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
+			</label> 
+			<input type="text" class="form-control datepicker" name="finish_date" 
+				placeholder="<spring:message code="placeholder.date" />"
+					
+				data-bv-notempty="true"
+                data-bv-notempty-message="Can't be empty (move this hardcode to language file)"			
+				data-bv-date-format = "YYYY-MM-DD"
+				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
+				
 			<div class="help-block with-errors"></div>
 		</div>
 	</c:if>
+	
 	<c:if test="${documentType==1 || documentType==2 }">
 		<div class="form-group">
 			<label class="text-info"><spring:message
