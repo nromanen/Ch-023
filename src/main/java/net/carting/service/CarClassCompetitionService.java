@@ -20,6 +20,8 @@ public interface CarClassCompetitionService {
     
     public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId);
     
+    public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId);
+    
 	/**
 	 * This method gets list of team racers who are NOT valid to registration.
 	 * 

@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import net.carting.dao.CarClassCompetitionDAO;
 import net.carting.dao.RacerCarClassCompetitionNumberDAO;
 import net.carting.domain.CarClass;
@@ -16,6 +12,10 @@ import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CarClassCompetitionServiceImpl implements CarClassCompetitionService{
@@ -60,6 +60,12 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
 	@Transactional
 	public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId) {
 		return carClassCompetitionDAO.getCarClassCompetitionsByCompetitionId(competitonId);		
+	}
+	
+	@Override
+	@Transactional
+	public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId) {
+		return carClassCompetitionDAO.getCarClassCompetitionsByCarClassId(carClassId);		
 	}
 	
 	@Override
