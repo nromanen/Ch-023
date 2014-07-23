@@ -119,7 +119,7 @@ public class DocumentController {
 
 	}
 
-	@RequestMapping(value = "/add/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/add/{documentType}", method = RequestMethod.GET)
 	public String pageForAddDocument(Map<String, Object> map, @PathVariable int documentType) {
 		String username = userService.getCurrentUserName();
 		Leader leader = leaderService.getLeaderByUserName(username);
