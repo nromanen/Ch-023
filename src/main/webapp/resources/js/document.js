@@ -39,11 +39,6 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	// deprecated
-	$('#add_document').click(function() {
-		//$("#ajax_loader").css("display", "inline-block");		
-	});
-	
 	$('#approved_radio').change(function(){
 		var document_id = $('#document_id').val();
 		var json = {"documentId" : document_id };		
