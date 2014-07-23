@@ -120,12 +120,11 @@ public class DocumentController {
 	}
 
 	@RequestMapping(value = "/add/{type}", method = RequestMethod.GET)
-	public String pageForAddDocument(Map<String, Object> map, @PathVariable int type) {
+	public String pageForAddDocument(Map<String, Object> map, @PathVariable int documentType) {
 		String username = userService.getCurrentUserName();
 		Leader leader = leaderService.getLeaderByUserName(username);
 		if (teamService.isTeamByLeaderId(leader.getId())) {
 			Team team = teamService.getTeamByLeader(leader);
-			int documentType = type;
 			map.put("documentType", documentType);
 			if (documentType == Document.TYPE_RACER_PERENTAL_PERMISSIONS) {
 				map.put("racers", racerService
@@ -147,7 +146,6 @@ public class DocumentController {
 					+ "tried to add document , but was redirected to add team, because he didn't has a team");
 			return "redirect:/team/add";
 		}
-
 	}
 
 	@RequestMapping(value = "/addDocument", method = RequestMethod.POST)
