@@ -3,6 +3,12 @@ $(document).ready(function(){
 	$(".datepicker").keydown(function(){
 		return false;
 	});
+	if ($("#car_classes").val()=="") {
+		$("#edit_numbers_modal").attr("disabled","disabled");
+		$("#delete_classes_ER_modal").attr("disabled","disabled");
+		$("#delete_classes").attr("disabled", "disabled");
+	}
+		
 	$("#add_class").attr("disabled","disabled");
 	$('#new_racer').submit(function(){
 	    
@@ -171,7 +177,7 @@ $(document).ready(function(){
 												if(car_classes_id != "") { car_classes_id += separator; }		
 														
 												car_classes_numbers += $("#car_number").val();
-												car_classes += $("#car_class :selected").text() + "(#" + $("#car_number").val() + ")";
+												car_classes += $("#car_class :selected").text() + " (#" + $("#car_number").val() + ")";
 												car_classes_id += $("#car_class :selected").val();
 														
 												$("#car_class :selected").attr("disabled", "disabled");
@@ -251,11 +257,11 @@ $(document).ready(function(){
 			else{
 				if(carClassView==""){
 					carClassView = document.getElementById("car_class_name"+inputs[i].name).value
-					+"(#"+document.getElementById(inputs[i].name).value+")";
+					+" (#"+document.getElementById(inputs[i].name).value+")";
 				}
 				else{
 				carClassView +=separator + document.getElementById("car_class_name"+inputs[i].name).value
-					+"(#"+document.getElementById(inputs[i].name).value+")";
+					+" (#"+document.getElementById(inputs[i].name).value+")";
 				}
 				
 			}
@@ -347,7 +353,7 @@ $(document).ready(function(){
 	    		for (var i = 0; i < inputs .length; i++) {		
 	    			var carClassName = document.getElementById("car_class_name"+inputs[i].id).value;
 	    			if (carClassView==""){
-	    				carClassView = carClassName+"(#"+inputs[i].value+")";
+	    				carClassView = carClassName+" (#"+inputs[i].value+")";
 	    			}
 	    			else{
 	    				carClassView += separator + carClassName+" (#"+inputs[i].value+")";
@@ -422,10 +428,12 @@ $(document).ready(function(){
 			if(car_classes_id != "") { car_classes_id += separator; }		
 			
 			car_classes_numbers += $("#car_number").val();
-			car_classes += $("#car_class :selected").text() + "(#" + $("#car_number").val() + ")";
+			car_classes += $("#car_class :selected").text() + " (#" + $("#car_number").val() + ")";
 			car_classes_id += $("#car_class :selected").val();
 			
 			$("#car_class :selected").attr("disabled", "disabled");
+			$("#add_class").attr("disabled","disabled");
+			$("#delete_classes").removeAttr("disabled");
 			$('#car_class').val("");
 			$('#car_number').val("");
 			$("#car_classes_numbers").val(car_classes_numbers);
@@ -441,6 +449,7 @@ $(document).ready(function(){
 		$('#car_class option').each(function(){
             this.disabled = false;
         });
+		$(this).attr("disabled", "disabled");
 	});
 	
 	$('#delete_racer_btn').click(function(){
