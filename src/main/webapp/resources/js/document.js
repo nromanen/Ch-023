@@ -1,7 +1,10 @@
 $(document).ready(function() {
 	
 	// Setup validator
-	$('#addDocument').bootstrapValidator();
+
+	if ($('#addDocument').length != 0) {
+		$('#addDocument').bootstrapValidator();
+	}
 	
 	// Display ajax loader image if form pass validation
 	$('#addDocument').on('success.form.bv', function(e) {
@@ -29,15 +32,17 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.datepicker').datepicker({
-		format : 'yyyy-mm-dd',
-		todayBtn : 'linked',
-	// language: 'ua'
-	});
-	
-	$(".datepicker").keydown(function(){
-		return false;
-	});
+	if ($('.datepicker').length != 0) {
+		$('.datepicker').datepicker({
+			format : 'yyyy-mm-dd',
+			todayBtn : 'linked',
+		// language: 'ua'
+		});
+		
+		$(".datepicker").keydown(function(){
+			return false;
+		});
+	}
 	
 	$('#approved_radio').change(function(){
 		var document_id = $('#document_id').val();
