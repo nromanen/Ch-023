@@ -231,7 +231,7 @@
 									id="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}"
 									value="${ racerCarClassNumber.number}"
 									placeholder="${ racerCarClassNumber.number}" required
-									pattern="[0-9]{1,2}" data-error="Enter number between 1 and 99" />
+									pattern="[1-9]{1,2}" data-error="Enter number between 1 and 99" />
 								<input type="checkbox" class="check_to_delete"
 									id=${ racerCarClassNumber.id}
 									name="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}">
@@ -276,7 +276,7 @@
 						class="form-control span6" id="car_class">
 						<c:if test="${!empty carClassList}">
 							<c:forEach items="${carClassList}" var="carClass">
-								<option value="${carClass.id}">${carClass.name}</option>
+								<option value="${carClass.id}">${carClass.name} (${carClass.lowerYearsLimit} - ${carClass.upperYearsLimit})</option>
 							</c:forEach>
 						</c:if>
 
