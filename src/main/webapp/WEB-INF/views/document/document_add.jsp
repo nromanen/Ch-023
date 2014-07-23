@@ -110,18 +110,21 @@
 		<tr>
 			<td>
 				<div class="form-group">
-					<input type="file" name="file" class="form-control" id="upload_file" multiple />
+					<input type="file" name="file" class="form-control file" id="upload_file"  onchange="return ValidateFileUpload(this)"
+						data-bv-notempty="true"
+                		data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+					 />
 				</div>
 			</td>
 		</tr>
 	</table>
 	<div class="form-group" style="height: 50px;">
-		<!-- input id="addFile" type="button" class="btn btn-primary btn-sm fl-left" value="<spring:message code="label.another_file" />" / -->
+		<input id="addFile" type="button" class="btn btn-primary btn-sm fl-left" value="<spring:message code="label.another_file" />" />
 		<div class="alert alert-danger" id="max_count_achieved"
 			style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 			<spring:message code="dataerror.max_count_achieved" />
 		</div>
-		<input type="hidden" value=0 id="fileCount">
+		<input type="hidden" value="0" id="fileCount">
 	</div>
 	<%
 		int number = 0;

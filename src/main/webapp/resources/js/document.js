@@ -1,21 +1,7 @@
 $(document).ready(function() {
 	
 	// Setup validator
-	$('#addDocument').bootstrapValidator({
-		fields: {
-            file: {
-                validators: {
-                    notEmpty: {
-                        message: 'This field is required'
-                    },
-                    file: {
-                        extension: 'jpg,pdf,jpeg,gif,png',
-                        message: 'The selected file is not valid'
-                    }
-                }
-            }
-        }
-	});
+	$('#addDocument').bootstrapValidator();
 	
 	// Display ajax loader image if form pass validation
 	$('#addDocument').on('success.form.bv', function(e) {
@@ -30,36 +16,19 @@ $(document).ready(function() {
         $('#doc_date_picker').datepicker('hide');
     });
 	
-    $("#upload_file").on('change',function(){
-        var $fileUpload = $("input[type='file']");
-        if (parseInt($fileUpload.get(0).files.length)>3){
-        	$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
-			$('#max_count_achieved').delay(5000).fadeOut('slow');
-			$('#addDocument').bootstrapValidator('updateStatus', 'file', 'INVALID');
-        } else {        	
-        	$('#addDocument').bootstrapValidator('revalidateField', 'file');
-        }
-    }); 
-    
-	
-	/*
 	$('#addFile').click(function() {		
 		var count = document.getElementsByClassName('file').length+parseInt($('#fileCount').val());
 		if(count<3){
 			$('#fileTable').append(
 	                '<tr><td><div class="form-group">'+
-	                '   <input type="file" name="file" onchange="return ValidateFileUpload(this)" class="file"/>'+
+	                '   <input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file"/>'+
 	                '</div></td></tr>');
-			console.log("appended");
-		}
-		else{
+		} else {
 			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
 			$('#max_count_achieved').delay(2000).fadeOut('slow');
 		}        
     });
-    */
-	
-	
+    
 	$('.datepicker').datepicker({
 		format : 'yyyy-mm-dd',
 		todayBtn : 'linked',
