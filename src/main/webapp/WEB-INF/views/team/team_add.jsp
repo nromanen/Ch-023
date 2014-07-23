@@ -25,8 +25,8 @@
 		<label class="text-info"><spring:message code="label.team_name" /><span class="text-danger">*</span>:&nbsp;
 		</label> <input type="text" class="form-control" placeholder="<spring:message
 				code="placeholder.enter_team_name" />"
-			id="team_name" required pattern=".{1,100}"
-			data-error="T<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
+			id="team_name" required pattern="[A-ZА-ЯІЇЄ][A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,100}"
+			data-error="<spring:message code="dataerror.team_name_example" />" />
 		<div class="help-block with-errors"></div>
 	</div>
 
@@ -42,8 +42,8 @@
 		<label class="text-info"><spring:message
 				code="label.license_number" /><span class="text-danger">*</span>:&nbsp;
 		</label> <input type="text" class="form-control" placeholder="<spring:message code="placeholder.license_number" />"
-			id="license" required pattern=".{1,100}"
-			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
+			id="license" required pattern=".{1,30}"
+			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
 		<div class="help-block with-errors"></div>
 	</div>
 

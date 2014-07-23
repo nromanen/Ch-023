@@ -204,7 +204,7 @@
 			</div>
 			<div class="modal-body">
 				<label class="text-info">
-					<spring:message code="message.question_delete_team" />&nbsp;<u><spring:message code="message.question_delete_team" /></u>?&nbsp;
+					<spring:message code="message.question_delete_team" />?
 				</label>
 				<input type="hidden" id="team_delete_url" value="<c:url value="/team/delete" />">
 				<input type="hidden" id="team_delete_id" value="${needTeam.id}">

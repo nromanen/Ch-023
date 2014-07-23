@@ -105,7 +105,7 @@ public class RacerController {
 						carClassNumbers += (racerCarClassNumber.getNumber());
 						carClassView += (racerCarClassNumber.getCarClass()
 								.getName()
-								+ " (#"
+								+ "(#"
 								+ racerCarClassNumber.getNumber() + ")");
 						i++;
 					} else {
@@ -115,7 +115,7 @@ public class RacerController {
 								.getNumber());
 						carClassView += (", "
 								+ racerCarClassNumber.getCarClass().getName()
-								+ " (#" + racerCarClassNumber.getNumber() + ")");
+								+ "(#" + racerCarClassNumber.getNumber() + ")");
 					}
 				}
 				map.put("racer", racer);

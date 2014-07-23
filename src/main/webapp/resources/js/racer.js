@@ -177,7 +177,7 @@ $(document).ready(function(){
 												if(car_classes_id != "") { car_classes_id += separator; }		
 														
 												car_classes_numbers += $("#car_number").val();
-												car_classes += $("#car_class :selected").text() + " (#" + $("#car_number").val() + ")";
+												car_classes += $("#car_class :selected").text() + "(#" + $("#car_number").val() + ")";
 												car_classes_id += $("#car_class :selected").val();
 														
 												$("#car_class :selected").attr("disabled", "disabled");
@@ -257,11 +257,11 @@ $(document).ready(function(){
 			else{
 				if(carClassView==""){
 					carClassView = document.getElementById("car_class_name"+inputs[i].name).value
-					+" (#"+document.getElementById(inputs[i].name).value+")";
+					+"(#"+document.getElementById(inputs[i].name).value+")";
 				}
 				else{
 				carClassView +=separator + document.getElementById("car_class_name"+inputs[i].name).value
-					+" (#"+document.getElementById(inputs[i].name).value+")";
+					+"(#"+document.getElementById(inputs[i].name).value+")";
 				}
 				
 			}
@@ -353,10 +353,10 @@ $(document).ready(function(){
 	    		for (var i = 0; i < inputs .length; i++) {		
 	    			var carClassName = document.getElementById("car_class_name"+inputs[i].id).value;
 	    			if (carClassView==""){
-	    				carClassView = carClassName+" (#"+inputs[i].value+")";
+	    				carClassView = carClassName+"(#"+inputs[i].value+")";
 	    			}
 	    			else{
-	    				carClassView += separator + carClassName+" (#"+inputs[i].value+")";
+	    				carClassView += separator + carClassName+"(#"+inputs[i].value+")";
 	    			}
 	    			inputs[i].name = inputs[i].value;
 	    			inputs[i].placeholder = inputs[i].value;	    			
@@ -428,7 +428,7 @@ $(document).ready(function(){
 			if(car_classes_id != "") { car_classes_id += separator; }		
 			
 			car_classes_numbers += $("#car_number").val();
-			car_classes += $("#car_class :selected").text() + " (#" + $("#car_number").val() + ")";
+			car_classes += $("#car_class :selected").text() + "(#" + $("#car_number").val() + ")";
 			car_classes_id += $("#car_class :selected").val();
 			
 			$("#car_class :selected").attr("disabled", "disabled");
