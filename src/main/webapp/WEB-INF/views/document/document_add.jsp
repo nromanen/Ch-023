@@ -47,7 +47,7 @@
 </h2>
 <form method="POST" class="well" role="form"
 	action="<c:url value="/document/addDocument" />"
-    enctype="multipart/form-data"
+	enctype="multipart/form-data"
 	id="addDocument">
 
 	<input type="hidden" id="type" name="document_type" value=${ documentType }> <br>
@@ -62,7 +62,7 @@
 				placeholder="<spring:message code="placeholder.date" />"
 				id="doc_date_picker"
 				data-bv-notempty="true"
-                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 				data-bv-date-format = "YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 			<div class="help-block with-errors"></div>
@@ -77,7 +77,7 @@
 				placeholder="<spring:message code="placeholder.date" />"
 				id="doc_date_picker"
 				data-bv-notempty="true"
-                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 				data-bv-date-format = "YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 				
@@ -93,7 +93,7 @@
 				placeholder="<spring:message code="placeholder.document_number" />"
 				id="number" name="number" maxlength="100" 
 				data-bv-notempty="true"
-                data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />"	/>
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />"	/>
 			<div class="help-block with-errors"></div>
 		</div>
 	</c:if>
@@ -112,7 +112,7 @@
 				<div class="form-group">
 					<input type="file" name="file" class="form-control file" id="upload_file"  onchange="return ValidateFileUpload(this)"
 						data-bv-notempty="true"
-                		data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+						data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 					 />
 				</div>
 			</td>
@@ -155,7 +155,7 @@
 								<input type="checkbox" name="racer_id" value="${ racer.id }" 
 											
 									data-bv-notempty="true"
-                					data-bv-notempty-message="<spring:message code="dataerror.field_required" />" />
+									data-bv-notempty-message="<spring:message code="dataerror.field_required" />" />
 									
 								</td>
 
@@ -164,7 +164,7 @@
 								<td class="text-center racer_checked"><input type="radio"
 									name="racer_id" value="${ racer.id }" 
 									data-bv-notempty="true"
-                					data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/></td>
+									data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/></td>
 							</c:when>
 						</c:choose>
 					</tr>
