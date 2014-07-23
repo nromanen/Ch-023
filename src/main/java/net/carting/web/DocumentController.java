@@ -119,20 +119,13 @@ public class DocumentController {
 
 	}
 
-	@RequestMapping(value = "/chooseType", method = RequestMethod.GET)
-	public String chooseDocumentType(Map<String, Object> map) {
-		return "choose_document_type";
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String pageForAddDocument(Map<String, Object> map,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/add/{type}", method = RequestMethod.GET)
+	public String pageForAddDocument(Map<String, Object> map, @PathVariable int type) {
 		String username = userService.getCurrentUserName();
 		Leader leader = leaderService.getLeaderByUserName(username);
 		if (teamService.isTeamByLeaderId(leader.getId())) {
 			Team team = teamService.getTeamByLeader(leader);
-			int documentType = Integer.parseInt(request.getParameter(
-					"document_type").toString());
+			int documentType = type;
 			map.put("documentType", documentType);
 			if (documentType == Document.TYPE_RACER_PERENTAL_PERMISSIONS) {
 				map.put("racers", racerService
