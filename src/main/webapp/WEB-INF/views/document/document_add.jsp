@@ -11,8 +11,6 @@
 <link href='<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.min.css" />'
 	rel="stylesheet">
 		
-<!-- script type='text/javascript'
-	src='<c:url value="/resources/js/lib/validator.js" />'></script -->
 <script type='text/javascript'
 	src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
 <script type='text/javascript'
@@ -47,14 +45,14 @@
 		</c:when>
 	</c:choose>"
 </h2>
-<form method="POST" class="well "
+<form method="POST" class="well" role="form"
 	action="<c:url value="/document/addDocument" />"
-    role="form" enctype="multipart/form-data"
+    enctype="multipart/form-data"
 	id="addDocument">
 
 	<input type="hidden" id="type" name="document_type" value=${ documentType }> <br>
 	
-	<!-- Date field  -->
+	<!-- Date field, can be merged into 1 expression  -->
 	<c:if test="${documentType==4 }">
 		<div class="form-group">
 			<label class="text-info"><spring:message
@@ -62,9 +60,9 @@
 			</label> 
 			<input type="text" class="form-control datepicker" name="start_date"
 				placeholder="<spring:message code="placeholder.date" />"
-				
+				id="doc_date_picker"
 				data-bv-notempty="true"
-                data-bv-notempty-message="Can't be empty (move this hardcode to language file)"			
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 				data-bv-date-format = "YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 			<div class="help-block with-errors"></div>
@@ -77,9 +75,9 @@
 			</label> 
 			<input type="text" class="form-control datepicker" name="finish_date" 
 				placeholder="<spring:message code="placeholder.date" />"
-					
+				id="doc_date_picker"
 				data-bv-notempty="true"
-                data-bv-notempty-message="Can't be empty (move this hardcode to language file)"			
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 				data-bv-date-format = "YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 				
@@ -87,14 +85,15 @@
 		</div>
 	</c:if>
 	
+	<!-- Document number field  -->
 	<c:if test="${documentType==1 || documentType==2 }">
 		<div class="form-group">
-			<label class="text-info"><spring:message
-					code="label.document_number" /><span class="text-danger">*</span>:&nbsp;
-			</label> <input type="text" class="form-control"
+			<label class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
+			<input type="text" class="form-control"
 				placeholder="<spring:message code="placeholder.document_number" />"
-				id="number" pattern=".{1,100}" name="number" required
-				data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.enter_document_namber" />" />
+				id="number" name="number" maxlength="100" 
+				data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />"	/>
 			<div class="help-block with-errors"></div>
 		</div>
 	</c:if>
@@ -103,24 +102,21 @@
 		<strong><spring:message code="message.attention" /></strong>
 		<spring:message code="message.file_warning" />
 	</div>
+	
+	<!-- Files fields  -->
 	<label class="text-info"><spring:message
 			code="label.choose_file" /><span class="text-danger">*</span>: </label>
 	<table id="fileTable">
 		<tr>
 			<td>
-				<div class="form-group success">
-					<input type="file" name="file" id="fileChooser" required
-						onchange="return ValidateFileUpload(this)" class="file"
-						data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.upload_file" />" />
+				<div class="form-group">
+					<input type="file" name="file" class="form-control" id="upload_file" multiple />
 				</div>
 			</td>
 		</tr>
 	</table>
 	<div class="form-group" style="height: 50px;">
-		<input id="addFile" type="button"
-			class="btn btn-primary btn-sm fl-left"
-			value="<spring:message
-							code="label.another_file" />" />
+		<!-- input id="addFile" type="button" class="btn btn-primary btn-sm fl-left" value="<spring:message code="label.another_file" />" / -->
 		<div class="alert alert-danger" id="max_count_achieved"
 			style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 			<spring:message code="dataerror.max_count_achieved" />
@@ -131,6 +127,7 @@
 		int number = 0;
 	%>
 	<div class="form-group">
+
 		<table id="team-table" class="table table-bordered">
 			<thead style="font-weight: 100;">
 				<tr>
@@ -147,21 +144,24 @@
 							number++;
 						%>
 						<td class="text-center"><%=number%></td>
-						<td class="text-left"><a
-							href='<c:url value="/racer/${racer.id}" />'>
-								${racer.firstName} ${racer.lastName} </a></td>
+						<td class="text-left"><a href='<c:url value="/racer/${racer.id}" />'>${racer.firstName} ${racer.lastName} </a></td>
 						<c:choose>
 							<c:when test="${documentType==2 }">
 
-								<td class="text-center racer_checked"><input
-									type="checkbox" name="racer_id" value="${ racer.id }" required></td>
-
+								<td class="text-center racer_checked">
+								<input type="checkbox" name="racer_id" value="${ racer.id }" 
+											
+									data-bv-notempty="true"
+                					data-bv-notempty-message="<spring:message code="dataerror.field_required" />" />
+									
+								</td>
 
 							</c:when>
-							<c:when
-								test="${documentType==1|| documentType==3 || documentType==4 }">
+							<c:when test="${documentType==1|| documentType==3 || documentType==4 }">
 								<td class="text-center racer_checked"><input type="radio"
-									name="racer_id" value="${ racer.id }" required></td>
+									name="racer_id" value="${ racer.id }" 
+									data-bv-notempty="true"
+                					data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/></td>
 							</c:when>
 						</c:choose>
 					</tr>
@@ -170,11 +170,8 @@
 			</tbody>
 		</table>
 	</div>
-	<input type="hidden" name="racer_id" value=-1> <br> <input
-		type="submit" class="btn btn-success"
-		value="<spring:message
-							code="label.accept" />"
-		id="add_document"> <img
+	<!--  input type="hidden" name="racer_id" value=-1> <br --> 
+	<button type="submit" class="btn btn-success" id="add_document"><spring:message code="label.accept" /></button> <img
 		src='<c:url value="/resources/img/ajax-loader.gif" />'
 		style="display: none;" id="ajax_loader"> <br> <br>
 </form>

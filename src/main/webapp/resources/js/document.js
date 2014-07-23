@@ -1,8 +1,82 @@
 $(document).ready(function() {
 	
-	$('#add_document').click(function() {
+	// Setup validator
+	$('#addDocument').bootstrapValidator({
+		fields: {
+            file: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required'
+                    },
+                    file: {
+                        extension: 'jpg,pdf,jpeg,gif,png',
+                        message: 'The selected file is not valid'
+                    }
+                }
+            }
+        }
+	});
+	
+	// Display ajax loader image if form pass validation
+	$('#addDocument').on('success.form.bv', function(e) {
 		$("#ajax_loader").css("display", "inline-block");
-		
+	});
+	
+	// reValidate the date when user change it  
+	$('#doc_date_picker').on('changeDate', function(e) {
+         	
+	   var name = $('#doc_date_picker').attr('name')
+        $('#addDocument').bootstrapValidator('revalidateField', name); 
+        $('#doc_date_picker').datepicker('hide');
+    });
+	
+    $("#upload_file").on('change',function(){
+        var $fileUpload = $("input[type='file']");
+        if (parseInt($fileUpload.get(0).files.length)>3){
+        	$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved').delay(5000).fadeOut('slow');
+			$('#addDocument').bootstrapValidator('updateStatus', 'file', 'INVALID');
+        } else {        	
+        	$('#addDocument').bootstrapValidator('revalidateField', 'file');
+        }
+    }); 
+    
+	
+	/*
+	$('#addFile').click(function() {		
+		var count = document.getElementsByClassName('file').length+parseInt($('#fileCount').val());
+		if(count<3){
+			$('#fileTable').append(
+	                '<tr><td><div class="form-group">'+
+	                '   <input type="file" name="file" onchange="return ValidateFileUpload(this)" class="file"/>'+
+	                '</div></td></tr>');
+			console.log("appended");
+		}
+		else{
+			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved').delay(2000).fadeOut('slow');
+		}        
+    });
+    */
+	
+	
+	$('.datepicker').datepicker({
+		format : 'yyyy-mm-dd',
+		todayBtn : 'linked',
+	// language: 'ua'
+	});
+	
+	$(".datepicker").keydown(function(){
+		return false;
+	});
+	
+	
+	
+
+	
+	// deprecated
+	$('#add_document').click(function() {
+		//$("#ajax_loader").css("display", "inline-block");		
 	});
 	
 	$('#approved_radio').change(function(){
@@ -49,6 +123,7 @@ $(document).ready(function() {
 		}
 		
 	});	
+	
 	$('#reason').change(function(){
 		var reason = $('#reason').val();
 		if (reason.length == 0 || reason.length>255)
@@ -104,35 +179,5 @@ $(document).ready(function() {
 	        }
 	    });
 	});
-	
-	$('#addFile').click(function() {		
-		var count = document.getElementsByClassName('file').length+parseInt($('#fileCount').val());
-		if(count<3){
-			$('#fileTable').append(
-	                '<tr><td><div class="form-group">'+
-	                '   <input type="file" name="file" onchange="return ValidateFileUpload(this)" class="file"/>'+
-	                '</div></td></tr>');
-		}
-		else{
-			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
-			$('#max_count_achieved').delay(2000).fadeOut('slow');
-		}
-        
-        
-        
-    });
-	
-	$('.datepicker').datepicker({
-		format : 'yyyy-mm-dd',
-		todayBtn : 'linked',
-	// language: 'ua'
-	});
-	
-	$(".datepicker").keydown(function(){
-		return false;
-	});
-	
 
-	
-	
 });
