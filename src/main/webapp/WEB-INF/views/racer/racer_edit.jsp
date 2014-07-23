@@ -231,7 +231,7 @@
 									id="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}"
 									value="${ racerCarClassNumber.number}"
 									placeholder="${ racerCarClassNumber.number}" required
-									pattern="[1-9]{1,2}" data-error="Enter number between 1 and 99" />
+									pattern="[1-9]{1}[0-9]{0,1}" data-error="Enter number between 1 and 99" />
 								<input type="checkbox" class="check_to_delete"
 									id=${ racerCarClassNumber.id}
 									name="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}">
