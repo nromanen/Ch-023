@@ -23,11 +23,6 @@
 <script type='text/javascript'
 	src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 	
-<div class="text-right">
-	<a href='<c:url value="/document/chooseType" />'
-		class="btn btn-primary right "><spring:message
-			code="label.document_choose_type" /></a>
-</div>
 <h2 class="text-left user-info-name">
 	<spring:message code="label.add_document_type" />&nbsp;"
 	<c:choose>
