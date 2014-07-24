@@ -39,6 +39,14 @@
 		<c:forEach items="${competitionListByYear}" var="competition">
 			<div class="panel panel-info">
 				<div class="panel-heading">
+					<c:choose>
+						<c:when test="${competition.isEnabled()}">
+							<span class="glyphicon glyphicon-ok-circle" style="color: green" alt="<spring:message code="label.competition.registration_continues" />" title="<spring:message code="label.competition.registration_continues" />"></span>
+						</c:when>
+						<c:otherwise>
+							<span class="glyphicon glyphicon-remove-circle" style="color: red" alt="<spring:message code="label.competition.registration_completed" />" title="<spring:message code="label.competition.registration_completed" />"></span>
+						</c:otherwise>
+					</c:choose>
 					<a href='<c:url value="/competition/${competition.id}" />'>${competition.name}</a>
 				</div>
 				<div class="panel-body">
