@@ -212,7 +212,29 @@ $(document).ready(function(){
 		}
 	});
 	$("#edit_numbers_modal").click(function(){
+		
 		$('#editNumbersModal').modal();
+		var carClasses = $(".car_class_number");
+		for (var i = 0; i < carClasses.length; i++) {
+			var carClassId = carClasses[i].id.split(",")[1];
+			var fullId = carClasses[i].id;
+			var url = $("#get_occupied_numbers_url").val();
+			var json = { "carClassId" : carClassId };
+			
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        async: false,
+		        success: function(response) {
+		        	if(response != "error"){
+		        		disableOccupiedNumbers(fullId, response);
+		        	}
+		        }
+		    });
+		}
+		$('.car_class_number').removeAttr("disabled");
 	});	
 	
 	$("#delete_classes_ER_modal").click(function(){
@@ -228,7 +250,6 @@ $(document).ready(function(){
 	        url: url,  
 	        data: JSON.stringify(json),  
 	        contentType: 'application/json',
-	        type: "POST",	        
 	        success: function(response) {  
 	        	$("#car_classes").val("");
 	    		$("#car_classes_id").val("");
@@ -288,7 +309,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('.car_class_number').change(function(){		
+	/*$('.car_class_number').change(function(){		
 		var number = $(this).val();
 		var carClassId = this.id.split(",")[1];		
 		var obj = this;
@@ -305,7 +326,6 @@ $(document).ready(function(){
 	        contentType: 'application/json',
 	        type: "POST",	        
 	        success: function(response) { 
-
 	        	if(response==true){
 	        		$('edit_numbers_ER').disabled = true;	        		
 	        		obj.value = obj.name;	        		
@@ -314,7 +334,7 @@ $(document).ready(function(){
 	        }
 		});
 	    }
-	});
+	});*/
 	
 	$('#editNumbersModal').on('hidden.bs.modal', function (e) {
 		var inputs = document.getElementsByClassName("car_class_number");
@@ -374,10 +394,12 @@ $(document).ready(function(){
 	});
 	
 	function disableOccupiedNumbers(dropdown_id, numbers){
+		console.log(dropdown_id);
 		$("#" + dropdown_id + " option").each(function(){
 		    $(this).removeAttr('disabled');
 		});
 		var numbers_arr = numbers.split(",");
+		
 		for(var i = 0; i < numbers_arr.length - 1; i++){// -1 because we have separator in the end of string
 			$('#' + dropdown_id + ' option[value="' + numbers_arr[i] + '"]').attr("disabled", "disabled");
 		}		
