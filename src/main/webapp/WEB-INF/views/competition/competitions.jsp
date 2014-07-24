@@ -41,12 +41,12 @@
 				<div class="panel-heading">
 					<c:choose>
 						<c:when test="${competition.isEnabled()}">
-							<span class="label label-success"><spring:message code="label.competition.registration_continues" /></span>
+							<span class="glyphicon glyphicon-ok-circle" style="color: green" alt="<spring:message code="label.competition.registration_continues" />" title="<spring:message code="label.competition.registration_continues" />"></span>
 						</c:when>
 						<c:otherwise>
-							<span class="label label-danger"><spring:message code="label.competition.registration_completed" /></span>
+							<span class="glyphicon glyphicon-remove-circle" style="color: red" alt="<spring:message code="label.competition.registration_completed" />" title="<spring:message code="label.competition.registration_completed" />"></span>
 						</c:otherwise>
-					</c:choose>					
+					</c:choose>
 					<a href='<c:url value="/competition/${competition.id}" />'>${competition.name}</a>
 				</div>
 				<div class="panel-body">
