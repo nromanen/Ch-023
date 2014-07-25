@@ -65,11 +65,9 @@ $(document).ready(function() {
 	
 	$('#unapproved').click(function(){
 		var reason = $('#reason').val();
-		if (reason.length == 0 || reason.length>255)
-		{
+		if (reason.length == 0 || reason.length>255) {
 			$("#unapproved").css("display", "none");
-		}
-		else{
+		} else {
 			$("#unapproved").css("display", "inline");
 			$("#ajax_loader_delete").css("display", "inline");
 			var document_id = $('#document_id').val();
@@ -132,10 +130,11 @@ $(document).ready(function() {
 	});
 	
 	$('.delete_file_btn').click(function(){
+		$('.delete_file').attr("id", $(this).attr("id"));
 		$('#delete_file_modal').modal();
 	});	
 	
-	$('#delete_file').click(function(){
+	$('.delete_file').click(function(){
 		var fileId = $(this).attr('id');
 		var json = { "fileId" : fileId };
 		$.ajax({

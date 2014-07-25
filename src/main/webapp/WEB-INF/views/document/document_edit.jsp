@@ -120,14 +120,13 @@
 	
 	
 	<c:if test="${document ne null}">
-				
 		<!-- Uploaded files table -->
 		<div style="width: 60%" class="fl-right">
 			<table style="width: 100%">
 				<c:forEach items="${document.files}" var="file">
 					<tr>
 						<td><a href="<c:url value="/resources/documents/${file.path}" />" class="glyphicon glyphicon-paperclip file-link fl-right">${file.path}</a></td>
-						<td><button type="button" id="${file.id}" class="btn btn-danger btn-sm delete_file" style="float: right">
+						<td><button type="button" id="${file.id}" class="btn btn-danger btn-sm delete_file_btn" style="float: right">
 								<spring:message code="label.delete" />
 							</button>
 					</tr>
@@ -246,7 +245,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-default" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
-				<button class="btn btn-primary" type="button" id="delete_file"><spring:message code="label.delete" /></button>
+				<button class="btn btn-primary delete_file" type="button" id=""><spring:message code="label.delete" /></button>
 			</div>
 		</div>
 	</div>
