@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page session="false"%>
 
@@ -46,7 +47,6 @@
 		</c:otherwise> 
 	</c:choose>
 	
-
 	<c:choose> 
 		<c:when test="${document ne null}">
 			<input type="hidden" id="type" name="document_id" value="${document.id}"> 
@@ -76,8 +76,7 @@
 	</c:if>
 	<c:if test="${documentType==2 || documentType==3 }">
 		<div class="form-group">
-			<label class="text-info"><spring:message
-					code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;
+			<label class="text-info"><spring:message code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;
 			</label> 
 			<input type="text" class="form-control datepicker" name="finish_date" value="${finishDate}"
 				placeholder="<spring:message code="placeholder.date" />"
@@ -121,8 +120,8 @@
 	
 	<c:if test="${document ne null}">
 		<!-- Uploaded files table -->
-		<div style="width: 60%" class="fl-right">
-			<table style="width: 100%">
+		<div class="col-sm-7 pull-right">
+			<table class="table">
 				<c:forEach items="${document.files}" var="file">
 					<tr>
 						<td><a href="<c:url value="/resources/documents/${file.path}" />" class="glyphicon glyphicon-paperclip file-link fl-right">${file.path}</a></td>
@@ -132,36 +131,39 @@
 					</tr>
 				</c:forEach>
 			</table>
+		</div>		
+	</c:if>
+	
+	<!--  Display adding file block  -->
+	<c:if test="${(document ne null && fn:length(document.files) < 3) || document == null}" >	
+		<label for="filePicker" class="text-info"><spring:message code="label.choose_file" />:</label>
+		<table id="fileTable">
+			<tr>
+				<td>
+					<div class="form-group">
+							<c:choose> 
+							<c:when test="${document ne null}">
+								<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)" />	
+							</c:when> 
+							<c:otherwise>
+								<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)"
+							data-bv-notempty="true"
+							data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
+							</c:otherwise> 
+						</c:choose>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+		<div class="form-group">
+			<input id="addFile" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
+			<div class="alert alert-danger" id="max_count_achieved" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
+				<spring:message code="dataerror.max_count_achieved" />
+			</div>
 		</div>
 	</c:if>
-
-	<label for="filePicker" class="text-info"><spring:message code="label.choose_file" />:</label>
-	<table id="fileTable">
-		<tr>
-			<td>
-				<div class="form-group">
-						<c:choose> 
-						<c:when test="${document ne null}">
-							<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)" />	
-						</c:when> 
-						<c:otherwise>
-							<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)"
-						data-bv-notempty="true"
-						data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
-						</c:otherwise> 
-					</c:choose>
-				</div>
-			</td>
-		</tr>
-	</table>
-	
-	<div class="form-group" style="height: 50px;">
-		<input id="addFile" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
-		<div class="alert alert-danger" id="max_count_achieved" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
-			<spring:message code="dataerror.max_count_achieved" />
-		</div>
-	</div>
-	
+	<div class="clearfix"></div>
 	<c:if test="${document == null }">
 		<!-- Racers Table Begin  -->
 		<%
@@ -185,14 +187,12 @@
 							<td class="text-left"><a href='<c:url value="/racer/${racer.id}" />'>${racer.firstName} ${racer.lastName} </a></td>
 							<c:choose>
 								<c:when test="${documentType==2 }">
-	
 									<td class="text-center racer_checked">
 									<input type="checkbox" name="racer_id" value="${ racer.id }" 
 										data-bv-notempty="true"
 										data-bv-notempty-message="<spring:message code="dataerror.field_required" />" />
 										
 									</td>
-	
 								</c:when>
 								<c:when test="${documentType==1|| documentType==3 || documentType==4 }">
 									<td class="text-center racer_checked"><input type="radio"
@@ -203,14 +203,15 @@
 								</c:when>
 							</c:choose>
 						</tr>
-	
 					</c:forEach>
 				</tbody>
 			</table>
 		</div>
 		<!-- Racers Table End  -->
 	</c:if>
-		<c:choose> 
+	
+	<!-- Different submit buttons  -->
+	<c:choose> 
 		<c:when test="${document ne null}">
 			<input type="submit" class="btn btn-success" value="<spring:message code="label.accept" />" id="edit_document">
 		</c:when> 
@@ -220,6 +221,7 @@
 	</c:choose>
 	
 	<img src='<c:url value="/resources/img/ajax-loader.gif" />'style="display: none;" id="ajax_loader">
+	
 </form>
 
 <!-- Modal window for deleting file   -->
