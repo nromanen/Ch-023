@@ -137,7 +137,7 @@ public class DocumentController {
 			LOG.info("Leader of team " + team.getName()
 					+ " tried to add document "
 					+ Document.getStringDocumentType(documentType));
-			return "document_add";
+			return "document_add_edit";
 		} else {
 			LOG.info("Leader "
 					+ leader.getFirstName()
@@ -158,11 +158,12 @@ public class DocumentController {
 
 		if (teamService.isTeamByLeaderId(leader.getId())) {
 			Team team = teamService.getTeamByLeader(leader);
-			if (racersId.length == 1) {
+			if (racersId.length == 0) {
 				/*
 				 * If team leader doesn't choose racers, he is redirected to
 				 * page of his team
 				 */
+				LOG.info("Team leader doesn't choose racers...");
 				return "redirect:/team/" + team.getId();
 			} else {
 				/*
@@ -184,8 +185,8 @@ public class DocumentController {
 				}
 				return "redirect:/team/" + team.getId();
 			}
-
 		} else {
+			LOG.error("Team leader doesn't exists...");
 			return "redirect:/team/add";
 		}
 	}
@@ -267,7 +268,8 @@ public class DocumentController {
 					map.put("finishDate",
 							formatter.get().format(document.getFinishDate()));
 				}
-				return "document_edit";
+				map.put("documentType", document.getType());
+				return "document_add_edit";
 			} else {
 				return "redirect:/team/" + team.getId();
 			}

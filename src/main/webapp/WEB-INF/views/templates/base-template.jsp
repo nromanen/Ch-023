@@ -4,8 +4,7 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=UTF-8"> -->
+		 <meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -21,15 +20,21 @@
 		<script type='text/javascript' src="<c:url value="/resources/style/bootstrap/js/bootstrap.min.js" />"></script>		
 	</head>
 	<body>
-		
-        
-        <div class="row" id="main_container">
-        	<tiles:insertAttribute name="menu" />		
+        <!--div class="row" id="main_container" -->
+		<div class="container">
+		<div class="row">
+			<tiles:insertAttribute name="menu" />		
 			<tiles:insertAttribute name="left" />		
+			
 			<div class="col-sm-9" id="content" style="<tiles:getAsString name="content_style" />">
-    			<tiles:insertAttribute name="content" />
-  			</div>       		
-        </div>       
+				<div class="row">
+					<tiles:insertAttribute name="content" />
+				</div>
+  			</div>
+  			       
+  		</div>			
+        </div>
+               
         <tiles:insertAttribute name="footer" />
                       
 	</body>

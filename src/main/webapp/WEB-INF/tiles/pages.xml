@@ -147,18 +147,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
 	</definition>
 
-	<!-- Add document -->
-	<definition name="document_add" extends="base-template">
-		<put-attribute name="title" value="Add document " />
-		<put-attribute name="content"
-			value="/WEB-INF/views/document/document_add.jsp" />
-	</definition>
-
 	<!-- Edit document -->
-	<definition name="document_edit" extends="base-template">
-		<put-attribute name="title" value="Edit document " />
+	<definition name="document_add_edit" extends="base-template">
+		<put-attribute name="title" value="Add / Edit document " />
 		<put-attribute name="content"
-			value="/WEB-INF/views/document/document_edit.jsp" />
+			value="/WEB-INF/views/document/document_add_edit.jsp" />
 	</definition>
 
 	<!-- Document page -->
