@@ -131,7 +131,11 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('.delete_file').click(function(){
+	$('.delete_file_btn').click(function(){
+		$('#delete_file_modal').modal();
+	});	
+	
+	$('#delete_file').click(function(){
 		var fileId = $(this).attr('id');
 		var json = { "fileId" : fileId };
 		$.ajax({

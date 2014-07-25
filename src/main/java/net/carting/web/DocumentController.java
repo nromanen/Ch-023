@@ -137,7 +137,8 @@ public class DocumentController {
 			LOG.info("Leader of team " + team.getName()
 					+ " tried to add document "
 					+ Document.getStringDocumentType(documentType));
-			return "document_add";
+			//return "document_add";
+			return "document_edit";
 		} else {
 			LOG.info("Leader "
 					+ leader.getFirstName()
@@ -268,6 +269,7 @@ public class DocumentController {
 					map.put("finishDate",
 							formatter.get().format(document.getFinishDate()));
 				}
+				map.put("documentType", document.getType());
 				return "document_edit";
 			} else {
 				return "redirect:/team/" + team.getId();

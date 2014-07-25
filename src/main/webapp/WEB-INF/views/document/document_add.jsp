@@ -1,27 +1,18 @@
 <%@page import="net.carting.domain.Document"%>
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false"%>
+<%@page session="false"%>
 
-<link href='<c:url value="/resources/style/datepicker.css" />'
-	rel="stylesheet">
-<link href='<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.min.css" />'
-	rel="stylesheet">
+<link href='<c:url value="/resources/style/datepicker.css" />' rel="stylesheet">
+<link href='<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.min.css" />' rel="stylesheet">
 		
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />'
-	charset="UTF-8"></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/document.js" />'></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/file-validation.js" />'></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />' charset="UTF-8"></script>
+<script type='text/javascript' src='<c:url value="/resources/js/document.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/js/file-validation.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 	
 <h2 class="text-left user-info-name">
 	<spring:message code="label.add_document_type" />&nbsp;"
@@ -40,12 +31,9 @@
 		</c:when>
 	</c:choose>"
 </h2>
-<form method="POST" class="well" role="form"
-	action="<c:url value="/document/addDocument" />"
-	enctype="multipart/form-data"
-	id="addDocument">
+<form method="POST" class="well" role="form" action="<c:url value="/document/addDocument" />" enctype="multipart/form-data" id="addDocument">
 
-	<input type="hidden" id="type" name="document_type" value=${ documentType }> <br>
+	<input type="hidden" id="type" name="document_type" value="${documentType}">
 	
 	<!-- Date field, can be merged into 1 expression  -->
 	<c:if test="${documentType==4 }">
@@ -99,13 +87,12 @@
 	</div>
 	
 	<!-- Files fields  -->
-	<label class="text-info"><spring:message
-			code="label.choose_file" /><span class="text-danger">*</span>: </label>
+	<label class="text-info"><spring:message code="label.choose_file" /><span class="text-danger">*</span>: </label>
 	<table id="fileTable">
 		<tr>
 			<td>
 				<div class="form-group">
-					<input type="file" name="file" class="form-control file" id="upload_file"  onchange="return ValidateFileUpload(this)"
+					<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)"
 						data-bv-notempty="true"
 						data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 					 />
@@ -113,19 +100,20 @@
 			</td>
 		</tr>
 	</table>
+	
 	<div class="form-group" style="height: 50px;">
 		<input id="addFile" type="button" class="btn btn-primary btn-sm fl-left" value="<spring:message code="label.another_file" />" />
-		<div class="alert alert-danger" id="max_count_achieved"
-			style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
+		<div class="alert alert-danger" id="max_count_achieved" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 			<spring:message code="dataerror.max_count_achieved" />
 		</div>
 		<input type="hidden" value="0" id="fileCount">
 	</div>
+	
+	<!-- Racers Table Begin  -->
 	<%
 		int number = 0;
 	%>
 	<div class="form-group">
-
 		<table id="team-table" class="table table-bordered">
 			<thead style="font-weight: 100;">
 				<tr>
@@ -135,7 +123,6 @@
 				</tr>
 			</thead>
 			<tbody>
-
 				<c:forEach items="${racers}" var="racer">
 					<tr>
 						<%
@@ -147,8 +134,7 @@
 							<c:when test="${documentType==2 }">
 
 								<td class="text-center racer_checked">
-								<input type="checkbox" name="racer_id" value="${ racer.id }" 
-											
+								<input type="checkbox" name="racer_id" value="${ racer.id }" 											
 									data-bv-notempty="true"
 									data-bv-notempty-message="<spring:message code="dataerror.field_required" />" />
 									
@@ -168,8 +154,9 @@
 			</tbody>
 		</table>
 	</div>
+	<!-- Racers Table End  -->
+	
 	<!--  input type="hidden" name="racer_id" value=-1> <br --> 
-	<button type="submit" class="btn btn-success" id="add_document"><spring:message code="label.accept" /></button> <img
-		src='<c:url value="/resources/img/ajax-loader.gif" />'
-		style="display: none;" id="ajax_loader"> <br> <br>
+	<button type="submit" class="btn btn-success" id="add_document"><spring:message code="label.accept" /></button> 
+	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader"> <br> <br>
 </form>
