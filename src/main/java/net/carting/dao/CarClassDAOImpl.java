@@ -1,8 +1,7 @@
 package net.carting.dao;
 
 import net.carting.domain.CarClass;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.carting.util.EntityManagerUtil;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,41 +9,45 @@ import java.util.List;
 @Repository
 public class CarClassDAOImpl implements CarClassDAO {
 
-    @Autowired
-    private SessionFactory sessionFactory;
-
     @Override
     public List<CarClass> getAllCarClasses() {
-        return (List<CarClass>) sessionFactory
-                .getCurrentSession()
-                .createQuery("from CarClass")
-                .list();
+        List<CarClass> carClassList = EntityManagerUtil.getEntityManager().
+            createQuery("from CarClass").getResultList();
+        EntityManagerUtil.closeTransaction();
+        return carClassList;
     }
 
     @Override
     public CarClass getCarClassById(int id) {
-        return (CarClass) sessionFactory.getCurrentSession().get(CarClass.class, id);
+        CarClass carClass = EntityManagerUtil.getEntityManager().getReference(CarClass.class, id);
+        EntityManagerUtil.closeTransaction();
+        return carClass;
     }
 
     public void addCarClass(CarClass carClass) {
-        sessionFactory.getCurrentSession().save(carClass);
+        EntityManagerUtil.getEntityManager().persist(carClass);
+        EntityManagerUtil.closeTransaction();
     }
 
     @Override
     public void updateCarClass(CarClass carClass) {
-        sessionFactory.getCurrentSession().merge(carClass);
+        EntityManagerUtil.getEntityManager().merge(carClass);
+        EntityManagerUtil.closeTransaction();
     }
 
     @Override
     public void deleteCarClass(CarClass carClass) {
-        sessionFactory.getCurrentSession().delete(carClass);
+        EntityManagerUtil.getEntityManager().remove(carClass);
+        EntityManagerUtil.closeTransaction();
 
     }
 
     @Override
     public void deleteCarClassById(int id) {
-        CarClass carClass = (CarClass) sessionFactory.getCurrentSession().load(CarClass.class, id);
-        sessionFactory.getCurrentSession().delete(carClass);
+        CarClass carClass = (CarClass) EntityManagerUtil.getEntityManager().getReference(CarClass.class, id);
+        EntityManagerUtil.closeTransaction();
+        EntityManagerUtil.getEntityManager().remove(carClass);
+        EntityManagerUtil.closeTransaction();
     }
 
 }

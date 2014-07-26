@@ -25,7 +25,7 @@ public class AdminSettingsServiceImpl implements AdminSettingsService {
 	@Override
 	@Transactional
 	public void updatePerentalPermissionYears(int value) {
-		adminSettingsDAO.updatePerentalPermissionYears(value);
+		adminSettingsDAO.updateParentalPermissionYears(value);
 	}
 
 	@Override

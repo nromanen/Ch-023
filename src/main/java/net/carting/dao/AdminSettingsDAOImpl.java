@@ -2,47 +2,49 @@ package net.carting.dao;
 
 import net.carting.domain.AdminSettings;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.carting.util.EntityManagerUtil;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.Query;
 
 @Repository
 public class AdminSettingsDAOImpl implements AdminSettingsDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
-	
 	@Override
 	public AdminSettings getAdminSettings() {
-		return (AdminSettings)sessionFactory.getCurrentSession().createQuery("from AdminSettings").list().get(0);
+        AdminSettings adminSettings = (AdminSettings)EntityManagerUtil.getEntityManager().createQuery("from AdminSettings").getResultList().get(0);
+        EntityManagerUtil.closeTransaction();
+		return adminSettings;
 	}
 
 	@Override
-	public void updatePerentalPermissionYears(int value) {
-		Query query = sessionFactory.getCurrentSession().
+	public void updateParentalPermissionYears(int value) {
+		Query query = EntityManagerUtil.getEntityManager().
 				createQuery("UPDATE AdminSettings "
 							+ "SET parentalPermissionYears = :parentalPermissionYears");
 		query.setParameter("parentalPermissionYears", value);
 		query.executeUpdate();
+        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void updatePointsByPlaces(String value) {
-		Query query = sessionFactory.getCurrentSession().
+        Query query = EntityManagerUtil.getEntityManager().
 				createQuery("UPDATE AdminSettings "
 							+ "SET pointsByPlaces = :pointsByPlaces");
 		query.setParameter("pointsByPlaces", value);
 		query.executeUpdate();
+        EntityManagerUtil.closeTransaction();
 	}
 	
 	@Override
 	public void updateFeedbackEmail(String value){
-		Query query = sessionFactory.getCurrentSession().
+        Query query = EntityManagerUtil.getEntityManager().
 				createQuery("UPDATE AdminSettings "
 							+ "SET feedbackEmail = :feedbackEmail");
 		query.setParameter("feedbackEmail", value);
 		query.executeUpdate();
+        EntityManagerUtil.closeTransaction();
 	}
 
 }

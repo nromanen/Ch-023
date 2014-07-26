@@ -16,7 +16,7 @@ public interface CarClassCompetitionDAO {
 
     public void deleteCarClassCompetition(CarClassCompetition carClassCompetition);
 
-    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId);
+    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId);
     
     public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId);
     

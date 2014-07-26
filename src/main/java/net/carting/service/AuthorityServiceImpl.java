@@ -24,7 +24,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 	@Override
 	@Transactional
 	public List<String> getUsersByAuthotity(String authority) {
-		return authorityDAO.getUsersByAuthotity(authority);
+		return authorityDAO.getUsersByAuthority(authority);
 	}
 
 	@Override

@@ -2,8 +2,7 @@ package net.carting.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.carting.util.EntityManagerUtil;
 import org.springframework.stereotype.Repository;
 
 import net.carting.domain.Authority;
@@ -11,46 +10,51 @@ import net.carting.domain.Authority;
 @Repository
 public class AuthorityDAOImpl implements AuthorityDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
-
 	@Override
 	public Authority getAuthorityByUserName(String username) {
-		return (Authority) sessionFactory.getCurrentSession()
+        Authority authority = (Authority) EntityManagerUtil.getEntityManager()
 				.createQuery("from Authority where username = :username")
-				.setParameter("username", username).uniqueResult();
+				.setParameter("username", username).getResultList().get(0);
+        EntityManagerUtil.closeTransaction();
+        return authority;
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> getUsersByAuthotity(String authority) {
-		return sessionFactory.getCurrentSession()
+	public List<String> getUsersByAuthority(String authority) {
+        List<String> stringList = EntityManagerUtil.getEntityManager()
 				.createQuery("from Authority where authority = :authority")
-				.setParameter("authority", authority).list();
+				.setParameter("authority", authority).getResultList();
+        EntityManagerUtil.closeTransaction();
+        return  stringList;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Authority> getAllAuthorities() {
-		return sessionFactory.getCurrentSession().createQuery("from Authority")
-				.list();
+        List<Authority> authorities = EntityManagerUtil.getEntityManager().
+                createQuery("from Authority").getResultList();
+        EntityManagerUtil.closeTransaction();
+        return  authorities;
 	}
 
 	@Override
 	public void addAuthority(Authority authority) {
-		sessionFactory.getCurrentSession().save(authority);
+        EntityManagerUtil.getEntityManager().persist(authority);
+        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void updateAuthority(Authority authority) {
-		sessionFactory.getCurrentSession().merge(authority);
+        EntityManagerUtil.getEntityManager().merge(authority);
+        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void deleteAuthority(Authority authority) {
-		sessionFactory.getCurrentSession().delete(authority);
-
+        EntityManagerUtil.getEntityManager().remove(authority);
+        EntityManagerUtil.closeTransaction();
 	}
 
 }

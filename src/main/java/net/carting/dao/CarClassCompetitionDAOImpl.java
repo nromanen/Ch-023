@@ -5,76 +5,85 @@ import java.util.List;
 
 import net.carting.domain.CarClassCompetition;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.carting.util.EntityManagerUtil;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.Query;
 
 @Repository
 public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO{
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 
 	@Override
 	public List<CarClassCompetition> getAllCarClassCompetitions() {
-		return sessionFactory.getCurrentSession().createQuery("from CarClassCompetition").list();
+        List<CarClassCompetition> classCompetitions = EntityManagerUtil.getEntityManager().
+                createQuery("from CarClassCompetition").getResultList();
+        EntityManagerUtil.closeTransaction();
+        return classCompetitions;
 	}
 
 	@Override
 	public CarClassCompetition getCarClassCompetitionById(int id) {
-		return (CarClassCompetition) sessionFactory.getCurrentSession().get(CarClassCompetition.class, id);
+        CarClassCompetition carClassCompetition = EntityManagerUtil.getEntityManager().getReference(CarClassCompetition.class, id);
+        EntityManagerUtil.closeTransaction();
+		return carClassCompetition;
 	}
 
 	@Override
 	public void addCarClassCompetition(CarClassCompetition carClassCompetition) {
-		sessionFactory.getCurrentSession().save(carClassCompetition);		
+        EntityManagerUtil.getEntityManager().persist(carClassCompetition);
+        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void updateCarClassCompetition(CarClassCompetition carClassCompetition) {
-
-		Query query = sessionFactory.getCurrentSession().createQuery("UPDATE CarClassCompetition "
+        //TODO: NEED TO TEST
+		Query query = EntityManagerUtil.getEntityManager().createQuery("UPDATE CarClassCompetition "
 				+ "SET firstRaceTime = :firstRaceTime, "
 				+ "secondRaceTime = :secondRaceTime, "
 				+ "circleCount = :circleCount, "
 				+ "percentageOffset = :percentageOffset "
 				+ "WHERE id = :id");
-		
-		query.setTime("firstRaceTime", carClassCompetition.getFirstRaceTime());
-		query.setTime("secondRaceTime", carClassCompetition.getSecondRaceTime());
-		query.setParameter("circleCount", carClassCompetition.getCircleCount());
+
+        //TODO: WAS setTime
+		query.setParameter("firstRaceTime", carClassCompetition.getFirstRaceTime());
+		query.setParameter("secondRaceTime", carClassCompetition.getSecondRaceTime());
+
+        query.setParameter("circleCount", carClassCompetition.getCircleCount());
 		query.setParameter("percentageOffset", carClassCompetition.getPercentageOffset());
 		query.setParameter("id", carClassCompetition.getId());
 		
 		query.executeUpdate();
+        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void deleteCarClassCompetition(CarClassCompetition carClassCompetition) {
-		sessionFactory.getCurrentSession().delete(carClassCompetition);		
+        EntityManagerUtil.getEntityManager().remove(carClassCompetition);
+        EntityManagerUtil.closeTransaction();
 	}
 	
 	@Override
-	public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId) {	
-		Query query = sessionFactory.getCurrentSession().
+	public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId) {
+		Query query = EntityManagerUtil.getEntityManager().
 				createQuery("FROM CarClassCompetition ccc "
-						  + "WHERE ccc.competition.id = :id "
-						  + "ORDER BY ccc.carClass.name");
-		query.setParameter("id", competitonId);
-		return query.list();
+                        + "WHERE ccc.competition.id = :id "
+                        + "ORDER BY ccc.carClass.name");
+		query.setParameter("id", competitionId);
+        List<CarClassCompetition> competitions = query.getResultList();
+        EntityManagerUtil.closeTransaction();
+		return competitions;
 	}
 	
 	@Override
 	public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId) {	
-		Query query = sessionFactory.getCurrentSession().
+		Query query = EntityManagerUtil.getEntityManager().
 				createQuery("FROM CarClassCompetition ccc "
 						  + "WHERE ccc.carClass.id = :id "
 						  + "ORDER BY ccc.carClass.name");
 		query.setParameter("id", carClassId);
-		return query.list();
+        List<CarClassCompetition> competitions = query.getResultList();
+        EntityManagerUtil.closeTransaction();
+		return competitions;
 	}
 	
 

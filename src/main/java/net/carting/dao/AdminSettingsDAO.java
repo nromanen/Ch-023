@@ -6,7 +6,7 @@ public interface AdminSettingsDAO {
  	
 	public AdminSettings getAdminSettings();
 	
-	public void updatePerentalPermissionYears(int value);
+	public void updateParentalPermissionYears(int value);
 	
 	public void updatePointsByPlaces(String value);
 	

@@ -8,7 +8,7 @@ public interface AuthorityDAO {
 	
 	 	public Authority getAuthorityByUserName(String username);
 	 	
-	 	List<String> getUsersByAuthotity(String authority);
+	 	List<String> getUsersByAuthority(String authority);
 	 
 	    public List<Authority> getAllAuthorities();
 
