@@ -18,6 +18,12 @@
 		});
 	});
 </script>
+<script type="text/javascript">
+	function focusonusername() {
+		document.getElementById('username').focus();
+	}
+	window.onload = focusonname;
+</script>
 
 <div class="container">
 	<div class="col-md-4 col-md-offset-4">
@@ -44,7 +50,7 @@
 					</c:if>
 					<div class="form-group">
 						<label for="username" class="text-info"><spring:message
-								code="label.login" /></label> <input type="text" name="j_username"
+								code="label.login" /></label> <input autofocus type="text" name="j_username"
 							class="form-control" style="border-radius: 0px" id="username"
 							placeholder="<spring:message
 								code="placeholder.login" />">
