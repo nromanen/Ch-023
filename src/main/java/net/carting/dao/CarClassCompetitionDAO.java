@@ -1,12 +1,12 @@
 package net.carting.dao;
 
-import java.util.List;
-
 import net.carting.domain.CarClassCompetition;
 
+import java.util.List;
+
 public interface CarClassCompetitionDAO {
-	
-	public List<CarClassCompetition> getAllCarClassCompetitions();
+
+    public List<CarClassCompetition> getAllCarClassCompetitions();
 
     public CarClassCompetition getCarClassCompetitionById(int id);
 
@@ -16,8 +16,8 @@ public interface CarClassCompetitionDAO {
 
     public void deleteCarClassCompetition(CarClassCompetition carClassCompetition);
 
-    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId);
-    
+    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId);
+
     public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId);
-    
+
 }

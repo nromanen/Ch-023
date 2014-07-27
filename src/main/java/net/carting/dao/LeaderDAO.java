@@ -15,7 +15,7 @@ public interface LeaderDAO {
     public void updateLeader(Leader leader);
 
     public void deleteLeader(Leader leader);
-    
+
     public Leader getLeaderByUserName(String username);
 
 }

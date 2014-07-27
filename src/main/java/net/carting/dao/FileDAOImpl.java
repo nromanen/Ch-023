@@ -1,44 +1,55 @@
 package net.carting.dao;
 
-import java.util.List;
-
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.carting.domain.File;
 import org.springframework.stereotype.Repository;
 
-import net.carting.domain.File;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 public class FileDAOImpl implements FileDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<File> getAllFiles() {
-		return sessionFactory.getCurrentSession().createQuery("from File")
-				.list();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<File> getAllFiles() {
+        List<File> files = entityManager
+                .createQuery("from File")
+                .getResultList();
 
-	@Override
-	public File getFileById(int id) {
-		return (File) sessionFactory.getCurrentSession().get(File.class, id);
-	}
+        return files;
+    }
 
-	@Override
-	public void addFile(File file) {
-		sessionFactory.getCurrentSession().save(file);
-	}
+    @Override
+    public File getFileById(int id) {
+        File file = (File) entityManager
+                .createQuery("from File where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
 
-	@Override
-	public void updateFile(File file) {
-		sessionFactory.getCurrentSession().merge(file);
-	}
+        return file;
+    }
 
-	@Override
-	public void deleteFile(File file) {
-		sessionFactory.getCurrentSession().delete(file);
-	}
+    @Override
+    public void addFile(File file) {
+        entityManager.persist(file);
+
+    }
+
+    @Override
+    public void updateFile(File file) {
+        entityManager.merge(file);
+
+    }
+
+    @Override
+    public void deleteFile(File file) {
+        entityManager.remove(file);
+
+    }
 
 }

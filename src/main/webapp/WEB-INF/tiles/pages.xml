@@ -1,212 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
 
-	<!-- Pages -->
+    <!-- Pages -->
 
-	<!-- Index -->
-	<definition name="index" extends="base-template">
-		<put-attribute name="title" value="Karting" />
-		<put-attribute name="content" value="/WEB-INF/views/index.jsp" />
-	</definition>
+    <!-- Index -->
+    <definition name="index" extends="base-template">
+        <put-attribute name="title" value="Karting"/>
+        <put-attribute name="content" value="/WEB-INF/views/index.jsp"/>
+    </definition>
 
-	<!-- Team -->
-	<definition name="team_add" extends="base-template">
-		<put-attribute name="title" value="New Team" />
-		<put-attribute name="content" value="/WEB-INF/views/team/team_add.jsp" />
-	</definition>
+    <!-- Team -->
+    <definition name="team_add" extends="base-template">
+        <put-attribute name="title" value="New Team"/>
+        <put-attribute name="content" value="/WEB-INF/views/team/team_add.jsp"/>
+    </definition>
 
-	<definition name="team_edit" extends="base-template">
-		<put-attribute name="title" value="Edit Team" />
-		<put-attribute name="content" value="/WEB-INF/views/team/team_edit.jsp" />
-	</definition>
+    <definition name="team_edit" extends="base-template">
+        <put-attribute name="title" value="Edit Team"/>
+        <put-attribute name="content" value="/WEB-INF/views/team/team_edit.jsp"/>
+    </definition>
 
-	<definition name="team" extends="base-template">
-		<put-attribute name="title" value="Team" />
-		<put-attribute name="content" value="/WEB-INF/views/team/team.jsp" />
-	</definition>
+    <definition name="team" extends="base-template">
+        <put-attribute name="title" value="Team"/>
+        <put-attribute name="content" value="/WEB-INF/views/team/team.jsp"/>
+    </definition>
 
-	<definition name="teams" extends="base-template">
-		<put-attribute name="title" value="Racer List" />
-		<put-attribute name="content" value="/WEB-INF/views/team/teams.jsp" />
-	</definition>
+    <definition name="teams" extends="base-template">
+        <put-attribute name="title" value="Racer List"/>
+        <put-attribute name="content" value="/WEB-INF/views/team/teams.jsp"/>
+    </definition>
 
-	<!-- Racer -->
-	<definition name="racer_add" extends="base-template">
-		<put-attribute name="title" value="New Racer" />
-		<put-attribute name="content" value="/WEB-INF/views/racer/racer_add.jsp" />
-	</definition>
+    <!-- Racer -->
+    <definition name="racer_add" extends="base-template">
+        <put-attribute name="title" value="New Racer"/>
+        <put-attribute name="content" value="/WEB-INF/views/racer/racer_add.jsp"/>
+    </definition>
 
-	<definition name="racer_edit" extends="base-template">
-		<put-attribute name="title" value="Edit Racer" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/racer/racer_edit.jsp" />
-	</definition>
+    <definition name="racer_edit" extends="base-template">
+        <put-attribute name="title" value="Edit Racer"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/racer/racer_edit.jsp"/>
+    </definition>
 
-	<definition name="racer" extends="base-template">
-		<put-attribute name="title" value="Racer" />
-		<put-attribute name="content" value="/WEB-INF/views/racer/racer.jsp" />
-	</definition>
+    <definition name="racer" extends="base-template">
+        <put-attribute name="title" value="Racer"/>
+        <put-attribute name="content" value="/WEB-INF/views/racer/racer.jsp"/>
+    </definition>
 
-	<!-- Leader -->
-	<definition name="leader" extends="base-template">
-		<put-attribute name="title" value="Leader" />
-		<put-attribute name="content" value="/WEB-INF/views/leader/leader.jsp" />
-	</definition>
+    <!-- Leader -->
+    <definition name="leader" extends="base-template">
+        <put-attribute name="title" value="Leader"/>
+        <put-attribute name="content" value="/WEB-INF/views/leader/leader.jsp"/>
+    </definition>
 
-	<definition name="leader_edit" extends="base-template">
-		<put-attribute name="title" value="Leader" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/leader/leader_edit.jsp" />
-	</definition>
+    <definition name="leader_edit" extends="base-template">
+        <put-attribute name="title" value="Leader"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/leader/leader_edit.jsp"/>
+    </definition>
 
-	<definition name="leader_registration" extends="base-template">
-		<put-attribute name="title" value="Registration" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/leader/leader_registration.jsp" />
-	</definition>
+    <definition name="leader_registration" extends="base-template">
+        <put-attribute name="title" value="Registration"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/leader/leader_registration.jsp"/>
+    </definition>
 
-	<!-- Race -->
-	<definition name="race_add" extends="base-template">
-		<put-attribute name="title" value="Add Race" />
-		<put-attribute name="content" value="/WEB-INF/views/race_add.jsp" />
-	</definition>
+    <!-- Race -->
+    <definition name="race_add" extends="base-template">
+        <put-attribute name="title" value="Add Race"/>
+        <put-attribute name="content" value="/WEB-INF/views/race_add.jsp"/>
+    </definition>
 
-	<definition name="race_results" extends="base-template">
-		<put-attribute name="title" value="Race Results" />
-		<put-attribute name="content" value="/WEB-INF/views/race_results.jsp" />
-	</definition>
+    <definition name="race_results" extends="base-template">
+        <put-attribute name="title" value="Race Results"/>
+        <put-attribute name="content" value="/WEB-INF/views/race_results.jsp"/>
+    </definition>
 
-	<!-- Competition views -->
-	<definition name="competition_add_edit" extends="base-template">
-		<put-attribute name="title" value="Competition Add / Edit" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_add_edit.jsp" />
-	</definition>
-	
-	<definition name="competition" extends="base-template">
-		<put-attribute name="title" value="Competition" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition.jsp" />
-	</definition>
+    <!-- Competition views -->
+    <definition name="competition_add_edit" extends="base-template">
+        <put-attribute name="title" value="Competition Add / Edit"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_add_edit.jsp"/>
+    </definition>
 
-	<definition name="competitions" extends="base-template">
-		<put-attribute name="title" value="Competitions" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competitions.jsp" />
-	</definition>
+    <definition name="competition" extends="base-template">
+        <put-attribute name="title" value="Competition"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition.jsp"/>
+    </definition>
 
-	<definition name="competition_carclass" extends="base-template">
-		<put-attribute name="title" value="Competition car class" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_carclass.jsp" />
-	</definition>
+    <definition name="competitions" extends="base-template">
+        <put-attribute name="title" value="Competitions"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competitions.jsp"/>
+    </definition>
 
-	<definition name="competition_mandat" extends="base-template">
-		<put-attribute name="title" value="Mandat" />
-		<put-attribute name="content_style" value="padding-left: 0px; width: 100%;" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_mandat.jsp" />
-	</definition>
-	
-	<definition name="competition_carclass_results_add_edit" extends="base-template">
-		<put-attribute name="title" value=" Add CarClass Results" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_carclass_results_add_edit.jsp" />
-	</definition>
+    <definition name="competition_carclass" extends="base-template">
+        <put-attribute name="title" value="Competition car class"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_carclass.jsp"/>
+    </definition>
 
-	<definition name="competetition_carclass_absoluteresults_edit"
-		extends="base-template">
-		<put-attribute name="title" value="Edit CarClass summary results" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competetition_carclass_absoluteresults_edit.jsp" />
-	</definition>
+    <definition name="competition_mandat" extends="base-template">
+        <put-attribute name="title" value="Mandat"/>
+        <put-attribute name="content_style" value="padding-left: 0px; width: 100%;"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_mandat.jsp"/>
+    </definition>
 
-	<!-- Registration team for a Competition -->
-	<definition name="choose_competition" extends="base-template">
-		<put-attribute name="title" value="Choose competition" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/choose_competition.jsp" />
-	</definition>
+    <definition name="competition_carclass_results_add_edit" extends="base-template">
+        <put-attribute name="title" value=" Add CarClass Results"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_carclass_results_add_edit.jsp"/>
+    </definition>
 
-	<definition name="competition_team_add" extends="base-template">
-		<put-attribute name="title"
-			value="Registration team for a competition" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/competition/competition_team_add.jsp" />
-	</definition>
+    <definition name="competetition_carclass_absoluteresults_edit"
+                extends="base-template">
+        <put-attribute name="title" value="Edit CarClass summary results"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competetition_carclass_absoluteresults_edit.jsp"/>
+    </definition>
 
-	<!-- Login -->
-	<definition name="login_page" extends="base-template">
-		<put-attribute name="title" value="Login" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
-	</definition>
+    <!-- Registration team for a Competition -->
+    <definition name="choose_competition" extends="base-template">
+        <put-attribute name="title" value="Choose competition"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/choose_competition.jsp"/>
+    </definition>
 
-	<!-- Edit document -->
-	<definition name="document_add_edit" extends="base-template">
-		<put-attribute name="title" value="Add / Edit document " />
-		<put-attribute name="content"
-			value="/WEB-INF/views/document/document_add_edit.jsp" />
-	</definition>
+    <definition name="competition_team_add" extends="base-template">
+        <put-attribute name="title"
+                       value="Registration team for a competition"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_team_add.jsp"/>
+    </definition>
 
-	<!-- Document page -->
-	<definition name="document" extends="base-template">
-		<put-attribute name="title" value="Document " />
-		<put-attribute name="content"
-			value="/WEB-INF/views/document/document.jsp" />
-	</definition>
+    <!-- Login -->
+    <definition name="login_page" extends="base-template">
+        <put-attribute name="title" value="Login"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content" value="/WEB-INF/views/login.jsp"/>
+    </definition>
 
-	<!-- Checking documents -->
-	<definition name="checking_documents" extends="base-template">
-		<put-attribute name="title" value="Checking documents " />
-		<put-attribute name="content"
-			value="/WEB-INF/views/document/checking_documents.jsp" />
-	</definition>
+    <!-- Edit document -->
+    <definition name="document_add_edit" extends="base-template">
+        <put-attribute name="title" value="Add / Edit document "/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/document/document_add_edit.jsp"/>
+    </definition>
 
-	<!-- Admin -->
-	<definition name="admin_cabinet" extends="base-template">
-		<put-attribute name="title" value="Admin cabinet" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/admin/admin_cabinet.jsp" />
-	</definition>
+    <!-- Document page -->
+    <definition name="document" extends="base-template">
+        <put-attribute name="title" value="Document "/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/document/document.jsp"/>
+    </definition>
 
-	<!-- Feedback -->
-	<definition name="feedback" extends="base-template">
-		<put-attribute name="title" value="Feedback" />
-		<put-attribute name="content_style" value="padding-left: 0px; width: 100%;" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/feedback.jsp" />
-	</definition>
+    <!-- Checking documents -->
+    <definition name="checking_documents" extends="base-template">
+        <put-attribute name="title" value="Checking documents "/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/document/checking_documents.jsp"/>
+    </definition>
 
-	<!-- Errors 403 -->
-	<definition name="error_403" extends="base-template">
-		<put-attribute name="title" value="Error 403" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/errors/403.jsp" />
-	</definition>
+    <!-- Admin -->
+    <definition name="admin_cabinet" extends="base-template">
+        <put-attribute name="title" value="Admin cabinet"/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/admin/admin_cabinet.jsp"/>
+    </definition>
 
-	<!-- Exceptions -->
-	<!-- Exception -->
-	<definition name="exception_error" extends="base-template">
-		<put-attribute name="title" value="Exception" />
-		<put-attribute name="content_style" value="width: 100%;" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/exceptions/exception_error.jsp" />
-	</definition>
+    <!-- Feedback -->
+    <definition name="feedback" extends="base-template">
+        <put-attribute name="title" value="Feedback"/>
+        <put-attribute name="content_style" value="padding-left: 0px; width: 100%;"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content" value="/WEB-INF/views/feedback.jsp"/>
+    </definition>
 
-	<!-- CustomGenericException -->
-	<definition name="custom_generic_exception" extends="base-template">
-		<put-attribute name="title" value="Exception" />
-		<put-attribute name="content_style" value="width: 100%;" />
-		<put-attribute name="left" value="" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/exceptions/custom_generic_exception.jsp" />
-	</definition>
+    <!-- Errors 403 -->
+    <definition name="error_403" extends="base-template">
+        <put-attribute name="title" value="Error 403"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content" value="/WEB-INF/views/errors/403.jsp"/>
+    </definition>
+
+    <!-- Exceptions -->
+    <!-- Exception -->
+    <definition name="exception_error" extends="base-template">
+        <put-attribute name="title" value="Exception"/>
+        <put-attribute name="content_style" value="width: 100%;"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/exceptions/exception_error.jsp"/>
+    </definition>
+
+    <!-- CustomGenericException -->
+    <definition name="custom_generic_exception" extends="base-template">
+        <put-attribute name="title" value="Exception"/>
+        <put-attribute name="content_style" value="width: 100%;"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/exceptions/custom_generic_exception.jsp"/>
+    </definition>
 
 </tiles-definitions>

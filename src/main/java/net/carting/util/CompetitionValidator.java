@@ -1,10 +1,9 @@
 package net.carting.util;
 
+import net.carting.domain.Competition;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import net.carting.domain.Competition;
 
 import java.util.Date;
 

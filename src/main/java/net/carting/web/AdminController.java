@@ -1,19 +1,9 @@
 package net.carting.web;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
-
 import net.carting.domain.CarClass;
 import net.carting.domain.Leader;
 import net.carting.domain.User;
-import net.carting.service.AdminSettingsService;
-import net.carting.service.CarClassService;
-import net.carting.service.DocumentService;
-import net.carting.service.LeaderService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
-
+import net.carting.service.*;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,61 +15,68 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 
-	@Autowired
-	private DocumentService documentService;	
-	@Autowired
-	private CarClassService carClassService;	
-	@Autowired
-	private AdminSettingsService adminSettingsService;
-	@Autowired
-	private LeaderService leaderService;
-	@Autowired
-	private TeamService teamService;
-	@Autowired
-	private UserService userService;
-	
-	private static final Logger LOG = Logger.getLogger(AdminController.class);
-	
-	@RequestMapping(value = "/cabinet", method = RequestMethod.GET)
-	public ModelAndView adminPage(Model model) {
-		model.addAttribute("leadersList", leaderService.getAllLeaders());
-		model.addAttribute("carClassList", carClassService.getAllCarClasses());
-		model.addAttribute("adminSettings", adminSettingsService.getAdminSettings());
-		model.addAttribute("pointsByPlacesList", adminSettingsService.getPointsByPlacesList());
-		return new ModelAndView("admin_cabinet");
-	}
-	
-	@RequestMapping(value = "/addCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String addCarClassAction(@RequestBody Map<String, Object> map) {
-		CarClass carClass = new CarClass();
-		carClass.setName(map.get("name").toString());
-		carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
-		carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
-		carClassService.addCarClass(carClass);
-		LOG.info("Admin has added new car class " + carClass.getName());
-		return Integer.toString(carClass.getId());
-	}
-	
-	@RequestMapping(value = "/editCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String editCarClassAction(@RequestBody Map<String, Object> map) {
-		CarClass carClass = new  CarClass();
-		carClass.setId(Integer.parseInt(map.get("id").toString()));
-		carClass.setName(map.get("name").toString());
-		carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
-		carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
-		carClassService.updateCarClass(carClass);
-		LOG.info("Admin has edited car class " + carClass.getName() + " (id = " + carClass.getId() + ")");
-		return "success";
-	}
+    @Autowired
+    private DocumentService documentService;
+    @Autowired
+    private CarClassService carClassService;
+    @Autowired
+    private AdminSettingsService adminSettingsService;
+    @Autowired
+    private LeaderService leaderService;
+    @Autowired
+    private TeamService teamService;
+    @Autowired
+    private UserService userService;
 
-    @RequestMapping(value = "/deleteCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
-    public @ResponseBody
+    private static final Logger LOG = Logger.getLogger(AdminController.class);
+
+    @RequestMapping(value = "/cabinet", method = RequestMethod.GET)
+    public ModelAndView adminPage(Model model) {
+        model.addAttribute("leadersList", leaderService.getAllLeaders());
+        model.addAttribute("carClassList", carClassService.getAllCarClasses());
+        model.addAttribute("adminSettings", adminSettingsService.getAdminSettings());
+        model.addAttribute("pointsByPlacesList", adminSettingsService.getPointsByPlacesList());
+        return new ModelAndView("admin_cabinet");
+    }
+
+    @RequestMapping(value = "/addCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String addCarClassAction(@RequestBody Map<String, Object> map) {
+        CarClass carClass = new CarClass();
+        carClass.setName(map.get("name").toString());
+        carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
+        carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
+        carClassService.addCarClass(carClass);
+        LOG.info("Admin has added new car class " + carClass.getName());
+        return Integer.toString(carClass.getId());
+    }
+
+    @RequestMapping(value = "/editCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String editCarClassAction(@RequestBody Map<String, Object> map) {
+        CarClass carClass = new CarClass();
+        carClass.setId(Integer.parseInt(map.get("id").toString()));
+        carClass.setName(map.get("name").toString());
+        carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
+        carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
+        carClassService.updateCarClass(carClass);
+        LOG.info("Admin has edited car class " + carClass.getName() + " (id = " + carClass.getId() + ")");
+        return "success";
+    }
+
+    @RequestMapping(value = "/deleteCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
     String deleteCarClassAction(@RequestBody Map<String, Object> map) {
         String result = "success";
         int id = Integer.parseInt(map.get("id").toString());
@@ -92,76 +89,82 @@ public class AdminController {
         }
         return result;
     }
-	
-	@RequestMapping(value = "/changePerentalPermissionYears", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String changePerentalPermissionYearsAction(@RequestBody Map<String, Object> map) {
-		int perentalPermissionYears = Integer.parseInt(map.get("perentalPermissionYears").toString());		
-		adminSettingsService.updatePerentalPermissionYears(perentalPermissionYears);
-		LOG.info("Admin has changed perental permission years to " + perentalPermissionYears);
-		return "success";
-	}
-	
-	@RequestMapping(value = "/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String changePointsByPlacesAction(@RequestBody Map<String, Object> map) {
-		String pointsByPlaces = map.get("pointsByPlaces").toString();		
-		adminSettingsService.updatePointsByPlaces(pointsByPlaces);
-		LOG.info("Admin has changed points by places to " + pointsByPlaces);
-		return "success";
-	}
-	
-	@RequestMapping(value = "/changeFeedbackEmail", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String changeFeedbackEmailAction(@RequestBody Map<String, Object> map) {
-		String feedbackEmail = map.get("feedbackEmail").toString();
-		adminSettingsService.updateFeedbackEmail(feedbackEmail);
-		LOG.info("Admin has changed feedback email to " + feedbackEmail);
-		return "success";
-	}
-	
-	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String changePasswordAction(@RequestBody Map<String, Object> map) 
-			throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		
-		String oldPassword = map.get("oldPassword").toString();
-		String newPassword = map.get("newPassword").toString();
-		
-		String username = userService.getCurrentUserName();
-		User user = userService.getUserByUserName(username);
-		if(!user.getPassword().equals(userService.getEncodedPassword(oldPassword))){
-			LOG.info(username + " trying to change their password but incorrectly entered old password");
-			return "error";
-		}
-		
-		userService.changePassword(user, newPassword);
-		LOG.info(username + " has successfuly changed their password");
-		return "success";
-	}
-	
-	@RequestMapping(value = "/deleteLeader", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String deleteLeader(@RequestBody Map<String, Object> map) {
-		int leaderId = Integer.parseInt(map.get("id").toString());		
-		if(teamService.isTeamByLeaderId(leaderId)){
-			return "error";
-		}
-		Leader leader = leaderService.getLeaderById(leaderId);
-		leaderService.deleteLeader(leader);
-		LOG.info("Admin has deleted leader " + leader.getFirstName() + " " + leader.getFirstName());
-		return "success";
-	}
-	
-	@RequestMapping(value = "/resetLeaderPass", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	String resetLeaderPass(@RequestBody Map<String, Object> map) 
-			throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		int leaderId = Integer.parseInt(map.get("id").toString());		
-		Leader leader = leaderService.getLeaderById(leaderId);
-		userService.resetPassword(leader.getUser());
-		LOG.info("Admin has reseted leader(" + leader.getFirstName() + " " + leader.getFirstName() + ") password to default");
-		return "success";
-	}
+
+    @RequestMapping(value = "/changePerentalPermissionYears", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changePerentalPermissionYearsAction(@RequestBody Map<String, Object> map) {
+        int perentalPermissionYears = Integer.parseInt(map.get("perentalPermissionYears").toString());
+        adminSettingsService.updatePerentalPermissionYears(perentalPermissionYears);
+        LOG.info("Admin has changed perental permission years to " + perentalPermissionYears);
+        return "success";
+    }
+
+    @RequestMapping(value = "/changePointsByPlaces", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changePointsByPlacesAction(@RequestBody Map<String, Object> map) {
+        String pointsByPlaces = map.get("pointsByPlaces").toString();
+        adminSettingsService.updatePointsByPlaces(pointsByPlaces);
+        LOG.info("Admin has changed points by places to " + pointsByPlaces);
+        return "success";
+    }
+
+    @RequestMapping(value = "/changeFeedbackEmail", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changeFeedbackEmailAction(@RequestBody Map<String, Object> map) {
+        String feedbackEmail = map.get("feedbackEmail").toString();
+        adminSettingsService.updateFeedbackEmail(feedbackEmail);
+        LOG.info("Admin has changed feedback email to " + feedbackEmail);
+        return "success";
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changePasswordAction(@RequestBody Map<String, Object> map)
+            throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        String oldPassword = map.get("oldPassword").toString();
+        String newPassword = map.get("newPassword").toString();
+
+        String username = userService.getCurrentUserName();
+        User user = userService.getUserByUserName(username);
+        if (!user.getPassword().equals(userService.getEncodedPassword(oldPassword))) {
+            LOG.info(username + " trying to change their password but incorrectly entered old password");
+            return "error";
+        }
+
+        userService.changePassword(user, newPassword);
+        LOG.info(username + " has successfuly changed their password");
+        return "success";
+    }
+
+    @RequestMapping(value = "/deleteLeader", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String deleteLeader(@RequestBody Map<String, Object> map) {
+        int leaderId = Integer.parseInt(map.get("id").toString());
+        if (teamService.isTeamByLeaderId(leaderId)) {
+            return "error";
+        }
+        Leader leader = leaderService.getLeaderById(leaderId);
+        leaderService.deleteLeader(leader);
+        LOG.info("Admin has deleted leader " + leader.getFirstName() + " " + leader.getFirstName());
+        return "success";
+    }
+
+    @RequestMapping(value = "/resetLeaderPass", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String resetLeaderPass(@RequestBody Map<String, Object> map)
+            throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        int leaderId = Integer.parseInt(map.get("id").toString());
+        Leader leader = leaderService.getLeaderById(leaderId);
+        userService.resetPassword(leader.getUser());
+        LOG.info("Admin has reseted leader(" + leader.getFirstName() + " " + leader.getFirstName() + ") password to default");
+        return "success";
+    }
 
 }

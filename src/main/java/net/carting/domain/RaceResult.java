@@ -1,97 +1,90 @@
 package net.carting.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "race_results")
 public class RaceResult {
-	
-	@Id
-	@Column(name = "id")
-	@GeneratedValue
-	private int id;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "racer_id", nullable = false)
-	private Racer racer;
 
-	@Column(name="place", nullable = false)
-	private Integer place;
-	
-	@Column(name="points", nullable = false)
-	private Integer points;
-		
-	@Column(name="full_laps", nullable = false)
-	private Integer fullLaps;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "race_id", nullable = false)
-	private Race race;
-	
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
+    private int id;
 
-	@Column(name="car_number", nullable = false)
-	private Integer carNumber;
-	
-	public Integer getCarNumber() {
-		return carNumber;
-	}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "racer_id", nullable = false)
+    private Racer racer;
 
-	public void setCarNumber(Integer carNumber) {
-		this.carNumber = carNumber;
-	}
+    @Column(name = "place", nullable = false)
+    private Integer place;
 
-	public int getId() {
-		return id;
-	}
+    @Column(name = "points", nullable = false)
+    private Integer points;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @Column(name = "full_laps", nullable = false)
+    private Integer fullLaps;
 
-	public Racer getRacer() {
-		return racer;
-	}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "race_id", nullable = false)
+    private Race race;
 
-	public void setRacer(Racer racer) {
-		this.racer = racer;
-	}
 
-	public Integer getPlace() {
-		return place;
-	}
+    @Column(name = "car_number", nullable = false)
+    private Integer carNumber;
 
-	public void setPlace(Integer place) {
-		this.place = place;
-	}
+    public Integer getCarNumber() {
+        return carNumber;
+    }
 
-	public Integer getPoints() {
-		return points;
-	}
+    public void setCarNumber(Integer carNumber) {
+        this.carNumber = carNumber;
+    }
 
-	public void setPoints(Integer points) {
-		this.points = points;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public Integer getFullLaps() {
-		return fullLaps;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setFullLaps(Integer fullLaps) {
-		this.fullLaps = fullLaps;
-	}
+    public Racer getRacer() {
+        return racer;
+    }
 
-	public Race getRace() {
-		return race;
-	}
+    public void setRacer(Racer racer) {
+        this.racer = racer;
+    }
 
-	public void setRace(Race race) {
-		this.race = race;
-	}	
+    public Integer getPlace() {
+        return place;
+    }
+
+    public void setPlace(Integer place) {
+        this.place = place;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getFullLaps() {
+        return fullLaps;
+    }
+
+    public void setFullLaps(Integer fullLaps) {
+        this.fullLaps = fullLaps;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
+    }
 }
