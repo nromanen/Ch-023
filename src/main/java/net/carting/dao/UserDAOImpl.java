@@ -3,9 +3,10 @@ package net.carting.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 
 import net.carting.domain.Authority;
@@ -14,74 +15,81 @@ import net.carting.domain.User;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
-	@Override
-	public User getUserByUserName(String userName) {
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from User where username= :username")
-				.setParameter("username", userName);
-		return (User) query.uniqueResult();
+    @Override
+    public User getUserByUserName(String userName) {
+        Query query = entityManager
+                .createQuery("from User where username= :username")
+                .setParameter("username", userName);
+        User user = (User) query.getResultList().get(0);
+        
+        return user;
 
-	}
+    }
 
-	@Override
-	public List<String> getAuthoritiesByUserName(String userName) {
-		User u = (User) sessionFactory.getCurrentSession()
-				.createQuery("from User where username= :username")
-				.setParameter("username", userName).list().get(0);
-		Authority a = u.getAuthority();
-		String auth = a.getAuthority();
-		List<String> l = new ArrayList<String>();
-		l.add(auth);
-		return l;
-	}
+    @Override
+    public List<String> getAuthoritiesByUserName(String userName) {
+        User u = (User) entityManager
+                .createQuery("from User where username= :username")
+                .setParameter("username", userName).getResultList().get(0);
+        Authority a = u.getAuthority();
+        String auth = a.getAuthority();
+        List<String> l = new ArrayList<String>();
+        l.add(auth);
+        
+        return l;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User> getAllUsers() {
-		return sessionFactory.getCurrentSession().createQuery("from User")
-				.list();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = entityManager
+                .createQuery("from User").getResultList();
+        
+        return users;
+    }
 
-	@Override
-	public void addUser(User user) {
-		sessionFactory.getCurrentSession().save(user);
-	}
+    @Override
+    public void addUser(User user) {
+        entityManager.persist(user);
+        
+    }
 
-	@Override
-	public void updateUser(User user) {
-		sessionFactory.getCurrentSession().merge(user);
-	}
+    @Override
+    public void updateUser(User user) {
+        entityManager.merge(user);
+        
+    }
 
-	@Override
-	public void deleteUser(User user) {
-		sessionFactory.getCurrentSession().delete(user);
-	}
+    @Override
+    public void deleteUser(User user) {
+        entityManager.remove(user);
+        
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean isSetUser(String username) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean isSetUser(String username) {
 
-		List<User> result = sessionFactory.getCurrentSession()
-				.createQuery("from User where username = :username")
-				.setParameter("username", username).list();
+        List<User> result = entityManager
+                .createQuery("from User where username = :username")
+                .setParameter("username", username).getResultList();
 
-		if (result.size() > 0) {
-			return true;
-		}
-		return false;
-	}
+        
+        return result.size() > 0;
+    }
 
-	@Override
-	public void setEnabled(String username, boolean enabled) {
-		Query query = sessionFactory.getCurrentSession().createQuery(
-				"UPDATE User SET enabled = :enabled "
-						+ "WHERE username = :username");
-		query.setBoolean("enabled", enabled);
-		query.setString("username", username);
-		query.executeUpdate();
-	}
+    @Override
+    public void setEnabled(String username, boolean enabled) {
+        Query query = entityManager.createQuery(
+                "UPDATE User SET enabled = :enabled "
+                        + "WHERE username = :username");
+        query.setParameter("enabled", enabled);
+        query.setParameter("username", username);
+        query.executeUpdate();
+        
+    }
 
 }

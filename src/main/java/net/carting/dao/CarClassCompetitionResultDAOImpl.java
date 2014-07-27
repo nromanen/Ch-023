@@ -2,61 +2,77 @@ package net.carting.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 
 @Repository
-public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResultDAO{
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	@Override
-	public List<CarClassCompetitionResult> getAllCarClassCompetitionResults() {
-		return sessionFactory.getCurrentSession().createQuery("from CarClassCompetitionResult") .list();
-	}
+public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResultDAO {
 
-	@Override
-	public CarClassCompetitionResult getCarClassCompetitionResultById(int id) {
-		return (CarClassCompetitionResult) sessionFactory.getCurrentSession().get(CarClassCompetitionResult.class, id);
-	}
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
-	@Override
-	public void addCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
-		sessionFactory.getCurrentSession().save(carClassCompetitionResult);
-		
-	}
+    @Override
+    public List<CarClassCompetitionResult> getAllCarClassCompetitionResults() {
+        List<CarClassCompetitionResult> competitionResults = entityManager
+                .createQuery("from CarClassCompetitionResult")
+                .getResultList();
+        return competitionResults;
+    }
 
-	@Override
-	public void updateCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
-		sessionFactory.getCurrentSession().merge(carClassCompetitionResult);		
-	}
+    @Override
+    public CarClassCompetitionResult getCarClassCompetitionResultById(int id) {
+        CarClassCompetitionResult result = (CarClassCompetitionResult) entityManager
+                .createQuery("from CarClassCompetitionResult where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
+        return result;
+    }
 
-	@Override
-	public void deleteCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
-		sessionFactory.getCurrentSession().delete(carClassCompetitionResult);	
-	}
+    @Override
+    public void addCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
+        entityManager.persist(carClassCompetitionResult);
+    }
 
-	@Override
-	public List<CarClassCompetitionResult> getCarClassCompetitionResultsByCarClassCompetition(
-			CarClassCompetition carClassCompetition) {
-		
-			Query query = sessionFactory.getCurrentSession().createQuery("from CarClassCompetitionResult cccr where cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition order by absolutePlace").setParameter("carClassCompetition",carClassCompetition);
-			return query.list();
-			
-	}
+    @Override
+    public void updateCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
+        entityManager.merge(carClassCompetitionResult);
+    }
 
-	@Override
-	public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByPoints(
-			CarClassCompetition carClassCompetition) {
-		Query query = sessionFactory.getCurrentSession().createQuery("from CarClassCompetitionResult cccr where cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition order by absolutePoints desc").setParameter("carClassCompetition",carClassCompetition);
-		return query.list();
-	}
+    @Override
+    public void deleteCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
+        entityManager.remove(carClassCompetitionResult);
+    }
+
+    @Override
+    public List<CarClassCompetitionResult> getCarClassCompetitionResultsByCarClassCompetition(
+            CarClassCompetition carClassCompetition) {
+
+        Query query = entityManager.
+                createQuery("from CarClassCompetitionResult cccr where " +
+                        "cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition " +
+                        "order by absolutePlace");
+        query.setParameter("carClassCompetition", carClassCompetition);
+        List<CarClassCompetitionResult> result = query.getResultList();
+        return result;
+    }
+
+    @Override
+    public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByPoints(
+            CarClassCompetition carClassCompetition) {
+        Query query = entityManager.
+                createQuery("from CarClassCompetitionResult cccr " +
+                        "where cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition " +
+                        "order by absolutePoints desc");
+        query.setParameter("carClassCompetition", carClassCompetition);
+        List<CarClassCompetitionResult> result = query.getResultList();
+        return result;
+    }
 
 }
 

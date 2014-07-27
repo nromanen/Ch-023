@@ -3,75 +3,85 @@ package net.carting.dao;
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
 public class TeamDAOImpl implements TeamDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Team> getAllTeams() {
-		return sessionFactory.getCurrentSession().createQuery("FROM Team").list();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Team> getAllTeams() {
+        List<Team> teams = entityManager.createQuery("FROM Team").getResultList();
+        
+        return teams;
+    }
 
-	@Override
-	public Team getTeamById(int id) {
-		return (Team) sessionFactory.getCurrentSession().get(Team.class, id);
-	}
+    @Override
+    public Team getTeamById(int id) {
+        Team team = (Team) entityManager
+                .createQuery("from Team where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
+        
+        return team;
+    }
 
-	public void addTeam(Team team) {
-		sessionFactory.getCurrentSession().save(team);
-	}
+    public void addTeam(Team team) {
+        entityManager.persist(team);
+        
+    }
 
-	@Override
-	public void updateTeam(Team team) {
-		sessionFactory.getCurrentSession().merge(team);
-	}
+    @Override
+    public void updateTeam(Team team) {
+        entityManager.merge(team);
+        
+    }
 
-	@Override
-	public void deleteTeam(Team team) {
-		sessionFactory.getCurrentSession().delete(team);
+    @Override
+    public void deleteTeam(Team team) {
+        entityManager.remove(team);
+        
+    }
 
-	}
+    @Override
+    public boolean isSetTeam(String teamName) {
+        String hql = "FROM Team WHERE name = ?";
+        Query query = entityManager.createQuery(hql).setParameter(0, teamName);
 
-	@Override
-	public boolean isSetTeam(String teamName) {
-		String hql = "FROM Team WHERE name = ?";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql).setString(0, teamName);
+        Team result = (Team) query.getResultList().get(0);
 
-		Team result = (Team) query.uniqueResult();
-		if (result != null) {
-			return true;
-		}
-		return false;
-	}
+        
+        return result != null;
+    }
 
-	@Override
-	public Team getTeamByLeader(Leader leader) {
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery("FROM Team WHERE leader = :leader")
-				.setParameter("leader", leader);
-		return (Team) query.uniqueResult();
-	}
+    @Override
+    public Team getTeamByLeader(Leader leader) {
+        Query query = entityManager
+                .createQuery("FROM Team WHERE leader = :leader")
+                .setParameter("leader", leader);
+        Team team = (Team) query.getResultList().get(0);
+        
+        return team;
+    }
 
-	@Override
-	public boolean isTeamByLeaderId(int leaderId) {
-		Query query = sessionFactory.getCurrentSession().createQuery("FROM Team WHERE leader.id = :leaderId");
-		query.setInteger("leaderId", leaderId);
-		
-		Team result = (Team) query.uniqueResult();
-		if (result != null) {
-			return true;
-		}
-		return false;
-	}
-	
+    @Override
+    public boolean isTeamByLeaderId(int leaderId) {
+        Query query = entityManager.createQuery("FROM Team WHERE leader.id = :leaderId");
+        query.setParameter("leaderId", leaderId);
+
+        Team result = (Team) query.getResultList().get(0);
+
+        
+        return result != null;
+    }
 
 }

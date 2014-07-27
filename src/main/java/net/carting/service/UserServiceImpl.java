@@ -113,22 +113,22 @@ public class UserServiceImpl implements UserService {
 		}
 		return hexPassword.toString();
 	}
-	
+
 	@Override
 	@Transactional
 	public void setEnabled(String username, boolean enabled){
 		userDao.setEnabled(username, enabled);
 	}
-	
+
 	@Override
 	@Transactional
-	public void resetPassword(User user) 
+	public void resetPassword(User user)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		User userToUpdate = user;
 		userToUpdate.setPassword(getEncodedPassword(User.DEFAULT_PASSWORD));
 		userDao.updateUser(userToUpdate);
 	}
-	
+
 	@Override
 	@Transactional
 	public void changePassword(User user, String password) 

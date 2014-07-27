@@ -1,50 +1,54 @@
 package net.carting.dao;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import net.carting.domain.CarClassCompetition;
 
-import net.carting.util.EntityManagerUtil;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Repository
 public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO{
 
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
+
 	@Override
 	public List<CarClassCompetition> getAllCarClassCompetitions() {
-        List<CarClassCompetition> classCompetitions = EntityManagerUtil.getEntityManager().
-                createQuery("from CarClassCompetition").getResultList();
-        EntityManagerUtil.closeTransaction();
+        List<CarClassCompetition> classCompetitions = entityManager
+                .createQuery("from CarClassCompetition").getResultList();
+        
         return classCompetitions;
 	}
 
 	@Override
 	public CarClassCompetition getCarClassCompetitionById(int id) {
-        CarClassCompetition carClassCompetition = EntityManagerUtil.getEntityManager().getReference(CarClassCompetition.class, id);
-        EntityManagerUtil.closeTransaction();
+        CarClassCompetition carClassCompetition = (CarClassCompetition) entityManager
+                .createQuery("from CarClassCompetition where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
 		return carClassCompetition;
 	}
 
 	@Override
 	public void addCarClassCompetition(CarClassCompetition carClassCompetition) {
-        EntityManagerUtil.getEntityManager().persist(carClassCompetition);
-        EntityManagerUtil.closeTransaction();
+        entityManager.persist(carClassCompetition);
+        
 	}
 
 	@Override
 	public void updateCarClassCompetition(CarClassCompetition carClassCompetition) {
-        //TODO: NEED TO TEST
-		Query query = EntityManagerUtil.getEntityManager().createQuery("UPDATE CarClassCompetition "
+		Query query = entityManager.createQuery("UPDATE CarClassCompetition "
 				+ "SET firstRaceTime = :firstRaceTime, "
 				+ "secondRaceTime = :secondRaceTime, "
 				+ "circleCount = :circleCount, "
 				+ "percentageOffset = :percentageOffset "
 				+ "WHERE id = :id");
 
-        //TODO: WAS setTime
 		query.setParameter("firstRaceTime", carClassCompetition.getFirstRaceTime());
 		query.setParameter("secondRaceTime", carClassCompetition.getSecondRaceTime());
 
@@ -53,36 +57,33 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO{
 		query.setParameter("id", carClassCompetition.getId());
 		
 		query.executeUpdate();
-        EntityManagerUtil.closeTransaction();
 	}
 
 	@Override
 	public void deleteCarClassCompetition(CarClassCompetition carClassCompetition) {
-        EntityManagerUtil.getEntityManager().remove(carClassCompetition);
-        EntityManagerUtil.closeTransaction();
+        entityManager.remove(carClassCompetition);
 	}
 	
 	@Override
 	public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId) {
-		Query query = EntityManagerUtil.getEntityManager().
+		Query query = entityManager.
 				createQuery("FROM CarClassCompetition ccc "
                         + "WHERE ccc.competition.id = :id "
                         + "ORDER BY ccc.carClass.name");
 		query.setParameter("id", competitionId);
         List<CarClassCompetition> competitions = query.getResultList();
-        EntityManagerUtil.closeTransaction();
+        
 		return competitions;
 	}
 	
 	@Override
 	public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId) {	
-		Query query = EntityManagerUtil.getEntityManager().
+		Query query = entityManager.
 				createQuery("FROM CarClassCompetition ccc "
 						  + "WHERE ccc.carClass.id = :id "
 						  + "ORDER BY ccc.carClass.name");
 		query.setParameter("id", carClassId);
         List<CarClassCompetition> competitions = query.getResultList();
-        EntityManagerUtil.closeTransaction();
 		return competitions;
 	}
 	

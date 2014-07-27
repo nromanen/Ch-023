@@ -2,43 +2,56 @@ package net.carting.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import net.carting.domain.File;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Repository
 public class FileDAOImpl implements FileDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<File> getAllFiles() {
-		return sessionFactory.getCurrentSession().createQuery("from File")
-				.list();
+        List<File> files = entityManager
+                .createQuery("from File")
+                .getResultList();
+        
+		return files;
 	}
 
 	@Override
 	public File getFileById(int id) {
-		return (File) sessionFactory.getCurrentSession().get(File.class, id);
-	}
+        File file = (File) entityManager
+                .createQuery("from File where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
+        
+        return file;
+    }
 
 	@Override
 	public void addFile(File file) {
-		sessionFactory.getCurrentSession().save(file);
+        entityManager.persist(file);
+        
 	}
 
 	@Override
 	public void updateFile(File file) {
-		sessionFactory.getCurrentSession().merge(file);
+        entityManager.merge(file);
+        
 	}
 
 	@Override
 	public void deleteFile(File file) {
-		sessionFactory.getCurrentSession().delete(file);
+        entityManager.remove(file);
+        
 	}
 
 }

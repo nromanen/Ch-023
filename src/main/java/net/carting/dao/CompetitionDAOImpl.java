@@ -4,85 +4,102 @@ import java.util.List;
 
 import net.carting.domain.Competition;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.*;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CompetitionDAOImpl implements CompetitionDAO{
-	
+
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
+
 	public static final int COMPETITION_PER_PAGE = 1;
-	
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Override
 	public List<Competition> getAllCompetitions() {
-		Query query = sessionFactory.getCurrentSession().createQuery("from Competition ORDER BY dateStart DESC");
-		return query.list();
+
+		Query query = entityManager.createQuery("from Competition ORDER BY dateStart DESC");
+        List<Competition> competitions = query.getResultList();
+        
+		return competitions;
 	}
-	
+
 	@Override
 	public List<Competition> getAllEnabledCompetitions() {
-		Query query = sessionFactory.getCurrentSession().createQuery("from Competition WHERE enabled = '1' ORDER BY dateStart DESC");
-		return query.list();
+		Query query = entityManager
+                .createQuery("from Competition WHERE enabled = '1' ORDER BY dateStart DESC");
+        List<Competition> competitions = query.getResultList();
+        
+        return competitions;
 	}
-	
+
 	@Override
 	public List<Competition> getCompetitionsByYear(int year) {
-		Query query = sessionFactory.getCurrentSession()
+		Query query = entityManager
 				.createQuery("from Competition WHERE YEAR(dateStart) = :year ORDER BY dateStart DESC");
-		query.setInteger("year", year);
-		return query.list();
+		query.setParameter("year", year);
+        List<Competition> competitions = query.getResultList();
+        return competitions;
 	}
-	
+
 	@Override
 	public List<Competition> getAllCompetitionsByPage(int page) {
-		Query query = sessionFactory.getCurrentSession()
+		Query query = entityManager
 				.createQuery("from Competition ORDER BY dateStart DESC");
 		query.setFirstResult((page - 1) * COMPETITION_PER_PAGE);
 		query.setMaxResults(COMPETITION_PER_PAGE);
-		return (List<Competition>) query.list();
+        List<Competition> competitions = query.getResultList();
+        
+        return competitions;
 	}
 
 	@Override
 	public Competition getCompetitionById(int id) {
-		return (Competition) sessionFactory.getCurrentSession().get(Competition.class, id);
+        Competition competition = (Competition) entityManager.createQuery("from Competition where id = :id")
+                .setParameter("id", id).getResultList().get(0);
+        
+		return competition;
 	}
 
 	@Override
 	public void addCompetition(Competition competition) {
-		sessionFactory.getCurrentSession().save(competition);		
+        entityManager.persist(competition);
+        
 	}
 
 	@Override
 	public void updateCompetition(Competition competition) {
-		sessionFactory.getCurrentSession().merge(competition);		
+        entityManager.merge(competition);
+        
 	}
 
 	@Override
 	public void deleteCompetition(Competition competition) {
-		sessionFactory.getCurrentSession().delete(competition);		
+        entityManager.remove(competition);
+        
 	}
-	
+
 	@Override
-	public void setEnabled(int competitionId, boolean enabled){		
-		Query query = sessionFactory.getCurrentSession().
+	public void setEnabled(int competitionId, boolean enabled){
+		Query query = entityManager.
 				createQuery("UPDATE Competition SET enabled = :enabled "
 							+ "WHERE id = :id");
-		query.setBoolean("enabled", enabled);
-		query.setInteger("id", competitionId);
-		query.executeUpdate();	
+		query.setParameter("enabled", enabled);
+		query.setParameter("id", competitionId);
+		query.executeUpdate();
+        
 	}
-	
+
 	@Override
 	public List<Integer> getCompetitionsYearsList(){
-		Query query = sessionFactory.getCurrentSession()
+		Query query = entityManager
 				.createQuery("SELECT YEAR(dateStart) FROM Competition "
 						+ "GROUP BY YEAR(dateStart) "
 						+ "ORDER BY YEAR(dateStart) DESC");
-		return (List<Integer>) query.list();
+        List<Integer> competitions = query.getResultList();
+        
+        return competitions;
 	}
 
 }
