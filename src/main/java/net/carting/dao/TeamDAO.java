@@ -18,9 +18,9 @@ public interface TeamDAO {
     public void deleteTeam(Team team);
 
     public boolean isSetTeam(String teamName);
-    
+
     public Team getTeamByLeader(Leader leader);
-   
+
     public boolean isTeamByLeaderId(int leaderId);
-    
+
 }

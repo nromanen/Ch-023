@@ -1,13 +1,11 @@
 package net.carting.dao;
 
 import net.carting.domain.Leader;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -21,7 +19,7 @@ public class LeaderDAOImpl implements LeaderDAO {
         List<Leader> leaders = entityManager
                 .createQuery("from Leader ORDER BY registrationDate DESC, lastName, firstName")
                 .getResultList();
-        
+
         return leaders;
     }
 
@@ -32,25 +30,25 @@ public class LeaderDAOImpl implements LeaderDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return lead;
     }
 
     public void addLeader(Leader leader) {
         entityManager.persist(leader);
-        
+
     }
 
     @Override
     public void updateLeader(Leader leader) {
         entityManager.merge(leader);
-        
+
     }
 
     @Override
     public void deleteLeader(Leader leader) {
         entityManager.remove(leader);
-        
+
     }
 
     @Override
@@ -59,7 +57,7 @@ public class LeaderDAOImpl implements LeaderDAO {
                 createQuery("FROM Leader WHERE user.username = :username");
         query.setParameter("username", username);
         Leader lead = (Leader) query.getResultList().get(0);
-        
+
         return lead;
     }
 

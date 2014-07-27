@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
-    "-//Hibernate/Hibernate Configuration DTD//EN"
-    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-	<session-factory>
-		<mapping class="net.carting.domain.Team" />
-		<mapping class="net.carting.domain.Leader" />
-		<mapping class="net.carting.domain.Racer" />
-		<mapping class="net.carting.domain.CarClass" />
-		<mapping class="net.carting.domain.RacerCarClassNumber" />
-		<mapping class="net.carting.domain.Race" />
-		<mapping class="net.carting.domain.Authority" />
-		<mapping class="net.carting.domain.User" />
-		<mapping class="net.carting.domain.RaceResult" />
-		<mapping class="net.carting.domain.Competition" />
-		<mapping class="net.carting.domain.CarClassCompetition" />
-		<mapping class="net.carting.domain.RacerCarClassCompetitionNumber" />
-		<mapping class="net.carting.domain.TeamInCompetition" />
-		<mapping class="net.carting.domain.CarClassCompetitionResult" />
-		<mapping class="net.carting.domain.File" />
-		<mapping class="net.carting.domain.Document" />
-		<mapping class="net.carting.domain.AdminSettings" />
-		
-	</session-factory>
+    <session-factory>
+        <mapping class="net.carting.domain.Team"/>
+        <mapping class="net.carting.domain.Leader"/>
+        <mapping class="net.carting.domain.Racer"/>
+        <mapping class="net.carting.domain.CarClass"/>
+        <mapping class="net.carting.domain.RacerCarClassNumber"/>
+        <mapping class="net.carting.domain.Race"/>
+        <mapping class="net.carting.domain.Authority"/>
+        <mapping class="net.carting.domain.User"/>
+        <mapping class="net.carting.domain.RaceResult"/>
+        <mapping class="net.carting.domain.Competition"/>
+        <mapping class="net.carting.domain.CarClassCompetition"/>
+        <mapping class="net.carting.domain.RacerCarClassCompetitionNumber"/>
+        <mapping class="net.carting.domain.TeamInCompetition"/>
+        <mapping class="net.carting.domain.CarClassCompetitionResult"/>
+        <mapping class="net.carting.domain.File"/>
+        <mapping class="net.carting.domain.Document"/>
+        <mapping class="net.carting.domain.AdminSettings"/>
+
+    </session-factory>
 </hibernate-configuration>

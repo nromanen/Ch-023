@@ -1,12 +1,12 @@
 package net.carting.dao;
 
-import java.util.List;
-
-import javax.persistence.*;
-
+import net.carting.domain.RacerCarClassCompetitionNumber;
 import org.springframework.stereotype.Repository;
 
-import net.carting.domain.RacerCarClassCompetitionNumber;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompetitionNumberDAO {
@@ -19,7 +19,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         List<RacerCarClassCompetitionNumber> competitionNumbers = entityManager
                 .createQuery("from RacerCarClassCompetitionNumber")
                 .getResultList();
-        
+
         return competitionNumbers;
     }
 
@@ -30,26 +30,26 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return number;
     }
 
     @Override
     public void addRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.persist(racerCarClassCompetitionNumber);
-        
+
     }
 
     @Override
     public void updateRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.merge(racerCarClassCompetitionNumber);
-        
+
     }
 
     @Override
     public void deleteRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.remove(racerCarClassCompetitionNumber);
-        
+
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("carClassCompetitionId", id);
         List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
-        
+
         return competitionNumbers;
     }
 
@@ -74,15 +74,15 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         query.setParameter("carClassCompetitionid", carClassCompetitionid);
         query.setParameter("teamId", teamId);
         List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
-        
+
         return competitionNumbers;
     }
 
     @Override
     public int getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(int id) {
         Query query = entityManager
-        .createQuery("SELECT COUNT(*) FROM RacerCarClassCompetitionNumber "
-                + "WHERE car_class_competition_id = :car_class_competition_id");
+                .createQuery("SELECT COUNT(*) FROM RacerCarClassCompetitionNumber "
+                        + "WHERE car_class_competition_id = :car_class_competition_id");
         query.setParameter("car_class_competition_id", Integer.toString(id));
         Long racersCount = (Long) query.getSingleResult();
         return racersCount.intValue();
@@ -96,7 +96,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "ORDER BY rcccn.racer.team.name, rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("id", id);
         List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
-        
+
         return competitionNumbers;
     }
 
@@ -109,7 +109,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         query.setParameter("carClassCompetitonId", carClassCompetitonId);
         query.setParameter("racerId", racerId);
         query.executeUpdate();
-        
+
     }
 
     @Override
@@ -121,7 +121,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         query.setParameter("competitonId", competitonId);
         query.setParameter("racerId", racerId);
         query.executeUpdate();
-        
+
     }
 
     @Override
@@ -133,7 +133,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         query.setParameter("competitionid", competitionId);
         query.setParameter("teamId", teamId);
         List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
-        
+
         return competitionNumbers;
     }
 

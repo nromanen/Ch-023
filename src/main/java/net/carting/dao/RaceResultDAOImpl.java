@@ -1,17 +1,14 @@
 package net.carting.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
+import java.util.List;
 
 @Repository
 public class RaceResultDAOImpl implements RaceResultDAO {
@@ -22,7 +19,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @Override
     public List<RaceResult> getAllRaceResults() {
         List<RaceResult> raceResults = entityManager.createQuery("from RaceResult").getResultList();
-        
+
         return raceResults;
     }
 
@@ -33,28 +30,28 @@ public class RaceResultDAOImpl implements RaceResultDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return raceResult;
     }
 
     @Override
     public void addRaceResult(RaceResult raceResult) {
         entityManager.persist(raceResult);
-        
+
 
     }
 
     @Override
     public void updateRaceResult(RaceResult raceResult) {
         entityManager.merge(raceResult);
-        
+
 
     }
 
     @Override
     public void deleteRaceResult(RaceResult raceResult) {
         entityManager.remove(raceResult);
-        
+
 
     }
 
@@ -64,7 +61,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
                 .createQuery("from RaceResult where race= :race order by place ")
                 .setParameter("race", race)
                 .getResultList();
-        
+
         return raceResults;
     }
 
@@ -77,7 +74,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
         query.setParameter("raceNumber", raceNumber);
         query.setParameter("racer", racer);
         RaceResult raceResult = (RaceResult) query.getResultList().get(0);
-        
+
         return raceResult;
     }
 

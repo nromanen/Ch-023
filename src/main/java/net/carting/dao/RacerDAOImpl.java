@@ -1,13 +1,11 @@
 package net.carting.dao;
 
 import net.carting.domain.Racer;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class RacerDAOImpl implements RacerDAO {
     @Override
     public List<Racer> getAllRacers() {
         List<Racer> racers = entityManager.createQuery("from Racer").getResultList();
-        
+
         return racers;
     }
 
@@ -32,26 +30,26 @@ public class RacerDAOImpl implements RacerDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return racer;
     }
 
     @Override
     public void addRacer(Racer racer) {
         entityManager.persist(racer);
-        
+
     }
 
     @Override
     public void updateRacer(Racer racer) {
         entityManager.merge(racer);
-        
+
     }
 
     @Override
     public void deleteRacer(Racer racer) {
         entityManager.remove(racer);
-        
+
     }
 
     @Override
@@ -63,7 +61,7 @@ public class RacerDAOImpl implements RacerDAO {
                 .setParameter(2, birthday);
 
         List result = query.getResultList();
-        
+
         return result.size() > 0;
     }
 
@@ -74,7 +72,7 @@ public class RacerDAOImpl implements RacerDAO {
         Query query = entityManager.createQuery(hql);
         query.setParameter("documentType", documentType);
         List<Racer> racers = query.getResultList();
-        
+
         return racers;
     }
 

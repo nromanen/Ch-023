@@ -1,14 +1,12 @@
 package net.carting.dao;
 
-import java.util.List;
+import net.carting.domain.Document;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import net.carting.domain.Document;
+import java.util.List;
 
 @Repository
 public class DocumentDAOImpl implements DocumentDAO {
@@ -20,7 +18,7 @@ public class DocumentDAOImpl implements DocumentDAO {
     @Override
     public List<Document> getAllDocuments() {
         List<Document> documents = entityManager.createQuery("from Document").getResultList();
-        
+
         return documents;
     }
 
@@ -31,27 +29,27 @@ public class DocumentDAOImpl implements DocumentDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return document;
     }
 
     @Override
     public void addDocument(Document document) {
         entityManager.persist(document);
-        
+
     }
 
     @Override
     public void updateDocument(Document document) {
         entityManager.merge(document);
-        
+
 
     }
 
     @Override
     public void deleteDocument(Document document) {
         entityManager.remove(document);
-        
+
     }
 
     @Override
@@ -64,7 +62,7 @@ public class DocumentDAOImpl implements DocumentDAO {
                 .setParameter("racerId", racerId);
         query.executeUpdate();
 
-        
+
     }
 
     @Override
@@ -72,7 +70,7 @@ public class DocumentDAOImpl implements DocumentDAO {
         String sql = "SELECT racer_id FROM racer_document WHERE document_id= :documentId  ";
         Query query = entityManager.createQuery(sql).setParameter("documentId", documentId);
         boolean emptyList = query.getResultList().isEmpty();
-        
+
         if (emptyList) {
             return false;
         }
@@ -86,7 +84,7 @@ public class DocumentDAOImpl implements DocumentDAO {
         List<Document> documents = entityManager.
                 createQuery("from Document where checked= :checked").
                 setParameter("checked", false).getResultList();
-        
+
         return documents;
     }
 

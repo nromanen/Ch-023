@@ -1,16 +1,14 @@
 package net.carting.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.carting.domain.Authority;
+import net.carting.domain.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import net.carting.domain.Authority;
-import net.carting.domain.User;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -24,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
                 .createQuery("from User where username= :username")
                 .setParameter("username", userName);
         User user = (User) query.getResultList().get(0);
-        
+
         return user;
 
     }
@@ -38,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
         String auth = a.getAuthority();
         List<String> l = new ArrayList<String>();
         l.add(auth);
-        
+
         return l;
     }
 
@@ -47,26 +45,26 @@ public class UserDAOImpl implements UserDAO {
     public List<User> getAllUsers() {
         List<User> users = entityManager
                 .createQuery("from User").getResultList();
-        
+
         return users;
     }
 
     @Override
     public void addUser(User user) {
         entityManager.persist(user);
-        
+
     }
 
     @Override
     public void updateUser(User user) {
         entityManager.merge(user);
-        
+
     }
 
     @Override
     public void deleteUser(User user) {
         entityManager.remove(user);
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +75,7 @@ public class UserDAOImpl implements UserDAO {
                 .createQuery("from User where username = :username")
                 .setParameter("username", username).getResultList();
 
-        
+
         return result.size() > 0;
     }
 
@@ -89,7 +87,7 @@ public class UserDAOImpl implements UserDAO {
         query.setParameter("enabled", enabled);
         query.setParameter("username", username);
         query.executeUpdate();
-        
+
     }
 
 }

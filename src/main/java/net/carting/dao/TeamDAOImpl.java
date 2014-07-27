@@ -2,12 +2,11 @@ package net.carting.dao;
 
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
@@ -20,7 +19,7 @@ public class TeamDAOImpl implements TeamDAO {
     @Override
     public List<Team> getAllTeams() {
         List<Team> teams = entityManager.createQuery("FROM Team").getResultList();
-        
+
         return teams;
     }
 
@@ -31,25 +30,25 @@ public class TeamDAOImpl implements TeamDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return team;
     }
 
     public void addTeam(Team team) {
         entityManager.persist(team);
-        
+
     }
 
     @Override
     public void updateTeam(Team team) {
         entityManager.merge(team);
-        
+
     }
 
     @Override
     public void deleteTeam(Team team) {
         entityManager.remove(team);
-        
+
     }
 
     @Override
@@ -59,7 +58,7 @@ public class TeamDAOImpl implements TeamDAO {
 
         Team result = (Team) query.getResultList().get(0);
 
-        
+
         return result != null;
     }
 
@@ -69,7 +68,7 @@ public class TeamDAOImpl implements TeamDAO {
                 .createQuery("FROM Team WHERE leader = :leader")
                 .setParameter("leader", leader);
         Team team = (Team) query.getResultList().get(0);
-        
+
         return team;
     }
 
@@ -80,7 +79,7 @@ public class TeamDAOImpl implements TeamDAO {
 
         Team result = (Team) query.getResultList().get(0);
 
-        
+
         return result != null;
     }
 

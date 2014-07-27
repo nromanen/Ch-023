@@ -1,15 +1,13 @@
 package net.carting.dao;
 
-import java.util.List;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Race;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Race;
+import java.util.List;
 
 @Repository
 public class RaceDAOImpl implements RaceDAO {
@@ -22,7 +20,7 @@ public class RaceDAOImpl implements RaceDAO {
         List<Race> races = entityManager
                 .createQuery("from Race")
                 .getResultList();
-        
+
         return races;
     }
 
@@ -33,27 +31,27 @@ public class RaceDAOImpl implements RaceDAO {
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-        
+
         return race;
     }
 
     @Override
     public void addRace(Race race) {
         entityManager.persist(race);
-        
+
     }
 
     @Override
     public void updateRace(Race race) {
         entityManager.merge(race);
-        
+
 
     }
 
     @Override
     public void deleteRace(Race race) {
         entityManager.remove(race);
-        
+
 
     }
 
@@ -67,7 +65,7 @@ public class RaceDAOImpl implements RaceDAO {
                 .setParameter("carClassCompetition", carClassCompetition);
 
         List<Race> races = query.getResultList();
-        
+
         return races;
     }
 
@@ -79,7 +77,7 @@ public class RaceDAOImpl implements RaceDAO {
         query.setParameter("carClassCompetition", carClassCompetition);
         query.setParameter("raceNumber", raceNumber);
         Race race = (Race) query.getResultList().get(0);
-        
+
         return race;
     }
 
