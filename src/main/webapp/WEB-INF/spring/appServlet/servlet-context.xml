@@ -1,55 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xsi:schemaLocation="
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- DispatcherServlet Context: determines the settings of one servlet; Beans 
-	which are available only to him -->
+    <!-- DispatcherServlet Context: determines the settings of one servlet; Beans
+    which are available only to him -->
 
-	<!-- Allow the use of annotations Spring MVC ( @Controller, etc) -->
-	<annotation-driven />
+    <!-- Allow the use of annotations Spring MVC ( @Controller, etc) -->
+    <annotation-driven/>
 
-	<!-- Localization options -->
-	<!--Writes LocaleChangeInterceptor as interceptor for parameter "lang" -->
-	<mvc:interceptors>
-		<beans:bean
-			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-			<beans:property name="paramName" value="lang" />
-		</beans:bean>
-	</mvc:interceptors>
-	
-	<!--Declares prefix to localization property files -->
-	<beans:bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<beans:property name="basename" value="classpath:messages" />
-		<beans:property name="defaultEncoding" value="UTF-8" />
-	</beans:bean>
-	
-	<!--Declares default locale -->
-	<beans:bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-		<beans:property name="defaultLocale" value="ua" />
-	</beans:bean>
-	
-	<!--  All static content(images, css-files, javascript) will be found in webapp/resources folder. 
-	We are mapping them into url like /resources/**-->
-	<resources mapping="/resources/**" location="/resources/" />
+    <!-- Localization options -->
+    <!--Writes LocaleChangeInterceptor as interceptor for parameter "lang" -->
+    <mvc:interceptors>
+        <beans:bean
+                class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <beans:property name="paramName" value="lang"/>
+        </beans:bean>
+    </mvc:interceptors>
 
-	<!-- CommonsMultipartResolver handles the file upload in a form -->
-	<beans:bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	</beans:bean>
+    <!--Declares prefix to localization property files -->
+    <beans:bean id="messageSource"
+                class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:messages"/>
+        <beans:property name="defaultEncoding" value="UTF-8"/>
+    </beans:bean>
 
-	<!-- Controllers configuration file -->
-	<beans:import resource="controllers.xml" />
-	
-	<!-- File with configurations  exceptions  -->
-	<beans:import resource="exceptions.xml" />	
-	
-	<!-- Apache tiles configurations  -->
-	<beans:import resource="apache_tiles.xml" />
-	
+    <!--Declares default locale -->
+    <beans:bean id="localeResolver"
+                class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <beans:property name="defaultLocale" value="ua"/>
+    </beans:bean>
+
+    <!--  All static content(images, css-files, javascript) will be found in webapp/resources folder.
+    We are mapping them into url like /resources/**-->
+    <resources mapping="/resources/**" location="/resources/"/>
+
+    <!-- CommonsMultipartResolver handles the file upload in a form -->
+    <beans:bean id="multipartResolver"
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </beans:bean>
+
+    <!-- Controllers configuration file -->
+    <beans:import resource="controllers.xml"/>
+
+    <!-- File with configurations  exceptions  -->
+    <beans:import resource="exceptions.xml"/>
+
+    <!-- Apache tiles configurations  -->
+    <beans:import resource="apache_tiles.xml"/>
+
 </beans:beans>

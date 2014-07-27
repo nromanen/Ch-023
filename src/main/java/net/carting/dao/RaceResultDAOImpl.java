@@ -1,68 +1,81 @@
 package net.carting.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassNumber;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class RaceResultDAOImpl implements RaceResultDAO {
-	
-	@Autowired
-	  private SessionFactory sessionFactory;
 
-	@Override
-	public List<RaceResult> getAllRaceResults() {
-		return sessionFactory.getCurrentSession().createQuery("from RaceResult").list();
-	}
+    @PersistenceContext(unitName = "entityManager")
+    private EntityManager entityManager;
 
-	@Override
-	public RaceResult getRaceResultById(int id) {
-		return (RaceResult) sessionFactory.getCurrentSession().get(RaceResult.class, id);
-	}
+    @Override
+    public List<RaceResult> getAllRaceResults() {
+        List<RaceResult> raceResults = entityManager.createQuery("from RaceResult").getResultList();
 
-	@Override
-	public void addRaceResult(RaceResult raceResult) {
-		 sessionFactory.getCurrentSession().save(raceResult);
-		
-	}
+        return raceResults;
+    }
 
-	@Override
-	public void updateRaceResult(RaceResult raceResult) {
-		sessionFactory.getCurrentSession().merge(raceResult);
-		
-	}
+    @Override
+    public RaceResult getRaceResultById(int id) {
+        RaceResult raceResult = (RaceResult) entityManager
+                .createQuery("from RaceResult where id = :id")
+                .setParameter("id", id)
+                .getResultList()
+                .get(0);
 
-	@Override
-	public void deleteRaceResult(RaceResult raceResult) {
-		 sessionFactory.getCurrentSession().delete(raceResult);
-		
-	}
+        return raceResult;
+    }
 
-	@Override
-	public List<RaceResult> getRaceResultsByRace(Race race) {
-		Query query = sessionFactory.getCurrentSession().createQuery("from RaceResult where race= :race order by place ").setParameter("race",race);
-		return (ArrayList<RaceResult>) query.list();
-	}
+    @Override
+    public void addRaceResult(RaceResult raceResult) {
+        entityManager.persist(raceResult);
 
-	@Override
-	public RaceResult getRaceResultByRaceNumberAndRacer(int raceNumber,Racer racer) {
-		
-		Query query = sessionFactory.getCurrentSession().
-				createQuery("FROM RaceResult rr "
-							+ "WHERE rr.race.raceNumber  = :raceNumber AND racer=:racer");
-		query.setParameter("raceNumber", raceNumber);
-		query.setParameter("racer", racer);
-		
-		return (RaceResult) (query.list().get(0));
-	}
+
+    }
+
+    @Override
+    public void updateRaceResult(RaceResult raceResult) {
+        entityManager.merge(raceResult);
+
+
+    }
+
+    @Override
+    public void deleteRaceResult(RaceResult raceResult) {
+        entityManager.remove(raceResult);
+
+
+    }
+
+    @Override
+    public List<RaceResult> getRaceResultsByRace(Race race) {
+        List<RaceResult> raceResults = entityManager
+                .createQuery("from RaceResult where race= :race order by place ")
+                .setParameter("race", race)
+                .getResultList();
+
+        return raceResults;
+    }
+
+    @Override
+    public RaceResult getRaceResultByRaceNumberAndRacer(int raceNumber, Racer racer) {
+
+        Query query = entityManager.
+                createQuery("FROM RaceResult rr "
+                        + "WHERE rr.race.raceNumber  = :raceNumber AND racer=:racer");
+        query.setParameter("raceNumber", raceNumber);
+        query.setParameter("racer", racer);
+        RaceResult raceResult = (RaceResult) query.getResultList().get(0);
+
+        return raceResult;
+    }
 
 }
