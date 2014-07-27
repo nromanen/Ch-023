@@ -78,31 +78,13 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         return competitionNumbers;
     }
 
-    //TODO: NEED TO FIX! Here is magic - one time works OK, another time - exception!
-    // Works OK, only if you're using the code below.
-    // Trying to use EntityManagerUtil class causes exception:
-
-    // Exception: session is closed.
-    // This method shows Racer's count in specified CarClass
-    // Find page /Carting/competition/{id}, at the bottom there is racer's count
-    // update page few times
     @Override
     public int getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(int id) {
-
         Query query = entityManager
         .createQuery("SELECT COUNT(*) FROM RacerCarClassCompetitionNumber "
                 + "WHERE car_class_competition_id = :car_class_competition_id");
         query.setParameter("car_class_competition_id", Integer.toString(id));
-
         Long racersCount = (Long) query.getSingleResult();
-
-        /*Query query = entityManager
-                .createQuery("from RacerCarClassCompetitionNumber "
-                        + "where car_class_competition_id = :car_class_competition_id");
-        query.setParameter("car_class_competition_id", Integer.toString(id));
-        int racersCount = query.getResultList().size();*/
-
-        //
         return racersCount.intValue();
     }
 
