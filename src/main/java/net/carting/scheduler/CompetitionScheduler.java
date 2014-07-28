@@ -26,8 +26,8 @@ public class CompetitionScheduler {
         return first.compareTo(second) >= 0;
     }
 
-    //Fire event everyday at 12:30 pm
-    @Scheduled(cron = "0 30 12 ? * *")
+    //Fire event everyday at 00:30 pm
+    @Scheduled(cron = "0 30 0 ? * *")
     public void disablePastCompetition() {
         Date today = new Date();
         List<Competition> competitions = competitionService.getAllCompetitions();
