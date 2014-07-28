@@ -234,7 +234,7 @@ public class RacerController {
 	@RequestMapping(value = "/getOccupiedDefaultNumbersForCarClass", 
 			method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody
-	ArrayList<Integer> getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
+	List<Integer> getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
 		int carClassId = Integer.parseInt(map.get("carClassId").toString());
 		try{
 			List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
