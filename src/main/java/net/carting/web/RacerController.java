@@ -48,17 +48,19 @@ public class RacerController {
 
         String username = userService.getCurrentUserName();
         String authority = userService.getCurrentAuthority();
-        map.put("authority", authority);
-        map.put("racer", racerService.getRacerById(id));
+
 
         if (authority.equals(ROLE_TEAM_LEADER)) {        	
         	Leader leader = leaderService.getLeaderByUserName(username);
 	        Team team = teamService.getTeamByLeader(leader);
-	        Racer racer = racerService.getRacerById(id);	        
-	        map.put("team", team);
+	        Racer racer = racerService.getRacerById(id);
 	        if (team.getId() != racer.getTeam().getId()) {
-	        	return "redirect:/error403";
-	        } 
+	        	return "error_403";
+	        }
+	        
+	        map.put("authority", authority);
+	        map.put("racer", racerService.getRacerById(id));	        
+	        map.put("team", team);
         }
 
         return "racer";
