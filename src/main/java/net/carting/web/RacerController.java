@@ -16,6 +16,7 @@ import java.util.*;
 public class RacerController {
 
     public static final String ROLE_TEAM_LEADER = "ROLE_TEAM_LEADER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -49,7 +50,6 @@ public class RacerController {
         String username = userService.getCurrentUserName();
         String authority = userService.getCurrentAuthority();
 
-
         if (authority.equals(ROLE_TEAM_LEADER)) {        	
         	Leader leader = leaderService.getLeaderByUserName(username);
 	        Team team = teamService.getTeamByLeader(leader);
@@ -61,6 +61,12 @@ public class RacerController {
 	        map.put("authority", authority);
 	        map.put("racer", racerService.getRacerById(id));	        
 	        map.put("team", team);
+        } else if (authority.equals(ROLE_ADMIN)) {
+        	Racer racer = racerService.getRacerById(id);
+        	Team team = teamService.getTeamById(racer.getTeam().getId());
+        	map.put("authority", authority);
+	        map.put("racer", racerService.getRacerById(id));
+	        map.put("team", team);
         }
 
         return "racer";
@@ -70,11 +76,20 @@ public class RacerController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editRacerPage(Map<String, Object> map,
                                 @PathVariable("id") int id) {
-        if (userService.getCurrentAuthority().equals(ROLE_TEAM_LEADER)) {
+    	
+    	String authority = userService.getCurrentAuthority();
+    	
+        if (authority.equals(ROLE_TEAM_LEADER) || authority.equals(ROLE_ADMIN)) {
             String username = userService.getCurrentUserName();
             Racer racer = racerService.getRacerById(id);
-            Leader leader = leaderService.getLeaderByUserName(username);
-            Team team = teamService.getTeamByLeader(leader);
+            Team team;
+            if (authority.equals(ROLE_TEAM_LEADER)) {
+            	Leader leader = leaderService.getLeaderByUserName(username);
+            	team = teamService.getTeamByLeader(leader);
+            } else {
+            	team = teamService.getTeamById(racer.getTeam().getId());
+            }
+            
             map.put("team", team);
             if (team.getId() == racer.getTeam().getId()) {
                 String carClassIds = "";
@@ -113,11 +128,11 @@ public class RacerController {
 
                 return "racer_edit";
             } else {
-                return "redirect:/error403";
+                return "error_403";
             }
 
         } else {
-            return "redirect:/error403";
+            return "error_403";
         }
     }
 
