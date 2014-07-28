@@ -23,7 +23,7 @@ public class CompetitionScheduler {
     CompetitionService competitionService;
 
     private static boolean compareDate(Date first, Date second) {
-        return first.compareTo(second) >= 0;
+        return first.compareTo(second) > 0;
     }
 
     //Fire event everyday at 00:30 pm
