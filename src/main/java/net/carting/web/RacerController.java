@@ -1,6 +1,7 @@
 package net.carting.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -233,12 +234,17 @@ public class RacerController {
 	@RequestMapping(value = "/getOccupiedDefaultNumbersForCarClass", 
 			method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody
-	String getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
+	ArrayList<Integer> getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
 		int carClassId = Integer.parseInt(map.get("carClassId").toString());
 		try{
-			return racerCarClassNumberService.getNumbersByCarClassId(carClassId, ",");
+			List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
+			ArrayList<Integer> numbers = new ArrayList<Integer>();
+			for (RacerCarClassNumber racer : racers) {
+				numbers.add(racer.getNumber());
+			}
+			return numbers;
 		} catch(Exception e){
-			return "error";
+			return null;
 		}
 	}
 	

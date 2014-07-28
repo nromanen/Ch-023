@@ -224,13 +224,7 @@
 								<input type="text" class="form-control text-center"
 									value="${ racerCarClassNumber.carClass.name}"
 									id="car_class_name${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}"
-									disabled /> <!-- <input type="text"
-									class="form-control text-center car_class_number"
-									name=${ racerCarClassNumber.number}
-									id="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}"
-									value="${ racerCarClassNumber.number}"
-									placeholder="${ racerCarClassNumber.number}" required
-									pattern="[1-9][0-9]?" data-error="Enter number between 1 and 99" />-->
+									disabled />
 								<select class="form-control text-center car_class_number" 
 										id="${racerCarClassNumber.id},${racerCarClassNumber.carClass.id}">
 									<c:forEach var="number" begin="1" end="99">

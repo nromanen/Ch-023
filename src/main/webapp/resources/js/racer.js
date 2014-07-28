@@ -230,12 +230,10 @@ $(document).ready(function(){
 		        type: "POST",
 		        async: false,
 		        success: function(response) {
-		        	if(response != "error"){
-		        		numbers = response.split(",");
-		        		response = "";
-		        		for (var j = 0; j < numbers.length-1; j++) {
-		        			if (numbers[j] != racerNumberInCarClass) {
-		        				response += numbers[j] + ",";
+		        	if(response != null) {
+		        		for (var j = 0; j < response.length; j++) {
+		        			if (response[j] == racerNumberInCarClass) {
+		        				response.splice(j,1);
 		        			}
 		        		}
 		        		disableOccupiedNumbers(fullId, response);
@@ -243,8 +241,6 @@ $(document).ready(function(){
 		        }
 		    });
 		}
-		
-		//$('.car_class_number').removeAttr("disabled");
 	});	
 	
 	$("#delete_classes_ER_modal").click(function(){
@@ -319,33 +315,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	/*$('.car_class_number').change(function(){		
-		var number = $(this).val();
-		var carClassId = this.id.split(",")[1];		
-		var obj = this;
-		var urlCheckClass = window.location.protocol + "//" + window.location.host + '/Carting/racer/isSetNumberForCarClass';
-	    var jsonCheckClass = {"number": number,
-	    					"carClass": carClassId
-	    };			    
-	    
-	    if(this.getAttribute("name") != $(this).val()){
-	    
-		$.ajax({  
-	        url: urlCheckClass,  
-	        data: JSON.stringify(jsonCheckClass),  
-	        contentType: 'application/json',
-	        type: "POST",	        
-	        success: function(response) { 
-	        	if(response==true){
-	        		$('edit_numbers_ER').disabled = true;	        		
-	        		obj.value = obj.name;	        		
-	        	}
-
-	        }
-		});
-	    }
-	});*/
-	
 	$('#editNumbersModal').on('hidden.bs.modal', function (e) {
 		var inputs = document.getElementsByClassName("car_class_number");
 		for (var i = 0; i < inputs .length; i++) {
@@ -404,15 +373,11 @@ $(document).ready(function(){
 	});
 	
 	function disableOccupiedNumbers(dropdown_id, numbers){
-		console.log(dropdown_id);
-		console.log(numbers);
 		$("#" + dropdown_id + " option").each(function(){
 		    $(this).removeAttr('disabled');
 		});
-		var numbers_arr = numbers.split(",");
-		
-		for(var i = 0; i < numbers_arr.length - 1; i++){// -1 because we have separator in the end of string
-			$('#' + dropdown_id + ' option[value="' + numbers_arr[i] + '"]').attr("disabled", "disabled");
+		for(var i = 0; i < numbers.length; i++){
+			$('#' + dropdown_id + ' option[value="' + numbers[i] + '"]').attr("disabled", "disabled");
 		}		
 	}
 	
