@@ -15,9 +15,6 @@ import java.util.*;
 @RequestMapping(value = "/racer")
 public class RacerController {
 
-    public static final String ROLE_TEAM_LEADER = "ROLE_TEAM_LEADER";
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
-
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
@@ -50,7 +47,7 @@ public class RacerController {
         String username = userService.getCurrentUserName();
         String authority = userService.getCurrentAuthority();
 
-        if (authority.equals(ROLE_TEAM_LEADER)) {        	
+        if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
         	Leader leader = leaderService.getLeaderByUserName(username);
 	        Team team = teamService.getTeamByLeader(leader);
 	        Racer racer = racerService.getRacerById(id);
@@ -61,7 +58,7 @@ public class RacerController {
 	        map.put("authority", authority);
 	        map.put("racer", racerService.getRacerById(id));	        
 	        map.put("team", team);
-        } else if (authority.equals(ROLE_ADMIN)) {
+        } else if (authority.equals(UserService.ROLE_ADMIN)) {
         	Racer racer = racerService.getRacerById(id);
         	Team team = teamService.getTeamById(racer.getTeam().getId());
         	map.put("authority", authority);
@@ -79,11 +76,11 @@ public class RacerController {
     	
     	String authority = userService.getCurrentAuthority();
     	
-        if (authority.equals(ROLE_TEAM_LEADER) || authority.equals(ROLE_ADMIN)) {
+        if (authority.equals(UserService.ROLE_TEAM_LEADER) || authority.equals(UserService.ROLE_ADMIN)) {
             String username = userService.getCurrentUserName();
             Racer racer = racerService.getRacerById(id);
             Team team;
-            if (authority.equals(ROLE_TEAM_LEADER)) {
+            if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
             	Leader leader = leaderService.getLeaderByUserName(username);
             	team = teamService.getTeamByLeader(leader);
             } else {
