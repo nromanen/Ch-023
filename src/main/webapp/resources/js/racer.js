@@ -212,7 +212,35 @@ $(document).ready(function(){
 		}
 	});
 	$("#edit_numbers_modal").click(function(){
+		
 		$('#editNumbersModal').modal();
+		var carClasses = $(".car_class_number");
+		for (var i = 0; i < carClasses.length; i++) {
+			var carClassId = carClasses[i].id.split(",")[1];
+			var racerCarClassNumberId = carClasses[i].id.split(",")[0];
+			var fullId = racerCarClassNumberId + "\\," + carClassId;
+			var racerNumberInCarClass = $("#"+fullId + " :selected").val();
+			var url = $("#get_occupied_numbers_url").val();
+			var json = { "carClassId" : carClassId };
+			
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        async: false,
+		        success: function(response) {
+		        	if(response != null) {
+		        		for (var j = 0; j < response.length; j++) {
+		        			if (response[j] == racerNumberInCarClass) {
+		        				response.splice(j,1);
+		        			}
+		        		}
+		        		disableOccupiedNumbers(fullId, response);
+		        	}
+		        }
+		    });
+		}
 	});	
 	
 	$("#delete_classes_ER_modal").click(function(){
@@ -228,7 +256,6 @@ $(document).ready(function(){
 	        url: url,  
 	        data: JSON.stringify(json),  
 	        contentType: 'application/json',
-	        type: "POST",	        
 	        success: function(response) {  
 	        	$("#car_classes").val("");
 	    		$("#car_classes_id").val("");
@@ -286,34 +313,6 @@ $(document).ready(function(){
 		else{
 			$('#deleteChosenClassesERModal').modal('hide');
 		}
-	});
-	
-	$('.car_class_number').change(function(){		
-		var number = $(this).val();
-		var carClassId = this.id.split(",")[1];		
-		var obj = this;
-		var urlCheckClass = window.location.protocol + "//" + window.location.host + '/Carting/racer/isSetNumberForCarClass';
-	    var jsonCheckClass = {"number": number,
-	    					"carClass": carClassId
-	    };			    
-	    
-	    if(this.getAttribute("name") != $(this).val()){
-	    
-		$.ajax({  
-	        url: urlCheckClass,  
-	        data: JSON.stringify(jsonCheckClass),  
-	        contentType: 'application/json',
-	        type: "POST",	        
-	        success: function(response) { 
-
-	        	if(response==true){
-	        		$('edit_numbers_ER').disabled = true;	        		
-	        		obj.value = obj.name;	        		
-	        	}
-
-	        }
-		});
-	    }
 	});
 	
 	$('#editNumbersModal').on('hidden.bs.modal', function (e) {
@@ -377,9 +376,8 @@ $(document).ready(function(){
 		$("#" + dropdown_id + " option").each(function(){
 		    $(this).removeAttr('disabled');
 		});
-		var numbers_arr = numbers.split(",");
-		for(var i = 0; i < numbers_arr.length - 1; i++){// -1 because we have separator in the end of string
-			$('#' + dropdown_id + ' option[value="' + numbers_arr[i] + '"]').attr("disabled", "disabled");
+		for(var i = 0; i < numbers.length; i++){
+			$('#' + dropdown_id + ' option[value="' + numbers[i] + '"]').attr("disabled", "disabled");
 		}		
 	}
 	
@@ -402,6 +400,7 @@ $(document).ready(function(){
 	        	if(response == "error"){
 	        		$('#car_number').attr("disabled", "disabled");
 	        	} else {
+	        		console.log(response);
 	        		disableOccupiedNumbers("car_number", response);
 	        	}
 	        }
