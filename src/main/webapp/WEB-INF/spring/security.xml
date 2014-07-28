@@ -15,8 +15,9 @@
         <intercept-url pattern="/index*"
                        access="ROLE_TEAM_LEADER,ROLE_ANONYMOUS,ROLE_ADMIN"/>
         <intercept-url pattern="/leader/edit/*" access="ROLE_TEAM_LEADER"/>
-        <intercept-url pattern="/racer/add" access="ROLE_TEAM_LEADER"/>
-        <intercept-url pattern="/racer/edit/*" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/racer/*" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+        <intercept-url pattern="/racer/add" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+        <intercept-url pattern="/racer/edit/*" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
 
         <intercept-url pattern="/competition/add" access="ROLE_ADMIN"/>
         <intercept-url pattern="/competition/addCompetition" access="ROLE_ADMIN"/>
