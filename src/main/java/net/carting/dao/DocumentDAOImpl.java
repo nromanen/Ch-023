@@ -62,10 +62,7 @@ public class DocumentDAOImpl implements DocumentDAO {
         String sql = "SELECT racer_id FROM racer_document WHERE document_id= :documentId  ";
         Query query = entityManager.createQuery(sql).setParameter("documentId", documentId);
         boolean emptyList = query.getResultList().isEmpty();
-        if (emptyList) {
-            return false;
-        }
-        return true;
+        return !emptyList;
     }
 
     @SuppressWarnings("unchecked")

@@ -1,6 +1,9 @@
 package net.carting.dao;
 
+import net.carting.domain.Document;
 import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -8,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class RacerDAOImpl implements RacerDAO {
@@ -32,7 +36,16 @@ public class RacerDAOImpl implements RacerDAO {
 
     @Override
     public void addRacer(Racer racer) {
-        entityManager.persist(racer);
+        try {
+            Team team = entityManager.find(Team.class, racer.getTeam().getId());
+            Set<Racer> racers = team.getRacers();
+            racers.add(racer);
+            team.setRacers(racers);
+            entityManager.persist(racer);
+            entityManager.merge(team);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -42,23 +55,17 @@ public class RacerDAOImpl implements RacerDAO {
 
     @Override
     public void deleteRacer(Racer racer) {
-        //TODO: do not works - Cannot delete or update a parent row: a foreign key constraint fails
         try {
-
-            Racer r = entityManager.getReference(Racer.class, racer.getId());
-          //  entityManager.refresh(r);
+            Team team = entityManager.find(Team.class, racer.getTeam().getId());
+            Racer r = entityManager.find(Racer.class, racer.getId());
+            Set<Racer> racers = team.getRacers();
+            racers.remove(racer);
+            team.setRacers(racers);
+            entityManager.merge(team);
             entityManager.remove(r);
-            /*Racer r = entityManager.find(Racer.class, racer.getId());
-            entityManager.remove(r);
-            entityManager.merge(r);
-            */
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*Query query = entityManager.createQuery(
-                "DELETE FROM Racer c WHERE c.id = :id");
-        query.setParameter("id", racer.getId());
-        query.executeUpdate();*/
     }
 
     @Override
