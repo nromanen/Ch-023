@@ -27,8 +27,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         return (RacerCarClassCompetitionNumber) entityManager
                 .createQuery("from RacerCarClassCompetitionNumber where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override

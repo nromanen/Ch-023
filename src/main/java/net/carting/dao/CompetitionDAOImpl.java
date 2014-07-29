@@ -54,7 +54,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
     @Override
     public Competition getCompetitionById(int id) {
         return (Competition) entityManager.createQuery("from Competition where id = :id")
-                .setParameter("id", id).getResultList().get(0);
+                .setParameter("id", id).getSingleResult();
     }
 
     @Override
@@ -71,10 +71,17 @@ public class CompetitionDAOImpl implements CompetitionDAO {
 
     @Override
     public void deleteCompetition(Competition competition) {
-        Query query = entityManager.createQuery(
-                "DELETE FROM Competition c WHERE c.id = :id");
-        query.setParameter("id", competition.getId());
-        query.executeUpdate();
+        try {
+            Query query = entityManager.createNativeQuery(
+                    "DELETE FROM car_class_competition WHERE competition_id = :id");
+            query.setParameter("id", competition.getId());
+            query.executeUpdate();
+
+            Competition c = entityManager.find(Competition.class, competition.getId());
+            entityManager.remove(c);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

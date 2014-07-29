@@ -27,8 +27,7 @@ public class TeamDAOImpl implements TeamDAO {
         return (Team) entityManager
                 .createQuery("from Team where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     public void addTeam(Team team) {
@@ -52,7 +51,12 @@ public class TeamDAOImpl implements TeamDAO {
     public boolean isSetTeam(String teamName) {
         String hql = "FROM Team WHERE name = :name";
         Query query = entityManager.createQuery(hql).setParameter("name", teamName);
-        Team result = (Team) query.getResultList().get(0);
+        Team result = null;
+        try {
+            result = (Team) query.getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
         return result != null;
     }
 
@@ -61,7 +65,7 @@ public class TeamDAOImpl implements TeamDAO {
         Query query = entityManager
                 .createQuery("FROM Team WHERE leader = :leader")
                 .setParameter("leader", leader);
-        return (Team) query.getResultList().get(0);
+        return (Team) query.getSingleResult();
     }
 
     @Override

@@ -27,8 +27,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
         return (CarClassCompetition) entityManager
                 .createQuery("from CarClassCompetition where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override
@@ -62,6 +61,9 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
                 "DELETE FROM CarClassCompetition c WHERE c.id = :id");
         query.setParameter("id", carClassCompetition.getId());
         query.executeUpdate();
+//        CarClassCompetition competition = entityManager.find(CarClassCompetition.class, carClassCompetition.getId());
+//        entityManager.remove(competition);
+// Doesn't work. No exception, simply doesn't delete from DB.
     }
 
     @SuppressWarnings("unchecked")

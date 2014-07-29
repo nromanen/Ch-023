@@ -28,8 +28,7 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
         return (CarClassCompetitionResult) entityManager
                 .createQuery("from CarClassCompetitionResult where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override

@@ -27,8 +27,7 @@ public class LeaderDAOImpl implements LeaderDAO {
         return (Leader) entityManager
                 .createQuery("from Leader where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     public void addLeader(Leader leader) {
@@ -53,7 +52,7 @@ public class LeaderDAOImpl implements LeaderDAO {
         Query query = entityManager.
                 createQuery("FROM Leader WHERE user.username = :username");
         query.setParameter("username", username);
-        return (Leader) query.getResultList().get(0);
+        return (Leader) query.getSingleResult();
     }
 
 }

@@ -27,8 +27,7 @@ public class FileDAOImpl implements FileDAO {
         return (File) entityManager
                 .createQuery("from File where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override

@@ -27,8 +27,7 @@ public class DocumentDAOImpl implements DocumentDAO {
         return (Document) entityManager
                 .createQuery("from Document where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override

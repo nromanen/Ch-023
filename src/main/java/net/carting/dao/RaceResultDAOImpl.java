@@ -27,8 +27,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
         return (RaceResult) entityManager
                 .createQuery("from RaceResult where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
         query.setParameter("raceNumber", raceNumber);
         query.setParameter("racer", racer);
 
-        return (RaceResult) query.getResultList().get(0);
+        return (RaceResult) query.getSingleResult();
     }
 
 }

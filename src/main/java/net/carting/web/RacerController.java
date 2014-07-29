@@ -264,10 +264,9 @@ public class RacerController {
                 "updatedRacerCarClassNumbers").toString();
         Set<RacerCarClassNumber> racerCarClassNumbers = racerService.parseUpdatedRacerCarClassNumbers(
                 updatedRacerCarClassNumbersStr, racer);
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
             racerCarClassNumberService
-                    .updateRacerCarClassNumber((RacerCarClassNumber) it.next());
+                    .updateRacerCarClassNumber(racerCarClassNumber);
         }
         return "success";
     }
@@ -276,15 +275,20 @@ public class RacerController {
     public
     @ResponseBody
     String deleteRacerCarClassNumbers(@RequestBody Map<String, Object> map) {
-        int racerId = Integer.parseInt(map.get("racerId").toString());
-        Racer racer = racerService.getRacerById(racerId);
-        for (RacerCarClassNumber racerCarClassNumber : racer.getCarClassNumbers()) {
-            int carClassId = racerCarClassNumber.getCarClass().getId();
-            List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCarClassId(carClassId);
-            for (CarClassCompetition carClassCompetition : carClassCompetitions) {
-                racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(carClassCompetition.getId(), racerId);
+        try {
+            //TODO: cannot delete car classes, if there are results. don't think, that this is a bug, but it is needed to show a message
+            int racerId = Integer.parseInt(map.get("racerId").toString());
+            Racer racer = racerService.getRacerById(racerId);
+            for (RacerCarClassNumber racerCarClassNumber : racer.getCarClassNumbers()) {
+                int carClassId = racerCarClassNumber.getCarClass().getId();
+                List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCarClassId(carClassId);
+                for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+                    racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(carClassCompetition.getId(), racerId);
+                }
+                racerCarClassNumberService.deleteRacerCarClassNumber(racerCarClassNumber);
             }
-            racerCarClassNumberService.deleteRacerCarClassNumber(racerCarClassNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return "success";

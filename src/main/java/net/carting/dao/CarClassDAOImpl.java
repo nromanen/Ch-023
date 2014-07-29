@@ -26,8 +26,7 @@ public class CarClassDAOImpl implements CarClassDAO {
         return (CarClass) entityManager
                 .createQuery("from CarClass where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     public void addCarClass(CarClass carClass) {
@@ -46,10 +45,12 @@ public class CarClassDAOImpl implements CarClassDAO {
 
     @Override
     public void deleteCarClassById(int id) {
-        Query query = entityManager.createQuery(
+        CarClass carClass = entityManager.find(CarClass.class, id);
+        entityManager.remove(carClass);
+        /*Query query = entityManager.createQuery(
                 "DELETE FROM CarClass c WHERE c.id = :id");
         query.setParameter("id", id);
-        query.executeUpdate();
+        query.executeUpdate();*/
     }
 
 }

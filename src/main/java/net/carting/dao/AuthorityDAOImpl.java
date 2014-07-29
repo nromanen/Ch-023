@@ -18,7 +18,7 @@ public class AuthorityDAOImpl implements AuthorityDAO {
     public Authority getAuthorityByUserName(String username) {
         return (Authority) entityManager
                 .createQuery("from Authority where username = :username")
-                .setParameter("username", username).getResultList().get(0);
+                .setParameter("username", username).getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -48,10 +48,8 @@ public class AuthorityDAOImpl implements AuthorityDAO {
 
     @Override
     public void deleteAuthority(Authority authority) {
-        Query query = entityManager.createQuery(
-                "DELETE FROM Authority a WHERE a.username = :name");
-        query.setParameter("name", authority.getUsername());
-        query.executeUpdate();
+        Authority auth = entityManager.find(Authority.class, authority.getUsername());
+        entityManager.remove(auth);
     }
 
 }

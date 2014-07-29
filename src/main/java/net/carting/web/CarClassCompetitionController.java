@@ -189,29 +189,37 @@ public class CarClassCompetitionController {
 
     @RequestMapping(value = "/{id}/addResults")
     public String addRacePage(Map<String, Object> map, @PathVariable("id") int id) {
-        map.put("race", new Race());
-        map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
-        map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-        map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        try {
+            map.put("race", new Race());
+            map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
+            map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "competition_carclass_results_add_edit";
     }
 
+    //TODO: cannot set results for a race - do not find an exception, may be there is a trouble in .jsp - javascript validation
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
-        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        race.setCarClassCompetition(carClassCompetition);
-        race.setCarClass(carClassCompetition.getCarClass());
-        raceService.setRaceNumber(carClassCompetition, race);
-        raceService.addRace(race);
-        raceService.setResultTable(raceService.getChessRoll(race), race);
-        carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
+        try {
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+            race.setCarClassCompetition(carClassCompetition);
+            race.setCarClass(carClassCompetition.getCarClass());
+            raceService.setRaceNumber(carClassCompetition, race);
+            raceService.addRace(race);
+            raceService.setResultTable(raceService.getChessRoll(race), race);
+            carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
 
-        LOG.info("Admin has added race with id=" + race.getId()
-                + " race number " + race.getRaceNumber()
-                + " in car class competition " + carClassCompetition.getCarClass().getName()
-                + " in competition " + carClassCompetition.getCompetition().getName());
-
+            LOG.info("Admin has added race with id=" + race.getId()
+                    + " race number " + race.getRaceNumber()
+                    + " in car class competition " + carClassCompetition.getCarClass().getName()
+                    + " in competition " + carClassCompetition.getCompetition().getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/carclass/" + id;
     }
 

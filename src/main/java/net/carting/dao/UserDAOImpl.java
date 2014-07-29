@@ -33,7 +33,7 @@ public class UserDAOImpl implements UserDAO {
     public List<String> getAuthoritiesByUserName(String userName) {
         User u = (User) entityManager
                 .createQuery("from User where username= :username")
-                .setParameter("username", userName).getResultList().get(0);
+                .setParameter("username", userName).getSingleResult();;
         Authority a = u.getAuthority();
         String auth = a.getAuthority();
         List<String> l = new ArrayList<String>();

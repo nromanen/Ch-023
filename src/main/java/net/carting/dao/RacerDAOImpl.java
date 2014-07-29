@@ -30,8 +30,7 @@ public class RacerDAOImpl implements RacerDAO {
         return (Racer) entityManager
                 .createQuery("from Racer where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override

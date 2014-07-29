@@ -29,8 +29,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         return (RacerCarClassNumber) entityManager
                 .createQuery("from RacerCarClassNumber where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
+                .getSingleResult();
     }
 
     @Override
@@ -92,7 +91,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         query.setParameter("carClassId", carClassId);
         query.setParameter("racerId", racerId);
 
-        return (RacerCarClassNumber) query.getResultList().get(0);
+        return (RacerCarClassNumber) query.getSingleResult();
     }
 
     @Override
