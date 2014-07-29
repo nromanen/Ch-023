@@ -37,11 +37,13 @@
 	<div>
 		<label class="text-info"><spring:message code="label.age" />:&nbsp;</label>${racer.getAge()}
 	</div>
+	<c:if test="${accessGranted}">
 	<div>
 		<label class="text-info"><spring:message
 				code="label.identification" />:&nbsp;</label>${racer.document}</div>
 	<div>
 		<label class="text-info"><spring:message code="label.address" />:&nbsp;</label>${racer.address}</div>
+	</c:if>
 	<div>
 		<label class="text-info"><spring:message
 				code="sportcategory.sport_category" />:&nbsp;</label>
