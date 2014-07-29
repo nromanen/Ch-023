@@ -1,21 +1,41 @@
 package net.carting.web;
 
-import net.carting.domain.*;
-import net.carting.service.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Leader;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+import net.carting.service.CarClassCompetitionService;
+import net.carting.service.CarClassService;
+import net.carting.service.LeaderService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.service.RacerCarClassNumberService;
+import net.carting.service.RacerService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
 import net.carting.util.DateUtil;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/racer")
 public class RacerController {
-
-    public static final String ROLE_TEAM_LEADER = "ROLE_TEAM_LEADER";
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -48,17 +68,24 @@ public class RacerController {
 
         String username = userService.getCurrentUserName();
         String authority = userService.getCurrentAuthority();
-        map.put("authority", authority);
-        map.put("racer", racerService.getRacerById(id));
 
-        if (authority.equals(ROLE_TEAM_LEADER)) {        	
+        if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
         	Leader leader = leaderService.getLeaderByUserName(username);
 	        Team team = teamService.getTeamByLeader(leader);
-	        Racer racer = racerService.getRacerById(id);	        
-	        map.put("team", team);
+	        Racer racer = racerService.getRacerById(id);
 	        if (team.getId() != racer.getTeam().getId()) {
-	        	return "redirect:/error403";
-	        } 
+	        	return "error_403";
+	        }
+
+	        map.put("authority", authority);
+	        map.put("racer", racerService.getRacerById(id));	        
+	        map.put("team", team);
+        } else if (authority.equals(UserService.ROLE_ADMIN)) {
+        	Racer racer = racerService.getRacerById(id);
+        	Team team = teamService.getTeamById(racer.getTeam().getId());
+        	map.put("authority", authority);
+	        map.put("racer", racerService.getRacerById(id));
+	        map.put("team", team);
         }
 
         return "racer";
@@ -68,11 +95,20 @@ public class RacerController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editRacerPage(Map<String, Object> map,
                                 @PathVariable("id") int id) {
-        if (userService.getCurrentAuthority().equals(ROLE_TEAM_LEADER)) {
+    	
+    	String authority = userService.getCurrentAuthority();
+    	
+        if (authority.equals(UserService.ROLE_TEAM_LEADER) || authority.equals(UserService.ROLE_ADMIN)) {
             String username = userService.getCurrentUserName();
             Racer racer = racerService.getRacerById(id);
-            Leader leader = leaderService.getLeaderByUserName(username);
-            Team team = teamService.getTeamByLeader(leader);
+            Team team;
+            if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
+            	Leader leader = leaderService.getLeaderByUserName(username);
+            	team = teamService.getTeamByLeader(leader);
+            } else {
+            	team = teamService.getTeamById(racer.getTeam().getId());
+            }
+            
             map.put("team", team);
             if (team.getId() == racer.getTeam().getId()) {
                 String carClassIds = "";
@@ -111,11 +147,11 @@ public class RacerController {
 
                 return "racer_edit";
             } else {
-                return "redirect:/error403";
+                return "error_403";
             }
 
         } else {
-            return "redirect:/error403";
+            return "error_403";
         }
     }
 
@@ -257,7 +293,7 @@ public class RacerController {
         racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
 
         String username = userService.getCurrentUserName();
-        LOG.info(username + " has added car class" + carClass.getName() + "Â» with #" + number
+        LOG.info(username + " has added car class" + carClass.getName() + "» with #" + number
                 + " to racer " + racer.getFirstName() + " " + racer.getLastName() + "(id = " + racerId + ")");
 
         return "success";
