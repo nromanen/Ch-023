@@ -5,6 +5,7 @@ import net.carting.domain.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -21,7 +22,11 @@ public class UserDAOImpl implements UserDAO {
         Query query = entityManager
                 .createQuery("from User where username= :username")
                 .setParameter("username", userName);
-        return (User) query.getResultList().get(0);
+        try {
+            return (User) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

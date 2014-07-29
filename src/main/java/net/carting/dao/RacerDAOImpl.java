@@ -43,13 +43,22 @@ public class RacerDAOImpl implements RacerDAO {
     @Override
     public void deleteRacer(Racer racer) {
         //TODO: do not works - Cannot delete or update a parent row: a foreign key constraint fails
-        // Maybe CascadeType.REMOVE, but it doesn't work
-        /*Racer r = entityManager.find(Racer.class, racer.getId());
-        entityManager.remove(r);*/
-        Query query = entityManager.createQuery(
+        try {
+
+            Racer r = entityManager.getReference(Racer.class, racer.getId());
+          //  entityManager.refresh(r);
+            entityManager.remove(r);
+            /*Racer r = entityManager.find(Racer.class, racer.getId());
+            entityManager.remove(r);
+            entityManager.merge(r);
+            */
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*Query query = entityManager.createQuery(
                 "DELETE FROM Racer c WHERE c.id = :id");
         query.setParameter("id", racer.getId());
-        query.executeUpdate();
+        query.executeUpdate();*/
     }
 
     @Override

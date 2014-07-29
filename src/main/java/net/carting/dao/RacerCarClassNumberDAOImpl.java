@@ -75,7 +75,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
                 createNativeQuery("SELECT * FROM racer_car_class_numbers "
                         + "WHERE car_class_id = :car_class_id AND "
                         + "number = :number");
-        //TODO: Was: .addEntity(RacerCarClassNumber.class); Need to test, if it works ok without this line
+        //TODO: Was: .addEntity(RacerCarClassNumber.class); Need to test, if it works ok without this line. UPD: 29/07/14 Seems to work ok.
         query.setParameter("car_class_id", Integer.toString(carClassId));
         query.setParameter("number", Integer.toString(number));
         List result = query.getResultList();

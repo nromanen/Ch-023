@@ -5,6 +5,7 @@ import net.carting.domain.Team;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
@@ -67,8 +68,12 @@ public class TeamDAOImpl implements TeamDAO {
     public boolean isTeamByLeaderId(int leaderId) {
         Query query = entityManager.createQuery("FROM Team WHERE leader.id = :leaderId");
         query.setParameter("leaderId", leaderId);
-        Team result = (Team) query.getResultList().get(0);
-        return result != null;
+        try {
+            query.getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
+        return true;
     }
 
 }
