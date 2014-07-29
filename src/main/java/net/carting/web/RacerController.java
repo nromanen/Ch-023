@@ -188,9 +188,8 @@ public class RacerController {
         racerService.addRacer(racer);
 
         // add Racer CarClass Numbers
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
-            racerCarClassNumberService.addRacerCarClassNumber((RacerCarClassNumber) it.next());
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
+            racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
         }
         // --------------------------------------
 

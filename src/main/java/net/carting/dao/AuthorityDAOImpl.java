@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -15,27 +16,24 @@ public class AuthorityDAOImpl implements AuthorityDAO {
 
     @Override
     public Authority getAuthorityByUserName(String username) {
-        Authority authority = (Authority) entityManager
+        return (Authority) entityManager
                 .createQuery("from Authority where username = :username")
                 .setParameter("username", username).getResultList().get(0);
-        return authority;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<String> getUsersByAuthority(String authority) {
-        List<String> stringList = entityManager
+        return entityManager
                 .createQuery("from Authority where authority = :authority")
                 .setParameter("authority", authority).getResultList();
-        return stringList;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Authority> getAllAuthorities() {
-        List<Authority> authorities = entityManager.
+        return entityManager.
                 createQuery("from Authority").getResultList();
-        return authorities;
     }
 
     @Override
@@ -50,7 +48,10 @@ public class AuthorityDAOImpl implements AuthorityDAO {
 
     @Override
     public void deleteAuthority(Authority authority) {
-        entityManager.remove(authority);
+        Query query = entityManager.createQuery(
+                "DELETE FROM Authority a WHERE a.username = :name");
+        query.setParameter("name", authority.getUsername());
+        query.executeUpdate();
     }
 
 }

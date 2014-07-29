@@ -16,66 +16,57 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getAllRaceResults() {
-        List<RaceResult> raceResults = entityManager.createQuery("from RaceResult").getResultList();
-
-        return raceResults;
+        return entityManager.createQuery("from RaceResult").getResultList();
     }
 
     @Override
     public RaceResult getRaceResultById(int id) {
-        RaceResult raceResult = (RaceResult) entityManager
+        return (RaceResult) entityManager
                 .createQuery("from RaceResult where id = :id")
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-
-        return raceResult;
     }
 
     @Override
     public void addRaceResult(RaceResult raceResult) {
         entityManager.persist(raceResult);
-
-
     }
 
     @Override
     public void updateRaceResult(RaceResult raceResult) {
         entityManager.merge(raceResult);
-
-
     }
 
     @Override
     public void deleteRaceResult(RaceResult raceResult) {
-        entityManager.remove(raceResult);
-
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM RaceResult c WHERE c.id = :id");
+        query.setParameter("id", raceResult.getId());
+        query.executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getRaceResultsByRace(Race race) {
-        List<RaceResult> raceResults = entityManager
+        return entityManager
                 .createQuery("from RaceResult where race= :race order by place ")
                 .setParameter("race", race)
                 .getResultList();
-
-        return raceResults;
     }
 
     @Override
     public RaceResult getRaceResultByRaceNumberAndRacer(int raceNumber, Racer racer) {
-
         Query query = entityManager.
                 createQuery("FROM RaceResult rr "
                         + "WHERE rr.race.raceNumber  = :raceNumber AND racer=:racer");
         query.setParameter("raceNumber", raceNumber);
         query.setParameter("racer", racer);
-        RaceResult raceResult = (RaceResult) query.getResultList().get(0);
 
-        return raceResult;
+        return (RaceResult) query.getResultList().get(0);
     }
 
 }

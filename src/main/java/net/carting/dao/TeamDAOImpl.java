@@ -18,47 +18,40 @@ public class TeamDAOImpl implements TeamDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<Team> getAllTeams() {
-        List<Team> teams = entityManager.createQuery("FROM Team").getResultList();
-
-        return teams;
+        return entityManager.createQuery("FROM Team").getResultList();
     }
 
     @Override
     public Team getTeamById(int id) {
-        Team team = (Team) entityManager
+        return (Team) entityManager
                 .createQuery("from Team where id = :id")
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-
-        return team;
     }
 
     public void addTeam(Team team) {
         entityManager.persist(team);
-
     }
 
     @Override
     public void updateTeam(Team team) {
         entityManager.merge(team);
-
     }
 
     @Override
     public void deleteTeam(Team team) {
-        entityManager.remove(team);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM Team c WHERE c.id = :id");
+        query.setParameter("id", team.getId());
+        query.executeUpdate();
     }
 
     @Override
     public boolean isSetTeam(String teamName) {
-        String hql = "FROM Team WHERE name = ?";
-        Query query = entityManager.createQuery(hql).setParameter(0, teamName);
-
+        String hql = "FROM Team WHERE name = :name";
+        Query query = entityManager.createQuery(hql).setParameter("name", teamName);
         Team result = (Team) query.getResultList().get(0);
-
-
         return result != null;
     }
 
@@ -67,19 +60,14 @@ public class TeamDAOImpl implements TeamDAO {
         Query query = entityManager
                 .createQuery("FROM Team WHERE leader = :leader")
                 .setParameter("leader", leader);
-        Team team = (Team) query.getResultList().get(0);
-
-        return team;
+        return (Team) query.getResultList().get(0);
     }
 
     @Override
     public boolean isTeamByLeaderId(int leaderId) {
         Query query = entityManager.createQuery("FROM Team WHERE leader.id = :leaderId");
         query.setParameter("leaderId", leaderId);
-
         Team result = (Team) query.getResultList().get(0);
-
-
         return result != null;
     }
 

@@ -21,10 +21,7 @@ public class UserDAOImpl implements UserDAO {
         Query query = entityManager
                 .createQuery("from User where username= :username")
                 .setParameter("username", userName);
-        User user = (User) query.getResultList().get(0);
-
-        return user;
-
+        return (User) query.getResultList().get(0);
     }
 
     @Override
@@ -43,39 +40,34 @@ public class UserDAOImpl implements UserDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<User> getAllUsers() {
-        List<User> users = entityManager
+        return entityManager
                 .createQuery("from User").getResultList();
-
-        return users;
     }
 
     @Override
     public void addUser(User user) {
         entityManager.persist(user);
-
     }
 
     @Override
     public void updateUser(User user) {
         entityManager.merge(user);
-
     }
 
     @Override
     public void deleteUser(User user) {
-        entityManager.remove(user);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM User u WHERE u.username = :name");
+        query.setParameter("name", user.getUsername());
+        query.executeUpdate();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean isSetUser(String username) {
-
         List<User> result = entityManager
                 .createQuery("from User where username = :username")
                 .setParameter("username", username).getResultList();
-
-
         return result.size() > 0;
     }
 
@@ -87,7 +79,6 @@ public class UserDAOImpl implements UserDAO {
         query.setParameter("enabled", enabled);
         query.setParameter("username", username);
         query.executeUpdate();
-
     }
 
 }

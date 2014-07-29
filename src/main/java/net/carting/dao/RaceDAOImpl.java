@@ -15,46 +15,42 @@ public class RaceDAOImpl implements RaceDAO {
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Race> getAllRaces() {
-        List<Race> races = entityManager
+        return entityManager
                 .createQuery("from Race")
                 .getResultList();
-
-        return races;
     }
 
     @Override
     public Race getRaceById(int id) {
-        Race race = (Race) entityManager
+        return (Race) entityManager
                 .createQuery("from Race where id = :id")
                 .setParameter("id", id)
                 .getResultList()
                 .get(0);
-
-        return race;
     }
 
     @Override
     public void addRace(Race race) {
         entityManager.persist(race);
-
     }
 
     @Override
     public void updateRace(Race race) {
         entityManager.merge(race);
-
-
     }
 
     @Override
     public void deleteRace(Race race) {
-        entityManager.remove(race);
-
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM Race c WHERE c.id = :id");
+        query.setParameter("id", race.getId());
+        query.executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Race> getRacesByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
@@ -64,9 +60,7 @@ public class RaceDAOImpl implements RaceDAO {
                         "order by raceNumber")
                 .setParameter("carClassCompetition", carClassCompetition);
 
-        List<Race> races = query.getResultList();
-
-        return races;
+        return query.getResultList();
     }
 
     @Override
@@ -76,9 +70,8 @@ public class RaceDAOImpl implements RaceDAO {
                         + "(raceNumber = :raceNumber)");
         query.setParameter("carClassCompetition", carClassCompetition);
         query.setParameter("raceNumber", raceNumber);
-        Race race = (Race) query.getResultList().get(0);
 
-        return race;
+        return (Race) query.getResultList().get(0);
     }
 
 }

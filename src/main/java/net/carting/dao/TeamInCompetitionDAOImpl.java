@@ -15,30 +15,29 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
     private EntityManager entityManager;
 
     @Override
-    public boolean isTeamInCompetition(int teamId, int competitonId) {
+    public boolean isTeamInCompetition(int teamId, int competitionId) {
         String sql = "SELECT id FROM team_in_competition WHERE team_id = :team_id AND competition_id = :competition_id";
         Query query = entityManager.createQuery(sql)
                 .setParameter("team_id", teamId)
-                .setParameter("competition_id", competitonId);
-
+                .setParameter("competition_id", competitionId);
         List result = query.getResultList();
-
-
         return result.size() > 0;
     }
 
     @Override
     public void addTeamInCompetition(TeamInCompetition teamInCompetition) {
         entityManager.persist(teamInCompetition);
-
     }
 
     @Override
     public void deleteTeamInCompetition(TeamInCompetition teamInCompetition) {
-        entityManager.remove(teamInCompetition);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM TeamInCompetition c WHERE c.id = :id");
+        query.setParameter("id", teamInCompetition.getId());
+        query.executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<TeamInCompetition> getTeamInCompetitionListByTeamId(int teamId) {
         Query query = entityManager.
@@ -46,9 +45,7 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                         + "WHERE team.id = :teamId "
                         + "ORDER BY competition.dateStart");
         query.setParameter("teamId", teamId);
-        List<TeamInCompetition> teams = query.getResultList();
-
-        return teams;
+        return query.getResultList();
     }
 
     @Override
@@ -60,6 +57,6 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
         query.setParameter("teamId", teamId);
         query.setParameter("competitionId", competitionId);
         query.executeUpdate();
-
     }
+
 }
