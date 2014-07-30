@@ -5,20 +5,21 @@
 
 <link href='<c:url value="/resources/style/wysiwyg.css" />' rel="stylesheet">
 <script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
-<script type='text/javascript' src='<c:url value="/resources/js/carclasscompetition_editrace.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/bootstrap-wysiwyg.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/jquery.hotkeys.js" />'></script>
 <c:choose>
-	<c:when test="${race ne null }">
+	<c:when test="${edit ne null }">
+		<script type='text/javascript' src='<c:url value="/resources/js/carclasscompetition_editrace.js" />'></script>	
 		<h2 class="user-info-name">Edit race</h2>
 	</c:when>
 	<c:otherwise>
+		<script type='text/javascript' src='<c:url value="/resources/js/carclasscompetition_addrace.js" />'></script>	
 		<h2 class="user-info-name">Add race</h2>
 	</c:otherwise>
 </c:choose>
 
 <c:choose>
-	<c:when test="${race ne null }">
+	<c:when test="${edit ne null }">
 		<form class="well" method="post" action="editRace" id="edit_race_form"
 			data-toggle="validator" role="form" commandName="race">
 	</c:when>
@@ -55,7 +56,7 @@
 	</label> <br> <span> Valid numbers:</span> <span  id="validNumbers" data-validnumbers="${validNumbers}" >${validNumbers}</span>
 	
 	<c:choose>
-		<c:when test="${race ne null }">
+		<c:when test="${edit ne null }">
 		<input type="hidden" path="resultSequance" name="resultSequance"
 			class="form-control" placeholder="Enter result sequance"
 			id="result_sequance" value="${race.resultSequance}" />
@@ -72,12 +73,12 @@
 	 <div id="editor"> </div> 
 	
 	<c:choose>
-		<c:when test="${race ne null }">
-			<input type="button" class="btn btn-primary" value="Recalculate" id="edit_race_btn">
+		<c:when test="${edit ne null }">
+			<input type="submit" class="btn btn-primary" value="Recalculate" id="edit_race_btn">
 			<input type="button" class="btn btn-success" value="Validate" id="validate_btn">
 		</c:when>
 		<c:otherwise>
-			<input type="button" class="btn btn-primary" value="Calculate" id="add_race_btn">
+			<input type="submit" class="btn btn-primary" value="Calculate" id="add_race_btn">
 			<input type="button" class="btn btn-success" value="Validate" id="validate_btn">
 		</c:otherwise>
 	</c:choose>

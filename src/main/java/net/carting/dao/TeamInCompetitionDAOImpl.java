@@ -17,7 +17,7 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
     @Override
     public boolean isTeamInCompetition(int teamId, int competitionId) {
         String sql = "SELECT id FROM team_in_competition WHERE team_id = :team_id AND competition_id = :competition_id";
-        Query query = entityManager.createQuery(sql)
+        Query query = entityManager.createNativeQuery(sql)
                 .setParameter("team_id", teamId)
                 .setParameter("competition_id", competitionId);
         List result = query.getResultList();

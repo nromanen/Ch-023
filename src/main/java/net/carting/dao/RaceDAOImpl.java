@@ -1,5 +1,6 @@
 package net.carting.dao;
 
+import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Race;
 import org.springframework.stereotype.Repository;
@@ -33,7 +34,35 @@ public class RaceDAOImpl implements RaceDAO {
 
     @Override
     public void addRace(Race race) {
-        entityManager.persist(race);
+        /*System.out.println(race.getId());
+        System.out.print("\tResults: " + race.getResultSequance());
+        System.out.print("\tMembers: " + race.getNumberOfMembers());
+        System.out.print("\tRaceNumber: " + race.getRaceNumber());
+        System.out.print("\tCarClassCompetition: " + race.getCarClassCompetition().getId());
+        System.out.print("\tCarClass: " + race.getCarClass().getId());
+        System.out.print("\tLaps: " + race.getNumberOfLaps());*/
+        try {
+            /*int carClassCompetitionId = race.getCarClassCompetition().getId();
+            CarClassCompetition carClassCompetition = entityManager.find(CarClassCompetition.class, carClassCompetitionId);
+            carClassCompetition.getRaces().add(race);
+            entityManager.merge(carClassCompetition);*/
+
+            //Race r = entityManager.find(Race.class, race.getId());
+            int carClassCompetitionId = race.getCarClassCompetition().getId();
+            CarClassCompetition carClassCompetition = entityManager.find(CarClassCompetition.class, carClassCompetitionId);
+
+            int carClassId = race.getCarClass().getId();
+            CarClass carClass = entityManager.find(CarClass.class, carClassId);
+
+
+            race.setCarClass(carClass);
+            race.setCarClassCompetition(carClassCompetition);
+
+            entityManager.persist(race);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
