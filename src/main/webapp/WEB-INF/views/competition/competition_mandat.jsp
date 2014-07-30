@@ -221,8 +221,8 @@
 				<h4 class="modal-title"><spring:message code="label.unregister_racer_from_car_class" /></h4>
 			</div>
 			<div class="modal-body">
-				<label class="text-info">Are you sure you want to unregister
-					<span id="racer_name"></span> from car class <span id="carclass_name"></span>?&nbsp;
+				<label class="text-info"><spring:message code="label.unregister_confirm" />
+					<span id="racer_name"></span><spring:message code="label.from_class" /><span id="carclass_name"></span>?&nbsp;
 				</label>
 				<input type="hidden" id="unreg_racer_url" value="<c:url value="/carclass/" />">
 				<input type="hidden" id="unreg_racer_id" value="<c:url value="" />">
@@ -230,7 +230,7 @@
 				<br><br>
 				<div class="alert alert-danger" id="unreg_error"
 					style="display: none; padding: 0px 0px 0px 10px; height: 25px;">
-					You can't unregister this racer because he participated in races.
+					<spring:message code="label.unregister_failed" />
 				</div>
 				<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_unreg">
 			</div>

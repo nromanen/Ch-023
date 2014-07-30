@@ -232,33 +232,33 @@
 						
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.first_race_time" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter time in format hh:mm" id="first_race_time"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.time_format" />" id="first_race_time"
 							   required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-							   data-error="This field is required. Time format hh:mm. For example 12:30" />
+							   data-error="<spring:message code="dataerror.invalid_time" />" />
 						<div class="help-block with-errors"></div>
 					</div>
 						
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.second_race_time" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter time in format hh:mm" id="second_race_time"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.time_format" />" id="second_race_time"
 							   required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-							   data-error="This field is required. Time format hh:mm. For example 15:30" />
+							   data-error="<spring:message code="dataerror.invalid_time" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 					
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.lap_count" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter lap count" id="lap_count"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.enter_lap_count" />" id="lap_count"
 							   required pattern="[1-9]{1}[0-9]{0,1}"
-							   data-error="This field is required. Number must be less equal 99." />
+							   data-error="<spring:message code="dataerror.lap_count_invalid" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 					
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.percentage_offset" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter percentage offset" id="percentage_offset"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.enter_percentage" />" id="percentage_offset"
 							   value="75" required pattern="([1-9]{1}[0-9]{0,1})|100"
-							   data-error="This field is required. Number must be less equal 100." />
+							   data-error="<spring:message code="dataerror.percentage_offset_invalid" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 									
@@ -295,33 +295,33 @@
 						
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.first_race_time" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter time in format hh:mm" id="first_race_time_edit"
+						<input type="text" class="form-control" placeholder="<spring:message code="label.competition.first_race_time" />" id="first_race_time_edit"
 							   required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-							   data-error="This field is required. Time format hh:mm. For example 12:30" />
+							   data-error="<spring:message code="dataerror.invalid_time" />" />
 						<div class="help-block with-errors"></div>
 					</div>
 						
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.second_race_time" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter time in format hh:mm" id="second_race_time_edit"
+						<input type="text" class="form-control" placeholder="<spring:message code="label.competition.first_race_time" />" id="second_race_time_edit"
 							   required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-							   data-error="This field is required. Time format hh:mm. For example 15:30" />
+							   data-error="<spring:message code="dataerror.invalid_time" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 					
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.lap_count" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter lap count" id="lap_count_edit"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.enter_lap_count" />" id="lap_count_edit"
 							   required pattern="[1-9]{1}[0-9]{0,1}"
-							   data-error="This field is required. Number must be less equal 99." />
+							   data-error="<spring:message code="dataerror.lap_count_invalid" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 					
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.competition.percentage_offset" />:&nbsp;</label>
-						<input type="text" class="form-control" placeholder="Enter percentage offset" id="percentage_offset_edit"
+						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.enter_percentage" />" id="percentage_offset_edit"
 							   required pattern="([1-9]{1}[0-9]{0,1})|100"
-							   data-error="This field is required. Number must be less equal 100." />
+							   data-error="<spring:message code="dataerror.percentage_offset_invalid" />" />
 						<div class="help-block with-errors"></div>
 					</div>	
 									
