@@ -70,22 +70,22 @@ public class RacerController {
         String authority = userService.getCurrentAuthority();
 
         if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
-        	Leader leader = leaderService.getLeaderByUserName(username);
-	        Team team = teamService.getTeamByLeader(leader);
-	        Racer racer = racerService.getRacerById(id);
-	        if (team.getId() != racer.getTeam().getId()) {
-	        	return "error_403";
-	        }
+            Leader leader = leaderService.getLeaderByUserName(username);
+            Team team = teamService.getTeamByLeader(leader);
+            Racer racer = racerService.getRacerById(id);
+            if (team.getId() != racer.getTeam().getId()) {
+                return "error_403";
+            }
 
-	        map.put("authority", authority);
-	        map.put("racer", racerService.getRacerById(id));	        
-	        map.put("team", team);
+            map.put("authority", authority);
+            map.put("racer", racerService.getRacerById(id));
+            map.put("team", team);
         } else if (authority.equals(UserService.ROLE_ADMIN)) {
-        	Racer racer = racerService.getRacerById(id);
-        	Team team = teamService.getTeamById(racer.getTeam().getId());
-        	map.put("authority", authority);
-	        map.put("racer", racerService.getRacerById(id));
-	        map.put("team", team);
+            Racer racer = racerService.getRacerById(id);
+            Team team = teamService.getTeamById(racer.getTeam().getId());
+            map.put("authority", authority);
+            map.put("racer", racerService.getRacerById(id));
+            map.put("team", team);
         }
 
         return "racer";
@@ -95,20 +95,20 @@ public class RacerController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editRacerPage(Map<String, Object> map,
                                 @PathVariable("id") int id) {
-    	
-    	String authority = userService.getCurrentAuthority();
-    	
+
+        String authority = userService.getCurrentAuthority();
+
         if (authority.equals(UserService.ROLE_TEAM_LEADER) || authority.equals(UserService.ROLE_ADMIN)) {
             String username = userService.getCurrentUserName();
             Racer racer = racerService.getRacerById(id);
             Team team;
             if (authority.equals(UserService.ROLE_TEAM_LEADER)) {
-            	Leader leader = leaderService.getLeaderByUserName(username);
-            	team = teamService.getTeamByLeader(leader);
+                Leader leader = leaderService.getLeaderByUserName(username);
+                team = teamService.getTeamByLeader(leader);
             } else {
-            	team = teamService.getTeamById(racer.getTeam().getId());
+                team = teamService.getTeamById(racer.getTeam().getId());
             }
-            
+
             map.put("team", team);
             if (team.getId() == racer.getTeam().getId()) {
                 String carClassIds = "";
@@ -252,22 +252,22 @@ public class RacerController {
                 .isSetRacerCarClassNumberByCarClassIdAndNumber(carClass, number);
     }
 
-    @RequestMapping(value = "/getOccupiedDefaultNumbersForCarClass", 
-			method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody
-	List<Integer> getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
-		int carClassId = Integer.parseInt(map.get("carClassId").toString());
-		try{
-			List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
-			ArrayList<Integer> numbers = new ArrayList<Integer>();
-			for (RacerCarClassNumber racer : racers) {
-				numbers.add(racer.getNumber());
-			}
-			return numbers;
-		} catch(Exception e){
-			return null;
-		}
-	}
+    @RequestMapping(value = "/getOccupiedDefaultNumbersForCarClass",
+            method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody
+    List<Integer> getOccupiedDefaultNumbersForCarClassAction(@RequestBody Map<String, Object> map) {
+        int carClassId = Integer.parseInt(map.get("carClassId").toString());
+        try{
+            List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
+            ArrayList<Integer> numbers = new ArrayList<Integer>();
+            for (RacerCarClassNumber racer : racers) {
+                numbers.add(racer.getNumber());
+            }
+            return numbers;
+        } catch(Exception e){
+            return null;
+        }
+    }
 
     @RequestMapping(value = "/isSetCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
@@ -293,7 +293,7 @@ public class RacerController {
         racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
 
         String username = userService.getCurrentUserName();
-        LOG.info(username + " has added car class" + carClass.getName() + "» with #" + number
+        LOG.info(username + " has added car class" + carClass.getName() + "ï¿½ with #" + number
                 + " to racer " + racer.getFirstName() + " " + racer.getLastName() + "(id = " + racerId + ")");
 
         return "success";

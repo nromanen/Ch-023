@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -16,22 +17,17 @@ public class FileDAOImpl implements FileDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<File> getAllFiles() {
-        List<File> files = entityManager
+        return entityManager
                 .createQuery("from File")
                 .getResultList();
-
-        return files;
     }
 
     @Override
     public File getFileById(int id) {
-        File file = (File) entityManager
+        return (File) entityManager
                 .createQuery("from File where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
-
-        return file;
+                .getSingleResult();
     }
 
     @Override
@@ -48,8 +44,10 @@ public class FileDAOImpl implements FileDAO {
 
     @Override
     public void deleteFile(File file) {
-        entityManager.remove(file);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM File c WHERE c.id = :id");
+        query.setParameter("id", file.getId());
+        query.executeUpdate();
     }
 
 }

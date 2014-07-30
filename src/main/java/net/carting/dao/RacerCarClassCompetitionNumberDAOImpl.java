@@ -14,56 +14,58 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getAllRacerCarClassCompetitionNumbers() {
-        List<RacerCarClassCompetitionNumber> competitionNumbers = entityManager
+        return entityManager
                 .createQuery("from RacerCarClassCompetitionNumber")
                 .getResultList();
-
-        return competitionNumbers;
     }
 
     @Override
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumberById(int id) {
-        RacerCarClassCompetitionNumber number = (RacerCarClassCompetitionNumber) entityManager
+        return (RacerCarClassCompetitionNumber) entityManager
                 .createQuery("from RacerCarClassCompetitionNumber where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
-
-        return number;
+                .getSingleResult();
     }
 
     @Override
     public void addRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.persist(racerCarClassCompetitionNumber);
-
     }
 
     @Override
     public void updateRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.merge(racerCarClassCompetitionNumber);
-
     }
 
     @Override
     public void deleteRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
-        entityManager.remove(racerCarClassCompetitionNumber);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM RacerCarClassCompetitionNumber c WHERE c.id = :id");
+        query.setParameter("id", racerCarClassCompetitionNumber.getId());
+        query.executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCarClassCompetitionId(int id) {
-        Query query = entityManager.
-                createQuery("FROM RacerCarClassCompetitionNumber rcccn "
-                        + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
-                        + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
-        query.setParameter("carClassCompetitionId", id);
-        List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
-
-        return competitionNumbers;
+        List<RacerCarClassCompetitionNumber> list = null;
+        try {
+            Query query = entityManager.
+                    createQuery("FROM RacerCarClassCompetitionNumber rcccn "
+                            + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
+                            + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
+            query.setParameter("carClassCompetitionId", id);
+            list = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("getRacerCarClassCompetitionNumbersByCarClassCompetitionId");
+        }
+        return list;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCarClassCompetitionIdAndTeamId(int carClassCompetitionid, int teamId) {
         Query query = entityManager.
@@ -73,9 +75,8 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("carClassCompetitionid", carClassCompetitionid);
         query.setParameter("teamId", teamId);
-        List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
 
-        return competitionNumbers;
+        return query.getResultList();
     }
 
     @Override
@@ -88,6 +89,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         return racersCount.intValue();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCompetitionId(int id) {
         Query query = entityManager.
@@ -95,35 +97,35 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "WHERE rcccn.carClassCompetition.competition.id = :id "
                         + "ORDER BY rcccn.racer.team.name, rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("id", id);
-        List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
 
-        return competitionNumbers;
+        return query.getResultList();
     }
 
     @Override
-    public void deleteByCarClassCompetitionIdAndRacerId(int carClassCompetitonId, int racerId) {
+    public void deleteByCarClassCompetitionIdAndRacerId(int carClassCompetitionId, int racerId) {
         Query query = entityManager.
                 createQuery("DELETE FROM RacerCarClassCompetitionNumber rcccn "
-                        + "WHERE (rcccn.carClassCompetition.id = :carClassCompetitonId) AND "
+                        + "WHERE (rcccn.carClassCompetition.id = :carClassCompetitionId) AND "
                         + "(rcccn.racer.id = :racerId)");
-        query.setParameter("carClassCompetitonId", carClassCompetitonId);
+        query.setParameter("carClassCompetitionId", carClassCompetitionId);
         query.setParameter("racerId", racerId);
         query.executeUpdate();
 
     }
 
     @Override
-    public void deleteByCompetitionIdAndRacerId(int competitonId, int racerId) {
+    public void deleteByCompetitionIdAndRacerId(int competitionId, int racerId) {
         Query query = entityManager.
                 createQuery("DELETE FROM RacerCarClassCompetitionNumber rcccn "
-                        + "WHERE (rcccn.carClassCompetition.competition.id = :competitonId) AND "
+                        + "WHERE (rcccn.carClassCompetition.competition.id = :competitionId) AND "
                         + "(rcccn.racer.id = :racerId)");
-        query.setParameter("competitonId", competitonId);
+        query.setParameter("competitionId", competitionId);
         query.setParameter("racerId", racerId);
         query.executeUpdate();
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCompetitionIdAndTeamId(int competitionId, int teamId) {
         Query query = entityManager.
@@ -132,9 +134,8 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "rcccn.racer.team.id = :teamId");
         query.setParameter("competitionid", competitionId);
         query.setParameter("teamId", teamId);
-        List<RacerCarClassCompetitionNumber> competitionNumbers = query.getResultList();
 
-        return competitionNumbers;
+        return query.getResultList();
     }
 
 }

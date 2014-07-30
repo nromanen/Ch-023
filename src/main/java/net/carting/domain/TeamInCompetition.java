@@ -7,6 +7,14 @@ import javax.persistence.*;
         "team_id", "competition_id"})})
 public class TeamInCompetition {
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue

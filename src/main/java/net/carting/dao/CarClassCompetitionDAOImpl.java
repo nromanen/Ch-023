@@ -14,22 +14,20 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetition> getAllCarClassCompetitions() {
-        List<CarClassCompetition> classCompetitions = entityManager
-                .createQuery("from CarClassCompetition").getResultList();
 
-        return classCompetitions;
+        return entityManager
+                .createQuery("from CarClassCompetition").getResultList();
     }
 
     @Override
     public CarClassCompetition getCarClassCompetitionById(int id) {
-        CarClassCompetition carClassCompetition = (CarClassCompetition) entityManager
+        return (CarClassCompetition) entityManager
                 .createQuery("from CarClassCompetition where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
-        return carClassCompetition;
+                .getSingleResult();
     }
 
     @Override
@@ -59,9 +57,16 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
     @Override
     public void deleteCarClassCompetition(CarClassCompetition carClassCompetition) {
-        entityManager.remove(carClassCompetition);
+        Query query = entityManager.createQuery(
+                "DELETE FROM CarClassCompetition c WHERE c.id = :id");
+        query.setParameter("id", carClassCompetition.getId());
+        query.executeUpdate();
+//        CarClassCompetition competition = entityManager.find(CarClassCompetition.class, carClassCompetition.getId());
+//        entityManager.remove(competition);
+// Doesn't work. No exception, simply doesn't delete from DB.
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId) {
         Query query = entityManager.
@@ -69,11 +74,10 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
                         + "WHERE ccc.competition.id = :id "
                         + "ORDER BY ccc.carClass.name");
         query.setParameter("id", competitionId);
-        List<CarClassCompetition> competitions = query.getResultList();
-
-        return competitions;
+        return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetition> getCarClassCompetitionsByCarClassId(int carClassId) {
         Query query = entityManager.
@@ -81,8 +85,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
                         + "WHERE ccc.carClass.id = :id "
                         + "ORDER BY ccc.carClass.name");
         query.setParameter("id", carClassId);
-        List<CarClassCompetition> competitions = query.getResultList();
-        return competitions;
+        return query.getResultList();
     }
 
 

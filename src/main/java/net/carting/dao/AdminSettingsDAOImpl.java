@@ -15,8 +15,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
 
     @Override
     public AdminSettings getAdminSettings() {
-        AdminSettings adminSettings = (AdminSettings) entityManager.createQuery("from AdminSettings").getResultList().get(0);
-        return adminSettings;
+        return (AdminSettings) entityManager.createQuery("from AdminSettings").getSingleResult();
     }
 
     @Override

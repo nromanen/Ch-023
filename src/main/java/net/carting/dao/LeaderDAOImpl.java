@@ -14,41 +14,37 @@ public class LeaderDAOImpl implements LeaderDAO {
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Leader> getAllLeaders() {
-        List<Leader> leaders = entityManager
+        return entityManager
                 .createQuery("from Leader ORDER BY registrationDate DESC, lastName, firstName")
                 .getResultList();
-
-        return leaders;
     }
 
     @Override
     public Leader getLeaderById(int id) {
-        Leader lead = (Leader) entityManager
+        return (Leader) entityManager
                 .createQuery("from Leader where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
-
-        return lead;
+                .getSingleResult();
     }
 
     public void addLeader(Leader leader) {
         entityManager.persist(leader);
-
     }
 
     @Override
     public void updateLeader(Leader leader) {
         entityManager.merge(leader);
-
     }
 
     @Override
     public void deleteLeader(Leader leader) {
-        entityManager.remove(leader);
-
+        Query query = entityManager.createQuery(
+                "DELETE FROM Leader c WHERE c.id = :id");
+        query.setParameter("id", leader.getId());
+        query.executeUpdate();
     }
 
     @Override
@@ -56,9 +52,7 @@ public class LeaderDAOImpl implements LeaderDAO {
         Query query = entityManager.
                 createQuery("FROM Leader WHERE user.username = :username");
         query.setParameter("username", username);
-        Leader lead = (Leader) query.getResultList().get(0);
-
-        return lead;
+        return (Leader) query.getSingleResult();
     }
 
 }

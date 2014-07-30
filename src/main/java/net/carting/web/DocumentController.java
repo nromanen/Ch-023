@@ -209,35 +209,34 @@ public class DocumentController {
     public
     @ResponseBody
     String deleteDocument(@RequestBody Map<String, Object> map) {
-        int documentId = Integer.parseInt(map.get("document_id").toString());
-        Document document = documentService.getDocumentById(documentId);
-        String[] racersIdString = map.get("racers_id_string").toString()
-                .split("#");
-        int[] racersId = new int[racersIdString.length];
-        for (int i = 0; i < racersIdString.length; i++) {
-            racersId[i] = Integer.parseInt(racersIdString[i]);
-            documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
-                    documentId, racersId[i]);
-            LOG.info("'" + document.getCurrentStringDocumentType() + "'"
-                    + " was deleted from racer "
-                    + racerService.getRacerById(racersId[i]).getFirstName()
-                    + " "
-                    + racerService.getRacerById(racersId[i]).getLastName()
-                    + " by leader "
-                    + document.getTeamOwner().getLeader().getFirstName() + " "
-                    + document.getTeamOwner().getLeader().getLastName()
-                    + " of team " + document.getTeamOwner().getName() + "'");
-        }
-        if (documentService.isRacerOwnerOfDocument(documentId) == false) {
-            for (File file : document.getFiles()) {
-                documentService.deleteFileFromServer(file.getPath());
+            int documentId = Integer.parseInt(map.get("document_id").toString());
+            Document document = documentService.getDocumentById(documentId);
+            String[] racersIdString = map.get("racers_id_string").toString()
+                    .split("#");
+            int[] racersId = new int[racersIdString.length];
+            for (int i = 0; i < racersIdString.length; i++) {
+                racersId[i] = Integer.parseInt(racersIdString[i]);
+                documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
+                        documentId, racersId[i]);
+                LOG.info("'" + document.getCurrentStringDocumentType() + "'"
+                        + " was deleted from racer "
+                        + racerService.getRacerById(racersId[i]).getFirstName()
+                        + " "
+                        + racerService.getRacerById(racersId[i]).getLastName()
+                        + " by leader "
+                        + document.getTeamOwner().getLeader().getFirstName() + " "
+                        + document.getTeamOwner().getLeader().getLastName()
+                        + " of team " + document.getTeamOwner().getName() + "'");
             }
-            documentService.deleteDocument(document);
-            LOG.info(document.getCurrentStringDocumentType()
-                    + "was deleted by leader of team '"
-                    + document.getTeamOwner().getName() + "'");
-        }
-
+            if (!documentService.isRacerOwnerOfDocument(documentId)) {
+                for (File file : document.getFiles()) {
+                    documentService.deleteFileFromServer(file.getPath());
+                }
+                documentService.deleteDocument(document);
+                LOG.info(document.getCurrentStringDocumentType()
+                        + "was deleted by leader of team '"
+                        + document.getTeamOwner().getName() + "'");
+            }
         return "success";
     }
 

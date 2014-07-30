@@ -15,22 +15,20 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetitionResult> getAllCarClassCompetitionResults() {
-        List<CarClassCompetitionResult> competitionResults = entityManager
+        return entityManager
                 .createQuery("from CarClassCompetitionResult")
                 .getResultList();
-        return competitionResults;
     }
 
     @Override
     public CarClassCompetitionResult getCarClassCompetitionResultById(int id) {
-        CarClassCompetitionResult result = (CarClassCompetitionResult) entityManager
+        return (CarClassCompetitionResult) entityManager
                 .createQuery("from CarClassCompetitionResult where id = :id")
                 .setParameter("id", id)
-                .getResultList()
-                .get(0);
-        return result;
+                .getSingleResult();
     }
 
     @Override
@@ -45,9 +43,13 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
 
     @Override
     public void deleteCarClassCompetitionResult(CarClassCompetitionResult carClassCompetitionResult) {
-        entityManager.remove(carClassCompetitionResult);
+        Query query = entityManager.createQuery(
+                "DELETE FROM CarClassCompetitionResult c WHERE c.id = :id");
+        query.setParameter("id", carClassCompetitionResult.getId());
+        query.executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetitionResult> getCarClassCompetitionResultsByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
@@ -57,10 +59,10 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
                         "cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition " +
                         "order by absolutePlace");
         query.setParameter("carClassCompetition", carClassCompetition);
-        List<CarClassCompetitionResult> result = query.getResultList();
-        return result;
+        return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByPoints(
             CarClassCompetition carClassCompetition) {
@@ -69,8 +71,7 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
                         "where cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition " +
                         "order by absolutePoints desc");
         query.setParameter("carClassCompetition", carClassCompetition);
-        List<CarClassCompetitionResult> result = query.getResultList();
-        return result;
+        return query.getResultList();
     }
 
 }

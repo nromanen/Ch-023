@@ -145,6 +145,7 @@ public class CarClassCompetitionController {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.info(username + " trying to unregister racer(id = " + racerId + ") "
                     + "from competition " + competition.getName() + "(id = " + competition.getId() + ") "
                     + "from car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitionId + ")");
@@ -167,51 +168,64 @@ public class CarClassCompetitionController {
     public
     @ResponseBody
     String registerRacerToCarClassCompetitionAction(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        int carClassCompetitonId = id;
-        int racerId = Integer.parseInt(map.get("racerId").toString());
-        int number = Integer.parseInt(map.get("number").toString());
-        RacerCarClassCompetitionNumber racerCarClassCompetitionNumber = new RacerCarClassCompetitionNumber();
-        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitonId);
-        racerCarClassCompetitionNumber.setCarClassCompetition(carClassCompetition);
-        Racer racer = racerService.getRacerById(racerId);
-        racerCarClassCompetitionNumber.setRacer(racer);
-        racerCarClassCompetitionNumber.setNumberInCompetition(number);
-        racerCarClassCompetitionNumberService.addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
+        try {
+            int carClassCompetitionId = id;
+            int racerId = Integer.parseInt(map.get("racerId").toString());
+            int number = Integer.parseInt(map.get("number").toString());
+            RacerCarClassCompetitionNumber racerCarClassCompetitionNumber = new RacerCarClassCompetitionNumber();
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId);
+            racerCarClassCompetitionNumber.setCarClassCompetition(carClassCompetition);
+            Racer racer = racerService.getRacerById(racerId);
+            racerCarClassCompetitionNumber.setRacer(racer);
+            racerCarClassCompetitionNumber.setNumberInCompetition(number);
+            racerCarClassCompetitionNumberService.addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
 
-        String username = userService.getCurrentUserName();
-        Competition competition = carClassCompetition.getCompetition();
-        LOG.info(username + " has registered racer " + racer.getFirstName() + " " + racer.getLastName()
-                + " (id = " + racerId + ") with number " + number + " "
-                + " to competition " + competition.getName() + "(id = " + competition.getId() + ") "
-                + " to car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitonId + ")");
+            String username = userService.getCurrentUserName();
+            Competition competition = carClassCompetition.getCompetition();
+            LOG.info(username + " has registered racer " + racer.getFirstName() + " " + racer.getLastName()
+                    + " (id = " + racerId + ") with number " + number + " "
+                    + " to competition " + competition.getName() + "(id = " + competition.getId() + ") "
+                    + " to car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitionId + ")");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "success";
     }
 
     @RequestMapping(value = "/{id}/addResults")
     public String addRacePage(Map<String, Object> map, @PathVariable("id") int id) {
-        map.put("race", new Race());
-        map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
-        map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-        map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        try {
+
+            map.put("race", new Race());
+            map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
+            map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "competition_carclass_results_add_edit";
     }
 
+    //TODO: cannot set results for a race - do not find an exception, may be there is a trouble in .jsp - javascript validation
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
+
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         race.setCarClassCompetition(carClassCompetition);
         race.setCarClass(carClassCompetition.getCarClass());
         raceService.setRaceNumber(carClassCompetition, race);
         raceService.addRace(race);
-        raceService.setResultTable(raceService.getChessRoll(race), race);
+        try {
+            raceService.setResultTable(raceService.getChessRoll(race), race);
+        } catch (Exception e) {
+            System.out.println("11111111");
+        }
         carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
-
         LOG.info("Admin has added race with id=" + race.getId()
                 + " race number " + race.getRaceNumber()
                 + " in car class competition " + carClassCompetition.getCarClass().getName()
                 + " in competition " + carClassCompetition.getCompetition().getName());
-
         return "redirect:/carclass/" + id;
     }
 
@@ -221,26 +235,34 @@ public class CarClassCompetitionController {
         map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
         map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
         map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        map.put("edit", true);
 
         return "competition_carclass_results_add_edit";
     }
 
     @RequestMapping(value = "/{id}/race/{raceNumber}/editRace", method = RequestMethod.POST)
     public String editRace(@ModelAttribute("race") Race race,
-                           Map<String, Object> map, @PathVariable("id") int id, @PathVariable("raceNumber") int raceNumber) {
-        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        race.setCarClassCompetition(carClassCompetition);
-        race.setId(raceService.getRaceByNumberAndCarClassCompetition(raceNumber, carClassCompetition).getId());
-        race.setCarClass(carClassCompetition.getCarClass());
-        race.setRaceNumber(raceNumber);
-        raceService.updateRace(race);
-        raceService.setResultTable(raceService.getChessRoll(race), race);
-        carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+                           Map<String, Object> map, @PathVariable("id") int id,
+                           @PathVariable("raceNumber") int raceNumber,
+                           @RequestParam("numberOfLaps") String lapsNumber) {
+        try {
+            int laps = Integer.parseInt(lapsNumber);
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+            race.setCarClassCompetition(carClassCompetition);
+            race.setId(raceService.getRaceByNumberAndCarClassCompetition(raceNumber, carClassCompetition).getId());
+            race.setCarClass(carClassCompetition.getCarClass());
+            race.setRaceNumber(raceNumber);
+            raceService.updateRace(race);
+            raceService.setResultTable(raceService.getChessRoll(race), race);
+            carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
 
-        LOG.info("Admin has edited race with id=" + race.getId()
-                + " race number " + raceNumber
-                + " in car class competition " + carClassCompetition.getCarClass().getName()
-                + " in competition " + carClassCompetition.getCompetition().getName());
+            LOG.info("Admin has edited race with id=" + race.getId()
+                    + " race number " + raceNumber
+                    + " in car class competition " + carClassCompetition.getCarClass().getName()
+                    + " in competition " + carClassCompetition.getCompetition().getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/carclass/" + id;
     }
 
