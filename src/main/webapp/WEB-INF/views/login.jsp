@@ -27,7 +27,7 @@
 
 <div class="container">
 	<div class="col-md-4 col-md-offset-4">
-		<div class="panel panel-primary">
+		<div class="panel panel-primary" style="max-width: 350px">
 			<div class="panel-heading">
 				<h3 class="panel-title">
 					<strong><spring:message code="label.authorization" /></strong>
