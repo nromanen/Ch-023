@@ -32,7 +32,7 @@
 	<div class="container">
 		<!-- Main component for a primary marketing message or call to action -->
 		<div class="jumbotron">
-			<p>HTTP Status 404 - Page not found
+			<p><spring:message code="label.page_not_found" />
 		</div>
 	</div>
 

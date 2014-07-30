@@ -19,7 +19,7 @@
 			<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
 				<td style="padding: 15px 0px 0px 20px;">
 					<div class="btn-group" style="float: right;">
-						<a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary">Add results</a>
+						<a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
 					</div>
 				</td>
 			</c:if>	
@@ -110,7 +110,7 @@
 			</c:choose>
 			<c:if test="${authority.equals('ROLE_TEAM_LEADER') && carClassCompetition.competition.enabled }">
 				<div style="width: 100%; text-align: center;">
-					<a href="#" class="btn btn-primary btn-sm" style="margin: 5px 10px 20px 0px; " id="reg_racer_btn">Register racer</a>
+					<a href="#" class="btn btn-primary btn-sm" style="margin: 5px 10px 20px 0px; " id="reg_racer_btn"><spring:message code="label.register_racer" /></a>
 				</div>
 			</c:if>
 	  	</div>
