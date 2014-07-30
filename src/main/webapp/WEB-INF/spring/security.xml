@@ -27,6 +27,7 @@
                        access="ROLE_TEAM_LEADER"/>
         <intercept-url pattern="/competition/chooseCompetition"
                        access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/competition/setEnabled" access="ROLE_ADMIN" />
 
         <intercept-url pattern="/document/checkingDocuments/*"
                        access="ROLE_ADMIN"/>
