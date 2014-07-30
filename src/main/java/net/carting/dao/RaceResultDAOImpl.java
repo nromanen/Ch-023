@@ -32,7 +32,32 @@ public class RaceResultDAOImpl implements RaceResultDAO {
 
     @Override
     public void addRaceResult(RaceResult raceResult) {
-        entityManager.persist(raceResult);
+        try {
+//            System.out.println("########################################################");
+            String sql = "INSERT INTO race_results " +
+                    "(car_number, full_laps, place, points, race_id, racer_id) " +
+                    "VALUES (:car, :laps, :place, :points, :race, :racer)";
+            Query query = entityManager.createNativeQuery(sql);
+
+            query.setParameter("car", raceResult.getCarNumber());
+            query.setParameter("laps", raceResult.getFullLaps());
+            query.setParameter("place", raceResult.getPlace());
+            query.setParameter("points", raceResult.getPoints());
+            query.setParameter("race",raceResult.getRace().getId() );
+            query.setParameter("racer", raceResult.getRacer().getId());
+            System.out.println(raceResult.getCarNumber() +
+                    "\t" + raceResult.getFullLaps() +
+                    "\t" + raceResult.getPlace() +
+                    "\t" + raceResult.getPoints() +
+                    "\t" + raceResult.getRace().getId() +
+                    "\t" + raceResult.getRacer().getId());
+            query.executeUpdate();
+
+//            System.out.println("########################################################");
+        } catch (Exception e) {
+            System.out.println("addRaceResult");
+//            e.printStackTrace();
+        }
     }
 
     @Override
@@ -51,10 +76,16 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getRaceResultsByRace(Race race) {
-        return entityManager
-                .createQuery("from RaceResult where race= :race order by place ")
-                .setParameter("race", race)
-                .getResultList();
+        List<RaceResult> list = null;
+        try {
+            list = entityManager
+                    .createQuery("from RaceResult where race= :race order by place ")
+                    .setParameter("race", race)
+                    .getResultList();
+        } catch (Exception e) {
+            System.out.println("getRaceResultsByRace");
+        }
+        return list;
     }
 
     @Override

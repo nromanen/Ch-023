@@ -65,7 +65,11 @@ public class CompetitionDAOImpl implements CompetitionDAO {
 
     @Override
     public void updateCompetition(Competition competition) {
-        entityManager.merge(competition);
+        try {
+            entityManager.merge(competition);
+        } catch (Exception e) {
+            System.out.println("updateCompetition");
+        }
 
     }
 

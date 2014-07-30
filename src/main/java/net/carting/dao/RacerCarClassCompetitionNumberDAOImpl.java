@@ -51,13 +51,18 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
     @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCarClassCompetitionId(int id) {
-        Query query = entityManager.
-                createQuery("FROM RacerCarClassCompetitionNumber rcccn "
-                        + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
-                        + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
-        query.setParameter("carClassCompetitionId", id);
-
-        return query.getResultList();
+        List<RacerCarClassCompetitionNumber> list = null;
+        try {
+            Query query = entityManager.
+                    createQuery("FROM RacerCarClassCompetitionNumber rcccn "
+                            + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
+                            + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
+            query.setParameter("carClassCompetitionId", id);
+            list = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("getRacerCarClassCompetitionNumbersByCarClassCompetitionId");
+        }
+        return list;
     }
 
     @SuppressWarnings("unchecked")
