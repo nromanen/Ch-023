@@ -78,8 +78,7 @@
 											${racerCarClassCompetitionNumber.racer.firstName} ${racerCarClassCompetitionNumber.racer.lastName}
 										</a>
 										<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
-											<img class="team_valid_icon" style="cursor: pointer; float: right;" title="Disabled"
-												src="<c:url value="/resources/img/warning.png" />">
+											<span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
 										</c:if>
 									</td>
 									<td>
