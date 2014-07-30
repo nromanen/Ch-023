@@ -1,6 +1,8 @@
 package net.carting.domain;
 
 import javax.persistence.*;
+import java.util.Set;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "admin_settings")
@@ -14,6 +16,9 @@ public class AdminSettings {
     @Column(name = "parental_permission_years", nullable = false)
     private int parentalPermissionYears;
 
+ 	
+
+    @Max(1000)
     @Column(name = "points_by_places", nullable = false)
     private String pointsByPlaces;
 
