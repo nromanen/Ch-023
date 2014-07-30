@@ -137,5 +137,9 @@ $(document).ready(function(){
 
 	//set datepickers start and end date
 	$('#birthday').datepicker('setEndDate', (new Date()).yyyymmdd());
+	
+	$('#birthday').on('changeDate', function() {
+		$(this).datepicker('hide');
+	});
 		
 });

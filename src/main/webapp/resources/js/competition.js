@@ -23,6 +23,14 @@ $(document).ready(function(){
 	$('#firstRaceDate').datepicker('setStartDate', (new Date()).yyyymmdd());
 	$('#secondRaceDate').datepicker('setStartDate', (new Date()).yyyymmdd());
 	
+	$('#dateStart, #dateEnd, #firstRaceDate, #secondRaceDate').on('changeDate', function(){
+		$(this).datepicker('hide');
+	});
+	$('#dateStart, #dateEnd, #firstRaceDate, #secondRaceDate').on('click', function(){
+		$('#dateStart, #dateEnd, #firstRaceDate, #secondRaceDate').datepicker('hide');
+		$(this).datepicker('show');
+	});
+	
 	$('#delete_competition_btn').click(function(){
 		$("#delete_competition_error").css("display", "none");
 		$('#delete_competition_modal').modal();

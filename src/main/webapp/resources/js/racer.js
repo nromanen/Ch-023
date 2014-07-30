@@ -491,5 +491,9 @@ $(document).ready(function(){
 	$('#birthday').datepicker('setEndDate', (new Date()).yyyymmdd());
 	$('#medical_certificate_expires').datepicker('setStartDate', (new Date()).yyyymmdd());
 	$('#insurance_expire').datepicker('setStartDate', (new Date()).yyyymmdd());
+	
+	$('#birthday, #medical_certificate_expires, #insurance_expire').on('changeDate', function() {
+		$(this).datepicker('hide');
+	});
 		
 });
