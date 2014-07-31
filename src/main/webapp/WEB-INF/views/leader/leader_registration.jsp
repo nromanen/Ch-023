@@ -69,7 +69,7 @@
 		<input type="text" class="form-control"
 			placeholder="<spring:message
 				code="placeholder.identification" />"
-			id="document" required pattern=".{1,50}"
+			id="document" required pattern="[^<>\&\^\$]{1,50}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;50." />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -79,7 +79,7 @@
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
 			class="form-control"
 			placeholder="<spring:message code="placeholder.address" />"
-			id="address" required pattern=".{1,100}"
+			id="address" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -89,7 +89,7 @@
 				code="label.license_number" /><span class="text-danger">*</span>:&nbsp;</label>
 		<input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.license_number" />"
-			id="license" required pattern=".{1,30}"
+			id="license" required pattern="[^<>\&\^\$]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -99,7 +99,7 @@
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
 			class="form-control"
 			placeholder="<spring:message code="placeholder.login" />"
-			id="username" required pattern=".{1,30}"
+			id="username" required pattern="[^<>\&\^\$]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
 		<div class="help-block with-errors"></div>
 	</div>

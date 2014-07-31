@@ -37,27 +37,36 @@ $(document).ready(function(){
 	});
 	
 	$("#add_car_class_form").submit(function(){
-		$("#ajax_loader_add_carclass").css("display", "block");
-		var url = $("#add_car_class_form").attr("action");
-		var json = { "name" : $('#name').val(),
-					 "lowerYearsLimit" : $('#lower_years_limit').val(),
-					 "upperYearsLimit" : $('#upper_years_limit').val() };
-		$.ajax({
-	        url: url,
-	        data: JSON.stringify(json),
-	        contentType: 'application/json',
-	        type: "POST",
-	        success: function(response) {
-	        	$("#ajax_loader_add_carclass").css("display", "none");
-	        	$('#add_carclass_modal').modal('hide');
-	        	location.reload();
-	        }
-	    });
-		return false;
+		$('#age_error').css("display","none");
+		var lowerYearsLimit = +$('#lower_years_limit').val();
+		var upperYearsLimit = +$('#upper_years_limit').val();
+		if (lowerYearsLimit > upperYearsLimit) {
+			$('#age_error').css("display","block");
+			return false;
+		}
+		else {
+			$("#ajax_loader_add_carclass").css("display", "block");
+			var url = $("#add_car_class_form").attr("action");
+			var json = { "name" : $('#name').val(),
+						 "lowerYearsLimit" : $('#lower_years_limit').val(),
+						 "upperYearsLimit" : $('#upper_years_limit').val() };
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {
+		        	$("#ajax_loader_add_carclass").css("display", "none");
+		        	$('#add_carclass_modal').modal('hide');
+		        	location.reload();
+		        }
+		    });
+			return false;
+		}
+		
 	});
 	
 	$('.edit_carclass_btn').click(function(){
-		
 		var id = $(this).attr("id").replace("edit", "");
 		var name = $('#carClassName' + id).html();
 		var lower_years_limit = $('#lowerYearsLimit' + id).html();
@@ -75,24 +84,33 @@ $(document).ready(function(){
 	});
 	
 	$("#edit_car_class_form").submit(function(){
-		$("#ajax_loader_edit_carclass").css("display", "block");		
-		var url = $("#edit_car_class_form").attr("action");
-		var json = { "id" : $('#id_edit').val(),
-					 "name" : $('#name_edit').val(),
-					 "lowerYearsLimit" : $('#lower_years_limit_edit').val(),
-					 "upperYearsLimit" : $('#upper_years_limit_edit').val() };
-		$.ajax({
-	        url: url,
-	        data: JSON.stringify(json),
-	        contentType: 'application/json',
-	        type: "POST",
-	        success: function(response) {
-	        	$("#ajax_loader_edit_carclass").css("display", "none");
-	        	$('#edit_carclass_modal').modal('hide');
-	        	location.reload();
-	        }
-	    });
-		return false;
+		$('#age_error_edit').css("display","none");
+		var lowerYearsLimit = +$('#lower_years_limit_edit').val();
+		var upperYearsLimit = +$('#upper_years_limit_edit').val();
+		if (lowerYearsLimit > upperYearsLimit) {
+			$('#age_error_edit').css("display","block");
+			return false;
+		}
+		else {
+			$("#ajax_loader_edit_carclass").css("display", "block");		
+			var url = $("#edit_car_class_form").attr("action");
+			var json = { "id" : $('#id_edit').val(),
+						 "name" : $('#name_edit').val(),
+						 "lowerYearsLimit" : $('#lower_years_limit_edit').val(),
+						 "upperYearsLimit" : $('#upper_years_limit_edit').val() };
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {
+		        	$("#ajax_loader_edit_carclass").css("display", "none");
+		        	$('#edit_carclass_modal').modal('hide');
+		        	location.reload();
+		        }
+		    });
+			return false;
+		}
 	});
 	
 	function numberTest(value){
