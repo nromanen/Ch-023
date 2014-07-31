@@ -250,9 +250,7 @@ $(document).ready(function(){
 
 	$("#delete_classes_ER").click(function(){
 		var racerId = $("#id").val();
-		console.log(racerId);
 		var url = window.location.protocol + "//" + window.location.host + '/Carting/racer/deleteRacerCarClassNumbers';
-		console.log(url);
 	    var json = { "racerId" : racerId};
 	    $.ajax({  
 	        url: url,  
