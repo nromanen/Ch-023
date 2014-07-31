@@ -252,7 +252,7 @@
 							<spring:message code="label.name" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.car_class_name" />"
-						       id="name" required pattern=".{1,50}" 
+						       id="name" required pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}" 
 						       data-error="<spring:message code="dataerror.50_symbols_limit" />" />
 						<div class="help-block with-errors"></div>
 					</div>
@@ -313,7 +313,7 @@
 							<spring:message code="label.name" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.car_class_name" />"
-						       id="name_edit" required pattern=".{1,50}" 
+						       id="name_edit" required pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}" 
 						       data-error="<spring:message code="dataerror.50_symbols_limit" />" />
 						<div class="help-block with-errors"></div>
 					</div>

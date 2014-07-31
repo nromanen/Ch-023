@@ -96,7 +96,7 @@
 					<div class="form-group">
 						<label class="text-info"><spring:message code="label.summary_results_editing_comment" />:&nbsp;</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.enter_comment" />" id="comment_edit"
-							   required pattern=".{1,70}"
+							   required pattern="[^<>\&\^\$]{1,70}"
 							   data-error="<spring:message code="dataerror.enter_comment" />" />
 						<div class="help-block with-errors"></div>
 					</div>	

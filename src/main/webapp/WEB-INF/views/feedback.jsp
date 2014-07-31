@@ -25,7 +25,7 @@
 			<label class="text-info"><spring:message code="label.email_subject" /><span class="text-danger">*</span>:&nbsp;</label>
 			<input type="text" class="form-control"
 				placeholder="<spring:message code="placeholder.email_subject" />" id="subject" name="subject" required
-				pattern=".{1,100}" data-error="<spring:message code="dataerror.100_symbols_limit" />" />
+				pattern="[^<>\&\^\$]{1,100}" data-error="<spring:message code="dataerror.100_symbols_limit" />" />
 			<div class="help-block with-errors"></div>
 		</div>
 		
@@ -33,7 +33,7 @@
 			<label class="text-info"><spring:message code="label.email_message" /><span class="text-danger">*</span>:&nbsp;</label>
 			<textarea type="text" class="form-control" cols="20"
 				placeholder="<spring:message code="placeholder.email_message" />" id="message" name="message" required
-				data-error="<spring:message code="dataerror.field_required" />"></textarea>
+				pattern="[^<>\&\^]{1,1000}" data-error="<spring:message code="dataerror.field_required" />"></textarea>
 			<div class="help-block with-errors"></div>
 		</div>
 		

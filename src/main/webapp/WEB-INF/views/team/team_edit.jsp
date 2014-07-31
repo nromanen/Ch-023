@@ -44,7 +44,7 @@
 			class="text-danger">*</span>:&nbsp; </label> <input type="text"
 			class="form-control" value="${team.address}" 
 			placeholder="<spring:message code="placeholder.address" />"
-			id="address" required pattern=".{1,100}"
+			id="address" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		
 		<div class="help-block with-errors"></div>
@@ -55,7 +55,7 @@
 				code="label.license_number" /><span class="text-danger">*</span>:&nbsp;
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.license_number" />"
-			value="${team.license}" id="license" required pattern=".{1,30}"
+			value="${team.license}" id="license" required pattern="[^<>\&\^\$]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30."
 			id="document" />
 		<div class="help-block with-errors"></div>
