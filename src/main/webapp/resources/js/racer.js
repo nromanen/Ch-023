@@ -250,12 +250,15 @@ $(document).ready(function(){
 
 	$("#delete_classes_ER").click(function(){
 		var racerId = $("#id").val();
+		console.log(racerId);
 		var url = window.location.protocol + "//" + window.location.host + '/Carting/racer/deleteRacerCarClassNumbers';
+		console.log(url);
 	    var json = { "racerId" : racerId};
 	    $.ajax({  
 	        url: url,  
 	        data: JSON.stringify(json),  
 	        contentType: 'application/json',
+	        type: "POST",
 	        success: function(response) {  
 	        	$("#car_classes").val("");
 	    		$("#car_classes_id").val("");
