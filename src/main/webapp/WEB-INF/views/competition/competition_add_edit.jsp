@@ -45,7 +45,7 @@
 		<label class="text-info"><spring:message code="label.name" /><span class="text-danger">*</span>:&nbsp;
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.enter_competition_name" />" id="name" name="name" required
-			pattern=".{1,200}" data-error="<spring:message code="dataerror.200_symbols_limit" />"
+			pattern="[^<>\&\^\$]{1,200}" data-error="<spring:message code="dataerror.200_symbols_limit" />"
 			value="${competition.name}" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -54,7 +54,7 @@
 		<label class="text-info"><spring:message code="label.competition.place" /><span class="text-danger">*</span>:&nbsp;
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.enter_competition_place" />" id="place" name="place"
-			required pattern=".{1,200}" data-error="<spring:message code="dataerror.200_symbols_limit" />"
+			required pattern="[^<>\&\^\$]{1,200}" data-error="<spring:message code="dataerror.200_symbols_limit" />"
 			value="${competition.place}" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -123,7 +123,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.enter_secretary_category_judical_license" />"
 			id="secretaryCategoryJudicialLicense"
-			name="secretaryCategoryJudicialLicense" required pattern=".{1,100}"
+			name="secretaryCategoryJudicialLicense" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.competition_director_license" />"
 			value="${competition.secretaryCategoryJudicialLicense}" />
 		<div class="help-block with-errors"></div>
@@ -146,7 +146,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message code="placeholder.enter_director_category_judical_license" />"
 			id="directorCategoryJudicialLicense"
-			name="directorCategoryJudicialLicense" required pattern=".{1,100}"
+			name="directorCategoryJudicialLicense" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.competition_director_license" />"
 			value="${competition.directorCategoryJudicialLicense}" />
 		<div class="help-block with-errors"></div>

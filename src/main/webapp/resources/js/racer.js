@@ -256,6 +256,7 @@ $(document).ready(function(){
 	        url: url,  
 	        data: JSON.stringify(json),  
 	        contentType: 'application/json',
+	        type: "POST",
 	        success: function(response) {  
 	        	$("#car_classes").val("");
 	    		$("#car_classes_id").val("");

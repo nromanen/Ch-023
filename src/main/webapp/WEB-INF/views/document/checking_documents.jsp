@@ -200,7 +200,7 @@
 									value="<c:url value="/document/setUnapproved"/>">
 								<textarea rows=5 id="reason" class="form-control"
 									placeholder="<spring:message code="placeholder.reason" />" id="result_sequance"
-									pattern=".{1,255}" required
+									pattern="[^<>\&\^\$]{1,255}" required
 									data-error="<spring:message code="dataerror.invalid_reason" />">${document.reason}</textarea>
 								<div class="help-block with-errors"></div>
 							</form>

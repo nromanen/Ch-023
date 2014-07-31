@@ -58,7 +58,7 @@
 				code="label.identification" /><span class="text-danger">*</span>:&nbsp;</label> <input type="text"
 			class="form-control" placeholder="<spring:message
 				code="placeholder.identification" />" id="document"
-			required pattern=".{1,100}"
+			required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -66,7 +66,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.address" /><span class="text-danger">*</span>:&nbsp;</label> <input type="text"
 			class="form-control" placeholder="<spring:message code="placeholder.address" />" id="address"
-			required pattern=".{1,100}"
+			required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		<div class="help-block with-errors"></div>
 	</div>

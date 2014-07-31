@@ -106,34 +106,6 @@ public class Racer extends Person {
         return age;
     }
 
-    public String getStringSportsCategory() {
-        String stringSportsCategory;
-        switch (this.sportsCategory) {
-            case 0:
-                stringSportsCategory = "Without sports category";
-                break;
-            case 1:
-                stringSportsCategory = "1";
-                break;
-            case 2:
-                stringSportsCategory = "2";
-                break;
-            case 3:
-                stringSportsCategory = "3";
-                break;
-            case 4:
-                stringSportsCategory = "Candidate master of sports";
-                break;
-            case 5:
-                stringSportsCategory = "Master of sports";
-                break;
-            default:
-                stringSportsCategory = "Invalid sportsCategory";
-                break;
-        }
-        return stringSportsCategory;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }

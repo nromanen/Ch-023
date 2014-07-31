@@ -71,7 +71,7 @@
 		</label> <input type="text" class="form-control"
 			placeholder="<spring:message
 				code="placeholder.identification" />"
-			value=${racer.document } id="document" required pattern=".{1,100}"
+			value=${racer.document } id="document" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -81,7 +81,7 @@
 			class="text-danger">*</span>:&nbsp; </label> <input type="text"
 			class="form-control"
 			placeholder="<spring:message code="placeholder.address"  />"
-			value="${racer.address}" id="address" required pattern=".{1,100}"
+			value="${racer.address}" id="address" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
 		<div class="help-block with-errors"></div>
 	</div>
