@@ -4,6 +4,10 @@ import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Competition;
 import net.carting.domain.Race;
+import net.carting.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -50,7 +54,13 @@ public class RaceDAOImpl implements RaceDAO {
             team.setRacers(racers);
             entityManager.persist(racer);
             entityManager.merge(team);*/
-            String sql = "INSERT INTO races " +
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            session.save(race);
+            tx.commit();
+            session.close();
+           /* String sql = "INSERT INTO races " +
                     "(number_of_laps, number_of_members, race_number, result_sequance, car_class_id) " +
                     "VALUES (:laps, :members, :number, :results, :carId);";
             Query query = entityManager.createNativeQuery(sql);
@@ -61,7 +71,7 @@ public class RaceDAOImpl implements RaceDAO {
             query.setParameter("results", race.getResultSequance());
             query.setParameter("carId", race.getCarClass().getId());
 
-            query.executeUpdate();
+            query.executeUpdate();*/
 
            /* CarClassCompetition competition = entityManager.find(CarClassCompetition.class, race.getCarClassCompetition().getId());
             Set<Race> races = competition.getRaces();
