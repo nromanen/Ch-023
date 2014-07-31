@@ -22,7 +22,7 @@
 	function focusonusername() {
 		document.getElementById('username').focus();
 	}
-	window.onload = focusonname;
+	window.onload = focusonusername;
 </script>
 
 <div class="container">

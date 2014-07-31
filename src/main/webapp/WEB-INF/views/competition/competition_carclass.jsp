@@ -206,7 +206,7 @@
 				<div class="panel-body" style="padding: 0px;">
 				<table id="abs-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
-									<th style="text-align: center;"><spring:message code="label.competition.place" /></th>
+									<th style="text-align: center;"><spring:message code="label.competition.place_in_race" /></th>
 									<th style="text-align: center;"><spring:message code="label.car_number" /></th>
 									<th style="text-align: center;"><spring:message code="label.racer" /></th>
 									<th style="text-align: center;"><spring:message code="label.summary_results_editing_summarypoints" /></th>
@@ -275,7 +275,7 @@
 				
 							<table id="res-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
-									<th style="text-align: center;"><spring:message code="label.competition.place" /></th>
+									<th style="text-align: center;"><spring:message code="label.competition.place_in_race" /></th>
 									<th style="text-align: center;"><spring:message code="label.car_number" /></th>
 									<th style="text-align: center;"><spring:message code="label.racer" /></th>
 									<th style="text-align: center;"><spring:message code="label.full_laps" /></th>
