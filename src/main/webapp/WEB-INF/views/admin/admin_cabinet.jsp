@@ -284,7 +284,8 @@
 					<br>
 					<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_add_carclass">	
 				</div>
-				<div class="modal-footer">					       		
+				<div class="modal-footer">	
+					<span id="age_error" style="display:none; color:red; margin-bottom: 5px"><spring:message code="label.age_error" /></span>				       		
 					<button class="btn btn-primary" type="button" data-dismiss="modal">
 						<spring:message code="label.cancel" />
 					</button>
@@ -345,7 +346,8 @@
 					<br>
 					<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_edit_carclass">	
 				</div>
-				<div class="modal-footer">					       		
+				<div class="modal-footer">
+					<span id="age_error_edit" style="display:none; color:red; margin-bottom: 5px"><spring:message code="label.age_error" /></span>					       		
 					<button class="btn btn-primary" type="button" data-dismiss="modal">
 						<spring:message code="label.cancel" />
 					</button>
