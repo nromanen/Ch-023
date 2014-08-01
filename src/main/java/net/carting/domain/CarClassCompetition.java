@@ -1,11 +1,22 @@
 package net.carting.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "car_class_competition")
@@ -111,12 +122,8 @@ public class CarClassCompetition {
     @Override
     public String toString() {
         return String
-                .format("CarClassCompetition [id=%s, competition=%s"
-                                + ", carClass=%s, firstRaceTime=%s"
-                                + ", secondRaceTime=%s, circleCount=%s"
-                                + ", percentageOffset=%s, races=%s]",
-                        id, competition, carClass, firstRaceTime,
-                        secondRaceTime, circleCount, percentageOffset, races);
+                .format("CarClassCompetition [id=%d, competition=%s]",
+                        id, competition);
     }
 
     @Override

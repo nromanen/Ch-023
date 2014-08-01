@@ -1,6 +1,13 @@
 package net.carting.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "races")
@@ -99,10 +106,7 @@ public class Race {
 
     @Override
     public String toString() {
-        return String.format(
-                "Race [id=%s, carClass=%s, resultSequance=%s, numberOfLaps=%s, "
-                        + "numberOfMembers=%s]", id, carClass, resultSequance,
-                numberOfLaps, numberOfMembers);
+        return String.format("Race [id=%d, carClass=%s]", id, carClass);
     }
 
 }
