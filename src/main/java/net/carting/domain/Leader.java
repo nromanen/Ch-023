@@ -1,6 +1,15 @@
 package net.carting.domain;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "leaders")
@@ -64,11 +73,7 @@ public class Leader extends Person {
 
     @Override
     public String toString() {
-        return String
-                .format("Leader [id=%s, firstName=%s, lastName=%s,"
-                                + " document=%s, address=%s, birthday=%s, user=%s, license=%s]",
-                        id, firstName, lastName, document, address, birthday,
-                        user, license);
+        return String.format("Leader [id=%d, firstName=%s, lastName=%s]",id, firstName, lastName);
     }
 
 }

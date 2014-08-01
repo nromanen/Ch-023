@@ -117,7 +117,7 @@ public class RacerController {
 
                 int i = 0;
                 for (RacerCarClassNumber racerCarClassNumber : racer
-                        .getCarClassNumbers()) {
+                        .getCarClassNumbers()) { System.out.println(racerCarClassNumber);
                     if (i == 0) {
                         carClassIds += (racerCarClassNumber.getCarClass()
                                 .getId());

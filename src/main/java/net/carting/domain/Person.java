@@ -1,8 +1,9 @@
 package net.carting.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
 
 @MappedSuperclass
 public abstract class Person {
@@ -118,9 +119,7 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return String.format("User [firstName=%s, lastName=%s, document=%s, "
-                        + "address=%s, birthday=%s]", firstName, lastName, document,
-                address, birthday);
+        return String.format("User [firstName=%s, lastName=%s]", firstName, lastName);
     }
 
     public Person() {

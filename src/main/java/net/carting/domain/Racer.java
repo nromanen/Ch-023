@@ -1,9 +1,23 @@
 package net.carting.domain;
 
-import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "racers")
@@ -74,10 +88,7 @@ public class Racer extends Person {
 
     @Override
     public String toString() {
-        return String
-                .format("Racer [id=%s, team=%s, firstName=%s, lastName=%s, birthday=%s, address=%s, document=%s, carClassNumbers=%s, sportsCategory=%s]",
-                        id, team, firstName, lastName, birthday, address,
-                        document, carClassNumbers, sportsCategory);
+        return String.format("Racer [id=%d, firstName=%s, lastName=%s]",id, firstName, lastName);
     }
 
     public int getId() {
