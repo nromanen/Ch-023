@@ -1,24 +1,46 @@
 package net.carting.web;
 
-import net.carting.domain.*;
-import net.carting.service.*;
-import net.carting.util.CompetitionValidator;
-import net.carting.util.DateUtil;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Competition;
+import net.carting.domain.Leader;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+import net.carting.service.AdminSettingsService;
+import net.carting.service.CarClassCompetitionService;
+import net.carting.service.CarClassService;
+import net.carting.service.CompetitionService;
+import net.carting.service.LeaderService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.service.RacerService;
+import net.carting.service.TeamInCompetitionService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
+import net.carting.util.CompetitionValidator;
+import net.carting.util.DateUtil;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/competition")
@@ -167,6 +189,13 @@ public class CompetitionController {
         map.put("perentalPermissionYears", adminSettingsService.getAdminSettings().getParentalPermissionYears());
 
         return "competition_mandat";
+    }
+    
+    @RequestMapping(value = "/{id}/personal", method = RequestMethod.GET)
+    public String personalOffsetPage(@PathVariable("id") int id,
+                                                 Map<String, Object> map) {
+
+        return "competition_personal_offset";
     }
 
     @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = {"content-type=application/json"})
