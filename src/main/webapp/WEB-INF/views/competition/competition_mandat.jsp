@@ -7,6 +7,13 @@
 <script type='text/javascript'
 	src="<c:url value="/resources/js/mandat.js" />"></script>
 
+<!-- Sorter includes -->	
+<script type='text/javascript'
+	src="<c:url value="/resources/js/mandatSorterJquery.js" />"></script>
+<script type='text/javascript'
+	src="<c:url value="/resources/js/mandatSorter.js" />"></script>
+<link href="<c:url value="/resources/style/mandatSorter.css" />" rel="stylesheet" type="text/css">
+
 <div>
 
 	<label class="text-info" style="font-size: 20px; width: 100%; text-align: center; margin-bottom: 20px;">${competition.name}</label>
@@ -240,6 +247,12 @@
 		</div>
 	</div>
 </div>
+
+<script>
+$(document).ready( function () {
+    $('#team_table').DataTable();
+} );
+</script>
 
 <p><span class="glyphicon glyphicon-minus"></span>  - <spring:message code="label.document_missing_or_unapproved" />
 <p><span class="glyphicon glyphicon-plus"></span>  - <spring:message code="label.document_is_approved" />
