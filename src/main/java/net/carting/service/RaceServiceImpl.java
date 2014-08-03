@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -161,72 +162,73 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public void setResultTable(List<Set<Integer>> chessRoll,
                                Race race) {
-        try {
-            Map<Integer, Integer> resultFullLaps = new LinkedHashMap<Integer, Integer>();
-            Map<Integer, Integer> resultPoints = new LinkedHashMap<Integer, Integer>();
-            Map<Integer, Racer> numbersAndRacersMap = new LinkedHashMap<Integer, Racer>();
-            Map<Integer, Integer> numbersAndPlacesMap = new LinkedHashMap<Integer, Integer>();
-            List<RacerCarClassCompetitionNumber> racersByClassCompetition = racerCarClassCompetitionNumberService.
-                    getRacerCarClassCompetitionNumbersByCarClassCompetitionId(race.getCarClassCompetition().getId());
-            for (int lapIndex = race.getNumberOfLaps() - 1; lapIndex >= 0; lapIndex--) {
-                Iterator<Integer> it = chessRoll.get(lapIndex).iterator();
-                while (it.hasNext()) {
-                    Integer carNumber = (Integer) it.next();
-                    if (!resultFullLaps.containsKey(carNumber)) {
-                        resultFullLaps.put(carNumber, lapIndex + 1);
-                    }
+
+        Map<Integer, Integer> resultFullLaps = new LinkedHashMap<Integer, Integer>();
+        Map<Integer, Integer> resultPoints = new LinkedHashMap<Integer, Integer>();
+        Map<Integer, Racer> numbersAndRacersMap = new LinkedHashMap<Integer, Racer>();
+        Map<Integer, Integer> numbersAndPlacesMap = new LinkedHashMap<Integer, Integer>();
+        List<RacerCarClassCompetitionNumber> racersByClassCompetition = racerCarClassCompetitionNumberService.
+                getRacerCarClassCompetitionNumbersByCarClassCompetitionId(race.getCarClassCompetition().getId());
+        for (int lapIndex = race.getNumberOfLaps() - 1; lapIndex >= 0; lapIndex--) {
+            Iterator<Integer> it = chessRoll.get(lapIndex).iterator();
+            while (it.hasNext()) {
+                Integer carNumber = (Integer) it.next();
+                if (!resultFullLaps.containsKey(carNumber)) {
+                    resultFullLaps.put(carNumber, lapIndex + 1);
                 }
             }
+        }
 
-            for (RacerCarClassCompetitionNumber numberAndRacer : racersByClassCompetition) {
-                numbersAndRacersMap.put(numberAndRacer.getNumberInCompetition(),
-                        numberAndRacer.getRacer());
-                resultPoints.put(numberAndRacer.getNumberInCompetition(), 0);
+        for (RacerCarClassCompetitionNumber numberAndRacer : racersByClassCompetition) {
+            numbersAndRacersMap.put(numberAndRacer.getNumberInCompetition(),
+                    numberAndRacer.getRacer());
+            resultPoints.put(numberAndRacer.getNumberInCompetition(), 0);
+        }
+
+        List<String> pointsList = adminSettingsService.getPointsByPlacesList();
+        int place = 1;
+        for (Entry<Integer, Integer> entry : resultFullLaps.entrySet()) {
+            numbersAndPlacesMap.put(entry.getKey(), place);
+            if (place <= pointsList.size()) {
+                resultPoints.put(entry.getKey(), Integer.parseInt(pointsList.get(place - 1)));
             }
+            place++;
+        }
 
-            List<String> pointsList = adminSettingsService.getPointsByPlacesList();
-            int place = 1;
+        List<RaceResult> resultsList = (ArrayList<RaceResult>) raceResultService.getRaceResultsByRace(race);
+        if (resultsList.size() == 0) {
             for (Entry<Integer, Integer> entry : resultFullLaps.entrySet()) {
-                numbersAndPlacesMap.put(entry.getKey(), place);
-                if (place <= pointsList.size()) {
-                    resultPoints.put(entry.getKey(), Integer.parseInt(pointsList.get(place - 1)));
+                RaceResult raceResult = new RaceResult();
+                int number = entry.getKey();
+                raceResult.setFullLaps(entry.getValue());
+                raceResult.setPlace(numbersAndPlacesMap.get(number));
+                raceResult.setRace(race);
+                raceResult.setRacer(numbersAndRacersMap.get(number));
+                if (raceResult.getFullLaps() <= (race.getCarClassCompetition().getPercentageOffset() * 0.01) * (race.getNumberOfLaps())) {
+                    raceResult.setPoints(0);
+                } else {
+                    raceResult.setPoints(resultPoints.get(number));
                 }
-                place++;
-            }
-
-            List<RaceResult> resultsList = (ArrayList<RaceResult>) raceResultService.getRaceResultsByRace(race);
-            if (resultsList.size() == 0) {
-                for (Entry<Integer, Integer> entry : resultFullLaps.entrySet()) {
-                    RaceResult raceResult = new RaceResult();
-                    int number = entry.getKey();
-                    raceResult.setFullLaps(entry.getValue());
-                    raceResult.setPlace(numbersAndPlacesMap.get(number));
-                    raceResult.setRace(race);
-                    raceResult.setRacer(numbersAndRacersMap.get(number));
-                    if (raceResult.getFullLaps() <= (race.getCarClassCompetition().getPercentageOffset() * 0.01) * (race.getNumberOfLaps())) {
-                        raceResult.setPoints(0);
-                    } else {
-                        raceResult.setPoints(resultPoints.get(number));
-                    }
-                    raceResult.setCarNumber(number);
+                raceResult.setCarNumber(number);
+                try {
                     raceResultService.addRaceResult(raceResult);
-                }
-            } else {
-                for (RaceResult raceResult : resultsList) {
-                    int carNumber = raceResult.getCarNumber();
-                    raceResult.setFullLaps(resultFullLaps.get(carNumber));
-                    raceResult.setPlace(numbersAndPlacesMap.get(carNumber));
-                    raceResult.setRace(race);
-                    if (raceResult.getFullLaps() <= (race.getCarClassCompetition().getPercentageOffset() * 0.01) * (race.getNumberOfLaps())) {
-                        raceResult.setPoints(0);
-                    } else {
-                        raceResult.setPoints(resultPoints.get(carNumber));
-                    }
-                    raceResultService.updateRaceResult(raceResult);
+                } catch (PersistenceException e) {
+                    System.out.println("Oops");
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            for (RaceResult raceResult : resultsList) {
+                int carNumber = raceResult.getCarNumber();
+                raceResult.setFullLaps(resultFullLaps.get(carNumber));
+                raceResult.setPlace(numbersAndPlacesMap.get(carNumber));
+                raceResult.setRace(race);
+                if (raceResult.getFullLaps() <= (race.getCarClassCompetition().getPercentageOffset() * 0.01) * (race.getNumberOfLaps())) {
+                    raceResult.setPoints(0);
+                } else {
+                    raceResult.setPoints(resultPoints.get(carNumber));
+                }
+                raceResultService.updateRaceResult(raceResult);
+            }
         }
     }
 
