@@ -3,8 +3,10 @@ package net.carting.service;
 import net.carting.dao.LeaderDAO;
 import net.carting.domain.Authority;
 import net.carting.domain.Leader;
+import net.carting.domain.Role;
 import net.carting.domain.User;
 import net.carting.util.DateUtil;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,12 +78,15 @@ public class LeaderServiceImpl implements LeaderService {
     public void registerLeader(Map<String, Object> formMap)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = formMap.get("username").toString();
-
+/*
         Authority authority = new Authority();
         authority.setUsername(username);
         authority.setAuthority(UserService.ROLE_TEAM_LEADER);
         authorityService.addAuthority(authority);
-
+*/
+        Role role = new Role();
+        role.setRole("ROLE_TEAM_LEADER");
+        
         User user = new User();
         user.setUsername(username);
 
@@ -89,7 +94,8 @@ public class LeaderServiceImpl implements LeaderService {
                 .toString()));
 
         user.setEnabled(false);
-        user.setAuthority(authority);
+        //user.setAuthority(authority);
+        user.setRole(role);
         userService.addUser(user);
 
         Leader leader = new Leader();
