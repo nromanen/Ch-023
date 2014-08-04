@@ -9,10 +9,8 @@
 
 <!-- Sorter includes -->	
 <script type='text/javascript'
-	src="<c:url value="/resources/js/mandatSorterJquery.js" />"></script>
-<script type='text/javascript'
-	src="<c:url value="/resources/js/mandatSorter.js" />"></script>
-<link href="<c:url value="/resources/style/mandatSorter.css" />" rel="stylesheet" type="text/css">
+	src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
+<link href="<c:url value="/resources/style/jquery.dataTables.css" />" rel="stylesheet" type="text/css">
 
 <div>
 
