@@ -1,17 +1,40 @@
 <?xml  version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!--Adjusts transaction management via annotation @Transactional -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- Transaction manager -->
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <mvc:annotation-driven/>
+    <bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+        <property name="persistenceXmlLocations">
+            <list>
+                <value>classpath*:META-INF/persistence.xml</value>
+            </list>
+        </property>
+        <property name="defaultDataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitManager" ref="persistenceUnitManager"/>
+        <property name="persistenceUnitName" value="entityManager"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
     <!-- dataSource bean settings will be stored in a separate file -->
@@ -25,25 +48,8 @@
           p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.databaseurl}"
           p:username="${jdbc.username}" p:password="${jdbc.password}"/>
 
-    <!-- Hibernate session factory settings -->
-    <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-        <property name="configurationClass">
-            <value>org.hibernate.cfg.AnnotationConfiguration</value>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
-                <!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
-                <prop key="hibernate.hbm2ddl.auto">create</prop>
-                <prop key="hibernate.hbm2ddl.import_files">/WEB-INF/test_db/test_db.sql</prop>
-            </props>
-        </property>
-    </bean>
+    <task:annotation-driven executor="executor" scheduler="scheduler"/>
+    <task:executor id="executor" pool-size="10"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
 
 </beans>
