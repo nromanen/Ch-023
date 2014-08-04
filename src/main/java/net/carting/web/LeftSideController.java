@@ -26,7 +26,6 @@ public class LeftSideController extends ViewPreparerSupport implements Serializa
         Map<String, Object> response = tilesContext.getRequestScope();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         response.put("currentYear", currentYear);
-        System.out.println(currentYear);
         response.put("competitionListByCurrentYear", competitionService.getCompetitionsByYear(currentYear));
     }
 }

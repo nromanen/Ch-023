@@ -56,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		net.carting.domain.User domainUser = userDAO.getUserByUserName(username);
 		
-		boolean enabled = true;
+		boolean enabled = domainUser.isEnabled();
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
@@ -82,7 +82,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		List<String> roles = new ArrayList<String>();
 
 		if (role.intValue() == 1) {
-			//roles.add("ROLE_TEAM_LEADER");
 			roles.add("ROLE_ADMIN");
 		} else if (role.intValue() == 2) {
 			roles.add("ROLE_TEAM_LEADER");
