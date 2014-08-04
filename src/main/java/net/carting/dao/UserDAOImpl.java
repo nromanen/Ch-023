@@ -1,6 +1,5 @@
 package net.carting.dao;
 
-import net.carting.domain.Authority;
 import net.carting.domain.Role;
 import net.carting.domain.User;
 

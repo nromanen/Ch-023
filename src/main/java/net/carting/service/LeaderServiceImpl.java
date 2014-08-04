@@ -1,7 +1,6 @@
 package net.carting.service;
 
 import net.carting.dao.LeaderDAO;
-import net.carting.domain.Authority;
 import net.carting.domain.Leader;
 import net.carting.domain.Role;
 import net.carting.domain.User;
@@ -24,7 +23,8 @@ public class LeaderServiceImpl implements LeaderService {
     private LeaderDAO leaderDAO;
 
     @Autowired
-    private AuthorityService authorityService;
+    //private AuthorityService authorityService;
+    private RoleService roleService;
 
     @Autowired
     private UserService userService;
@@ -67,12 +67,20 @@ public class LeaderServiceImpl implements LeaderService {
         leaderDAO.deleteLeader(leader);
     }
 
+    
     @Override
     @Transactional
     public Leader getLeaderByUserName(String username) {
         return leaderDAO.getLeaderByUserName(username);
     }
-
+    
+    /*
+    @Override
+    @Transactional
+    public Leader getLeaderByUserId(int userId) {
+        return leaderDAO.getLeaderByUserId(userId);
+    }
+*/
     @Override
     @Transactional
     public void registerLeader(Map<String, Object> formMap)

@@ -2,6 +2,7 @@ package net.carting.service;
 
 import net.carting.dao.UserDAO;
 import net.carting.domain.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
                 .getAuthentication();
         return auth.getName();
     }
+    
 
     @SuppressWarnings("unchecked")
     @Override

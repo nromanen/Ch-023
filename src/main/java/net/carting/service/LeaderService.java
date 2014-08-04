@@ -19,6 +19,7 @@ public interface LeaderService {
     public void deleteLeader(Leader leader);
 
     public Leader getLeaderByUserName(String username);
+    //public Leader getLeaderByUserId(int userId);
 
     /**
      * <p/>

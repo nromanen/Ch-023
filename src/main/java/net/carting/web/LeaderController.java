@@ -26,7 +26,8 @@ public class LeaderController {
     @Autowired
     private TeamService teamService;
     @Autowired
-    private AuthorityService authorityService;
+    private RoleService roleService;
+    // private AuthorityService authorityService;
     @Autowired
     MailService mailService;
     @Autowired
