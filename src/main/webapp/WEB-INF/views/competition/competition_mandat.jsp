@@ -9,7 +9,7 @@
 
 <!-- Sorter includes -->	
 <script type='text/javascript'
-	src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
+	src="<c:url value="/resources/js//lib/jquery.dataTables.js" />"></script>
 <link href="<c:url value="/resources/style/jquery.dataTables.css" />" rel="stylesheet" type="text/css">
 
 <div>
