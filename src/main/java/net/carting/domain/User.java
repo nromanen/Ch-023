@@ -38,11 +38,8 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
     
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinTable(name="user_roles",
-		joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-		inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
-	)
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 /*
     // bi-directional one-to-one association to Authority

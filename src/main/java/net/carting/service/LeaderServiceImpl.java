@@ -92,8 +92,8 @@ public class LeaderServiceImpl implements LeaderService {
         authority.setAuthority(UserService.ROLE_TEAM_LEADER);
         authorityService.addAuthority(authority);
 */
-        Role role = new Role();
-        role.setRole("ROLE_TEAM_LEADER");
+        //Role role = new Role();
+        //role.setRole("ROLE_TEAM_LEADER");
         
         User user = new User();
         user.setUsername(username);
@@ -103,7 +103,8 @@ public class LeaderServiceImpl implements LeaderService {
 
         user.setEnabled(false);
         //user.setAuthority(authority);
-        user.setRole(role);
+        // 2 = ROLE_TEAM_LEADER
+        user.setRole(roleService.getRole(2));
         userService.addUser(user);
 
         Leader leader = new Leader();
