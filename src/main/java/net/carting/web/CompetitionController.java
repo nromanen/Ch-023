@@ -11,16 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
+import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.RaceResult;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
 import net.carting.service.AdminSettingsService;
+import net.carting.service.CarClassCompetitionResultService;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
+import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerService;
 import net.carting.service.TeamInCompetitionService;
@@ -49,6 +53,8 @@ public class CompetitionController {
     @Autowired
     private CompetitionService competitionService;
     @Autowired
+    private RaceService raceService;
+    @Autowired
     private TeamService teamService;
     @Autowired
     private CarClassService carClassService;
@@ -58,6 +64,8 @@ public class CompetitionController {
     private UserService userService;
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
+    @Autowired
+    private CarClassCompetitionResultService carClassCompetitionResultService;
     @Autowired
     private RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
     @Autowired
@@ -194,6 +202,19 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/personal", method = RequestMethod.GET)
     public String personalOffsetPage(@PathVariable("id") int id,
                                                  Map<String, Object> map) {
+    	List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(id);
+    	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
+    	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+    		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
+    		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+    	}
+    	
+    	map.put("carClassCompetitions", carClassCompetitions);
+    	map.put("raceResultsLists", raceResults);
+    	map.put("absoluteResultsList", carClassCompetitionResults);
+    	
 
         return "competition_personal_offset";
     }
