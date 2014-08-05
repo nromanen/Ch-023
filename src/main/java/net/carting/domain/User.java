@@ -41,13 +41,8 @@ public class User implements Serializable, UserDetails {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
-/*
-    // bi-directional one-to-one association to Authority
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", nullable = false)
-    private Authority authority;
-*/
-    // Getters & Setters for original props
+
+	// Getters & Setters for original props
 
     public String getUsername() {
         return this.username;
@@ -68,16 +63,7 @@ public class User implements Serializable, UserDetails {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-/*
-    public Authority getAuthority() {
-        return this.authority;
-    }
 
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
-*/
-    
     public Role getRole() {
 		return role;
 	}

@@ -21,9 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class UserDetailsServiceImpl implements UserDetailsService {
-/*
-    private static final Logger LOG = Logger
-            .getLogger(UserDetailsServiceImpl.class);
+
+    private static final Logger LOG = Logger.getLogger(UserDetailsServiceImpl.class);
 
     private UserDAO userDAO;
 
@@ -31,36 +30,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
-
-    @Override
+    
+	@Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) {
-        User user = userDAO.getUserByUserName(username);
-
-        if (user == null) {
-            String msg = String.format("User %s not found", username);
-            LOG.info(msg);
-            throw new UsernameNotFoundException(msg);
-        }
-
-        user.setUserAuthorities(userDAO.getAuthoritiesByUserName(username));
-        LOG.info(String.format("%s had logged successfully", user.getUsername()));
-        return user;
-    }
-*/
-	@Autowired
-	private UserDAO userDAO;	
-
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		
 		net.carting.domain.User domainUser = userDAO.getUserByUserName(username);
+		
+		if (domainUser == null) {
+            String msg = String.format("User %s not found", username);
+            LOG.info(msg);
+            throw new UsernameNotFoundException(msg);			
+		}
 		
 		boolean enabled = domainUser.isEnabled();
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		domainUser.setUserAuthorities(userDAO.getAuthoritiesByUserName(username));
+        LOG.info(String.format("%s had logged successfully", domainUser.getUsername()));
 		return new User (
 				domainUser.getUsername(),
 				domainUser.getPassword(),

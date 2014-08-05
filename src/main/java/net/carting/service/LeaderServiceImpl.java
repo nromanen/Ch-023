@@ -74,44 +74,25 @@ public class LeaderServiceImpl implements LeaderService {
         return leaderDAO.getLeaderByUserName(username);
     }
     
-    /*
-    @Override
-    @Transactional
-    public Leader getLeaderByUserId(int userId) {
-        return leaderDAO.getLeaderByUserId(userId);
-    }
-*/
     @Override
     @Transactional
     public void registerLeader(Map<String, Object> formMap)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = formMap.get("username").toString();
-/*
-        Authority authority = new Authority();
-        authority.setUsername(username);
-        authority.setAuthority(UserService.ROLE_TEAM_LEADER);
-        authorityService.addAuthority(authority);
-*/
-        //Role role = new Role();
-        //role.setRole("ROLE_TEAM_LEADER");
         
         User user = new User();
         user.setUsername(username);
-
         user.setPassword(userService.getEncodedPassword(formMap.get("password")
                 .toString()));
-
         user.setEnabled(false);
-        //user.setAuthority(authority);
         // 2 = ROLE_TEAM_LEADER
-        user.setRole(roleService.getRole(2));
+        user.setRole(roleService.getRole(2));        
         userService.addUser(user);
 
         Leader leader = new Leader();
         leader.setFirstName(formMap.get("firstName").toString());
         leader.setLastName(formMap.get("lastName").toString());
-        leader.setBirthday(DateUtil.getDateFromString(formMap.get("birthday")
-                .toString()));
+        leader.setBirthday(DateUtil.getDateFromString(formMap.get("birthday").toString()));
         leader.setDocument(formMap.get("document").toString());
         leader.setAddress(formMap.get("address").toString());
         leader.setLicense(formMap.get("license").toString());
