@@ -46,18 +46,25 @@ public class RacerController {
 
     @Autowired
     private RacerService racerService;
+    
     @Autowired
     private TeamService teamService;
+    
     @Autowired
     private CarClassService carClassService;
+    
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
+    
     @Autowired
     private RacerCarClassNumberService racerCarClassNumberService;
+    
     @Autowired
     private RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
+    
     @Autowired
     private LeaderService leaderService;
+    
     @Autowired
     private UserService userService;
 
@@ -93,8 +100,7 @@ public class RacerController {
 
     // edit racer by id (view)
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editRacerPage(Map<String, Object> map,
-                                @PathVariable("id") int id) {
+    public String editRacerPage(Map<String, Object> map, @PathVariable("id") int id) {
 
         String authority = userService.getCurrentAuthority();
 

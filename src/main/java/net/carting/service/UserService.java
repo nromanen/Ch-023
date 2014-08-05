@@ -27,7 +27,7 @@ public interface UserService {
     public void deleteUser(User user);
 
     public String getCurrentUserName();
-
+    
     public String getCurrentAuthority();
 
     public boolean isSetUser(String user_name);

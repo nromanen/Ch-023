@@ -48,11 +48,21 @@ public class LeaderDAOImpl implements LeaderDAO {
     }
 
     @Override
-    public Leader getLeaderByUserName(String username) {
-        Query query = entityManager.
+    public Leader getLeaderByUserName(String username) {    	
+    	Query query = entityManager.
                 createQuery("FROM Leader WHERE user.username = :username");
         query.setParameter("username", username);
         return (Leader) query.getSingleResult();
     }
+
+    /*
+	@Override
+	public Leader getLeaderByUserId(int userId) {
+        Query query = entityManager.
+                createQuery("FROM Leader WHERE user.id = :userId");
+        query.setParameter("username", userId);
+        return (Leader) query.getSingleResult();		
+	}
+	*/
 
 }

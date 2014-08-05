@@ -1,10 +1,11 @@
 package net.carting.service;
 
 import net.carting.dao.LeaderDAO;
-import net.carting.domain.Authority;
 import net.carting.domain.Leader;
+import net.carting.domain.Role;
 import net.carting.domain.User;
 import net.carting.util.DateUtil;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class LeaderServiceImpl implements LeaderService {
     private LeaderDAO leaderDAO;
 
     @Autowired
-    private AuthorityService authorityService;
+    //private AuthorityService authorityService;
+    private RoleService roleService;
 
     @Autowired
     private UserService userService;
@@ -65,38 +67,32 @@ public class LeaderServiceImpl implements LeaderService {
         leaderDAO.deleteLeader(leader);
     }
 
+    
     @Override
     @Transactional
     public Leader getLeaderByUserName(String username) {
         return leaderDAO.getLeaderByUserName(username);
     }
-
+    
     @Override
     @Transactional
     public void registerLeader(Map<String, Object> formMap)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = formMap.get("username").toString();
-
-        Authority authority = new Authority();
-        authority.setUsername(username);
-        authority.setAuthority(UserService.ROLE_TEAM_LEADER);
-        authorityService.addAuthority(authority);
-
+        
         User user = new User();
         user.setUsername(username);
-
         user.setPassword(userService.getEncodedPassword(formMap.get("password")
                 .toString()));
-
         user.setEnabled(false);
-        user.setAuthority(authority);
+        // 2 = ROLE_TEAM_LEADER
+        user.setRole(roleService.getRole(2));        
         userService.addUser(user);
 
         Leader leader = new Leader();
         leader.setFirstName(formMap.get("firstName").toString());
         leader.setLastName(formMap.get("lastName").toString());
-        leader.setBirthday(DateUtil.getDateFromString(formMap.get("birthday")
-                .toString()));
+        leader.setBirthday(DateUtil.getDateFromString(formMap.get("birthday").toString()));
         leader.setDocument(formMap.get("document").toString());
         leader.setAddress(formMap.get("address").toString());
         leader.setLicense(formMap.get("license").toString());

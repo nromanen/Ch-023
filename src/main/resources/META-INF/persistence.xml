@@ -2,8 +2,8 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="entityManager" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>net.carting.domain.AdminSettings</class>
-        <class>net.carting.domain.Authority</class>
+        <class>net.carting.domain.AdminSettings</class>       
+        <class>net.carting.domain.Role</class>
         <class>net.carting.domain.CarClass</class>
         <class>net.carting.domain.CarClassCompetition</class>
         <class>net.carting.domain.CarClassCompetitionResult</class>
@@ -26,6 +26,7 @@
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost/carting"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="root"/>
+            <!-- property name="hibernate.show_sql" value="true"/ -->
         </properties>
     </persistence-unit>
 </persistence>
