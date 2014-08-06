@@ -25,11 +25,11 @@ public class User implements Serializable, UserDetails {
     public static final String DEFAULT_PASSWORD = "1111";
 
     // Original props    
-	@Id
-	@GeneratedValue
-	private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
     
-	@Column(name = "username")
+    @Column(name = "username")
     private String username;
 
     @Column(name = "enabled", nullable = false, columnDefinition = "TINYINT(1)")
@@ -38,11 +38,11 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
     
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "role_id", nullable = false)
-	private Role role;
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-	// Getters & Setters for original props
+    // Getters & Setters for original props
 
     public String getUsername() {
         return this.username;
@@ -65,20 +65,20 @@ public class User implements Serializable, UserDetails {
     }
 
     public Role getRole() {
-		return role;
-	}
+        return role;
+    }
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     // Spring Security props
 
     private transient Collection<GrantedAuthority> authorities;
 
     // UserDetails methods
 
-	@Transient
+    @Transient
     public Collection<GrantedAuthority> getAuthorities() {
         return authorities;
     }
