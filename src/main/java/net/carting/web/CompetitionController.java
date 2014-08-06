@@ -60,7 +60,16 @@ public class CompetitionController {
     }
 
     @RequestMapping(value = "/list/{year}", method = RequestMethod.GET)
-    public ModelAndView competitionsPage(Model model, @PathVariable("year") int year) {
+    public ModelAndView competitionsPage(Model model, @PathVariable("year") String yearString) {
+    	int year;
+    	try {
+    		year = Integer.parseInt(yearString);
+    	} catch (NumberFormatException e) {
+    		year=0;
+    	}
+    	if(!competitionService.getCompetitionsYearsList().contains(year)) {
+    		year = competitionService.getCompetitionsYearsList().get(0);
+    	}
         List<Competition> competitionList = competitionService.getCompetitionsByYear(year);
         model.addAttribute("competitionListByYear", competitionList);
         model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
