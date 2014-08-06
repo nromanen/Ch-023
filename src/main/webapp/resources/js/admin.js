@@ -1,5 +1,10 @@
 $(document).ready(function(){
 	
+
+    $('#add_car_class_form').bootstrapValidator();
+    $('#edit_car_class_form').bootstrapValidator();
+	
+	
 	$("#change_pass_btn").click(function(){	
 		$('#change_password_modal').modal();
 	});
@@ -40,6 +45,9 @@ $(document).ready(function(){
 		$('#age_error').css("display","none");
 		var lowerYearsLimit = +$('#lower_years_limit').val();
 		var upperYearsLimit = +$('#upper_years_limit').val();
+		if ((lowerYearsLimit==0)&&(upperYearsLimit==0)) {
+			return false;
+		} else
 		if (lowerYearsLimit > upperYearsLimit) {
 			$('#age_error').css("display","block");
 			return false;
