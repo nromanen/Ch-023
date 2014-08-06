@@ -267,23 +267,28 @@ public class CarClassCompetitionResultServiceImpl implements
             @Override
             public int compare(CarClassCompetitionResult summaryResult1, CarClassCompetitionResult summaryResult2) {
                 if (summaryResult1.getAbsolutePoints() == summaryResult2.getAbsolutePoints()) {
-                	Racer racer1 = summaryResult1.getRacerCarClassCompetitionNumber().getRacer();
+                	//get racers for absoluteResult1 and absoluteResult2
+                	Racer racer1 = summaryResult1.getRacerCarClassCompetitionNumber().getRacer(); 
                 	Racer racer2 = summaryResult2.getRacerCarClassCompetitionNumber().getRacer();
+                	//get all races results of which are used in calculation of absolute results
                 	Set<Race> races1 = summaryResult1.getRacerCarClassCompetitionNumber().getCarClassCompetition().getRaces();
                 	Set<Race> races2 = summaryResult2.getRacerCarClassCompetitionNumber().getCarClassCompetition().getRaces();
                 	List<RaceResult> raceResults1 = new ArrayList<RaceResult>();
                 	List<RaceResult> raceResults2 = new ArrayList<RaceResult>();
+                	// get all results which are used in calculation of absolute results
                 	for (Race race : races1) {
                 		raceResults1.add(raceResultService.getRaceResultsByRaceAndRacer(race, racer1));
                 	}
                 	for (Race race : races2) {
                 		raceResults2.add(raceResultService.getRaceResultsByRaceAndRacer(race, racer2));
                 	}
+                	// get the best place in two races
                 	int min1 = Math.min(raceResults1.get(0).getPlace(), raceResults1.get(1).getPlace());
                 	int min2 = Math.min(raceResults2.get(0).getPlace(), raceResults2.get(1).getPlace());
                 	if (min1 != min2) {
                 		return min1 < min2 ? -1 : 1;
                 	}
+                	// get the worst place in two races
                 	int max1 = Math.max(raceResults1.get(0).getPlace(), raceResults1.get(1).getPlace());
                     int max2 = Math.max(raceResults2.get(0).getPlace(), raceResults2.get(1).getPlace());
                     if (max1 != max2) {
