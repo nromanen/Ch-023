@@ -62,6 +62,14 @@ public class CarClassCompetition {
     public void setId(int id) {
         this.id = id;
     }
+    
+    public Set<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbers() {
+    	return racerCarClassCompetitionNumbers;
+    }
+    
+    public void setRacerCarClassCompetitionNumbers(Set<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers) {
+    	this.racerCarClassCompetitionNumbers = racerCarClassCompetitionNumbers;
+    }
 
     public Competition getCompetition() {
         return competition;

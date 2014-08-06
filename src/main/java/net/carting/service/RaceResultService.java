@@ -1,9 +1,10 @@
 package net.carting.service;
 
+import java.util.List;
+
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
-
-import java.util.List;
+import net.carting.domain.Racer;
 
 public interface RaceResultService {
 
@@ -18,5 +19,7 @@ public interface RaceResultService {
     public void deleteRaceResult(RaceResult raceResult);
 
     public List<RaceResult> getRaceResultsByRace(Race race);
+    
+    public RaceResult getRaceResultsByRaceAndRacer(Race race, Racer racer);
 
 }

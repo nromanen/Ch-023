@@ -112,6 +112,14 @@
         <put-attribute name="content"
                        value="/WEB-INF/views/competition/competition_mandat.jsp"/>
     </definition>
+    
+    <definition name="competition_personal_offset" extends="base-template">
+        <put-attribute name="title" value="Personal offset"/>
+        <put-attribute name="content_style" value="padding-left: 0px; width: 100%;"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content"
+                       value="/WEB-INF/views/competition/competition_personal_offset.jsp"/>
+    </definition>
 
     <definition name="competition_carclass_results_add_edit" extends="base-template">
         <put-attribute name="title" value=" Add CarClass Results"/>
