@@ -1,5 +1,9 @@
 $(document).ready(function(){
 	
+    $('#loginForm').bootstrapValidator();
+    $('#add_car_class_form').bootstrapValidator();
+	
+	
 	$("#change_pass_btn").click(function(){	
 		$('#change_password_modal').modal();
 	});
