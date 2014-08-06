@@ -11,55 +11,6 @@
 <script type='text/javascript' src='<c:url value="/resources/style/bootstrap/js/bootstrap-switch.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/admin.js" />'></script>
 
-
-            		
-            		
-<button class="btn btn-default" data-toggle="modal" data-target="#loginModal">Login</button>
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-         <form id="loginForm" method="post" class="form-horizontal">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Login</h4>
-            </div>
-
-            <div class="modal-body">
-                <!-- The form is placed inside the body of modal -->
-               
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Username</label>
-                        <div class="col-md-5">
-                            <input type="text" class="form-control" name="username" 
-                            required
-                            data-bv-notempty="true"
-						    data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
-                            />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Password</label>
-                        <div class="col-md-5">
-                            <input type="password" class="form-control" name="password" 
-                            data-bv-notempty="true"
-						    data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
-                            />
-                            
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-5 col-md-offset-3">
-                            <button type="submit" class="btn btn-default">Login</button>
-                        </div>
-                    </div>
-                
-            </div>
-        </form>
-        </div>
-    </div>
-</div>
-
-
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 20px 40px;">
 		
 	<table width=100%>
@@ -213,7 +164,7 @@
 		</c:forEach>
 	</table>
 	<div class="text-center" style="width: 100%;">
-		<button type="button" class="btn btn-primary" id="add_carclass_btn" data-toggle="modal" data-target="#add_carclass_modal">
+		<button type="button" class="btn btn-primary" id="add_carclass_btn">
 			<spring:message code="label.add_car_class" />
 		</button>
 	</div>
@@ -291,13 +242,12 @@
     </div>
   </div>
 </div>
-<!-- Add car class modal -->
 
-<div class="modal fade" id="add_carclass_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Add car class modal -->
+<div class="modal fade" id="add_carclass_modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" style="margin-top: 5%;">
 		<div class="modal-content">
 			<form id="add_car_class_form" action="<c:url value="/admin/addCarClass" />"
-				 <%--  data-toggle="validator"  --%>
 				  role="form" name="add_car_class_form" >
 				<div class="modal-header"><button class="close" type="button" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title"><spring:message code="label.add_car_class" /></h4>
@@ -309,53 +259,50 @@
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.car_class_name" />"
 						       id="name" name="name" required 
-						       <%-- pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}"  --%>
+						       pattern="^[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}$"
+						        data-bv-regexp-message="<spring:message code="dataerror.carclass_name_exception" />&nbsp
+						        <spring:message code="dataerror.carclass_example" />"
 						       data-bv-notempty="true"
 						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 						       />
-						 <div class="help-block with-errors"></div> 
 					</div>
-						
 					<div class="form-group">
 						<label class="text-info">
 							<spring:message code="label.admin_lower_years_limit" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.lower_years_limit" />"
-						       id="lower_years_limit" required 
-						       <%-- pattern="[1-9]{1}[0-9]?" --%>
+						       id="lower_years_limit" name="lower_years_limit" required 
+						       pattern="^[1-9]{1}[0-9]?$" 
+						       data-bv-regexp-message="<spring:message code="dataerror.number_value" />&nbsp;
+						       <spring:message code="dataerror.value_range" />"
 						       data-bv-notempty="true"
 						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
-							   >
-						 <div class="help-block with-errors"></div> 
+							   />
 					</div>
-						
 					<div class="form-group">
 						<label class="text-info">
 							<spring:message code="label.admin_upper_years_limit" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.upper_years_limit" />"
-							   id="upper_years_limit" required 
-							   <%-- pattern="[1-9]{1}[0-9]?" --%>
-							  
+							   id="upper_years_limit" name="upper_years_limit" required 
+							   pattern="^[1-9]{1}[0-9]?$" 
+						       data-bv-regexp-message="<spring:message code="dataerror.number_value" />&nbsp;
+						       <spring:message code="dataerror.value_range" />"
 						       data-bv-notempty="true"
-						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"							   
-							   >
-						 <div class="help-block with-errors"></div> 
+						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+							   />
 					</div>	
-							
 					<br>
 					<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_add_carclass">	
 				</div>
 				<div class="modal-footer">	
-					<span id="age_error" style="display:none; color:red; margin-bottom: 5px"><spring:message code="label.age_error" /></span>	
-					<div class="form-group">			       		
-						<button class="btn btn-primary" type="button" data-dismiss="modal">
-							<spring:message code="label.cancel" />
-						</button>
-						<button class="btn btn-success" type="submit">
-							<spring:message code="label.add" />
-						</button>
-					</div>
+					<span id="age_error" style="display:none; color:red; margin-bottom: 5px"><spring:message code="label.age_error" /></span>				       		
+					<button class="btn btn-primary" type="button" data-dismiss="modal">
+						<spring:message code="label.cancel" />
+					</button>
+					<button class="btn btn-success" type="submit">
+						<spring:message code="label.add" />
+					</button>
 				</div>
 			</form>
 		</div>
@@ -366,7 +313,7 @@
 <div class="modal fade" id="edit_carclass_modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" style="margin-top: 5%;">
 		<div class="modal-content">
-			<form action="<c:url value="/admin/editCarClass" />"
+			<form action="<c:url value="/admin/editCarClass" />" method="post"
 				  data-toggle="validator" role="form" name="edit_car_class_form" id="edit_car_class_form">
 				<input type=hidden id="id_edit" value="">
 				<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
@@ -378,35 +325,40 @@
 							<spring:message code="label.name" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.car_class_name" />"
-						       id="name_edit" required pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}" 
-						       data-error="<spring:message code="dataerror.50_symbols_limit" />" />
-						<div class="help-block with-errors"></div>
+						       id="name_edit" name="name" required 
+						       pattern="^[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}$"
+						        data-bv-regexp-message="<spring:message code="dataerror.carclass_name_exception" />&nbsp
+						        <spring:message code="dataerror.carclass_example" />"
+						       data-bv-notempty="true"
+						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+						       />
 					</div>
-						
 					<div class="form-group">
 						<label class="text-info">
 							<spring:message code="label.admin_lower_years_limit" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.lower_years_limit" />"
-						       id="lower_years_limit_edit" required pattern="[1-9]{1}[0-9]?"
-							   data-error="<spring:message code="dataerror.field_required" />&nbsp;
-							   <spring:message code="dataerror.max_value_is" />&nbsp;
-							   <spring:message code="dataerror.number_value" />&nbsp;99." />
-						<div class="help-block with-errors"></div>
+						       id="lower_years_limit_edit" name="lower_years_limit_edit" required 
+						       pattern="^[1-9]{1}[0-9]?$" 
+						       data-bv-regexp-message="<spring:message code="dataerror.number_value" />&nbsp;
+						       <spring:message code="dataerror.value_range" />"
+						       data-bv-notempty="true"
+						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+							   />
 					</div>
-						
 					<div class="form-group">
 						<label class="text-info">
 							<spring:message code="label.admin_upper_years_limit" />:&nbsp;
 						</label>
 						<input type="text" class="form-control" placeholder="<spring:message code="placeholder.upper_years_limit" />"
-							   id="upper_years_limit_edit" required pattern="[1-9]{1}[0-9]?"
-							   data-error="<spring:message code="dataerror.field_required" />&nbsp;
-							   <spring:message code="dataerror.max_value_is" />&nbsp;
-							   <spring:message code="dataerror.number_value" />&nbsp;99." />
-						<div class="help-block with-errors"></div>
+							   id="upper_years_limit_edit" name="upper_years_limit_edit" required 
+							   pattern="^[1-9]{1}[0-9]?$" 
+						       data-bv-regexp-message="<spring:message code="dataerror.number_value" />&nbsp;
+						       <spring:message code="dataerror.value_range" />"
+						       data-bv-notempty="true"
+						       data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+							   />
 					</div>	
-							
 					<br>
 					<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_edit_carclass">	
 				</div>
