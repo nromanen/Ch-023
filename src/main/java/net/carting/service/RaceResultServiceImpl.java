@@ -1,13 +1,15 @@
 package net.carting.service;
 
+import java.util.List;
+
 import net.carting.dao.RaceResultDAO;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class RaceResultServiceImpl implements RaceResultService {
@@ -100,6 +102,12 @@ public class RaceResultServiceImpl implements RaceResultService {
     @Transactional
     public List<RaceResult> getRaceResultsByRace(Race race) {
         return raceResultDAO.getRaceResultsByRace(race);
+    }
+    
+    @Override
+    @Transactional
+    public RaceResult getRaceResultsByRaceAndRacer(Race race, Racer racer) {
+        return raceResultDAO.getRaceResultsByRaceAndRacer(race,racer);
     }
 
 }

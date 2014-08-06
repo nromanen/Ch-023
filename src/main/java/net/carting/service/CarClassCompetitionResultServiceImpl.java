@@ -1,15 +1,23 @@
 package net.carting.service;
 
-import net.carting.dao.CarClassCompetitionResultDAO;
-import net.carting.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+
+import net.carting.dao.CarClassCompetitionResultDAO;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.CarClassCompetitionResult;
+import net.carting.domain.Competition;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CarClassCompetitionResultServiceImpl implements
@@ -259,6 +267,29 @@ public class CarClassCompetitionResultServiceImpl implements
             @Override
             public int compare(CarClassCompetitionResult summaryResult1, CarClassCompetitionResult summaryResult2) {
                 if (summaryResult1.getAbsolutePoints() == summaryResult2.getAbsolutePoints()) {
+                	Racer racer1 = summaryResult1.getRacerCarClassCompetitionNumber().getRacer();
+                	Racer racer2 = summaryResult2.getRacerCarClassCompetitionNumber().getRacer();
+                	Set<Race> races1 = summaryResult1.getRacerCarClassCompetitionNumber().getCarClassCompetition().getRaces();
+                	Set<Race> races2 = summaryResult2.getRacerCarClassCompetitionNumber().getCarClassCompetition().getRaces();
+                	List<RaceResult> raceResults1 = new ArrayList<RaceResult>();
+                	List<RaceResult> raceResults2 = new ArrayList<RaceResult>();
+                	for (Race race : races1) {
+                		raceResults1.add(raceResultService.getRaceResultsByRaceAndRacer(race, racer1));
+                	}
+                	for (Race race : races2) {
+                		raceResults2.add(raceResultService.getRaceResultsByRaceAndRacer(race, racer2));
+                	}
+                	int min1 = Math.min(raceResults1.get(0).getPlace(), raceResults1.get(1).getPlace());
+                	int min2 = Math.min(raceResults2.get(0).getPlace(), raceResults2.get(1).getPlace());
+                	if (min1 != min2) {
+                		return min1 < min2 ? -1 : 1;
+                	}
+                	int max1 = Math.max(raceResults1.get(0).getPlace(), raceResults1.get(1).getPlace());
+                    int max2 = Math.max(raceResults2.get(0).getPlace(), raceResults2.get(1).getPlace());
+                    if (max1 != max2) {
+                    	return max1 > max2 ? 1 : -1;
+                    }	
+                	
                     return summaryResult1.getRace2points() > summaryResult2.getRace2points() ? -1 : 1;
                 }
                 return summaryResult1.getAbsolutePoints() > summaryResult2.getAbsolutePoints() ? -1 : 1;
