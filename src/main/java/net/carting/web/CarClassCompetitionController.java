@@ -50,7 +50,7 @@ public class CarClassCompetitionController {
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
 
         if (userService.getCurrentAuthority().equals(UserService.ROLE_TEAM_LEADER)) {
-            String username = userService.getCurrentUserName();
+            String username = userService.getCurrentUserName();            
             Leader leader = leaderService.getLeaderByUserName(username);
             Team teamByLeader = teamService.getTeamByLeader(leader);
             model.addAttribute("teamByLeader", teamByLeader);

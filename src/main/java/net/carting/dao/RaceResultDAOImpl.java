@@ -1,14 +1,16 @@
 package net.carting.dao;
 
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RaceResultDAOImpl implements RaceResultDAO {
@@ -80,6 +82,16 @@ public class RaceResultDAOImpl implements RaceResultDAO {
             System.out.println("getRaceResultsByRace");
         }
         return list;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public RaceResult getRaceResultsByRaceAndRacer(Race race, Racer racer) {
+        	Query q = entityManager
+                    .createQuery("from RaceResult where race= :race AND racer= :racer");
+        	q.setParameter("race", race);
+        	q.setParameter("racer", racer);
+        return (RaceResult) q.getSingleResult();
     }
 
     @Override
