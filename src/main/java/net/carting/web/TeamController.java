@@ -22,7 +22,8 @@ public class TeamController {
     @Autowired
     private UserService userService;
     @Autowired
-    private AuthorityService authorityService;
+    private RoleService roleService;
+    //private AuthorityService authorityService;
     @Autowired
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired

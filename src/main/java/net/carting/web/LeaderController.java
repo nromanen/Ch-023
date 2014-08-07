@@ -21,14 +21,19 @@ import java.util.Map;
 public class LeaderController {
     @Autowired
     private UserService userService;
+
     @Autowired
     private LeaderService leaderService;
+    
     @Autowired
     private TeamService teamService;
+    
     @Autowired
-    private AuthorityService authorityService;
+    private RoleService roleService;
+
     @Autowired
     MailService mailService;
+    
     @Autowired
     private AdminSettingsService adminSettingsService;
 

@@ -8,11 +8,14 @@ import java.util.List;
 
 public interface UserService {
 
-    public static final String ROLE_TEAM_LEADER = "ROLE_TEAM_LEADER";
+    public static final int ROLE_ADMIN_ID = 1;
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+	public static final String ROLE_TEAM_LEADER = "ROLE_TEAM_LEADER";
+    public static final int ROLE_TEAM_LEADER_ID = 2;
 
     public static final String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
-
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final int ROLE_ANONYMOUS_ID = 3;
 
     public User getUserByUserName(String userName);
 
@@ -27,7 +30,7 @@ public interface UserService {
     public void deleteUser(User user);
 
     public String getCurrentUserName();
-
+    
     public String getCurrentAuthority();
 
     public boolean isSetUser(String user_name);

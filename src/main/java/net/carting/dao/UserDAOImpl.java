@@ -1,13 +1,15 @@
 package net.carting.dao;
 
-import net.carting.domain.Authority;
+import net.carting.domain.Role;
 import net.carting.domain.User;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +36,17 @@ public class UserDAOImpl implements UserDAO {
         User u = (User) entityManager
                 .createQuery("from User where username= :username")
                 .setParameter("username", userName).getSingleResult();;
-        Authority a = u.getAuthority();
-        String auth = a.getAuthority();
+        Role r = u.getRole();
+        String auth = r.getRole();
         List<String> l = new ArrayList<String>();
         l.add(auth);
-
         return l;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<User> getAllUsers() {
-        return entityManager
-                .createQuery("from User").getResultList();
+        return entityManager.createQuery("from User").getResultList();
     }
 
     @Override
@@ -85,5 +85,4 @@ public class UserDAOImpl implements UserDAO {
         query.setParameter("username", username);
         query.executeUpdate();
     }
-
 }

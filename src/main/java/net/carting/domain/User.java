@@ -4,7 +4,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import net.carting.domain.Role;
+
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,9 +24,11 @@ public class User implements Serializable, UserDetails {
 
     public static final String DEFAULT_PASSWORD = "1111";
 
-    // Original props
-
+    // Original props    
     @Id
+    @GeneratedValue
+    private Integer id;
+    
     @Column(name = "username")
     private String username;
 
@@ -32,11 +37,10 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "password")
     private String password;
-
-    // bi-directional one-to-one association to Authority
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", nullable = false)
-    private Authority authority;
+    
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     // Getters & Setters for original props
 
@@ -60,12 +64,12 @@ public class User implements Serializable, UserDetails {
         this.enabled = enabled;
     }
 
-    public Authority getAuthority() {
-        return this.authority;
+    public Role getRole() {
+        return role;
     }
 
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     // Spring Security props
