@@ -16,13 +16,43 @@ $(document).ready(function(){
         });
     }
 
-    $("#save").click(function() {
-        $(".carPos").each(function() {
-            var pos = $(this).attr('racer');
-            var car = "#p" +$(this).val();
-            $(car).text(pos);
+    function clearTable() {
+        $(".place").each(function() {
+            $(this).text("");
         });
-        updatePDF();
+    }
+
+    $("#save").click(function() {    
+        clearTable();
+        var arr = [];
+        var max = Number($("#maxPos").val());
+        var valid = true;
+        $(".carPos").each(function() {
+            var racerNum = $(this).attr('racer');
+            var pos = $(this).val();
+            var startPos = ".p" + $(this).val();
+            if (pos >=1 && pos <= max) {
+                $(startPos).each(function() {
+                    $(this).text(racerNum);
+                });
+            } else {
+                valid = false;
+            }
+            arr.push(pos);
+        });
+        var sorted_arr = arr.sort();
+        for (var i = 0; i < arr.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                valid = false;        
+            }
+        }        
+
+        if (valid == true) {
+           updatePDF();
+        } else {
+            $('#add_competition_error').css("display", "inline-block").hide().fadeIn();
+            $('#add_competition_error').delay(2000).fadeOut('slow');
+        }
     });
 });
 </script>
@@ -61,7 +91,8 @@ $(document).ready(function(){
                                         ${racerCarClassCompetitionNumber.numberInCompetition}
                                     </td>
                                     <td>
-                                        <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.racer.id}">
+                                            <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}" 
+                                            pattern="[0-9]{2}">
                                     </td>
                                 </tr>
                                 <% number++; %>
@@ -70,7 +101,7 @@ $(document).ready(function(){
                     </table>
                     <center>
                         <a class="btn btn-lg btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
-                        <a class="btn btn-lg btn-success" id="pdf" href="${pdfLink}" ><spring:message code="label.document_download_pdf" /></a><p>
+                        <a class="btn btn-lg btn-success" id="pdf" href="${pdfLink}" target="_blank"><spring:message code="label.document_download_pdf" /></a><p>
                     </center>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
@@ -85,14 +116,17 @@ $(document).ready(function(){
         </div>
     </div>
 </c:if>
-
+    <div class="alert alert-danger" id="add_competition_error"
+        style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+        <spring:message code="dataerror.competition_date" />
+    </div
 
 <div id='table'>
 <meta charset="utf-8">
 <style>
-  table {
-    font-family: 'Times New Roman', Times, serif;
-  }
+    table {
+        font-family: 'Times New Roman', Times, serif;
+    }
     .place {
      font-size: 250%;
      font-family: serif;
@@ -101,6 +135,7 @@ $(document).ready(function(){
      text-decoration: underline;
     }
 </style>
+<input type="hidden" id="maxPos" value="${maxPositions}">
   <table style="width:100%" border='1' cellspacing='0' cellpadding='2'>
         <tr>
             <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
@@ -114,14 +149,14 @@ $(document).ready(function(){
             <td colspan='2' align='center'><b>Протокол старту</b></td>
             <td colspan='2' align='center'><b>Протокол старту</b></td>
         </tr>
-        <c:forEach var="i" begin="1" end="35" step="2">
-            <c:set var="j" value="${36-i}"/>
-            <c:set var="k" value="${36-i+1}"/>
+        <c:forEach var="i" begin="1" end="${maxPositions}" step="2">
+            <c:set var="j" value="${maxPositions-i}"/>
+            <c:set var="k" value="${maxPositions-i+1}"/>
             <tr>
-                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p${k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p${j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p${k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${k}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${k}"></span></td>
             </tr>
         </c:forEach>
         <tr>

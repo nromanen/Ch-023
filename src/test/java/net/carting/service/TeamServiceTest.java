@@ -1,6 +1,5 @@
 package net.carting.service;
 
-import net.carting.dao.RacerDAO;
 import net.carting.dao.TeamDAO;
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.Assert.*;
@@ -65,7 +63,6 @@ public class TeamServiceTest {
         when(teamDAO.getTeamById(0)).thenReturn(new Team(1, "name", new Leader()));
         when(teamDAO.getTeamById(1)).thenReturn(new Team(5, "name 2", new Leader()));
         assertTrue(teamDAO.getTeamById(0).equals(team1));
-
         assertFalse(teamDAO.getTeamById(0).equals(team2));
     }
 
