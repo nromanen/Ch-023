@@ -11,8 +11,12 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DocumentService {
-	
+
     public static final String DOCUMENTS_UPLOAD_DIR = "/resources/documents";
+
+    public static final String PDF_PATH = DocumentService.DOCUMENTS_UPLOAD_DIR + "/pdf";
+
+    public static final String START_STATEMENT_PATH = "/Carting" + PDF_PATH + "/start.pdf";
 
     public List<Document> getAllDocuments();
 
@@ -152,5 +156,7 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      */
     public List<Document> gelAllUncheckedDocuments();
+
+    public void createStartStatement(String html);
 
 }

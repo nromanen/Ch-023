@@ -9,11 +9,7 @@ import javax.persistence.Query;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;
-import net.carting.util.HibernateUtil;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,15 +34,15 @@ public class RaceResultDAOImpl implements RaceResultDAO {
 
     @Override
     public void addRaceResult(RaceResult raceResult) {
-        try {
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+           /* SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
             session.save(raceResult);
             tx.commit();
-            session.close();
-//            System.out.println("########################################################");
-   /*         String sql = "INSERT INTO race_results " +
+            session.close();*/
+            Race race = raceResult.getRace();
+
+            String sql = "INSERT INTO race_results " +
                     "(car_number, full_laps, place, points, race_id, racer_id) " +
                     "VALUES (:car, :laps, :place, :points, :race, :racer)";
             Query query = entityManager.createNativeQuery(sql);
@@ -55,21 +51,9 @@ public class RaceResultDAOImpl implements RaceResultDAO {
             query.setParameter("laps", raceResult.getFullLaps());
             query.setParameter("place", raceResult.getPlace());
             query.setParameter("points", raceResult.getPoints());
-            query.setParameter("race",raceResult.getRace().getId() );
+            query.setParameter("race", race.getId());
             query.setParameter("racer", raceResult.getRacer().getId());
-            System.out.println(raceResult.getCarNumber() +
-                    "\t" + raceResult.getFullLaps() +
-                    "\t" + raceResult.getPlace() +
-                    "\t" + raceResult.getPoints() +
-                    "\t" + raceResult.getRace().getId() +
-                    "\t" + raceResult.getRacer().getId());
             query.executeUpdate();
-*/
-//            System.out.println("########################################################");
-        } catch (Exception e) {
-            System.out.println("addRaceResult");
-//            e.printStackTrace();
-        }
     }
 
     @Override

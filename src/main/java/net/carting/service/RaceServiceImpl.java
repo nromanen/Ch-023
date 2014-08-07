@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
+
 @Service
 public class RaceServiceImpl implements RaceService {
 
@@ -181,7 +183,7 @@ public class RaceServiceImpl implements RaceService {
             Map<Integer, Integer> numbersAndPlacesMap = new LinkedHashMap<Integer, Integer>();
             List<RacerCarClassCompetitionNumber> racersByClassCompetition = racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersByCarClassCompetitionId(race.getCarClassCompetition().getId());
-            
+
             for (int lapIndex = race.getNumberOfLaps() - 1; lapIndex >= 0; lapIndex--) {
                 Iterator<Integer> it = chessRoll.get(lapIndex).iterator();
                 while (it.hasNext()) {
@@ -191,15 +193,15 @@ public class RaceServiceImpl implements RaceService {
                     }
                 }
             }
-            
+
             for (RacerCarClassCompetitionNumber racer : racersByClassCompetition) {
-            	Integer carNumber = racer.getNumberInCompetition();
-            	if (!resultFullLaps.containsKey(carNumber)) {
-            		resultFullLaps.put(carNumber, 0);
-            		resultPoints.put(carNumber, 0);
-            	}
+                Integer carNumber = racer.getNumberInCompetition();
+                if (!resultFullLaps.containsKey(carNumber)) {
+                    resultFullLaps.put(carNumber, 0);
+                    resultPoints.put(carNumber, 0);
+                }
             }
-            
+
             for (RacerCarClassCompetitionNumber numberAndRacer : racersByClassCompetition) {
                 numbersAndRacersMap.put(numberAndRacer.getNumberInCompetition(),
                         numberAndRacer.getRacer());
@@ -231,7 +233,11 @@ public class RaceServiceImpl implements RaceService {
                         raceResult.setPoints(resultPoints.get(number));
                     }
                     raceResult.setCarNumber(number);
-                    raceResultService.addRaceResult(raceResult);
+                    try {
+                        raceResultService.addRaceResult(raceResult);
+                    } catch (PersistenceException e) {
+                        System.out.println("Oops");
+                    }
                 }
             } else {
                 for (RaceResult raceResult : resultsList) {

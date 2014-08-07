@@ -30,9 +30,9 @@ public class CompetitionServiceTest {
         CarClass carClass1 = new CarClass();
         carClass1.setName("����������");
         CarClass carClass2 = new CarClass();
-        carClass2.setName("ϳ����-�");
+        carClass2.setName("Name1");
         CarClass carClass3 = new CarClass();
-        carClass3.setName("ϳ����-�");
+        carClass3.setName("Name2");
 
         List<CarClass> carClasses = new ArrayList<CarClass>();
         carClasses.add(carClass1);
@@ -55,8 +55,8 @@ public class CompetitionServiceTest {
                 carClasses, carClassCompetitions);
 
         assertEquals("Expected 1 results", 1, result.size());
-        assertEquals("Expected ϳ����-�", expectedResult, result);
-        assertEquals("Expected ϳ����-�", expectedResult.get(0).getName(), result.get(0).getName());
+        assertEquals("Expected Name1", expectedResult, result);
+        assertEquals("Expected Name2", expectedResult.get(0).getName(), result.get(0).getName());
 
     }
 
