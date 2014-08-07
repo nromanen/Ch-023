@@ -1,12 +1,14 @@
 package net.carting.dao;
 
-import net.carting.domain.CarClassCompetition;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.CarClassCompetition;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
@@ -42,7 +44,8 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
                 + "SET firstRaceTime = :firstRaceTime, "
                 + "secondRaceTime = :secondRaceTime, "
                 + "circleCount = :circleCount, "
-                + "percentageOffset = :percentageOffset "
+                + "percentageOffset = :percentageOffset, "
+                + "calculateByTableB = :calculateByTableB "
                 + "WHERE id = :id");
 
         query.setParameter("firstRaceTime", carClassCompetition.getFirstRaceTime());
@@ -50,6 +53,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
         query.setParameter("circleCount", carClassCompetition.getCircleCount());
         query.setParameter("percentageOffset", carClassCompetition.getPercentageOffset());
+        query.setParameter("calculateByTableB", carClassCompetition.getCalculateByTableB());
         query.setParameter("id", carClassCompetition.getId());
 
         query.executeUpdate();

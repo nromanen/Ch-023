@@ -126,4 +126,24 @@ $(document).ready(function(){
 	    $(this).parent().parent().next().slideToggle();
 	});
 	
+	$('.calculateByTableB').change(function(){
+		var calculate_by_table_b = $(this).prop('checked');
+		console.log(calculate_by_table_b + " " + $("#calculateByTableB_url").val());
+		var json = { "calculateByTableB" : calculate_by_table_b };
+		$.ajax({
+	        url: $("#calculateByTableB_url").val(),
+	        data: JSON.stringify(json),
+	        contentType: 'application/json',
+	        type: "POST",
+	        success: function(response) {
+	        	if(response != "success"){
+	        		alert("Error");
+	        	}
+	        	else {
+	        		location.reload();
+	        	}
+	        }
+	    });
+	});
+	
 });
