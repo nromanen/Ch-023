@@ -1,14 +1,27 @@
 package net.carting.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import net.carting.dao.RaceDAO;
 import net.carting.dao.RacerDAO;
-import net.carting.domain.*;
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.RacerCarClassNumber;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 @Service
 public class RaceServiceImpl implements RaceService {
@@ -168,6 +181,7 @@ public class RaceServiceImpl implements RaceService {
             Map<Integer, Integer> numbersAndPlacesMap = new LinkedHashMap<Integer, Integer>();
             List<RacerCarClassCompetitionNumber> racersByClassCompetition = racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersByCarClassCompetitionId(race.getCarClassCompetition().getId());
+            
             for (int lapIndex = race.getNumberOfLaps() - 1; lapIndex >= 0; lapIndex--) {
                 Iterator<Integer> it = chessRoll.get(lapIndex).iterator();
                 while (it.hasNext()) {
@@ -177,7 +191,15 @@ public class RaceServiceImpl implements RaceService {
                     }
                 }
             }
-
+            
+            for (RacerCarClassCompetitionNumber racer : racersByClassCompetition) {
+            	Integer carNumber = racer.getNumberInCompetition();
+            	if (!resultFullLaps.containsKey(carNumber)) {
+            		resultFullLaps.put(carNumber, 0);
+            		resultPoints.put(carNumber, 0);
+            	}
+            }
+            
             for (RacerCarClassCompetitionNumber numberAndRacer : racersByClassCompetition) {
                 numbersAndRacersMap.put(numberAndRacer.getNumberInCompetition(),
                         numberAndRacer.getRacer());
