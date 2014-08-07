@@ -5,7 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type='text/javascript'>
 $(document).ready(function(){
-    $("#pdf").click(function() {
+
+    function updatePDF() {
         $.ajax({
             url: "/Carting/SHKP/start",
             type: "POST",
@@ -13,13 +14,20 @@ $(document).ready(function(){
                 table: $('#table').html()
             }
         });
+    }
+
+    $("#save").click(function() {
+        $(".carPos").each(function() {
+            var pos = $(this).attr('racer');
+            var car = "#p" +$(this).val();
+            $(car).text(pos);
+        });
+        updatePDF();
     });
 });
 </script>
 
 <c:if test="${authority.equals('ROLE_ADMIN')}">
-<center><a class="btn btn-lg btn-primary" id="pdf" href="${pdfLink}" ><spring:message code="label.document_start" /></a><p></center>
-
     <div class="panel panel-primary">
          <div class="panel-heading" style="height: 50px;">
             <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.registered_racers" /></div>
@@ -32,7 +40,7 @@ $(document).ready(function(){
                             <th style="text-align: center;">№</th>
                             <th style="text-align: center;"><spring:message code="label.racer" /></th>
                             <th style="text-align: center;"><spring:message code="label.number" /></th>
-                            <th style="text-align: center;">&nbsp;</th>
+                            <th style="text-align: center;"><spring:message code="label.document_start_pos" /></th>
                         </thead>
                         <tbody>
                             <% int number = 1; %>
@@ -53,14 +61,17 @@ $(document).ready(function(){
                                         ${racerCarClassCompetitionNumber.numberInCompetition}
                                     </td>
                                     <td>
-                                        <input type="text">
+                                        <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.racer.id}">
                                     </td>
                                 </tr>
                                 <% number++; %>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <right><a class="btn btn-lg btn-primary" id="pdf" href="${pdfLink}" ><spring:message code="label.accept_changes" /></a><p></right>
+                    <center>
+                        <a class="btn btn-lg btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
+                        <a class="btn btn-lg btn-success" id="pdf" href="${pdfLink}" ><spring:message code="label.document_download_pdf" /></a><p>
+                    </center>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -107,10 +118,10 @@ $(document).ready(function(){
             <c:set var="j" value="${36-i}"/>
             <c:set var="k" value="${36-i+1}"/>
             <tr>
-                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p{k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p{j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p{k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p{j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class='place' id="p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class='place' id="p${j}"></span></td>
             </tr>
         </c:forEach>
         <tr>

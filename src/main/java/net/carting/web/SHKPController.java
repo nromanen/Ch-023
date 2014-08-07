@@ -39,7 +39,9 @@ public class SHKPController {
         @ResponseBody
         public String start(Model model, @RequestParam(value = "table", required = false) String table) {
             String pdf = "src/main/webapp/resources/documents/pdf/start.pdf";
-            System.out.println("POST");
+            //TODO: add to start document race number, start time, place, date
+            //TODO: validation: cannot be same numbers in table, place number cannot be <0 && > MAX_POS
+            //TODO: add car position to second table
             try {
                 InputStream stream = new ByteArrayInputStream(table.getBytes(StandardCharsets.UTF_8));
                 Document document = new Document();
@@ -63,7 +65,6 @@ public class SHKPController {
 
         @RequestMapping(value = "start/{id}", method = RequestMethod.GET)
         public ModelAndView astart(Model model, @PathVariable("id") int id) {
-            System.out.println("GET");
             String pdf = "src/main/webapp/resources/documents/pdf/start.pdf";
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             Competition competition = carClassCompetition.getCompetition();
