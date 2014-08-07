@@ -2,13 +2,17 @@ package net.carting.service;
 
 import net.carting.domain.Document;
 import net.carting.domain.Leader;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.util.List;
 
 public interface DocumentService {
+
+    public static final String DOCUMENTS_UPLOAD_DIR = "/resources/documents";
 
     public List<Document> getAllDocuments();
 

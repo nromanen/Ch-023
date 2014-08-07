@@ -181,8 +181,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     public String createDirectoryForFilesAndGetAbsolutePath() {
-//        String rootPath = System.getProperty("catalina.home");
-        File dir = new File("src/main/webapp/resources/documents");
+        File dir = new File( this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
         if (!dir.exists())
             dir.mkdirs();
         return dir.getAbsolutePath();
