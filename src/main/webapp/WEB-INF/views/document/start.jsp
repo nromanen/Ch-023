@@ -48,10 +48,12 @@ $(document).ready(function(){
         }        
 
         if (valid == true) {
+            $('#correctPositions').css("display", "inline-block").hide().fadeIn();
+            $('#correctPositions').delay(2000).fadeOut('slow');            
            updatePDF();
         } else {
-            $('#add_competition_error').css("display", "inline-block").hide().fadeIn();
-            $('#add_competition_error').delay(2000).fadeOut('slow');
+            $('#incorrectPositions').css("display", "inline-block").hide().fadeIn();
+            $('#incorrectPositions').delay(2000).fadeOut('slow');
         }
     });
 });
@@ -116,11 +118,15 @@ $(document).ready(function(){
         </div>
     </div>
 </c:if>
-    <div class="alert alert-danger" id="add_competition_error"
+    <div class="alert alert-danger" id="incorrectPositions"
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-        <spring:message code="dataerror.competition_date" />
-    </div
-
+        <spring:message code="dataerror.document_start_incorrect_postions" />
+    </div>
+    <div class="alert alert-success" id="correctPositions"
+        style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+        <spring:message code="label.data_save_success" />
+    </div>    
+<input type="hidden" id="maxPos" value="${maxPositions}">
 <div id='table'>
 <meta charset="utf-8">
 <style>
@@ -135,28 +141,43 @@ $(document).ready(function(){
      text-decoration: underline;
     }
 </style>
-<input type="hidden" id="maxPos" value="${maxPositions}">
   <table style="width:100%" border='1' cellspacing='0' cellpadding='2'>
         <tr>
             <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
             <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
         </tr>
         <tr>
-            <td align='center' colspan='2'><c:out value="${carClassName}"/></td>
-            <td align='center' colspan='2'><c:out value="${carClassName}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'>Клас картів: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'>Клас картів: <b><c:out value="${carClassName}"/></b></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'>Дата: <c:out value="${carClassDate}"/> Час: <c:out value="${carClassTime}"/></td>
+            <td align='center' colspan='2'>Дата: <c:out value="${carClassDate}"/> Час: <c:out value="${carClassTime}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><c:out value="${carClassRace}"/></td>
+            <td align='center' colspan='2'><c:out value="${carClassRace}"/></td>
         </tr>
         <tr>
             <td colspan='2' align='center'><b>Протокол старту</b></td>
             <td colspan='2' align='center'><b>Протокол старту</b></td>
         </tr>
         <c:forEach var="i" begin="1" end="${maxPositions}" step="2">
-            <c:set var="j" value="${maxPositions-i}"/>
-            <c:set var="k" value="${maxPositions-i+1}"/>
+            <c:set var="j" value="${maxPositions-i+1}"/>
+            <c:set var="k" value="${maxPositions-i}"/>
             <tr>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${k}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
             </tr>
         </c:forEach>
         <tr>

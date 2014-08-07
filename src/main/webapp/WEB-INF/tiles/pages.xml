@@ -186,7 +186,7 @@
     <definition name="start" extends="base-template">
         <put-attribute name="title" value="Start statement"/>
         <put-attribute name="content"
-                       value="/WEB-INF/views/admin/start.jsp"/>
+                       value="/WEB-INF/views/document/start.jsp"/>
     </definition>
 
     <!-- Feedback -->

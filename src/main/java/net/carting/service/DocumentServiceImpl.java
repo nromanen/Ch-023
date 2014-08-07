@@ -1,9 +1,11 @@
 package net.carting.service;
 
+import com.itextpdf.text.DocumentException;
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
 import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
+import net.carting.util.PdfWriter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -201,5 +200,20 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public List<Document> gelAllUncheckedDocuments() {
         return documentDAO.gelAllUncheckedDocuments();
+    }
+
+    @Override
+    public void createStartStatement(String html)  {
+        try {
+            File dir = new File( this.context.getRealPath("") + DocumentService.PDF_PATH);
+            if (!dir.exists())
+                dir.mkdirs();
+            String path = dir.getAbsolutePath() + "/start.pdf";
+            PdfWriter.createStartStatement(path, html);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 }
