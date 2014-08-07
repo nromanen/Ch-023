@@ -8,13 +8,13 @@ import net.carting.domain.Role;
 
 @Repository
 public class RoleDAOImpl implements RoleDAO {
-		
+
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
     @Override
     public Role getRole(int id) {
-	   return (Role) entityManager
+        return (Role) entityManager
                 .createQuery("from Role where id = :id")
                 .setParameter("id", id).getSingleResult();
 	}

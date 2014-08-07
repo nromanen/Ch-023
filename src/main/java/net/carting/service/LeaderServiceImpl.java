@@ -67,26 +67,24 @@ public class LeaderServiceImpl implements LeaderService {
         leaderDAO.deleteLeader(leader);
     }
 
-    
     @Override
     @Transactional
     public Leader getLeaderByUserName(String username) {
         return leaderDAO.getLeaderByUserName(username);
     }
-    
+
     @Override
     @Transactional
     public void registerLeader(Map<String, Object> formMap)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = formMap.get("username").toString();
-        
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(userService.getEncodedPassword(formMap.get("password")
                 .toString()));
         user.setEnabled(false);
-        // 2 = ROLE_TEAM_LEADER
-        user.setRole(roleService.getRole(2));        
+        user.setRole(roleService.getRole(UserService.ROLE_TEAM_LEADER_ID));        
         userService.addUser(user);
 
         Leader leader = new Leader();
