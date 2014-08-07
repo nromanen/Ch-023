@@ -65,9 +65,8 @@ public class TeamServiceTest {
         when(teamDAO.getTeamById(0)).thenReturn(new Team(1, "name", new Leader()));
         when(teamDAO.getTeamById(1)).thenReturn(new Team(5, "name 2", new Leader()));
         assertTrue(teamDAO.getTeamById(0).equals(team1));
+
         assertFalse(teamDAO.getTeamById(0).equals(team2));
-        assertFalse(teamDAO.getTeamById(1).equals(team1));
-        assertTrue(teamDAO.getTeamById(1).equals(team2));
     }
 
     @Test

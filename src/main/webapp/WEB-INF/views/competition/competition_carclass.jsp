@@ -5,10 +5,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<script type='text/javascript' src='<c:url value="/resources/js/competition_carclass.js" />'></script> 
-<script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script> 
+<script type='text/javascript' src='<c:url value="/resources/js/competition_carclass.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
 
-<div style="border: 1px solid #e3e3e3; padding: 0px 30px 60px 30px;"> 
+<div style="border: 1px solid #e3e3e3; padding: 0px 30px 60px 30px;">
 
 	<table class="width-100">
 		<tr>
@@ -22,7 +22,7 @@
 						<a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
 					</div>
 				</td>
-			</c:if>	
+			</c:if>
 			</c:if>
 		</tr>
 	</table>
@@ -42,14 +42,14 @@
 	<br>
 
 	<div class="panel panel-primary">
-		 <div class="panel-heading" style="height: 50px;"> 	
+		 <div class="panel-heading" style="height: 50px;">
 		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.registered_racers" /></div>
 			<c:if test="${authority.equals('ROLE_TEAM_LEADER')}">
 				<c:if test="${!empty racerCarClassCompetitionNumberList}">
 					<div class="btn-group" style="float: right;">
 						<input type="hidden" value="team${teamByLeader.id}" id="team_id">
 						<a href="#" class="btn btn-default btn-sm" id="my_team"><spring:message code="label.my_team" /></a>
-						<a href="#" class="btn btn-default btn-sm active" id="all_teams"><spring:message code="label.all_teams" /></a>	
+						<a href="#" class="btn btn-default btn-sm active" id="all_teams"><spring:message code="label.all_teams" /></a>
 					</div>
 				</c:if>
 			</c:if>
@@ -69,11 +69,11 @@
 						<tbody>
 							<% int number = 1; %>
 							<c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
-								<tr class="team${racerCarClassCompetitionNumber.racer.team.id} 
+								<tr class="team${racerCarClassCompetitionNumber.racer.team.id}
 									<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
 									<td><%= number %></td>
 									<td style="text-align: left; padding-left: 20px;">
-										<a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />" 
+										<a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
 								  		   	id="racer${racerCarClassCompetitionNumber.racer.id}">
 											${racerCarClassCompetitionNumber.racer.firstName} ${racerCarClassCompetitionNumber.racer.lastName}
 										</a>
@@ -85,11 +85,11 @@
 										${racerCarClassCompetitionNumber.numberInCompetition}
 									</td>
 									<c:if test="${authority.equals('ROLE_TEAM_LEADER') && carClassCompetition.competition.enabled }">
-										<td>							
+										<td>
 											<c:if test="${racerCarClassCompetitionNumber.racer.team.id==teamByLeader.id}">
-												<a href="#" class="btn btn-danger btn-xs unreg_racer_btn" 
-												   id="unreg${racerCarClassCompetitionNumber.racer.id}">Unregister</a>		
-											</c:if>						
+												<a href="#" class="btn btn-danger btn-xs unreg_racer_btn"
+												   id="unreg${racerCarClassCompetitionNumber.racer.id}">Unregister</a>
+											</c:if>
 										</td>
 									</c:if>
 								</tr>
@@ -115,7 +115,7 @@
 	  	</div>
 	</div>
 
-<!-- Unregister racer modal -->	
+<!-- Unregister racer modal -->
 <div class="modal fade" id="unreg_racer_modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" style="margin-top: 15%;">
 		<div class="modal-content">
@@ -131,9 +131,9 @@
 					style="display: none; padding: 0px 0px 0px 10px; height: 25px;">
 					<spring:message code="label.unregister_failed" />
 				</div>
-				<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_unreg">	
+				<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_unreg">
 			</div>
-			<div class="modal-footer">					       		
+			<div class="modal-footer">
 				<button class="btn btn-primary" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
 				<button class="btn btn-danger" type="button" id="unreg_racer"><spring:message code="label.unregister" /></button>
 			</div>
@@ -149,12 +149,12 @@
 					<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
 						<h4 class="modal-title"><spring:message code="label.register_racer_on_car_class" /></h4>
 					</div>
-					<div class="modal-body">						
+					<div class="modal-body">
 						<input type="hidden" id="reg_racer_url" value="<c:url value="/carclass/${carClassCompetition.id}/registerRacer" />">
 						<input type="hidden" id="reg_racer_get_number_url" value="<c:url value="/carclass/getRacerNumber" />">
 						<input type="hidden" id="reg_racer_carclass_id" value="${carClassCompetition.carClass.id}">
-						
-						<label class="text-info"><spring:message code="label.racer_from_your_team" />&nbsp;</label>					
+
+						<label class="text-info"><spring:message code="label.racer_from_your_team" />&nbsp;</label>
 						<select class="form-control span6" id="reg_racer_id">
 							<option value=""><spring:message code="label.choose_racer_from_your_team" /></option>
 							<c:if test="${(!empty teamByLeader.racers)}">
@@ -170,17 +170,17 @@
 								</c:forEach>
 							</c:if>
 						</select><br>
-						
-						<label class="text-info"><spring:message code="label.racer_number_in_car_class" />&nbsp;</label>					
+
+						<label class="text-info"><spring:message code="label.racer_number_in_car_class" />&nbsp;</label>
 						<input type="text" class="form-control" id="reg_racer_number" disabled value="" />
-						
+
 						<br>
 						<div class="alert alert-danger" id="reg_racer_empty"
 							style="display: none; padding: 0px 0px 0px 10px; height: 25px;"><spring:message code="label.select_racer" /></div>
-						
-						<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_reg">	
+
+						<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_reg">
 					</div>
-					<div class="modal-footer">					       		
+					<div class="modal-footer">
 						<button class="btn btn-primary" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
 						<button class="btn btn-success" type="button" id="reg_racer"><spring:message code="label.register" /></button>
 					</div>
@@ -194,7 +194,7 @@
 	<c:if test="${raceListSize==2}">
 		<c:if test="${!empty absoluteResultsList}">
 			<div class="panel panel-primary">
-					<div class="panel-heading" style="height: 50px;"> 	
+					<div class="panel-heading" style="height: 50px;">
 		 	<div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.summary_results" /></div>
 					<c:if test="${authority.equals('ROLE_ADMIN')}">
 						<div class="btn-group" style="float: right;">
@@ -202,7 +202,7 @@
 						</div>
 					</c:if>
 			</div>
-				
+
 				<div class="panel-body" style="padding: 0px;">
 				<table id="abs-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
@@ -225,25 +225,25 @@
 												</td>
 												<td>${absoluteResult.absolutePoints}</td>
 												<td>${absoluteResult.comment}</td>
-												
+
 											</tr>
 										</c:forEach>
 									</c:if>
 								</tbody>
 							</table>
-				</div>		
+				</div>
 			</div>
-		</c:if>			
- 	</c:if>	
+		</c:if>
+ 	</c:if>
 	</div>
-	
+
 		<div>
 			<c:if test="${!empty raceResultsLists}">
 				<c:forEach items="${raceResultsLists}" var="raceResultsList" varStatus="status">
-				
-				<div class="panel-group" id="accordition"> 
+
+				<div class="panel-group" id="accordition">
 					<div class="panel panel-primary">
-						<div class="panel-heading" style="height: 50px;"> 	
+						<div class="panel-heading" style="height: 50px;">
 							<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
 								<a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race${status.index+1}">
 								<spring:message code="label.race" /> #${ status.index+1} <spring:message code="label.results" />
@@ -251,14 +251,15 @@
 							</div>
 							<c:if test="${authority.equals('ROLE_ADMIN')}">
 								<div class="btn-group" style="float: right;">
+									<a href='<c:url value="/SHKP/start/${carClassCompetition.id}" />' class="btn btn-success"><spring:message code="label.document_start" /></a>
 									<a href='<c:url value="/carclass/${carClassCompetition.id}/race/${status.index+1}/edit" />' class="btn btn-info " id="edit_raceresults_button"><spring:message code="label.edit" /></a>
 								</div>
 							</c:if>
 						</div>
-						
-						
-						
-						
+
+
+
+
 					<div id="race${status.index+1}" class=" testcollapsing panel-collapse collapse" >
 						<div class="panel-body" >
 							<c:if test="${!empty chessRollsList[status.index]}">
@@ -272,7 +273,7 @@
 									</tbody>
 								</table>
 							</c:if>
-				
+
 							<table id="res-table" class="table table-hover table-bordered" style="text-align: center;">
 								<thead class="well" style="font-weight: 100;">
 									<th style="text-align: center;"><spring:message code="label.competition.place_in_race" /></th>
