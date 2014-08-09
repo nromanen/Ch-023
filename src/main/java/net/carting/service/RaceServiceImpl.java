@@ -1,6 +1,7 @@
 package net.carting.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 import net.carting.dao.RaceDAO;
 import net.carting.dao.RacerDAO;
+import net.carting.domain.AdminSettings;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Race;
@@ -207,8 +209,14 @@ public class RaceServiceImpl implements RaceService {
                         numberAndRacer.getRacer());
                 resultPoints.put(numberAndRacer.getNumberInCompetition(), 0);
             }
-
-            List<String> pointsList = adminSettingsService.getPointsByPlacesList();
+            List<String> pointsList;
+            if (race.getCarClassCompetition().getCalculateByTableB()) {
+            	pointsList = Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racersByClassCompetition.size()).split(","));
+            }
+            else {
+            	pointsList = adminSettingsService.getPointsByPlacesList();
+            }
+            
             int place = 1;
             for (Entry<Integer, Integer> entry : resultFullLaps.entrySet()) {
                 numbersAndPlacesMap.put(entry.getKey(), place);

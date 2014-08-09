@@ -1,19 +1,45 @@
 package net.carting.web;
 
-import net.carting.domain.*;
-import net.carting.service.*;
-import net.carting.util.DateUtil;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.CarClassCompetitionResult;
+import net.carting.domain.Competition;
+import net.carting.domain.Leader;
+import net.carting.domain.Race;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+import net.carting.service.CarClassCompetitionResultService;
+import net.carting.service.CarClassCompetitionService;
+import net.carting.service.CarClassService;
+import net.carting.service.CompetitionService;
+import net.carting.service.LeaderService;
+import net.carting.service.RaceService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.service.RacerCarClassNumberService;
+import net.carting.service.RacerService;
+import net.carting.service.TeamInCompetitionService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
+import net.carting.util.DateUtil;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/carclass")
@@ -302,6 +328,26 @@ public class CarClassCompetitionController {
         carClassCompetitionResultService.updateCarClassCompetitionResult(carClassCompetitionResult);
         carClassCompetitionResultService.recalculateAbsoluteResults(carClassCompetitionResult.getRacerCarClassCompetitionNumber().getCarClassCompetition());
         LOG.info("Result table has been recalculated ");
+        return "success";
+    }
+    
+    @RequestMapping(value = "/{id}/setCalculateByTableB", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String setCalculateByTableB(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+        boolean calculateByTableB = Boolean.parseBoolean(map.get("calculateByTableB").toString());
+        carClassCompetition.setCalculateByTableB(calculateByTableB);
+        System.out.println(carClassCompetition.getCalculateByTableB());
+        carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
+        for (Race race : carClassCompetition.getRaces()) {
+        	raceService.setResultTable(raceService.getChessRoll(race), race);
+            carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+        }
+        String username = userService.getCurrentUserName();
+        LOG.info(username + " has " + (calculateByTableB ? "enabled" : "disabled") + " calculating by table B"
+        		+ " for carclass competition (id=" + carClassCompetition.getId() + ")");
+        
         return "success";
     }
 

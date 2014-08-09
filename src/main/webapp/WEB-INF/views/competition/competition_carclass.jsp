@@ -31,6 +31,7 @@ pageEncoding="utf-8"%>
     </tr>
 </table>
 
+<<<<<<< HEAD
 <div><label class="text-info"><spring:message code="label.competition_name" />&nbsp;</label>${carClassCompetition.competition.name}</div>
 <div><label class="text-info"><spring:message code="label.competition.first_race_date" />&nbsp;</label>
     <fmt:formatDate value="${carClassCompetition.firstRaceTime}" pattern="HH:mm" />&nbsp;
@@ -43,6 +44,13 @@ pageEncoding="utf-8"%>
 <div><label class="text-info"><spring:message code="label.competition.lap_count" />&nbsp;</label>${carClassCompetition.circleCount}</div>
 <div><label class="text-info"><spring:message code="label.competition.percentage_offset" />&nbsp;</label>${carClassCompetition.percentageOffset}%</div>
 <div><label class="text-info"><spring:message code="label.age_limit" />&nbsp;</label>${carClassCompetition.carClass.lowerYearsLimit}-${carClassCompetition.carClass.upperYearsLimit}</div>
+<div>
+    <input type="hidden" id="calculateByTableB_url" value="<c:url value="/carclass/${carClassCompetition.id }/setCalculateByTableB" />" />
+    <label class="text-info"><spring:message code="label.calculate_by_table_b" /></label>
+    <input type="checkbox" class="calculateByTableB" id="calculateByTableB${carClassCompetition.id }"
+    <c:if test="${carClassCompetition.calculateByTableB }">checked</c:if>
+    <c:if test="${!authority.equals('ROLE_ADMIN') }"> disabled</c:if> />
+</div>
 <br>
 
 <div class="panel panel-primary">
