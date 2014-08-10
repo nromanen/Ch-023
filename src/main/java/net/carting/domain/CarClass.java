@@ -3,7 +3,7 @@ package net.carting.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "car_classes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+@Table(catalog="carting", name = "car_classes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class CarClass {
 
     @Id

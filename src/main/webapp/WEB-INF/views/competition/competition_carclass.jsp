@@ -31,7 +31,6 @@ pageEncoding="utf-8"%>
     </tr>
 </table>
 
-<<<<<<< HEAD
 <div><label class="text-info"><spring:message code="label.competition_name" />&nbsp;</label>${carClassCompetition.competition.name}</div>
 <div><label class="text-info"><spring:message code="label.competition.first_race_date" />&nbsp;</label>
     <fmt:formatDate value="${carClassCompetition.firstRaceTime}" pattern="HH:mm" />&nbsp;

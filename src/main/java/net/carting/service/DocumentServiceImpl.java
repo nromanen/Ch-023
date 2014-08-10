@@ -139,8 +139,8 @@ public class DocumentServiceImpl implements DocumentService {
                         + "."
                         + FilenameUtils
                         .getExtension(file.getOriginalFilename());
-                String directoryAbsoltePath = createDirectoryForFilesAndGetAbsolutePath();
-                File serverFile = new File(directoryAbsoltePath
+                String directoryAbsolutePath = createDirectoryForFilesAndGetAbsolutePath();
+                File serverFile = new File(directoryAbsolutePath
                         + File.separator + fileName);
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(serverFile));
@@ -180,7 +180,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     public String createDirectoryForFilesAndGetAbsolutePath() {
-        File dir = new File( this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
+        File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
         if (!dir.exists())
             dir.mkdirs();
         return dir.getAbsolutePath();
@@ -203,12 +203,9 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void createStartStatement(String html)  {
+    public void createStartStatement(String html) {
         try {
-            File dir = new File( this.context.getRealPath("") + DocumentService.PDF_PATH);
-            if (!dir.exists())
-                dir.mkdirs();
-            String path = dir.getAbsolutePath() + "/start.pdf";
+            String path = createDirectoryForFilesAndGetAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
         } catch (IOException e) {
             e.printStackTrace();

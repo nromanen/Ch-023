@@ -3,7 +3,14 @@ $(document).ready(function(){
 
     $('#add_car_class_form').bootstrapValidator();
     $('#edit_car_class_form').bootstrapValidator();
-	
+
+	$("#import").click(function() {
+        $.get( "downloadFiles" );
+	});
+
+	$("#export").click(function() {
+        $.get( "uploadFiles" );
+	});
 	
 	$("#change_pass_btn").click(function(){	
 		$('#change_password_modal').modal();

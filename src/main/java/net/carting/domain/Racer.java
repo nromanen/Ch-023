@@ -20,7 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "racers")
+@Table(catalog="carting", name = "racers")
 @AttributeOverrides({
         @AttributeOverride(name = "firstName", column = @Column(name = "first_name", nullable = false)),
         @AttributeOverride(name = "lastName", column = @Column(name = "last_name", nullable = false)),

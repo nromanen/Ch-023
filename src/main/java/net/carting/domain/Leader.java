@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "leaders")
+@Table(catalog="carting", name = "leaders")
 @AttributeOverrides({
         @AttributeOverride(name = "firstName", column = @Column(name = "first_name", nullable = false)),
         @AttributeOverride(name = "lastName", column = @Column(name = "last_name", nullable = false)),

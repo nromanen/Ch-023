@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 
 @Entity
-@Table(name = "admin_settings")
+@Table(catalog="carting", name = "admin_settings")
 public class AdminSettings {
 
     @Id

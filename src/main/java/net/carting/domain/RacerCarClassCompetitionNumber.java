@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "racer_competition_car_class_numbers", uniqueConstraints = {@UniqueConstraint(columnNames = {"racer_id", "car_class_competition_id"})})
+@Table(catalog="carting", name = "racer_competition_car_class_numbers", uniqueConstraints = {@UniqueConstraint(columnNames = {"racer_id", "car_class_competition_id"})})
 public class RacerCarClassCompetitionNumber {
 
     @Id

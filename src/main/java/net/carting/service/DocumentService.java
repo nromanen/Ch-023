@@ -14,9 +14,7 @@ public interface DocumentService {
 
     public static final String DOCUMENTS_UPLOAD_DIR = "/resources/documents";
 
-    public static final String PDF_PATH = DocumentService.DOCUMENTS_UPLOAD_DIR + "/pdf";
-
-    public static final String START_STATEMENT_PATH = "/Carting" + PDF_PATH + "/start.pdf";
+    public static final String START_STATEMENT_PATH = "/Carting" + DOCUMENTS_UPLOAD_DIR + "/start.pdf";
 
     public List<Document> getAllDocuments();
 
@@ -121,15 +119,6 @@ public interface DocumentService {
     public void editDocument(int documentId, HttpServletRequest request,
                              MultipartFile[] files) throws IOException;
 
-    /**
-     * <p/>
-     * Implementation of this creates directory on the server for files saving
-     * and returns absolute path to the directory
-     *
-     * @return absolute path to the directory
-     * @author Volodymyr Semaniv
-     */
-    public String createDirectoryForFilesAndGetAbsolutePath();
 
     /**
      * <p/>

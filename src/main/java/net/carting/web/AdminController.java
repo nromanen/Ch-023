@@ -35,6 +35,8 @@ public class AdminController {
     private TeamService teamService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private FilesService filesService;
 
     private static final Logger LOG = Logger.getLogger(AdminController.class);
 
@@ -165,6 +167,18 @@ public class AdminController {
         userService.resetPassword(leader.getUser());
         LOG.info("Admin has reseted leader(" + leader.getFirstName() + " " + leader.getFirstName() + ") password to default");
         return "success";
+    }
+
+    @RequestMapping(value = "/uploadFiles", method = RequestMethod.GET)
+    public String uploadFiles() {
+        filesService.uploadAll();
+        return "redirect:/admin/cabinet";
+    }
+
+    @RequestMapping(value = "/downloadFiles", method = RequestMethod.GET)
+    public String saveFiles() {
+        filesService.downloadAll();
+        return "redirect:/admin/cabinet";
     }
 
 }

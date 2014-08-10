@@ -3,7 +3,7 @@ package net.carting.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "team_in_competition", uniqueConstraints = {@UniqueConstraint(columnNames = {
+@Table(catalog="carting", name = "team_in_competition", uniqueConstraints = {@UniqueConstraint(columnNames = {
         "team_id", "competition_id"})})
 public class TeamInCompetition {
 

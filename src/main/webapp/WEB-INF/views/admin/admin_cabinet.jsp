@@ -219,6 +219,13 @@
 			</div>
 		</div>
 	</form>
+		<br><label class="text-info" style="font-size: 20px;">
+    		6.&nbsp;<spring:message code="label.db_imp_exp" />:
+    	</label><br><br>
+        <center>
+            <button type="button" id="import" class="btn btn-primary"><spring:message code="label.db_import" /></button>
+            <button type="button" id="export" class="btn btn-success"><spring:message code="label.db_export" /></button>
+        </center>
 </div>
 
 

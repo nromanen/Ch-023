@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "competitions")
+@Table(catalog="carting", name = "competitions")
 public class Competition {
 
     @Id
