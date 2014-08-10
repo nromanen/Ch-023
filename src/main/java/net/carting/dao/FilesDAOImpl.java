@@ -2,10 +2,9 @@ package net.carting.dao;
 
 import net.carting.domain.Files;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionSystemException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
 import java.io.*;
 import java.util.List;
 
@@ -64,10 +63,23 @@ public class FilesDAOImpl implements FilesDAO {
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
+
+                    Files doc = getFiles(file.getAbsolutePath());
+
+                    Query query = entityManager.createQuery("from Files f where f.fileName = :name");
+                    query.setParameter("name", doc.getFileName());
+                    Files tmpFile = null;
                     try {
-                        entityManager.persist(getFiles(file.getAbsolutePath()));
-                    } catch (PersistenceException e) {
-                        System.out.println("Found duplicate file, skipping...");
+                        tmpFile = (Files) query.getSingleResult();
+                    } catch (NoResultException e) {
+                        System.out.println("Found new file");
+                    }
+                    if (tmpFile != null) {
+                        // duplicate file - merging
+                        entityManager.merge(tmpFile);
+                    } else {
+                        // new file
+                        entityManager.persist(doc);
                     }
                 }
             }

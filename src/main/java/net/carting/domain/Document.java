@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(catalog="carting", name = "documents")
+@Table(name = "documents")
 public class Document {
 
     public static final int TYPE_RACER_LICENCE = 1;

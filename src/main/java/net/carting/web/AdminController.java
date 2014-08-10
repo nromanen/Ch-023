@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -170,15 +173,33 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/uploadFiles", method = RequestMethod.GET)
-    public String uploadFiles() {
-        filesService.uploadAll();
-        return "redirect:/admin/cabinet";
+    public
+    @ResponseBody
+    String uploadFiles() {
+        String result = "success";
+        try {
+            filesService.uploadAll();
+            LOG.info("Admin has uploaded documents to DB");
+        } catch (Exception e) {
+            result = "fail";
+            LOG.info("Admin has failed to upload documents to DB");
+        }
+        return result;
     }
 
     @RequestMapping(value = "/downloadFiles", method = RequestMethod.GET)
-    public String saveFiles() {
-        filesService.downloadAll();
-        return "redirect:/admin/cabinet";
+    public
+    @ResponseBody
+    String saveFiles() {
+        String result = "success";
+        try {
+            filesService.downloadAll();
+            LOG.info("Admin has downloaded documents from DB");
+        } catch (Exception e) {
+            result = "fail";
+            LOG.info("Admin has failed to download documents from DB");
+        }
+        return result;
     }
 
 }

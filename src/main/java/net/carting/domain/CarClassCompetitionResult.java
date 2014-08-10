@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(catalog="carting", name = "car_class_competition_results")
+@Table(name = "car_class_competition_results")
 public class CarClassCompetitionResult {
 
     @Id

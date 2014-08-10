@@ -3,7 +3,7 @@ package net.carting.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(catalog="carting", name = "files")
+@Table(name = "files")
 public class File {
 
     @Id

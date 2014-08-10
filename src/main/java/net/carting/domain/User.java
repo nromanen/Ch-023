@@ -17,7 +17,7 @@ import java.util.List;
  * The persistent class for the users database table.
  */
 @Entity
-@Table(catalog="carting", name = "users")
+@Table(name = "users")
 public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;

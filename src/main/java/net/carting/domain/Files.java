@@ -8,7 +8,7 @@ package net.carting.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(catalog="filesDB", name = "files")
+@Table(name = "filesDB")
 public class Files {
 
     @Id
