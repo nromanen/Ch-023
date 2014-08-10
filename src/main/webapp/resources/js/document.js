@@ -147,5 +147,10 @@ $(document).ready(function() {
 			}
 		});
 	});
-
+//sliding form in 'All documents' view
+	$('a[href^=#team]').click(function(e){
+	    e.preventDefault();
+	    $(this).parent().parent().next().slideToggle();
+	});
+	
 });

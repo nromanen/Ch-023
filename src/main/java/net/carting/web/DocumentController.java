@@ -325,7 +325,8 @@ public class DocumentController {
     @RequestMapping(value = "/allDocuments", method = RequestMethod.GET)
     public String allDocuments(Map<String, Object> map) {
     	map.put("teams", teamService.getAllTeams());
-    	map.put("racers", racerService.getAllRacers().get(0).getDocuments());
+    	map.put("all_docs", documentService.getAllDocuments());
+    	map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
         return "all_documents";
     }
 }
