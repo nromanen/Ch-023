@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DocumentService {
-	
+
     public static final String DOCUMENTS_UPLOAD_DIR = "/resources/documents";
+
+    public static final String START_STATEMENT_PATH = "/Carting" + DOCUMENTS_UPLOAD_DIR + "/start.pdf";
 
     public List<Document> getAllDocuments();
 
@@ -117,15 +119,6 @@ public interface DocumentService {
     public void editDocument(int documentId, HttpServletRequest request,
                              MultipartFile[] files) throws IOException;
 
-    /**
-     * <p/>
-     * Implementation of this creates directory on the server for files saving
-     * and returns absolute path to the directory
-     *
-     * @return absolute path to the directory
-     * @author Volodymyr Semaniv
-     */
-    public String createDirectoryForFilesAndGetAbsolutePath();
 
     /**
      * <p/>
@@ -152,5 +145,7 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      */
     public List<Document> gelAllUncheckedDocuments();
+
+    public void createStartStatement(String html);
 
 }

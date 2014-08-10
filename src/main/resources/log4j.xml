@@ -13,7 +13,7 @@
 
     <!-- FILE Appender for administrator needs -->
     <appender name="admin" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${catalina.home}/webapps/Carting/resources/logs/admin/admin_log.log "/>
+        <param name="file" value="src/main/webapp/resources/logs/admin/admin_log.log "/>
         <param name="MaxFileSize" value="20MB"/>
         <param name="Encoding" value="UTF-8"/>
         <!-- Keep one backup file -->
@@ -24,7 +24,7 @@
 
     <!-- FILE Appender for developer needs -->
     <appender name="dev" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${catalina.home}/webapps/Carting/resources/logs/developers/dev_log.log "/>
+        <param name="file" value="src/main/webapp/resources/logs/developers/dev_log.log "/>
         <param name="MaxFileSize" value="5MB"/>
         <param name="MaxBackupIndex" value="3"/>
         <param name="Encoding" value="UTF-8"/>
@@ -35,7 +35,7 @@
 
     <!-- FILE Appender for recording logs of all package -->
     <appender name="general" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="${catalina.home}/webapps/Carting/resources/logs/general/gen_log.log "/>
+        <param name="File" value="src/main/webapp/resources/logs/general/gen_log.log "/>
         <param name="MaxFileSize" value="5MB"/>
         <param name="MaxBackupIndex" value="3"/>
         <param name="Encoding" value="UTF-8"/>
