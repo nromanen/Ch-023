@@ -254,7 +254,7 @@
 						<div class="panel-heading" style="height: 50px;"> 	
 							<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
 								<a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race${status.index+1}">
-								<spring:message code="label.race" /> #${ status.index+1} <spring:message code="label.results" />
+									<spring:message code="label.race" /> #${status.index+1} <spring:message code="label.results" />
 								</a>
 							</div>
 							<c:if test="${authority.equals('ROLE_ADMIN')}">

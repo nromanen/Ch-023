@@ -90,6 +90,8 @@
 										code="label.admin_area" /></a></li>
 							<li><a href="<c:url value="/document/checkingDocuments/0"/>"><spring:message
 										code="label.checking_documents" /></a></li>
+							<li><a href="<c:url value="/document/allDocuments"/>"><spring:message
+										code="label.all_documents" /></a></li>
 							<li><a href="<c:url value="/logout" />"><spring:message
 										code="label.logout" /></a></li>
 						</c:if>
