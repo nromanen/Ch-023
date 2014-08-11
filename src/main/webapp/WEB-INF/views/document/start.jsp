@@ -155,20 +155,20 @@ $(document).ready(function(){
             <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
         </tr>
         <tr>
-            <td align='center' colspan='2'>Клас картів: <b><c:out value="${carClassName}"/></b></td>
-            <td align='center' colspan='2'>Клас картів: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'><spring:message code="label.car_classes" />: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'><spring:message code="label.car_classes" />: <b><c:out value="${carClassName}"/></b></td>
         </tr>
         <tr>
-            <td align='center' colspan='2'>Дата: <c:out value="${carClassDate}"/> Час: <c:out value="${carClassTime}"/></td>
-            <td align='center' colspan='2'>Дата: <c:out value="${carClassDate}"/> Час: <c:out value="${carClassTime}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
         </tr>
         <tr>
-            <td align='center' colspan='2'><c:out value="${carClassRace}"/></td>
-            <td align='center' colspan='2'><c:out value="${carClassRace}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
         </tr>
         <tr>
-            <td colspan='2' align='center'><b>Протокол старту</b></td>
-            <td colspan='2' align='center'><b>Протокол старту</b></td>
+            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
         </tr>
         <c:forEach var="i" begin="1" end="${maxPositions}" step="2">
             <c:set var="j" value="${maxPositions-i+1}"/>
@@ -181,16 +181,16 @@ $(document).ready(function(){
             </tr>
         </c:forEach>
         <tr>
-            <td colspan='2'>Допущено: <c:out value="${allowedNumber}"/></td>
-            <td colspan='2'>Допущено: <c:out value="${allowedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
         </tr>
         <tr>
-            <td colspan='2'>З них стартувало: <c:out value="${startedNumber}"/></td>
-            <td colspan='2'>З них стартувало: <c:out value="${startedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
         </tr>
         <tr>
-            <td colspan='2'>Головний секретар: <c:out value="${secretaryName}"/></td>
-            <td colspan='2'>Головний секретар: <c:out value="${secretaryName}"/></td>
+            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
         </tr>
   </table>
 </div>

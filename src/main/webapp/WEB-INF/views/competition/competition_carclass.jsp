@@ -18,8 +18,9 @@ pageEncoding="utf-8"%>
         <td style="padding: 15px 0px 0px 20px;">
             <c:if test="${authority.equals('ROLE_ADMIN')}">
                 <div class="btn-group" style="float: right;">
-                    <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/1" />' class="btn btn-success"><spring:message code="label.document_start" /> 1</a>
-                    <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/2" />' class="btn btn-success"><spring:message code="label.document_start" /> 2</a>
+                    <c:forEach var="i" begin="1" end="${maxRaces}">
+                        <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
+                    </c:forEach>
                 </div>
                 <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
                     <div class="btn-group" style="float: right;">

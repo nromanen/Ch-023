@@ -19,6 +19,9 @@ import java.util.Map;
 @RequestMapping(value = "/carclass")
 public class CarClassCompetitionController {
 
+    // MAX_RACES - max races, const.
+    public static final int MAX_RACES = 2;
+
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
     @Autowired
@@ -69,6 +72,7 @@ public class CarClassCompetitionController {
         model.addAttribute("chessRollsList", raceService.getChessRollsByCarClassCompetition(carClassCompetition));
         model.addAttribute("raceListSize", raceService.getRacesByCarClassCompetition(carClassCompetition).size());
         model.addAttribute("absoluteResultsList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+        model.addAttribute("maxRaces", MAX_RACES);
         return new ModelAndView("competition_carclass");
     }
 

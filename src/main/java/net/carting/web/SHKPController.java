@@ -65,20 +65,17 @@ public class SHKPController {
             CarClass carClass = competition.getCarClassCompetitions().iterator().next().getCarClass();
             Date time;
             Date date;
-            String race = "";
             if (raceId == 1) {
-                race = "Заїзд 1";
                 date = competition.getFirstRaceDate();
                 time = carClassCompetition.getFirstRaceTime();
             } else {
-                race = "Заїзд 2";
                 date = competition.getSecondRaceDate();
                 time = carClassCompetition.getSecondRaceTime();
             }
             model.addAttribute("carClassName", carClass.getName());
             model.addAttribute("carClassTime", timeFormat.format(time));
             model.addAttribute("carClassDate", dateFormat.format(date));
-            model.addAttribute("carClassRace", race);
+            model.addAttribute("carClassRace", raceId);
 
             model.addAttribute("maxPositions", MAX_CAR_POSITIONS);
             model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
