@@ -43,6 +43,8 @@
         <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
         <intercept-url pattern="/feedback" access="ROLE_TEAM_LEADER"/>
 
+        <intercept-url pattern="/SHKP/**" access="ROLE_ADMIN"/>
+
         <form-login login-page="/loginPage" default-target-url="/index"
                     authentication-failure-handler-ref="exceptionFilter"/>
 

@@ -45,6 +45,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/carclass")
 public class CarClassCompetitionController {
 
+    // MAX_RACES - max races, const.
+    public static final int MAX_RACES = 2;
+
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
     @Autowired
@@ -95,6 +98,7 @@ public class CarClassCompetitionController {
         model.addAttribute("chessRollsList", raceService.getChessRollsByCarClassCompetition(carClassCompetition));
         model.addAttribute("raceListSize", raceService.getRacesByCarClassCompetition(carClassCompetition).size());
         model.addAttribute("absoluteResultsList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+        model.addAttribute("maxRaces", MAX_RACES);
         return new ModelAndView("competition_carclass");
     }
 
@@ -232,22 +236,17 @@ public class CarClassCompetitionController {
         return "competition_carclass_results_add_edit";
     }
 
-    //TODO: cannot set results for a race - do not find an exception, may be there is a trouble in .jsp - javascript validation
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
-
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         race.setCarClassCompetition(carClassCompetition);
         race.setCarClass(carClassCompetition.getCarClass());
         raceService.setRaceNumber(carClassCompetition, race);
         raceService.addRace(race);
-        try {
-            raceService.setResultTable(raceService.getChessRoll(race), race);
-        } catch (Exception e) {
-            System.out.println("11111111");
-        }
+        raceService.setResultTable(raceService.getChessRoll(race), race);
         carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
+        editRace(race, map, id, race.getRaceNumber(), String.valueOf(race.getNumberOfLaps()));
         LOG.info("Admin has added race with id=" + race.getId()
                 + " race number " + race.getRaceNumber()
                 + " in car class competition " + carClassCompetition.getCarClass().getName()
