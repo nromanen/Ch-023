@@ -2,7 +2,6 @@ package net.carting.dao;
 
 import net.carting.domain.Files;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionSystemException;
 
 import javax.persistence.*;
 import java.io.*;
