@@ -112,7 +112,7 @@
 	<a href="<c:url value="/competition/${competition.id}/mandat" />" class="btn btn-primary">
 		<spring:message code="label.competition.mandat_statement" />
 	</a>
-	<c:if test="${authority.equals('ROLE_ADMIN')}">
+	<c:if test="${authority.equals('ROLE_ADMIN') && !empty carClassCompetitionList}">
 		<a href="<c:url value="/competition/${competition.id}/personal" />" class="btn btn-primary">
 			<spring:message code="label.personal_offset" />
 		</a>

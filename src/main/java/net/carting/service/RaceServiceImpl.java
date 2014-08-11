@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.persistence.PersistenceException;
+
 import net.carting.dao.RaceDAO;
 import net.carting.dao.RacerDAO;
 import net.carting.domain.AdminSettings;
@@ -24,8 +26,6 @@ import net.carting.domain.RacerCarClassNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.PersistenceException;
 
 @Service
 public class RaceServiceImpl implements RaceService {
@@ -47,6 +47,9 @@ public class RaceServiceImpl implements RaceService {
 
     @Autowired
     private AdminSettingsService adminSettingsService;
+    
+    @Autowired
+    private CompetitionService competitionService;
 
 
     /**
@@ -210,11 +213,11 @@ public class RaceServiceImpl implements RaceService {
                 resultPoints.put(numberAndRacer.getNumberInCompetition(), 0);
             }
             List<String> pointsList;
-            if (race.getCarClassCompetition().getCalculateByTableB()) {
+            if (race.getCarClassCompetition().getCompetition().isCalculateByTableB()) {
             	pointsList = Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racersByClassCompetition.size()).split(","));
             }
             else {
-            	pointsList = adminSettingsService.getPointsByPlacesList();
+            	pointsList = competitionService.getPointsByPlacesList(race.getCarClassCompetition().getCompetition());
             }
             
             int place = 1;

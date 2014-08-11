@@ -123,6 +123,7 @@ public class CompetitionController {
             LOG.info("Admin failed adding new competition " + competition.getName() + " (id = " + competition.getId() + ")");
             return "fail";
         }
+        competition.setPointsByPlaces(adminSettingsService.getAdminSettings().getPointsByPlaces());
         competitionService.addCompetition(competition);
         LOG.info("Admin has added new competition " + competition.getName() + " (id = " + competition.getId() + ")");
         return String.valueOf(competition.getId());
