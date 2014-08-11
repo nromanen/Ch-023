@@ -3,7 +3,30 @@ $(document).ready(function(){
 
     $('#add_car_class_form').bootstrapValidator();
     $('#edit_car_class_form').bootstrapValidator();
-	
+
+	$("#import").click(function() {
+        $.get( "downloadFiles", function(data) {
+            if (data === "success") {
+                $('#documents_loading_success').css("display", "inline-block").hide().fadeIn();
+                $('#documents_loading_success').delay(2000).fadeOut('slow');
+            } else if (data === "fail") {
+                $('#documents_loading_fail').css("display", "inline-block").hide().fadeIn();
+                $('#documents_loading_fail').delay(2000).fadeOut('slow');
+            }
+        });
+	});
+
+	$("#export").click(function() {
+        $.get( "uploadFiles",   function(data) {
+            if (data === "success") {
+                $('#documents_loading_success').css("display", "inline-block").hide().fadeIn();
+                $('#documents_loading_success').delay(2000).fadeOut('slow');
+            } else if (data === "fail") {
+                $('#documents_loading_fail').css("display", "inline-block").hide().fadeIn();
+                $('#documents_loading_fail').delay(2000).fadeOut('slow');
+            }
+        });
+	});
 	
 	$("#change_pass_btn").click(function(){	
 		$('#change_password_modal').modal();

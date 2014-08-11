@@ -3,7 +3,6 @@ package net.carting.util;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-import net.carting.service.DocumentService;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -29,9 +28,5 @@ public class PdfWriter {
         document.close();
         fos.close();
         stream.close();
-    }
-
-    public static String getStartStatementPath() {
-        return DocumentService.START_STATEMENT_PATH;
     }
 }
