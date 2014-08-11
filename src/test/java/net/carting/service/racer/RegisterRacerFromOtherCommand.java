@@ -36,8 +36,13 @@ public class RegisterRacerFromOtherCommand {
     driver.findElement(By.xpath("//div[@id='left']/div/a[2]")).click();
     driver.findElement(By.linkText("Популярний")).click();
     driver.findElement(By.id("reg_racer_btn")).click();
-//    new Select(driver.findElement(By.id("reg_racer_id"))).selectByVisibleText("Павло Мурзенко");
-//    driver.findElement(By.id("reg_racer")).click();
+      try {
+          // Павло Мурзенко relates to another team, so team lead "team1" cannot register this racer
+          new Select(driver.findElement(By.id("reg_racer_id"))).selectByVisibleText("Павло Мурзенко");
+          driver.findElement(By.id("reg_racer")).click();
+      } catch (NoSuchElementException e) {
+          System.out.println("It's ok, this element mustn't be.");
+      }
   }
 
   @After

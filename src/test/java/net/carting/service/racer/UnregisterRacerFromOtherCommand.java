@@ -24,23 +24,29 @@ public class UnregisterRacerFromOtherCommand {
 
   @Test
   public void testUnregisterRacerFromOtherCommand() throws Exception {
-    driver.get("http://localhost:8080/Carting/logout");
-    driver.get("http://localhost:8080/Carting/index");
-    driver.findElement(By.linkText("Гість")).click();
-    driver.findElement(By.linkText("Увійти")).click();
-    driver.findElement(By.id("username")).click();
-    driver.findElement(By.id("username")).clear();
-    driver.findElement(By.id("username")).sendKeys("team1");
-    driver.findElement(By.id("password")).clear();
-    driver.findElement(By.id("password")).sendKeys("1234");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
-    driver.findElement(By.xpath("//div[@id='left']/div/a[2]")).click();
-    driver.findElement(By.cssSelector("b.caret")).click();
-    driver.findElement(By.linkText("Моя команда")).click();
-    driver.findElement(By.linkText("Чемпіонат Чернівецької області (весна 2014 року)")).click();
-    driver.findElement(By.linkText("Популярний")).click();
-//    driver.findElement(By.id("unreg7")).click();
-//    driver.findElement(By.id("unreg_racer")).click();
+      driver.get("http://localhost:8080/Carting/logout");
+      driver.get("http://localhost:8080/Carting/index");
+      driver.findElement(By.linkText("Гість")).click();
+      driver.findElement(By.linkText("Увійти")).click();
+      driver.findElement(By.id("username")).click();
+      driver.findElement(By.id("username")).clear();
+      driver.findElement(By.id("username")).sendKeys("team1");
+      driver.findElement(By.id("password")).clear();
+      driver.findElement(By.id("password")).sendKeys("1234");
+      driver.findElement(By.xpath("//button[@type='submit']")).click();
+      driver.findElement(By.xpath("//div[@id='left']/div/a[2]")).click();
+      driver.findElement(By.cssSelector("b.caret")).click();
+      driver.findElement(By.linkText("Моя команда")).click();
+      driver.findElement(By.linkText("Чемпіонат Чернівецької області (весна 2014 року)")).click();
+      driver.findElement(By.linkText("Популярний")).click();
+      try {
+          // unreg7 relates to another team, so team lead "team1" cannot unregister this racer
+          WebElement webEl = driver.findElement(By.id("unreg7"));
+          webEl.click();
+          driver.findElement(By.id("unreg_racer")).click();
+      } catch (NoSuchElementException e) {
+          System.out.println("It's ok, this element mustn't be.");
+      }
   }
 
   @After
