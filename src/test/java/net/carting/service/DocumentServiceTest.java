@@ -4,6 +4,7 @@ import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
 import net.carting.domain.Racer;
 import net.carting.util.DateUtil;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,6 +78,14 @@ public class DocumentServiceTest {
     }
 
     @Test
+    public void testDeleteDocumentFromRacerByRacerIdAndDocumentId() {
+        int documentId = 1;
+        int racerId = 2;
+        documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(documentId, racerId);
+        verify(documentDAO, times(1)).deleteDocumentFromRacerByRacerIdAndDocumentId(documentId, racerId);
+    }
+
+    @Test
     public void testDeleteDocument() {
         Document document = new Document();
         documentService.deleteDocument(document);
@@ -96,6 +105,19 @@ public class DocumentServiceTest {
         assertEquals("Expected " + true, true,
                 documentService.isRacerOwnerOfDocument(id));
     }
+    
+    @Test
+    public void testGelAllUncheckedDocuments() {
+        List<Document> documentList = new ArrayList<Document>();
+        Document firstDocument = new Document();
+        firstDocument.setChecked(false);
+        documentList.add(firstDocument);
+        Document secondDocument = new Document();
+        secondDocument.setChecked(false);
+        documentList.add(secondDocument);
+        when(documentDAO.gelAllUncheckedDocuments()).thenReturn(documentList);
+        assertEquals("Expected 2 documents", 2, documentService.gelAllUncheckedDocuments().size());
+    } 
 
     @Test
     public void testSetDocumentParametersFromRequestAcordingToType() {
@@ -148,6 +170,14 @@ public class DocumentServiceTest {
         assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
                         .getParameter("start_date").toString()),
                 racerPerentalPermissions.getStartDate());
+    }
+    
+    @Test
+    public void testDeleteFileFromServer() {
+        String fileNotFound = "fileNotFound.jpg";
+//        when(documentService.createDirectoryForFilesAndGetAbsolutePath()).thenReturn("/");
+        //assertEquals("Expected " + true, true, documentService.deleteFileFromServer(fileNotFound));
+        verify(documentService, times(1)).deleteFileFromServer(fileNotFound);
     }
 
 }

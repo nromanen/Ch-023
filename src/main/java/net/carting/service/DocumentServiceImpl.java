@@ -70,10 +70,8 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void deleteDocumentFromRacerByRacerIdAndDocumentId(int documentId,
-                                                              int racerId) {
-        documentDAO.deleteDocumentFromRacerByRacerIdAndDocumentId(documentId,
-                racerId);
+    public void deleteDocumentFromRacerByRacerIdAndDocumentId(int documentId, int racerId) {
+        documentDAO.deleteDocumentFromRacerByRacerIdAndDocumentId(documentId, racerId);
     }
 
     @Override
@@ -188,8 +186,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public boolean deleteFileFromServer(String filePath) {
-        File serverFile = new File(createDirectoryForFilesAndGetAbsolutePath()
-                + File.separator + filePath);
+        File serverFile = new File(createDirectoryForFilesAndGetAbsolutePath() + File.separator + filePath);
         if (!serverFile.exists()) {
             return true;
         }
