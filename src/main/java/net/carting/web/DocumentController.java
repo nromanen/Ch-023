@@ -283,12 +283,12 @@ public class DocumentController {
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
     public String editDocument(@RequestParam("document_id") String documentId,
-                                @RequestParam(value="number", required=false) String number,
-                                @RequestParam(value="start_date", required=false) String startDate,
-                                @RequestParam(value="finish_date", required=false) String finishDate,
-                                @RequestParam("file") MultipartFile[] files, 
-                                Locale locale,
-                                Map<String, Object> map) {
+                               @RequestParam(value="number", required=false) String number,
+                               @RequestParam(value="start_date", required=false) String startDate,
+                               @RequestParam(value="finish_date", required=false) String finishDate,
+                               @RequestParam("file") MultipartFile[] files, 
+                               Locale locale,
+                               Map<String, Object> map) {
         
         Map<String, Object> documentParameters = new HashMap<String, Object>();
         documentParameters.put("document_id", documentId);
