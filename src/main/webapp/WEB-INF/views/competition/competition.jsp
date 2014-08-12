@@ -159,10 +159,9 @@
 		    	</tr>
 		  	</thead>
 		  	<tbody>		    	    				      		
-				<% int number = 1; %>
-				<c:forEach items="${carClassCompetitionList}" var="carClassCompetition">
+				<c:forEach items="${carClassCompetitionList}" var="carClassCompetition" varStatus="number">
 					<tr data-href='<c:url value="/carclass/${carClassCompetition.id} " />'>
-						<td><%= number %></td>
+						<td>${number.count }</td>
 						<td id="name${carClassCompetition.id}">
 							<a href="<c:url value="/carclass/${carClassCompetition.id}" />">${carClassCompetition.carClass.name}</a>
 					
@@ -192,7 +191,6 @@
 							</td>
 						</c:if>
 					</tr>
-					<% number++; %>
 				</c:forEach>					
 		 	</tbody>
 		</table>
@@ -418,10 +416,9 @@
 								<td><spring:message code="label.place" /></td>
 								<td><spring:message code="label.points" /></td>
 							</tr>	
-							<% int count = 1; %>
-							<c:forEach items="${pointsByPlacesList }" var="pointsByPlace">
+							<c:forEach items="${pointsByPlacesList }" var="pointsByPlace" varStatus="count">
 								<tr>
-									<td><%= count %></td>
+									<td>${count.count }</td>
 									<td><input type="text" class="points" style="width: 100px;" 
 											value="${pointsByPlace}" 
 											required pattern="^[0-9]+$" required
@@ -430,7 +427,6 @@
 										/>
 					   				</td>
 								</tr>
-								<% count++; %>
 							</c:forEach>			
 						</table>
 						<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
