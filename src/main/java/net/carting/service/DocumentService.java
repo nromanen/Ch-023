@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface DocumentService {
 
@@ -79,8 +80,7 @@ public interface DocumentService {
      * @author Volodymyr Semaniv
      * @see net.carting.domain.Document
      */
-    public Document setDocumentParametersFromRequestAcordingToType(
-            Document document, HttpServletRequest request);
+    public Document setDocumentParametersByType(Document document, Map<String, Object> documentParameters);
 
     /**
      * <p/>
@@ -98,9 +98,10 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      * @see net.carting.domain.File
      */
-    public void addDocumentAndUpdateRacers(HttpServletRequest request,
+    /*public void addDocumentAndUpdateRacers(HttpServletRequest request,
                                            MultipartFile[] files, String[] racersId, Leader leader)
-            throws IOException;
+            throws IOException;*/
+    public void addDocumentAndUpdateRacers(Map<String, Object> documentParameters, MultipartFile[] files, Leader leader) throws IOException;
 
     /**
      * <p/>
@@ -116,7 +117,7 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      * @see net.carting.domain.File
      */
-    public void editDocument(int documentId, HttpServletRequest request,
+    public void editDocument(int documentId,  Map<String, Object> documentParameters,
                              MultipartFile[] files) throws IOException;
 
 

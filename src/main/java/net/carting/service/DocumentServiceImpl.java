@@ -1,11 +1,13 @@
 package net.carting.service;
 
 import com.itextpdf.text.DocumentException;
+
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
 import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
 import net.carting.util.PdfWriter;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -81,33 +85,34 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    @Transactional
-    public void addDocumentAndUpdateRacers(HttpServletRequest request,
-                                           MultipartFile[] files, String[] racersId, Leader leader)
-            throws IOException {
-        int documentType = Integer.parseInt(request.getParameter(
-                "document_type").toString());
+    @Transactional //int documentType, String[] racersId, 
+    public void addDocumentAndUpdateRacers(Map<String, Object> documentParameters, MultipartFile[] files, Leader leader) throws IOException  {
         Document document = new Document();
+        String[] racersId = (String[])documentParameters.get("racers_ids");
+        int documentType = (Integer)documentParameters.get("document_type");
         document.setType(documentType);
-        document = setDocumentParametersFromRequestAcordingToType(document,
-                request);
+        document = setDocumentParametersByType(document, documentParameters);
         addDocument(document);
-        List<String> paths = getPathsAndWriteFilesToServer(files, documentType,
-                leader.getId());
+        List<String> paths = null;
+        try {
+            paths = getPathsAndWriteFilesToServer(files, documentType, leader.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         fileService.addFilesToDocument(document, paths);
         racerService.setDocumentToRacers(document, racersId);
     }
 
+
     @Override
     @Transactional
-    public void editDocument(int documentId, HttpServletRequest request,
+    public void editDocument(int documentId, Map<String, Object> documentParameters,
                              MultipartFile[] files) throws IOException {
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);
         document.setReason("");
-        document = setDocumentParametersFromRequestAcordingToType(document,
-                request);
+        document = setDocumentParametersByType(document, documentParameters);
         updateDocument(document);
 
         int documentType = document.getType();
@@ -151,25 +156,26 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document setDocumentParametersFromRequestAcordingToType(
-            Document document, HttpServletRequest request) {
+    public Document setDocumentParametersByType(Document document, Map<String, Object> documentParameters) {
         int documentType = document.getType();
         switch (documentType) {
             case Document.TYPE_RACER_LICENCE:
-                document.setName(request.getParameter("number").toString());
+                //document.setName(request.getParameter("number").toString());
+                document.setName(documentParameters.get("number").toString());
                 break;
             case Document.TYPE_RACER_INSURANCE:
-                document.setName(request.getParameter("number").toString());
-                document.setFinishDate(DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()));
+                //document.setName(request.getParameter("number").toString());
+                document.setName(documentParameters.get("number").toString());
+                //document.setFinishDate(DateUtil.getDateFromString(request.getParameter("finish_date").toString()));
+                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
                 break;
             case Document.TYPE_RACER_PERENTAL_PERMISSIONS:
-                document.setStartDate(DateUtil.getDateFromString(request
-                        .getParameter("start_date").toString()));
+                //document.setStartDate(DateUtil.getDateFromString(request.getParameter("start_date").toString()));
+                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("start_date").toString()));
                 break;
             case Document.TYPE_RACER_MEDICAL_CERTIFICATE:
-                document.setFinishDate(DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()));
+                //document.setFinishDate(DateUtil.getDateFromString(request.getParameter("finish_date").toString()));
+                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
                 break;
             default:
                 break;
