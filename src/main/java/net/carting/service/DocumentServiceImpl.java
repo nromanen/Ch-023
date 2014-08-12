@@ -106,8 +106,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void editDocument(int documentId, Map<String, Object> documentParameters,
+    public void editDocument(Map<String, Object> documentParameters,
                              MultipartFile[] files) throws IOException {
+        int documentId = (Integer)documentParameters.get("document_id");
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);

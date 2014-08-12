@@ -117,7 +117,7 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      * @see net.carting.domain.File
      */
-    public void editDocument(int documentId,  Map<String, Object> documentParameters,
+    public void editDocument(Map<String, Object> documentParameters,
                              MultipartFile[] files) throws IOException;
 
 

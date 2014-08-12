@@ -176,7 +176,7 @@ public class DocumentController {
                  documentParameters.put("number", number);
                  documentParameters.put("start_date", startDate);
                  documentParameters.put("finish_date", finishDate);
-                 
+
                  try {
                      documentService.addDocumentAndUpdateRacers(documentParameters, files, leader);
                  } catch (IOException e) {
@@ -282,19 +282,29 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
-    public String editDocument(HttpServletRequest request,
-                               @RequestParam("file") MultipartFile[] files, Map<String, Object> map) {
+    public String editDocument(@RequestParam("document_id") String documentId,
+                                @RequestParam(value="document_type") Integer documentType,
+                                @RequestParam(value="number", required=false) String number,
+                                @RequestParam(value="start_date", required=false) String startDate,
+                                @RequestParam(value="finish_date", required=false) String finishDate,
+                                @RequestParam("file") MultipartFile[] files, 
+                                Locale locale,
+                                Map<String, Object> map) {
         
-        int documentId = Integer.parseInt(request.getParameter("document_id")
-                .toString());
+        Map<String, Object> documentParameters = new HashMap<String, Object>();
+        documentParameters.put("document_id", documentId);
+        documentParameters.put("document_type", documentType);
+        documentParameters.put("number", number);
+        documentParameters.put("start_date", startDate);
+        documentParameters.put("finish_date", finishDate);
+        
         try {
-            documentService.editDocument(documentId, request, files);
+            documentService.editDocument(documentParameters, files);
             return "redirect:/document/" + documentId;
         } catch (IOException e) {
             String username = userService.getCurrentUserName();
             Leader leader = leaderService.getLeaderByUserName(username);
-            map.put("message",
-                    "Просимо вибачення, але сталася помилка при завантаженні файлів і Ваш документ не був відредагований. Спробуйту, будь ласка, пізніше.");
+            map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
             LOG.error("Leader "
                     + leader.getFirstName()
                     + " "
@@ -302,9 +312,6 @@ public class DocumentController {
                     + " tried to add document, but happened some problem with writing files to server");
             return "custom_generic_exception";
         }
-        
-        return "custom_generic_exception";
-
     }
 
     @RequestMapping(value = "/deleteFile", method = RequestMethod.POST, headers = {"content-type=application/json"})
