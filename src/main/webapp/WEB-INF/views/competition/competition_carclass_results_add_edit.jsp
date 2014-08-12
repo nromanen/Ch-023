@@ -49,7 +49,7 @@
 			value="${membersCount}" />
 		<div class="help-block with-errors"></div>
 	</div>
-
+	
 	<label path="resultSequance" class="text-info"><spring:message code="label.result_sequence" /><span
 		class="text-danger">*</span>:&nbsp;
 	</label> <br> <span> <spring:message code="label.valid_numbers" /></span> <span  id="validNumbers" data-validnumbers="${validNumbers}" >${validNumbers}</span>

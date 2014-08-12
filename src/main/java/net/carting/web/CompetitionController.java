@@ -14,6 +14,7 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
@@ -86,6 +87,7 @@ public class CompetitionController {
         model.addAttribute("carClassList", competitionService
                 .getDifferenceBetweenCarClassesAndCarClassCompetitions(carClasses, carClassCompetitions));
         model.addAttribute("carClassCompetitionList", carClassCompetitions);
+        model.addAttribute("pointsByPlacesList", competitionService.getPointsByPlacesList(competition));
         return new ModelAndView("competition");
     }
 
@@ -123,6 +125,7 @@ public class CompetitionController {
             LOG.info("Admin failed adding new competition " + competition.getName() + " (id = " + competition.getId() + ")");
             return "fail";
         }
+        competition.setPointsByPlaces(adminSettingsService.getAdminSettings().getPointsByPlaces());
         competitionService.addCompetition(competition);
         LOG.info("Admin has added new competition " + competition.getName() + " (id = " + competition.getId() + ")");
         return String.valueOf(competition.getId());
@@ -159,7 +162,15 @@ public class CompetitionController {
     @RequestMapping(value = "/editAction", method = RequestMethod.POST)
     public String editCompetitionAction(
             @ModelAttribute("editedCompetition") Competition competition) {
-        competitionService.updateCompetition(competition);
+    	
+    	competitionService.updateCompetition(competition);
+    	List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(competition.getId());
+    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+        	for (Race race : carClassCompetition.getRaces()) {
+            	raceService.setResultTable(raceService.getChessRoll(race), race);
+            	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+            }
+        }
         LOG.info("Admin has edited competition " + competition.getName() + " (id = " + competition.getId() + ")");
         return "redirect:/competition/" + competition.getId();
     }
@@ -316,6 +327,24 @@ public class CompetitionController {
         int competitionId = Integer.parseInt(formMap.get("competitionId")
                 .toString());
         return competitionId;
+    }
+    
+    @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changePointsByPlaces(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+        Competition competition = competitionService.getCompetitionById(id);
+        String pointsByPlaces = map.get("pointsByPlaces").toString();
+        competition.setPointsByPlaces(pointsByPlaces);
+        competitionService.updateCompetition(competition);
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(competition.getId());
+    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+        	for (Race race : carClassCompetition.getRaces()) {
+            	raceService.setResultTable(raceService.getChessRoll(race), race);
+            	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+            }
+        }
+        return "success";
     }
 
 }
