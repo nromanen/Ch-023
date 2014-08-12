@@ -45,15 +45,6 @@ pageEncoding="utf-8"%>
 <div><label class="text-info"><spring:message code="label.competition.percentage_offset" />&nbsp;</label>${carClassCompetition.percentageOffset}%</div>
 <div><label class="text-info"><spring:message code="label.age_limit" />&nbsp;</label>${carClassCompetition.carClass.lowerYearsLimit}-${carClassCompetition.carClass.upperYearsLimit}</div>
 
-<div>
-    <input type="hidden" id="calculateByTableB_url" value="<c:url value="/carclass/${carClassCompetition.id }/setCalculateByTableB" />" />
-    <label class="text-info"><spring:message code="label.calculate_by_table_b" /></label>
-    <input type="checkbox" class="calculateByTableB" id="calculateByTableB${carClassCompetition.id }"
-    <c:if test="${carClassCompetition.calculateByTableB }">checked</c:if>
-    <c:if test="${!authority.equals('ROLE_ADMIN') }"> disabled</c:if> />
-</div>
-<br>
-
 <div class="panel panel-primary">
      <div class="panel-heading" style="height: 50px;">
         <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.registered_racers" /></div>
@@ -80,11 +71,10 @@ pageEncoding="utf-8"%>
                         </c:if>
                     </thead>
                     <tbody>
-                        <% int number = 1; %>
-                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="number">
                             <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                 <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-                                <td><%= number %></td>
+                                <td>${number.count }</td>
                                 <td style="text-align: left; padding-left: 20px;">
                                     <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
                                         id="racer${racerCarClassCompetitionNumber.racer.id}">
@@ -106,7 +96,6 @@ pageEncoding="utf-8"%>
                                     </td>
                                 </c:if>
                             </tr>
-                            <% number++; %>
                         </c:forEach>
                     </tbody>
                 </table>

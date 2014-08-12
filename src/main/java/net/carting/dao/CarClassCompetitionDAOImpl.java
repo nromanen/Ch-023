@@ -44,8 +44,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
                 + "SET firstRaceTime = :firstRaceTime, "
                 + "secondRaceTime = :secondRaceTime, "
                 + "circleCount = :circleCount, "
-                + "percentageOffset = :percentageOffset, "
-                + "calculateByTableB = :calculateByTableB "
+                + "percentageOffset = :percentageOffset "
                 + "WHERE id = :id");
 
         query.setParameter("firstRaceTime", carClassCompetition.getFirstRaceTime());
@@ -53,7 +52,6 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
         query.setParameter("circleCount", carClassCompetition.getCircleCount());
         query.setParameter("percentageOffset", carClassCompetition.getPercentageOffset());
-        query.setParameter("calculateByTableB", carClassCompetition.getCalculateByTableB());
         query.setParameter("id", carClassCompetition.getId());
 
         query.executeUpdate();

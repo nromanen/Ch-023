@@ -1,11 +1,22 @@
 package net.carting.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "car_class_competition")
@@ -43,9 +54,6 @@ public class CarClassCompetition {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
     private Set<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = new HashSet<RacerCarClassCompetitionNumber>();
-    
-    @Column(name = "calculate_by_table_b", nullable = false, columnDefinition = "TINYINT(1)")
-    private boolean calculateByTableB = false;
 
     public int getId() {
         return id;
@@ -117,14 +125,6 @@ public class CarClassCompetition {
 
     public void setRaces(Set<Race> races) {
         this.races = races;
-    }
-    
-    public void setCalculateByTableB(boolean calculateByTableB) {
-    	this.calculateByTableB = calculateByTableB;
-    }
-    
-    public boolean getCalculateByTableB() {
-    	return calculateByTableB;
     }
 
     @Override
