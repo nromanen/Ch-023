@@ -24,22 +24,26 @@ public class DocumentController {
 
     @Autowired
     ServletContext context;
-
+    
     @Autowired
     private FileService fileService;
+    
     @Autowired
     private DocumentService documentService;
+    
     @Autowired
     private TeamService teamService;
+    
     @Autowired
     private UserService userService;
+    
     @Autowired
     private LeaderService leaderService;
+    
     @Autowired
     private RacerService racerService;
 
-    private static final Logger LOG = Logger
-            .getLogger(DocumentController.class);
+    private static final Logger LOG = Logger.getLogger(DocumentController.class);
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -95,12 +99,8 @@ public class DocumentController {
 			 * If team leader don't has a team, he is redirected to page in
 			 * which he can add team
 			 */
-            LOG.info("Leader "
-                    + leader.getFirstName()
-                    + " "
-                    + leader.getLastName()
-                    + "tried to see a document of team "
-                    + teamOwner.getName()
+            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
+                    + "tried to see a document of team " + teamOwner.getName()
                     + ", but was redirected to add team, because he didn't has a team");
             return "redirect:/team/add";
         }
@@ -127,10 +127,7 @@ public class DocumentController {
                     + Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.info("Leader "
-                    + leader.getFirstName()
-                    + " "
-                    + leader.getLastName()
+            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
                     + "tried to add document , but was redirected to add team, because he didn't has a team");
             return "redirect:/team/add";
         }
