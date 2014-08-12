@@ -33,6 +33,13 @@
 						<a href="#" class="btn btn-danger" id="delete_competition_btn">
 							<spring:message code="label.delete" />
 						</a>
+						<c:if test="${competition.enabled && !competition.calculateByTableB }">
+							<div style="margin-top: 40px;">
+								<a href="#" class="btn btn-info" id="edit_points_btn">
+									<spring:message code="label.edit_points" />
+								</a>
+							</div>
+						</c:if>
 					</div>
 				</c:if>
 			</td>
@@ -99,6 +106,17 @@
 				<div>
 					<label class="text-info"><spring:message code="label.competition.director_category_judicial_license" />:&nbsp;</label>
 					${competition.directorCategoryJudicialLicense}
+				</div>	
+				<div>
+					<label class="text-info"><spring:message code="label.competition.calculation_type" />:&nbsp;</label>
+					<c:choose>
+						<c:when test="${competition.calculateByTableB }">
+							<spring:message code="label.competition.calculate_by_table_b" />
+						</c:when>
+						<c:otherwise>
+							<spring:message code="label.competition.calculate_by_table_a" />
+						</c:otherwise>
+					</c:choose>
 				</div>	
 			</td>
 		    <td style="width: 40%; padding: 0px 10px 0px 20px; vertical-align: top; font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
@@ -376,6 +394,87 @@
 				</button>
 				<button class="btn btn-danger" type="button" id="delete_carclass">
 					<spring:message code="label.delete" />
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<input type="hidden" id="changePointsUrl" value="<c:url value="/competition/${competition.id}/changePointsByPlaces" />">
+
+<!-- Edit points modal -->	
+<div class="modal fade" id="edit_points_modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" style="margin-top: 10%;">
+		<div class="modal-content">
+			<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
+				<h4 class="modal-title"><spring:message code="label.competition.change_points" /></h4>
+			</div>
+			<div class="modal-body">
+				<form data-toggle="validator" role="form">
+					<div class="text-center" style="width: 100%;">
+						<table id="points_table" class="table table-hover text-center" 
+					   			style="cursor: pointer; width: 50%; margin: 0 auto 10px;">
+							<tr class="warning" style="font-weight: bolder;">
+								<td><spring:message code="label.place" /></td>
+								<td><spring:message code="label.points" /></td>
+							</tr>	
+							<% int count = 1; %>
+							<c:forEach items="${pointsByPlacesList }" var="pointsByPlace">
+								<tr>
+									<td><%= count %></td>
+									<td><input type="text" class="points" style="width: 100px;" 
+											value="${pointsByPlace}" 
+											required pattern="^[0-9]+$" required
+											data-bv-notempty="true"
+						       				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+										/>
+					   				</td>
+								</tr>
+								<% count++; %>
+							</c:forEach>			
+						</table>
+						<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
+						<button type="button" class="btn btn-primary" id="add_place">
+							<spring:message code="label.add" />
+						</button>
+						<button type="button" class="btn btn-danger" id="delete_place">
+							<spring:message code="label.delete_last" />
+						</button>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">					       		
+				<button class="btn btn-primary" type="button" data-dismiss="modal">
+					<spring:message code="label.cancel" />
+				</button>
+				<button class="btn btn-success" type="button" id="edit_points" data-dismiss="modal">
+					<spring:message code="label.edit" />
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Add place modal -->
+<div class="modal fade" id="add_place_modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" style="margin-top: 15%;">
+		<div class="modal-content">
+			<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
+				<h4 class="modal-title"><spring:message code="label.admin_add_place" /></h4>
+			</div>
+			<div class="modal-body">		
+				<label class="text-info">
+					<spring:message code="label.points_count" />:&nbsp;
+				</label>
+				<input type="text" class="form-control" 
+					   placeholder="<spring:message code="placeholder.points_count" />" id="points_count" />							
+			</div>
+			<div class="modal-footer">					       		
+				<button class="btn btn-primary" type="button" data-dismiss="modal">
+					<spring:message code="label.cancel" />	
+				</button>
+				<button class="btn btn-success" type="button" id="add_place_btn" data-dismiss="modal" disabled>
+					<spring:message code="label.add" />
 				</button>
 			</div>
 		</div>
