@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	
 	// Setup validator
 
 	if ($('#addDocument').length != 0) {
