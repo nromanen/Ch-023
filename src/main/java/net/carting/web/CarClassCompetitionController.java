@@ -335,23 +335,4 @@ public class CarClassCompetitionController {
         return "success";
     }
     
-/*    @RequestMapping(value = "/{id}/setCalculateByTableB", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String setCalculateByTableB(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        boolean calculateByTableB = Boolean.parseBoolean(map.get("calculateByTableB").toString());
-        carClassCompetition.setCalculateByTableB(calculateByTableB);
-        carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
-        for (Race race : carClassCompetition.getRaces()) {
-        	raceService.setResultTable(raceService.getChessRoll(race), race);
-            carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
-        }
-        String username = userService.getCurrentUserName();
-        LOG.info(username + " has " + (calculateByTableB ? "enabled" : "disabled") + " calculating by table B"
-        		+ " for carclass competition (id=" + carClassCompetition.getId() + ")");
-        
-        return "success";
-    }*/
-
 }

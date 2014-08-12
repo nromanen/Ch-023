@@ -380,8 +380,6 @@ $(document).ready(function(){
 		if($('#points_table tr').length > 1){
 			$('#points_table tr:last').remove();
 		}
-		var pointsStr = getPointsString();
-		editPointsByPlaces(pointsStr);
 	});
 	
 	$("#add_place").click(function(){
@@ -389,10 +387,6 @@ $(document).ready(function(){
 	});
 	
 	$("#add_place_btn").click(function(){
-		var pointsStr = getPointsString();
-		pointsStr += ",";
-		pointsStr += $("#points_count").val();
-		editPointsByPlaces(pointsStr);
 		$('#points_table').append('<tr><td>'+ (+$('#points_table tr:last td:first').text() + 1) +'</td><td><input type="text" class="points" style="width: 100px;"' 
 				+ ' value="'+ $("#points_count").val() + '"' 
 				+ ' required pattern="^[0-9]+$" required'
