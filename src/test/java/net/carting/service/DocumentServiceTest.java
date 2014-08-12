@@ -15,8 +15,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -120,64 +122,43 @@ public class DocumentServiceTest {
     } 
 
     @Test
-    public void testSetDocumentParametersFromRequestAcordingToType() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setParameter("number", "FG1234");
-        request.setParameter("start_date", "2012-12-12");
-        request.setParameter("finish_date", "2014-12-12");
+    public void testSetDocumentParametersByType() {
+        
+        Map<String, Object> documentParameters = new HashMap<String, Object>(); 
+        
+        documentParameters.put("number", "FG1234");
+        documentParameters.put("start_date", "2012-12-12");
+        documentParameters.put("finish_date", "2014-12-12");
 
         // Create a document "Racer licence" and check if the settings of
         // document are set correctly
         Document racerLicence = new Document();
         racerLicence.setType(Document.TYPE_RACER_LICENCE);
-        racerLicence = documentService
-                .setDocumentParametersFromRequestAcordingToType(racerLicence,
-                        request);
+        racerLicence = documentService.setDocumentParametersByType(racerLicence, documentParameters);
+        System.out.println(racerLicence.getName());
         assertEquals("Expected 'FG1234'", "FG1234", racerLicence.getName());
 
         // Create a document "Racer insurance" and check if the settings of
         // document are set correctly
         Document racerInsurance = new Document();
         racerInsurance.setType(Document.TYPE_RACER_INSURANCE);
-        racerInsurance = documentService
-                .setDocumentParametersFromRequestAcordingToType(racerInsurance,
-                        request);
+        racerInsurance = documentService.setDocumentParametersByType(racerInsurance, documentParameters);
         assertEquals("Expected 'FG1234'", "FG1234", racerInsurance.getName());
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()),
-                racerInsurance.getFinishDate());
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("finish_date").toString()), racerInsurance.getFinishDate());
 
         // Create a document "Racer medical certificate" and check if the
         // settings of document are set correctly
         Document racerMedicalCertificate = new Document();
-        racerMedicalCertificate
-                .setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
-        racerMedicalCertificate = documentService
-                .setDocumentParametersFromRequestAcordingToType(
-                        racerMedicalCertificate, request);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()),
-                racerMedicalCertificate.getFinishDate());
+        racerMedicalCertificate.setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
+        racerMedicalCertificate = documentService.setDocumentParametersByType(racerMedicalCertificate, documentParameters);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("finish_date").toString()),racerMedicalCertificate.getFinishDate());
 
         // Create a document "Racer perental permissions" and check if the
         // settings of document are set correctly
         Document racerPerentalPermissions = new Document();
-        racerPerentalPermissions
-                .setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
-        racerPerentalPermissions = documentService
-                .setDocumentParametersFromRequestAcordingToType(
-                        racerPerentalPermissions, request);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("start_date").toString()),
-                racerPerentalPermissions.getStartDate());
-    }
-    
-    @Test
-    public void testDeleteFileFromServer() {
-        String fileNotFound = "fileNotFound.jpg";
-//        when(documentService.createDirectoryForFilesAndGetAbsolutePath()).thenReturn("/");
-        //assertEquals("Expected " + true, true, documentService.deleteFileFromServer(fileNotFound));
-        verify(documentService, times(1)).deleteFileFromServer(fileNotFound);
+        racerPerentalPermissions.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
+        racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentParameters);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("start_date").toString()),racerPerentalPermissions.getStartDate());
     }
 
 }

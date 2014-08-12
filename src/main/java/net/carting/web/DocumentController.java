@@ -283,7 +283,6 @@ public class DocumentController {
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
     public String editDocument(@RequestParam("document_id") String documentId,
-                                @RequestParam(value="document_type") Integer documentType,
                                 @RequestParam(value="number", required=false) String number,
                                 @RequestParam(value="start_date", required=false) String startDate,
                                 @RequestParam(value="finish_date", required=false) String finishDate,
@@ -293,7 +292,6 @@ public class DocumentController {
         
         Map<String, Object> documentParameters = new HashMap<String, Object>();
         documentParameters.put("document_id", documentId);
-        documentParameters.put("document_type", documentType);
         documentParameters.put("number", number);
         documentParameters.put("start_date", startDate);
         documentParameters.put("finish_date", finishDate);

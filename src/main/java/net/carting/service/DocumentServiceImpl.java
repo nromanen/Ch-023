@@ -108,7 +108,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public void editDocument(Map<String, Object> documentParameters,
                              MultipartFile[] files) throws IOException {
-        int documentId = (Integer)documentParameters.get("document_id");
+        int documentId = Integer.parseInt(documentParameters.get("document_id").toString());
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);
@@ -161,21 +161,16 @@ public class DocumentServiceImpl implements DocumentService {
         int documentType = document.getType();
         switch (documentType) {
             case Document.TYPE_RACER_LICENCE:
-                //document.setName(request.getParameter("number").toString());
                 document.setName(documentParameters.get("number").toString());
                 break;
             case Document.TYPE_RACER_INSURANCE:
-                //document.setName(request.getParameter("number").toString());
                 document.setName(documentParameters.get("number").toString());
-                //document.setFinishDate(DateUtil.getDateFromString(request.getParameter("finish_date").toString()));
                 document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
                 break;
             case Document.TYPE_RACER_PERENTAL_PERMISSIONS:
-                //document.setStartDate(DateUtil.getDateFromString(request.getParameter("start_date").toString()));
-                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("start_date").toString()));
+                document.setStartDate(DateUtil.getDateFromString(documentParameters.get("start_date").toString()));
                 break;
             case Document.TYPE_RACER_MEDICAL_CERTIFICATE:
-                //document.setFinishDate(DateUtil.getDateFromString(request.getParameter("finish_date").toString()));
                 document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
                 break;
             default:
