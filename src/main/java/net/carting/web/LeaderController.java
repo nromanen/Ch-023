@@ -141,6 +141,7 @@ public class LeaderController {
     @ResponseBody
     boolean isSetTeam(@RequestBody Map<String, Object> map) {
         String userName = map.get("username").toString();
+        String email = map.get("email").toString();
         return userService.isSetUser(userName);
     }
 

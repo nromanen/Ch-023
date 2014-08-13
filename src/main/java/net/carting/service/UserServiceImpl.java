@@ -106,8 +106,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean isSetUser(String user_name) {
-        return userDao.isSetUser(user_name);
+    public boolean isSetUser(String userName) {
+        return userDao.isSetUser(userName);
+    }
+    
+    @Override
+    @Transactional
+    public boolean isSetEmail(String email) {
+        return userDao.isSetEmail(email);
     }
 
     @Override

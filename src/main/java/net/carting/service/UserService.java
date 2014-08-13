@@ -35,12 +35,14 @@ public interface UserService {
     
     public String getCurrentAuthority();
 
-    public boolean isSetUser(String user_name);
+    public boolean isSetUser(String userName);
+    
+    public boolean isSetEmail(String email);
 
     public String getEncodedPassword(String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    public void setEnabled(String username, boolean enabled);
+    public void setEnabled(String userName, boolean enabled);
 
     public void resetPassword(User user)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;

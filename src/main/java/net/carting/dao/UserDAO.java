@@ -21,6 +21,8 @@ public interface UserDAO {
     public void deleteUser(User user);
 
     public boolean isSetUser(String userName);
+    
+    public boolean isSetEmail(String email);
 
     public void setEnabled(String username, boolean enabled);
 

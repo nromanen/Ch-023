@@ -87,6 +87,15 @@ public class UserDAOImpl implements UserDAO {
                 .setParameter("username", username).getResultList();
         return result.size() > 0;
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean isSetEmail(String email) {
+        List<User> result = entityManager
+                .createQuery("from User where email = :email")
+                .setParameter("email", email).getResultList();
+        return result.size() > 0;
+    }
 
     @Override
     public void setEnabled(String username, boolean enabled) {

@@ -100,7 +100,7 @@ $(document).ready(function(){
 	    			 "email" : email
 	    		   };
 
-	    var jsonCheck = {"username" : username};
+	    var jsonCheck = {"username" : username, "email" : email};
 	    var urlCheck = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetUser';
 	    $.ajax({  
 	        url: urlCheck,  
