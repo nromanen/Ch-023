@@ -1,10 +1,13 @@
 package net.carting.web;
 
+import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Document;
 import net.carting.domain.File;
 import net.carting.domain.Leader;
+import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.Team;
 import net.carting.service.*;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -316,5 +320,13 @@ public class DocumentController {
         map.put("index", index);
 
         return "checking_documents";
+    }
+    
+    @RequestMapping(value = "/allDocuments", method = RequestMethod.GET)
+    public String allDocuments(Map<String, Object> map) {
+    	map.put("teams", teamService.getAllTeams());
+    	map.put("all_docs", documentService.getAllDocuments());
+    	map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
+        return "all_documents";
     }
 }

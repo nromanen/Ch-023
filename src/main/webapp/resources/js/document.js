@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	
 	// Setup validator
 
 	if ($('#addDocument').length != 0) {
@@ -147,5 +148,10 @@ $(document).ready(function() {
 			}
 		});
 	});
-
+//sliding form in 'All documents' view
+	$('a[href^=#team]').click(function(e){
+	    e.preventDefault();
+	    $(this).parent().parent().next().slideToggle();
+	});
+	
 });
