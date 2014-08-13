@@ -1,20 +1,32 @@
 package net.carting.web;
 
-import net.carting.domain.Leader;
-import net.carting.domain.Team;
-import net.carting.service.*;
-import net.carting.util.DateUtil;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContextUtils;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.carting.domain.Leader;
+import net.carting.domain.Team;
+import net.carting.domain.User;
+import net.carting.service.AdminSettingsService;
+import net.carting.service.LeaderService;
+import net.carting.service.MailService;
+import net.carting.service.RoleService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
+import net.carting.util.DateUtil;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
 @RequestMapping(value = "/leader")
@@ -141,5 +153,63 @@ public class LeaderController {
         userService.setEnabled(username, enabled);
         return "success";
     }
+    
+    @RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
+    public String passwordRecovery(Map<String, Object> map) {
+        return "password_recovery";
+    }
+    
+    @RequestMapping(value = "/sendSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String sendSecureCode(@RequestBody Map<String, Object> map) {
+    	String email = map.get("email").toString();
+    	System.out.println(email);
+    	User user = userService.getUserByEmail(email);
+    	System.out.println(user);
+    	userService.sendSecureCode(user);
+    	return "success";
+    }
+    
+    @RequestMapping(value = "/checkSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String checkSecureCode(@RequestBody Map<String, Object> map) {
+    	String email = map.get("email").toString();
+    	String secureCode = map.get("secureCode").toString();
+    	User user = userService.getUserByEmail(email);
+    	if (user.getResetPassLink().equals(secureCode)) {
+        	return "success";
+    	}
+    	else {
+    		return "invalid";
+    	}
+    }
+    
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    String changePassword(@RequestBody Map<String, Object> map) {
+    	String email = map.get("email").toString();
+    	String secureCode = map.get("secureCode").toString();
+    	String password = map.get("password").toString();
+    	User user = userService.getUserByEmail(email);
+    	if (user.getResetPassLink().equals(secureCode)) {
+    		try {
+				userService.changePassword(user, password);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	return "success";
+    	}
+    	else {
+    		return "invalid";
+    	}
+    }
+    
 
 }

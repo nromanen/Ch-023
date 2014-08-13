@@ -129,6 +129,16 @@
 			<spring:message code="dataerror.passwords_do_not_match" />
 		</div>
 	</div>
+	
+	<div class="form-group">
+		<label class="text-info"><spring:message code="label.email" /><span
+			class="text-danger">*</span>:&nbsp;</label> <input type="text"
+			class="form-control"
+			placeholder="<spring:message code="placeholder.email" />"
+			id="email" required pattern="[A-Za-z0-9_.-]{1,30}@[A-Za-z_.-]{1,30}"
+			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
+		<div class="help-block with-errors"></div>
+	</div>
 
 	<br> <input type="submit" class="btn btn-success"
 		value=<spring:message

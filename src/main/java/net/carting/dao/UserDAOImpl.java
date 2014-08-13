@@ -1,17 +1,17 @@
 package net.carting.dao;
 
-import net.carting.domain.Role;
-import net.carting.domain.User;
-
-import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.carting.domain.Role;
+import net.carting.domain.User;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -24,6 +24,18 @@ public class UserDAOImpl implements UserDAO {
         Query query = entityManager
                 .createQuery("from User where username= :username")
                 .setParameter("username", userName);
+        try {
+            return (User) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public User getUserByEmail(String email) {
+        Query query = entityManager
+                .createQuery("from User where email= :email")
+                .setParameter("email", email);
         try {
             return (User) query.getSingleResult();
         } catch (NoResultException e) {

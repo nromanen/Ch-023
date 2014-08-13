@@ -72,6 +72,11 @@
 						data-toggle="popover" data-content="E-mail: ${email}">
 						<spring:message code="label.contacts" />
 					</a>
+					<div>
+						<a href='<c:url value="/leader/passwordRecovery" />'>
+							<spring:message code="label.forgot_password" />
+						</a>
+					</div>
 				</form>
 			</div>
 		</div>

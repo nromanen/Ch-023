@@ -1,10 +1,10 @@
 package net.carting.service;
 
-import net.carting.domain.User;
-
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import net.carting.domain.User;
 
 public interface UserService {
 
@@ -18,6 +18,8 @@ public interface UserService {
     public static final int ROLE_ANONYMOUS_ID = 3;
 
     public User getUserByUserName(String userName);
+    
+    public User getUserByEmail(String email);
 
     public List<String> getAuthoritiesByUserName(String userName);
 
@@ -45,5 +47,7 @@ public interface UserService {
 
     public void changePassword(User user, String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    
+    public void sendSecureCode(User user);
 
 }
