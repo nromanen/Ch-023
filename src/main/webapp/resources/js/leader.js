@@ -86,6 +86,7 @@ $(document).ready(function(){
 	    var license = $('#license').val();
 	    var username = $('#username').val();
 	    var password = $('#password').val();
+	    var email = $('#email').val();
 	    
 	    var json = { 
 	    			 "firstName" : first_name, 
@@ -95,7 +96,8 @@ $(document).ready(function(){
 	    			 "address" : address, 
 	    			 "license" : license,
 	    			 "username" : username,
-	    			 "password" : password
+	    			 "password" : password,
+	    			 "email" : email
 	    		   };
 
 	    var jsonCheck = {"username" : username};

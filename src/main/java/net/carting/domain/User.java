@@ -1,14 +1,23 @@
 package net.carting.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The persistent class for the users database table.
@@ -35,7 +44,13 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
     
-    @ManyToOne(cascade=CascadeType.ALL)
+    @Column(name = "email", nullable = false)
+    private String email;
+    
+    @Column(name = "reset_pass_link")
+    private String resetPassLink;
+
+	@ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -68,6 +83,22 @@ public class User implements Serializable, UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
+    
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getResetPassLink() {
+		return resetPassLink;
+	}
+
+	public void setResetPassLink(String resetPassLink) {
+		this.resetPassLink = resetPassLink;
+	}
 
     // Spring Security props
 

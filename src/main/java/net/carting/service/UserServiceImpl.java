@@ -1,5 +1,11 @@
 package net.carting.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.List;
+
 import net.carting.dao.UserDAO;
 import net.carting.domain.User;
 
@@ -10,22 +16,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
-import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDao;
+    
+    @Autowired
+    private AdminSettingsService adminSettingsService;
+    
+    @Autowired
+    private MailService mailService;
 
     @Override
     @Transactional
     public User getUserByUserName(String userName) {
         return userDao.getUserByUserName(userName);
+    }
+    
+    @Override
+    @Transactional
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
 
     @Override
@@ -137,6 +149,27 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = user;
         userToUpdate.setPassword(getEncodedPassword(password));
         userDao.updateUser(userToUpdate);
+    }
+    
+    @Override
+    @Transactional
+    public void sendSecureCode(User user) {
+    	try {
+			String secureCode = getEncodedPassword(user.getUsername() + user.getPassword());
+			user.setResetPassLink(secureCode);
+			userDao.updateUser(user);
+			
+			String to = user.getEmail();
+			String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
+			String subject = "Password recovery on Carting";
+			String message = secureCode;
+			mailService.sendMail(to, from, subject, message);
+			
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
     }
 
 }
