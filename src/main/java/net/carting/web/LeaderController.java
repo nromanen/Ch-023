@@ -141,8 +141,15 @@ public class LeaderController {
     @ResponseBody
     boolean isSetTeam(@RequestBody Map<String, Object> map) {
         String userName = map.get("username").toString();
-        String email = map.get("email").toString();
         return userService.isSetUser(userName);
+    }
+    
+    @RequestMapping(value = "/isSetEmail", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public
+    @ResponseBody
+    boolean isSetEmail(@RequestBody Map<String, Object> map) {
+        String email = map.get("email").toString();
+        return userService.isSetEmail(email);
     }
 
     @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = {"content-type=application/json"})

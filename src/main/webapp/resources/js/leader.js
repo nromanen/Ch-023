@@ -100,7 +100,7 @@ $(document).ready(function(){
 	    			 "email" : email
 	    		   };
 
-	    var jsonCheck = {"username" : username, "email" : email};
+	    var jsonCheck = {"username" : username};
 	    var urlCheck = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetUser';
 	    $.ajax({  
 	        url: urlCheck,  
@@ -133,6 +133,29 @@ $(document).ready(function(){
 
 	    });
 		return false;
+	});
+	
+	$('#email').on('change', function(){
+		var email = $(this).val();
+		var json = {"email" : email};
+		var url = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetEmail';
+		$.ajax({  
+	        url: url,  
+	        data: JSON.stringify(json),  
+	        contentType: 'application/json',
+	        type: "POST",	        
+	        success: function(response) {  
+	        	if(response){
+				   $('#email_exists').css("display", "block");
+	        	}
+	        	else {
+	        		$('#email_exists').css("display", "none");
+	        	}
+	        }
+
+	    });
+		
+		
 	});
 	
 	$(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );

@@ -139,6 +139,11 @@
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
 		<div class="help-block with-errors"></div>
 	</div>
+	
+	<div class="alert alert-danger" id="email_exists"
+		style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
+		<spring:message code="message.email_exist" />
+	</div>
 
 	<br> <input type="submit" class="btn btn-success"
 		value=<spring:message
