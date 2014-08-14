@@ -170,15 +170,8 @@ public class DocumentController {
                   * Getting document data from form and creating object
                   * 'Document'
                   */
-                 Map<String, Object> documentParameters = new HashMap<String, Object>();
-                 documentParameters.put("document_type", documentType);
-                 documentParameters.put("racers_ids", racersId);
-                 documentParameters.put("number", number);
-                 documentParameters.put("start_date", startDate);
-                 documentParameters.put("finish_date", finishDate);
-
                  try {
-                     documentService.addDocumentAndUpdateRacers(documentParameters, files, leader);
+                     documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
                  } catch (IOException e) {
                      map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
                      LOG.error("Leader " + leader.getFirstName() + " " + leader.getLastName()
@@ -282,7 +275,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
-    public String editDocument(@RequestParam("document_id") String documentId,
+    public String editDocument(@RequestParam("document_id") Integer documentId,
                                @RequestParam(value="number", required=false) String number,
                                @RequestParam(value="start_date", required=false) String startDate,
                                @RequestParam(value="finish_date", required=false) String finishDate,
@@ -290,14 +283,8 @@ public class DocumentController {
                                Locale locale,
                                Map<String, Object> map) {
         
-        Map<String, Object> documentParameters = new HashMap<String, Object>();
-        documentParameters.put("document_id", documentId);
-        documentParameters.put("number", number);
-        documentParameters.put("start_date", startDate);
-        documentParameters.put("finish_date", finishDate);
-        
         try {
-            documentService.editDocument(documentParameters, files);
+            documentService.editDocument(documentId, number, startDate, finishDate, files);
             return "redirect:/document/" + documentId;
         } catch (IOException e) {
             String username = userService.getCurrentUserName();

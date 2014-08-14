@@ -16,13 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -85,13 +83,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    @Transactional //int documentType, String[] racersId, 
-    public void addDocumentAndUpdateRacers(Map<String, Object> documentParameters, MultipartFile[] files, Leader leader) throws IOException  {
+    @Transactional
+    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
+                                            String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
         Document document = new Document();
-        String[] racersId = (String[])documentParameters.get("racers_ids");
-        int documentType = (Integer)documentParameters.get("document_type");
         document.setType(documentType);
-        document = setDocumentParametersByType(document, documentParameters);
+        document = setDocumentParametersByType(document, number, startDate, finishDate);
         addDocument(document);
         List<String> paths = null;
         try {
@@ -106,14 +103,14 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void editDocument(Map<String, Object> documentParameters,
+    public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
                              MultipartFile[] files) throws IOException {
-        int documentId = Integer.parseInt(documentParameters.get("document_id").toString());
+ 
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);
         document.setReason("");
-        document = setDocumentParametersByType(document, documentParameters);
+        document = setDocumentParametersByType(document, number, startDate, finishDate);
         updateDocument(document);
 
         int documentType = document.getType();
@@ -157,21 +154,21 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document setDocumentParametersByType(Document document, Map<String, Object> documentParameters) {
+    public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
         int documentType = document.getType();
         switch (documentType) {
             case Document.TYPE_RACER_LICENCE:
-                document.setName(documentParameters.get("number").toString());
+                document.setName(number);
                 break;
             case Document.TYPE_RACER_INSURANCE:
-                document.setName(documentParameters.get("number").toString());
-                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
+                document.setName(number);
+                document.setFinishDate(DateUtil.getDateFromString(finishDate));
                 break;
             case Document.TYPE_RACER_PERENTAL_PERMISSIONS:
-                document.setStartDate(DateUtil.getDateFromString(documentParameters.get("start_date").toString()));
+                document.setStartDate(DateUtil.getDateFromString(startDate));
                 break;
             case Document.TYPE_RACER_MEDICAL_CERTIFICATE:
-                document.setFinishDate(DateUtil.getDateFromString(documentParameters.get("finish_date").toString()));
+                document.setFinishDate(DateUtil.getDateFromString(finishDate));
                 break;
             default:
                 break;

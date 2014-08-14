@@ -123,42 +123,39 @@ public class DocumentServiceTest {
 
     @Test
     public void testSetDocumentParametersByType() {
-        
-        Map<String, Object> documentParameters = new HashMap<String, Object>(); 
-        
-        documentParameters.put("number", "FG1234");
-        documentParameters.put("start_date", "2012-12-12");
-        documentParameters.put("finish_date", "2014-12-12");
+                        
+        String documentNumber = "FG1234";
+        String startDate = "2012-12-12";
+        String finishDate = "2014-12-12";
 
         // Create a document "Racer licence" and check if the settings of
         // document are set correctly
         Document racerLicence = new Document();
         racerLicence.setType(Document.TYPE_RACER_LICENCE);
-        racerLicence = documentService.setDocumentParametersByType(racerLicence, documentParameters);
-        System.out.println(racerLicence.getName());
+        racerLicence = documentService.setDocumentParametersByType(racerLicence, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerLicence.getName());
 
         // Create a document "Racer insurance" and check if the settings of
         // document are set correctly
         Document racerInsurance = new Document();
         racerInsurance.setType(Document.TYPE_RACER_INSURANCE);
-        racerInsurance = documentService.setDocumentParametersByType(racerInsurance, documentParameters);
+        racerInsurance = documentService.setDocumentParametersByType(racerInsurance, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerInsurance.getName());
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("finish_date").toString()), racerInsurance.getFinishDate());
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate), racerInsurance.getFinishDate());
 
         // Create a document "Racer medical certificate" and check if the
         // settings of document are set correctly
         Document racerMedicalCertificate = new Document();
         racerMedicalCertificate.setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
-        racerMedicalCertificate = documentService.setDocumentParametersByType(racerMedicalCertificate, documentParameters);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("finish_date").toString()),racerMedicalCertificate.getFinishDate());
+        racerMedicalCertificate = documentService.setDocumentParametersByType(racerMedicalCertificate, documentNumber, startDate, finishDate);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate),racerMedicalCertificate.getFinishDate());
 
         // Create a document "Racer perental permissions" and check if the
         // settings of document are set correctly
         Document racerPerentalPermissions = new Document();
         racerPerentalPermissions.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
-        racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentParameters);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(documentParameters.get("start_date").toString()),racerPerentalPermissions.getStartDate());
+        racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentNumber, startDate, finishDate);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(startDate),racerPerentalPermissions.getStartDate());
     }
 
 }
