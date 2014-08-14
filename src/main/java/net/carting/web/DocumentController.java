@@ -5,17 +5,23 @@ import net.carting.domain.File;
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
 import net.carting.service.*;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -24,22 +30,29 @@ public class DocumentController {
 
     @Autowired
     ServletContext context;
-
+    
+    @Autowired
+    private MessageSource messageSource;
+    
     @Autowired
     private FileService fileService;
+    
     @Autowired
     private DocumentService documentService;
+    
     @Autowired
     private TeamService teamService;
+    
     @Autowired
     private UserService userService;
+    
     @Autowired
     private LeaderService leaderService;
+    
     @Autowired
     private RacerService racerService;
 
-    private static final Logger LOG = Logger
-            .getLogger(DocumentController.class);
+    private static final Logger LOG = Logger.getLogger(DocumentController.class);
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -95,12 +108,8 @@ public class DocumentController {
 			 * If team leader don't has a team, he is redirected to page in
 			 * which he can add team
 			 */
-            LOG.info("Leader "
-                    + leader.getFirstName()
-                    + " "
-                    + leader.getLastName()
-                    + "tried to see a document of team "
-                    + teamOwner.getName()
+            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
+                    + "tried to see a document of team " + teamOwner.getName()
                     + ", but was redirected to add team, because he didn't has a team");
             return "redirect:/team/add";
         }
@@ -127,10 +136,7 @@ public class DocumentController {
                     + Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.info("Leader "
-                    + leader.getFirstName()
-                    + " "
-                    + leader.getLastName()
+            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
                     + "tried to add document , but was redirected to add team, because he didn't has a team");
             return "redirect:/team/add";
         }
@@ -138,45 +144,46 @@ public class DocumentController {
 
     @RequestMapping(value = "/addDocument", method = RequestMethod.POST)
     public String addDocument(@RequestParam("racer_id") String[] racersId,
+                              @RequestParam(value="document_type") Integer documentType,
+                              @RequestParam(value="number", required=false) String number,
+                              @RequestParam(value="start_date", required=false) String startDate,
+                              @RequestParam(value="finish_date", required=false) String finishDate,
                               @RequestParam("file") MultipartFile[] files,
-                              HttpServletRequest request, Map<String, Object> map) {
-		/* Getting current leader */
-        String username = userService.getCurrentUserName();
-        Leader leader = leaderService.getLeaderByUserName(username);
+                              Locale locale,
+                              Map<String, Object> map) {
+    	/* Getting current leader */
+    	
+    	 String username = userService.getCurrentUserName();
+         Leader leader = leaderService.getLeaderByUserName(username);
 
-        if (teamService.isTeamByLeaderId(leader.getId())) {
-            Team team = teamService.getTeamByLeader(leader);
-            if (racersId.length == 0) {
-				/*
-				 * If team leader doesn't choose racers, he is redirected to
-				 * page of his team
-				 */
-                LOG.info("Team leader doesn't choose racers...");
-                return "redirect:/team/" + team.getId();
-            } else {
-				/*
-				 * Getting document data from form and creating object
-				 * 'Document'
-				 */
-                try {
-                    documentService.addDocumentAndUpdateRacers(request, files,
-                            racersId, leader);
-                } catch (IOException e) {
-                    map.put("message",
-                            "Просимо вибачення, але сталася помилка при завантаженні файлів і Ваш документ не був доданий. Спробуйту, будь ласка, пізніше.");
-                    LOG.error("Leader "
-                            + leader.getFirstName()
-                            + " "
-                            + leader.getLastName()
-                            + " tried to add document, but happened some problem with writing files to server");
-                    return "custom_generic_exception";
-                }
-                return "redirect:/team/" + team.getId();
-            }
-        } else {
-            LOG.error("Team leader doesn't exists...");
-            return "redirect:/team/add";
-        }
+         if (teamService.isTeamByLeaderId(leader.getId())) {
+             Team team = teamService.getTeamByLeader(leader);
+             if (racersId.length == 0) {
+                 /*
+                  * If team leader doesn't choose racers, he is redirected to
+                  * page of his team
+                  */
+                 LOG.info("Team leader doesn't choose racers...");
+                 return "redirect:/team/" + team.getId();
+             } else {
+                 /*
+                  * Getting document data from form and creating object
+                  * 'Document'
+                  */
+                 try {
+                     documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
+                 } catch (IOException e) {
+                     map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
+                     LOG.error("Leader " + leader.getFirstName() + " " + leader.getLastName()
+                             + " tried to add document, but happened some problem with writing files to server");
+                     return "custom_generic_exception";
+                 }
+                 return "redirect:/team/" + team.getId();
+             }
+         } else {
+             LOG.error("Team leader doesn't exists...");
+             return "redirect:/team/add";
+         }
     }
 
     @RequestMapping(value = "/setApproved", method = RequestMethod.POST, headers = {"content-type=application/json"})
@@ -241,8 +248,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String pageForEditDocument(Map<String, Object> map,
-                                      @PathVariable("id") int id) {
+    public String pageForEditDocument(Map<String, Object> map, @PathVariable("id") int id) {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         if (teamService.isTeamByLeaderId(leader.getId())) {
@@ -269,18 +275,21 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
-    public String editDocument(HttpServletRequest request,
-                               @RequestParam("file") MultipartFile[] files, Map<String, Object> map) {
-        int documentId = Integer.parseInt(request.getParameter("document_id")
-                .toString());
+    public String editDocument(@RequestParam("document_id") Integer documentId,
+                               @RequestParam(value="number", required=false) String number,
+                               @RequestParam(value="start_date", required=false) String startDate,
+                               @RequestParam(value="finish_date", required=false) String finishDate,
+                               @RequestParam("file") MultipartFile[] files, 
+                               Locale locale,
+                               Map<String, Object> map) {
+        
         try {
-            documentService.editDocument(documentId, request, files);
+            documentService.editDocument(documentId, number, startDate, finishDate, files);
             return "redirect:/document/" + documentId;
         } catch (IOException e) {
             String username = userService.getCurrentUserName();
             Leader leader = leaderService.getLeaderByUserName(username);
-            map.put("message",
-                    "Просимо вибачення, але сталася помилка при завантаженні файлів і Ваш документ не був відредагований. Спробуйту, будь ласка, пізніше.");
+            map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
             LOG.error("Leader "
                     + leader.getFirstName()
                     + " "
@@ -288,7 +297,6 @@ public class DocumentController {
                     + " tried to add document, but happened some problem with writing files to server");
             return "custom_generic_exception";
         }
-
     }
 
     @RequestMapping(value = "/deleteFile", method = RequestMethod.POST, headers = {"content-type=application/json"})
