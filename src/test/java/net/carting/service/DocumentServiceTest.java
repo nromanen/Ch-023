@@ -4,6 +4,7 @@ import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
 import net.carting.domain.Racer;
 import net.carting.util.DateUtil;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +15,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -77,6 +80,14 @@ public class DocumentServiceTest {
     }
 
     @Test
+    public void testDeleteDocumentFromRacerByRacerIdAndDocumentId() {
+        int documentId = 1;
+        int racerId = 2;
+        documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(documentId, racerId);
+        verify(documentDAO, times(1)).deleteDocumentFromRacerByRacerIdAndDocumentId(documentId, racerId);
+    }
+
+    @Test
     public void testDeleteDocument() {
         Document document = new Document();
         documentService.deleteDocument(document);
@@ -96,58 +107,55 @@ public class DocumentServiceTest {
         assertEquals("Expected " + true, true,
                 documentService.isRacerOwnerOfDocument(id));
     }
+    
+    @Test
+    public void testGelAllUncheckedDocuments() {
+        List<Document> documentList = new ArrayList<Document>();
+        Document firstDocument = new Document();
+        firstDocument.setChecked(false);
+        documentList.add(firstDocument);
+        Document secondDocument = new Document();
+        secondDocument.setChecked(false);
+        documentList.add(secondDocument);
+        when(documentDAO.gelAllUncheckedDocuments()).thenReturn(documentList);
+        assertEquals("Expected 2 documents", 2, documentService.gelAllUncheckedDocuments().size());
+    } 
 
     @Test
-    public void testSetDocumentParametersFromRequestAcordingToType() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setParameter("number", "FG1234");
-        request.setParameter("start_date", "2012-12-12");
-        request.setParameter("finish_date", "2014-12-12");
+    public void testSetDocumentParametersByType() {
+                        
+        String documentNumber = "FG1234";
+        String startDate = "2012-12-12";
+        String finishDate = "2014-12-12";
 
         // Create a document "Racer licence" and check if the settings of
         // document are set correctly
         Document racerLicence = new Document();
         racerLicence.setType(Document.TYPE_RACER_LICENCE);
-        racerLicence = documentService
-                .setDocumentParametersFromRequestAcordingToType(racerLicence,
-                        request);
+        racerLicence = documentService.setDocumentParametersByType(racerLicence, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerLicence.getName());
 
         // Create a document "Racer insurance" and check if the settings of
         // document are set correctly
         Document racerInsurance = new Document();
         racerInsurance.setType(Document.TYPE_RACER_INSURANCE);
-        racerInsurance = documentService
-                .setDocumentParametersFromRequestAcordingToType(racerInsurance,
-                        request);
+        racerInsurance = documentService.setDocumentParametersByType(racerInsurance, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerInsurance.getName());
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()),
-                racerInsurance.getFinishDate());
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate), racerInsurance.getFinishDate());
 
         // Create a document "Racer medical certificate" and check if the
         // settings of document are set correctly
         Document racerMedicalCertificate = new Document();
-        racerMedicalCertificate
-                .setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
-        racerMedicalCertificate = documentService
-                .setDocumentParametersFromRequestAcordingToType(
-                        racerMedicalCertificate, request);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("finish_date").toString()),
-                racerMedicalCertificate.getFinishDate());
+        racerMedicalCertificate.setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
+        racerMedicalCertificate = documentService.setDocumentParametersByType(racerMedicalCertificate, documentNumber, startDate, finishDate);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate),racerMedicalCertificate.getFinishDate());
 
         // Create a document "Racer perental permissions" and check if the
         // settings of document are set correctly
         Document racerPerentalPermissions = new Document();
-        racerPerentalPermissions
-                .setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
-        racerPerentalPermissions = documentService
-                .setDocumentParametersFromRequestAcordingToType(
-                        racerPerentalPermissions, request);
-        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(request
-                        .getParameter("start_date").toString()),
-                racerPerentalPermissions.getStartDate());
+        racerPerentalPermissions.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
+        racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentNumber, startDate, finishDate);
+        assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(startDate),racerPerentalPermissions.getStartDate());
     }
 
 }
