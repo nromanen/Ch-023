@@ -148,10 +148,91 @@ $(document).ready(function() {
 			}
 		});
 	});
-//sliding form in 'All documents' view
+	
+	//sliding form in 'All documents' view
+	
 	$('a[href^=#team]').click(function(e){
 	    e.preventDefault();
 	    $(this).parent().parent().next().slideToggle();
 	});
+	
+	//handling showing of all documents
+	var table_id = "doc_table";
+	
+	$('#show_checked').click(function(){
+		showAll();	
+		showValidAction();
+		return false;
+	});
+	
+	$('#show_unchecked').click(function(){
+		showAll();	
+		showNotValidAction();
+		return false;
+	});
+	
+	$('#show_all').click(function(){
+		showAll();	
+		return false;
+	});
+	
+	function showValidAction(){
+		filter(table_id, "plus", "sortable");
+	}	
+	
+	function showNotValidAction(){
+		filterInverse(table_id, "minus", "sortable");
+	}	
+	
+	function filter(table_id, right_char, td_class) {
+		var del = false;
+		$('#' + table_id + ' tbody tr').each(function(){				
+		    $(this).find('td.' + td_class).each(function(){
+		    	var value = "";
+		    	if($(this).children('span.minus').length > 0) {
+		    		value = "minus";
+		    	} else if($(this).children('span.plus').length > 0) {
+		    		value = "plus";
+		    	}	        
+		        if (value != right_char) {
+		        	del = true;
+		        	return false;
+		        }	    	
+		    });
+		    if(del) {
+		    	$(this).hide();
+		    	del = false;
+		    }	
+		    del = false;
+		});
+			
+	}
+	
+	function filterInverse(table_id, right_char, td_class) {
+		var right = true;
+		$('#' + table_id +' tbody tr.sortable').each(function(){				
+		    $(this).find('td.' + td_class).each(function(){
+		    	var value = "";
+		    	if($(this).children('span.minus').length > 0) {
+		    		value = "minus";
+		    	} else if($(this).children('span.plus').length > 0) {
+		    		value = "plus";
+		    	}	    
+		        if (value == right_char) {     
+		        	right = false;
+		        	return false;
+		        }
+		    });		    
+		    if (right == true) {
+		    	$(this).hide();   	
+		    }		    
+		    right = true;
+		});
+	}
+	
+	function showAll(){
+		$("#" + table_id + " tbody tr").show();
+	}
+
 	
 });

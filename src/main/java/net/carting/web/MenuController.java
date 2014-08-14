@@ -3,6 +3,7 @@ package net.carting.web;
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
 import net.carting.service.CompetitionService;
+import net.carting.service.DocumentService;
 import net.carting.service.LeaderService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
@@ -29,7 +30,9 @@ public class MenuController extends ViewPreparerSupport implements Serializable 
     private LeaderService leaderService;
     @Autowired
     private CompetitionService competitionService;
-
+    @Autowired
+    private DocumentService documentService;
+    
     @Override
     public void execute(TilesRequestContext tilesContext, AttributeContext attributeContext) {
 
@@ -50,7 +53,7 @@ public class MenuController extends ViewPreparerSupport implements Serializable 
         response.put("currentYear", Calendar.getInstance().get(Calendar.YEAR));
         response.put("username", username);
         response.put("authority", userService.getCurrentAuthority());
-
+        response.put("uncheckedDocsCount",documentService.gelAllUncheckedDocuments().size());
     }
 
 }
