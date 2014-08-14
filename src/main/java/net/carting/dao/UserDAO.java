@@ -1,12 +1,14 @@
 package net.carting.dao;
 
-import net.carting.domain.User;
-
 import java.util.List;
+
+import net.carting.domain.User;
 
 public interface UserDAO {
 
     public User getUserByUserName(String userName);
+    
+    public User getUserByEmail(String email);
 
     List<String> getAuthoritiesByUserName(String userName);
 
@@ -19,6 +21,8 @@ public interface UserDAO {
     public void deleteUser(User user);
 
     public boolean isSetUser(String userName);
+    
+    public boolean isSetEmail(String email);
 
     public void setEnabled(String username, boolean enabled);
 

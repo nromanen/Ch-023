@@ -154,6 +154,13 @@
         <put-attribute name="left" value=""/>
         <put-attribute name="content" value="/WEB-INF/views/login.jsp"/>
     </definition>
+    
+    <!-- Password Recovery -->
+    <definition name="password_recovery" extends="base-template">
+        <put-attribute name="title" value="Password Recovery"/>
+        <put-attribute name="left" value=""/>
+        <put-attribute name="content" value="/WEB-INF/views/password_recovery.jsp"/>
+    </definition>
 
     <!-- Edit document -->
     <definition name="document_add_edit" extends="base-template">
