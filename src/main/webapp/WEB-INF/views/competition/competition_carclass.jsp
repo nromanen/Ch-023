@@ -71,10 +71,11 @@ pageEncoding="utf-8"%>
                         </c:if>
                     </thead>
                     <tbody>
-                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="number">
+                        <% int number = 1; %>
+                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
                             <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                 <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-                                <td>${number.count }</td>
+                                <td><%= number %></td>
                                 <td style="text-align: left; padding-left: 20px;">
                                     <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
                                         id="racer${racerCarClassCompetitionNumber.racer.id}">
@@ -96,6 +97,7 @@ pageEncoding="utf-8"%>
                                     </td>
                                 </c:if>
                             </tr>
+                            <% number++; %>
                         </c:forEach>
                     </tbody>
                 </table>
