@@ -235,6 +235,20 @@ public class CarClassCompetitionController {
         }
         return "competition_carclass_results_add_edit";
     }
+    
+    @RequestMapping(value = "/{id}/addTestRace")
+    public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
+        try {
+
+            map.put("race", new Race());
+            map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
+            map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "test";
+    }
 
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,

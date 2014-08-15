@@ -36,6 +36,7 @@
         <intercept-url pattern="/document/addDocument" access="ROLE_TEAM_LEADER"/>
         <intercept-url pattern="/document/**" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/addResults" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/addTestRace" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/editSummaryResults" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/race/*/edit" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/setCalculateByTableB" access="ROLE_ADMIN"/>
