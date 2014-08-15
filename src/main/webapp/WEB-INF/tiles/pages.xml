@@ -133,6 +133,12 @@
         <put-attribute name="content"
                        value="/WEB-INF/views/competition/competetition_carclass_absoluteresults_edit.jsp"/>
     </definition>
+    
+    <definition name="test"
+    			extends="base-template">
+    	<put-attribute name="title" value="Add and Edit test race"/>
+    	<put-attribute name="content" value="/WEB-INF/views/competition/competition_carclass_testrace_add_edit.jsp"/>
+    </definition>
 
     <!-- Registration team for a Competition -->
     <definition name="choose_competition" extends="base-template">

@@ -22,11 +22,12 @@ pageEncoding="utf-8"%>
                         <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
                     </c:forEach>
                 </div>
+                 <div class="btn-group" style="float: right;">
+                 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary">Add TestRace</a>
                 <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
-                    <div class="btn-group" style="float: right;">
                         <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
-                    </div>
                 </c:if>
+                </div>
             </c:if>
         </td>
     </tr>
