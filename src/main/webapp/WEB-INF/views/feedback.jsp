@@ -31,7 +31,7 @@
 	
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.email_message" /><span class="text-danger">*</span>:&nbsp;</label>
-		<textarea type="text" class="form-control" cols="20"
+		<textarea class="form-control" cols="20"
 			placeholder="<spring:message code="placeholder.email_message" />" id="message" name="message" required
 			pattern="[^<>\&\^]{1,1000}" data-error="<spring:message code="dataerror.field_required" />"></textarea>
 		<div class="help-block with-errors"></div>

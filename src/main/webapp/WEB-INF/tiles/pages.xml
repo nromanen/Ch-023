@@ -194,7 +194,7 @@
     <!-- Exceptions -->
     <!-- Exception -->
     <definition name="exception_error" extends="base-template">
-        <put-attribute name="title" value="Exception"/>        
+        <put-attribute name="title" value="Exception"/>
         <put-attribute name="left" value=""/>
         <put-attribute name="content" value="/WEB-INF/views/exceptions/exception_error.jsp"/>
     </definition>
