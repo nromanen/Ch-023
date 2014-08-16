@@ -1,6 +1,12 @@
 body {
-	/*padding-top: 70px;*/
-	padding-bottom: 70px;
+    padding-bottom: 70px;
+}
+
+#header {
+    /* width: 1170px; */
+    height: 133px;
+    padding: 10px;
+    text-align: right;
 }
 
 .copyright {
@@ -14,6 +20,7 @@ body {
 	text-shadow: 1px 2px #ccc;
 }
 
+/*
 #menu {
 	margin: 0 auto;
 	margin-bottom: 20px;
@@ -21,11 +28,13 @@ body {
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
 }
-
+*/
+/*
 #main_container {
 	width: 1172px;
 	margin: 0 auto;
 }
+*/
 
 #footer {
 	width: 100%;
@@ -38,13 +47,6 @@ body {
 .flag_icon {
 	width: 20px;
 	height: 20px;
-}
-
-#header {
-	width: 1170px;
-	height: 133px;
-	padding: 10px;
-	text-align: right;
 }
 
 .team_valid_icon {
