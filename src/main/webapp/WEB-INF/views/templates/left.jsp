@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-<div class="col-xs-6 col-sm-3 sidebar-offcanvas sidebar-nav-fixed" id="left" role="navigation" style="padding-left: 0px;">
+
 	<div class="list-group">
 		<label class="list-group-item list-group-item-info text-info text-center" 
 		      style="font-size: 20px;"><spring:message code="label.competitions" /> ${currentYear}</label>
@@ -27,4 +27,3 @@
 	<c:if test="${authority.equals('ROLE_ADMIN')}">
 		<a href="<c:url value="/competition/add" />" class="btn btn-primary" style="width: 100%; margin-bottom: 5px;"><spring:message code="label.add_competition" /></a>
 	</c:if>
-</div>

@@ -19,13 +19,17 @@
 <body>
 <div class="container">
     <div class="row">
-	    <tiles:insertAttribute name="menu" />
-	    <tiles:insertAttribute name="left" />
-	    <div class="col-sm-9" id="content" style="<tiles:getAsString name="content_style" />">
-	        <div class="row">
-	            <tiles:insertAttribute name="content" />
-	        </div>
-	    </div>
+        <tiles:insertAttribute name="menu" />
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <tiles:insertAttribute name="left" />
+        </div>
+        <div class="col-md-9" id="content" style="<tiles:getAsString name="content_style" />">
+            <div class="row">
+                <tiles:insertAttribute name="content" />
+            </div>
+        </div>
     </div>
 </div>
 

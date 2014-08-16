@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <script type='text/javascript' src='<c:url value="/resources/js/localization.js" />'></script>
-<div class="navbar navbar-inverse" role="navigation" id="menu">
+<div class="navbar navbar-inverse" role="navigation">
 
     <div id="header" style="background-image: url('<c:url value="/resources/img/karting-header.jpg" />');">
         <img class="flag_icon language_toggle" onclick="test('ua')" src='<c:url value="/resources/img/ua.png" />'> 
