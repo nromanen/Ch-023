@@ -22,13 +22,11 @@
         <tiles:insertAttribute name="menu" />
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 hidden-sm hidden-xs">
             <tiles:insertAttribute name="left" />
         </div>
-        <div class="col-md-9" id="content" style="<tiles:getAsString name="content_style" />">
-            <div class="row">
-                <tiles:insertAttribute name="content" />
-            </div>
+        <div class="col-md-9">
+            <tiles:insertAttribute name="content" />
         </div>
     </div>
 </div>
