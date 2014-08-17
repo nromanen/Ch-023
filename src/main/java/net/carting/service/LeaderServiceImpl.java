@@ -1,8 +1,13 @@
 package net.carting.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import net.carting.dao.LeaderDAO;
 import net.carting.domain.Leader;
-import net.carting.domain.Role;
 import net.carting.domain.User;
 import net.carting.util.DateUtil;
 
@@ -10,12 +15,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class LeaderServiceImpl implements LeaderService {
@@ -78,9 +77,11 @@ public class LeaderServiceImpl implements LeaderService {
     public void registerLeader(Map<String, Object> formMap)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = formMap.get("username").toString();
+        String email = formMap.get("email").toString();
 
         User user = new User();
         user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(userService.getEncodedPassword(formMap.get("password")
                 .toString()));
         user.setEnabled(false);
@@ -98,10 +99,18 @@ public class LeaderServiceImpl implements LeaderService {
         leader.setUser(user);
         leaderDAO.addLeader(leader);
 
-        String to = adminSettingsService.getAdminSettings().getFeedbackEmail();
-        String from = to;
-        String subject = "Leader registration";
-        String message = String.format("Registered a new team leader - %s %s ",
+        //Message to leader
+        String to = email;
+        String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
+        String subject = "Welcome to Carting";
+        String message = String.format("Dear %s %s, welcome to Carting, please wait the confirmation of your account ",
+                leader.getFirstName(), leader.getLastName());
+        mailService.sendMail(to, from, subject, message);
+        
+        //Message to admin
+        to = adminSettingsService.getAdminSettings().getFeedbackEmail();
+        subject = "Leader registration";
+        message = String.format("Registered a new team leader - %s %s ",
                 leader.getFirstName(), leader.getLastName());
         mailService.sendMail(to, from, subject, message);
 

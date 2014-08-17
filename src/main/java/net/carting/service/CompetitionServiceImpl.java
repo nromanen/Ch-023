@@ -1,13 +1,19 @@
 package net.carting.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.carting.dao.CompetitionDAO;
-import net.carting.domain.*;
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Competition;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.Team;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -110,6 +116,14 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
         return teams;
     }
+    
+    @Override
+    public List<String> getPointsByPlacesList(Competition competition) {
+        String pointsByPlacesStr = competition.getPointsByPlaces();
+        List<String> pointsByPlacesList = Arrays.asList(pointsByPlacesStr.split(","));
+        return pointsByPlacesList;
+    }
+    
 
 
 }

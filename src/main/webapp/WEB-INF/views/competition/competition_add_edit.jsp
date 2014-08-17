@@ -151,7 +151,16 @@
 			value="${competition.directorCategoryJudicialLicense}" />
 		<div class="help-block with-errors"></div>
 	</div>
-	
+	<br>
+	<div class="form-group">
+    	<label class="text-info"><spring:message code="label.calculate_by_table_b" /></label>
+    	<input type="checkbox" id="calculateByTableB" name="calculateByTableB"
+    	<c:if test="${competition.calculateByTableB }">checked</c:if> >
+	</div>
+	<c:if test="${competition ne null }">
+		<input type="hidden" name="pointsByPlaces" value="${competition.pointsByPlaces }">
+		<input type="hidden" name="enabled" value="${competition.enabled }">
+	</c:if>
 	<br>
 	<c:choose> 
 		<c:when test="${competition ne null}">

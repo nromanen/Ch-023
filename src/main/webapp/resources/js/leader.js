@@ -86,6 +86,7 @@ $(document).ready(function(){
 	    var license = $('#license').val();
 	    var username = $('#username').val();
 	    var password = $('#password').val();
+	    var email = $('#email').val();
 	    
 	    var json = { 
 	    			 "firstName" : first_name, 
@@ -95,7 +96,8 @@ $(document).ready(function(){
 	    			 "address" : address, 
 	    			 "license" : license,
 	    			 "username" : username,
-	    			 "password" : password
+	    			 "password" : password,
+	    			 "email" : email
 	    		   };
 
 	    var jsonCheck = {"username" : username};
@@ -131,6 +133,29 @@ $(document).ready(function(){
 
 	    });
 		return false;
+	});
+	
+	$('#email').on('change', function(){
+		var email = $(this).val();
+		var json = {"email" : email};
+		var url = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetEmail';
+		$.ajax({  
+	        url: url,  
+	        data: JSON.stringify(json),  
+	        contentType: 'application/json',
+	        type: "POST",	        
+	        success: function(response) {  
+	        	if(response){
+				   $('#email_exists').css("display", "block");
+	        	}
+	        	else {
+	        		$('#email_exists').css("display", "none");
+	        	}
+	        }
+
+	    });
+		
+		
 	});
 	
 	$(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );

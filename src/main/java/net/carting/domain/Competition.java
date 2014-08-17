@@ -1,10 +1,18 @@
 package net.carting.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "competitions")
@@ -54,6 +62,12 @@ public class Competition {
 
     @Column(name = "enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled = false;
+
+	@Column(name = "calculate_by_table_b", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean calculateByTableB = false;
+    
+    @Column(name = "points_by_places", nullable = false)
+    private String pointsByPlaces;
 
     public int getId() {
         return id;
@@ -161,6 +175,22 @@ public class Competition {
     public void setDirectorName(String directorName) {
         this.directorName = directorName;
     }
+    
+    public boolean isCalculateByTableB() {
+		return calculateByTableB;
+	}
+
+	public void setCalculateByTableB(boolean calculateByTableB) {
+		this.calculateByTableB = calculateByTableB;
+	}
+
+	public String getPointsByPlaces() {
+		return pointsByPlaces;
+	}
+
+	public void setPointsByPlaces(String pointsByPlaces) {
+		this.pointsByPlaces = pointsByPlaces;
+	}
 
     @Override
     public String toString() {

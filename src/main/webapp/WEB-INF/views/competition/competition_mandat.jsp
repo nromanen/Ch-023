@@ -214,6 +214,7 @@
 			</c:if>
 		</tbody>
 	</table>
+	
 </div>
 
 <!-- Unregister racer modal -->

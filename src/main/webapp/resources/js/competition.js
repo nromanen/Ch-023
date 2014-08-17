@@ -36,7 +36,10 @@ $(document).ready(function(){
 		$('#delete_competition_modal').modal();
 		return false;
 	});
-
+	$('#edit_points_btn').click(function(){
+		$('#edit_points_modal').modal();
+		return false;
+	});
 	function compareDate(first, second) {
 		var dateOne = first.split('-');
 		var yearOne = dateOne[0];
@@ -317,5 +320,91 @@ $(document).ready(function(){
         parent.history.back();                
         return false;
 	});
+    
+    $(".points").keyup(function () {
+		var valid = validPoints();
+
+		if (valid) {
+			$("#edit_points").removeAttr("disabled");
+		} else {
+			$("#edit_points").attr("disabled", "disabled");
+		}
+
+	});
+    
+    function validPoints() {
+		var valid = true;
+		$(".points").each(function (i){
+			var points = $(this).val();
+			if(!numberTest(points)) {
+				valid = false;
+			}
+		});	
+		return valid;		
+	}
+    
+    function getPointsString(){
+		var pointsStr = "";
+		var first = true;
+		$(".points").each(function (i){
+			var points = $(this).val();
+			if(first){
+				pointsStr += points;
+				first = false;
+			} else {
+				pointsStr += ",";
+				pointsStr += points;
+			}			
+		});	
+		return pointsStr;
+	}
+	
+	function editPointsByPlaces(pointsStr){
+		var url = $("#changePointsUrl").val();
+		var json = { "pointsByPlaces" : pointsStr };	
+			$.ajax({
+		        url: url,
+		        data: JSON.stringify(json),
+		        contentType: 'application/json',
+		        type: "POST",
+		        success: function(response) {}
+		    });	
+	}
+	
+	$("#edit_points").click(function(){
+		var pointsStr = getPointsString();
+		editPointsByPlaces(pointsStr);
+	});
+	
+	$("#delete_place").click(function(){
+		if($('#points_table tr').length > 1){
+			$('#points_table tr:last').remove();
+		}
+	});
+	
+	$("#add_place").click(function(){
+		$('#add_place_modal').modal();
+	});
+	
+	$("#add_place_btn").click(function(){
+		$('#points_table').append('<tr><td>'+ (+$('#points_table tr:last td:first').text() + 1) +'</td><td><input type="text" class="points" style="width: 100px;"' 
+				+ ' value="'+ $("#points_count").val() + '"' 
+				+ ' required pattern="^[0-9]+$" required'
+				+ '	data-bv-notempty="true"'
+       			+ '	data-bv-notempty-message="<spring:message code="dataerror.field_required" />'
+				+ ' </td></tr>');
+	});
+	
+	$("#points_count").keyup(function () {
+		if(!numberTest($(this).val())){ 
+			$("#add_place_btn").attr("disabled", "disabled");
+		} else {
+			$("#add_place_btn").removeAttr("disabled");
+		}
+	});
+	
+	function numberTest(value){
+		return /^-?\d+$/.test(value);
+	}
 	
 });

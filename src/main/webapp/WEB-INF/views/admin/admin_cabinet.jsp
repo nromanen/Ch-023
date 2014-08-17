@@ -48,10 +48,9 @@
 			<td class="text-center">&nbsp;</td>
 			<td class="text-center">&nbsp;</td>
 		</tr>
-		<% int position = 1; %>
-		<c:forEach items="${leadersList}" var="leader">
+		<c:forEach items="${leadersList}" var="leader" varStatus="position">
 			<tr>
-				<td><%= position %></td>
+				<td>${position.count }</td>
 				<td style="text-align: left;" id="name${leader.id}">
 					<a href="<c:url value="../leader/${leader.id}" />">
 						${leader.lastName} ${leader.firstName}
@@ -75,7 +74,6 @@
 					</a>
 				</td>
 			</tr>
-			<% position++; %>
 		</c:forEach>
 	</table>
 	
@@ -139,11 +137,10 @@
 			<td class="text-center"><spring:message code="label.admin_upper_years_limit" /></td>
 			<td class="text-center">&nbsp;</td>
 		</tr>
-		<% int number = 1; %>
 		<input type="hidden" id="carclass_delete_id" value="">
-		<c:forEach items="${carClassList}" var="carClass">
+		<c:forEach items="${carClassList}" var="carClass" varStatus="number">
 			<tr>
-				<td><%= number %></td>
+				<td>${number.count }</td>
 				<td id="carClassName${carClass.id}" style="text-align: left;">${carClass.name}</td>
 				<td id="lowerYearsLimit${carClass.id}">${carClass.lowerYearsLimit}</td>
 				<td id="upperYearsLimit${carClass.id}">${carClass.upperYearsLimit}</td>
@@ -160,7 +157,6 @@
 					</div>					
 				</td>
 			</tr>
-			<% number++; %>
 		</c:forEach>
 	</table>
 	<div class="text-center" style="width: 100%;">
@@ -184,10 +180,9 @@
 						<td><spring:message code="label.place" /></td>
 						<td><spring:message code="label.points" /></td>
 					</tr>	
-					<% int count = 1; %>
-					<c:forEach items="${pointsByPlacesList}" var="pointsByPlace">
+					<c:forEach items="${pointsByPlacesList}" var="pointsByPlace" varStatus="count">
 						<tr>
-							<td><%= count %></td>
+							<td>${count.count }</td>
 							<td><input type="text" class="points" style="width: 100px;" 
 								value="${pointsByPlace}" 
 								required pattern="^[0-9]+$" required
@@ -196,7 +191,6 @@
 								/>
 					   		</td>
 						</tr>
-						<% count++; %>
 					</c:forEach>			
 				</table>
 			<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
