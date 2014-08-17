@@ -239,7 +239,7 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addTestRace")
     public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
         try {
-
+    		
             map.put("race", new Race());
             map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
             map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
@@ -247,7 +247,7 @@ public class CarClassCompetitionController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "test";
+        return "competition_carclass_testrace_add_edit";
     }
 
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
