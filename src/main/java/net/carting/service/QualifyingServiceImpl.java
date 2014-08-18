@@ -17,7 +17,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 
 	@Autowired
 	private QualifyingDAO qualifyingDao;
-	
+	//added Transactional
 	@Transactional
 	@Override
 	public List<Qualifying> getAllQualifyings() {
