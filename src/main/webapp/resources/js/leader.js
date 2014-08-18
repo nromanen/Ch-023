@@ -75,8 +75,8 @@ $(document).ready(function(){
         return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
 	};  
 
-	$('#new_leader').submit(function(){
-		$("#ajax_loader").css("display", "inline-block");		
+	$('#new_leader').submit(function(e){
+		/*$("#ajax_loader").css("display", "inline-block");		
     		
 		var first_name = $('#first_name').val();
 	    var last_name = $('#last_name').val();
@@ -131,7 +131,21 @@ $(document).ready(function(){
 	        	}
 	        }
 
-	    });
+	    });*/
+		jQuery(".formFieldError").remove();
+        jQuery.ajax({
+                url: jQuery(this).attr("action"),
+                context: document.body,
+                type: 'post',
+                data:jQuery(this).serialize()
+            }).done(function(res) {
+                if (res.length == 0) {
+                	console.log("good");
+                }
+                else {
+                	console.log(res);
+                }
+            });
 		return false;
 	});
 	

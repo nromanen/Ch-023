@@ -3,9 +3,13 @@ package net.carting.web;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
@@ -20,7 +24,13 @@ import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +43,9 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 public class LeaderController {
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private MessageSource messages;
 
     @Autowired
     private LeaderService leaderService;
@@ -69,20 +82,41 @@ public class LeaderController {
         }
     }
 
-    @RequestMapping(value = "/addLeader", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    @RequestMapping(value = "/addLeader", method = RequestMethod.POST)
     public
     @ResponseBody
-    boolean addLeader(@RequestBody Map<String, Object> formMap) {
-        try {
-            leaderService.registerLeader(formMap);
-            return true;
-        } catch (NoSuchAlgorithmException e) {
-            LOG.info("Error encoding passwords: NoSuchAlgorithmException. On page leader registration");
-            return false;
-        } catch (UnsupportedEncodingException e) {
-            LOG.info("Error encoding passwords: UnsupportedEncodingException. On page leader registration");
-            return false;
+    Map<String, String> addLeader(@Valid Leader leader,  BindingResult bindingResult) {
+        Map<String, String> result = new HashMap<String, String>();
+        if (bindingResult.hasErrors()) {
+        	List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        	System.out.println(fieldErrors);
+            for (FieldError fieldError : fieldErrors) {
+                String[] resolveMessageCodes = bindingResult.resolveMessageCodes(fieldError.getCode());
+                String string = resolveMessageCodes[0];
+                System.out.println("resolveMessageCodes : "+string);
+                String message = messages.getMessage(string+"."+fieldError.getField(), new Object[]{fieldError.getRejectedValue()}, null);
+                System.out.println("Message : "+message);
+                result.put(fieldError.getField(), message)    ;
+            }
         }
+        else {
+        	
+        	User user = leader.getUser();
+        	System.out.println(user.getRole().getRole() + " " + user.getRole().getId());
+        	System.out.println(leader + " " + user);
+        	try {
+				user.setPassword(userService.getEncodedPassword(user.getPassword()));
+			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+        	user.setEnabled(false);
+        	userService.addUser(user);
+        	leader.setUser(user);
+        	leader.setRegistrationDate(new Date());
+        	leaderService.addLeader(leader);
+        	System.out.println(leader + " " + user);
+        }
+        return result;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -217,6 +251,12 @@ public class LeaderController {
     	else {
     		return "invalid";
     	}
+    }
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
     
 

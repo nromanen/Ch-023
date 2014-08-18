@@ -1,25 +1,32 @@
 package net.carting.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @MappedSuperclass
 public abstract class Person {
 
     @Column(name = "first_name", nullable = false)
+    @NotEmpty
     protected String firstName;
 
     @Column(name = "last_name", nullable = false)
+    @NotEmpty
     protected String lastName;
 
     /**
      * Identification of person
      */
     @Column(name = "document", nullable = false)
+    @NotEmpty
     protected String document;
 
     @Column(name = "address", nullable = false)
+    @NotEmpty
     protected String address;
 
     @Column(name = "birthday", nullable = false)
