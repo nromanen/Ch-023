@@ -76,8 +76,8 @@ public class CarClassCompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private CompetitionService competitionService;
-    /*@Autowired
-    private QualifyingService qualifyingService;*/
+    @Autowired
+    private QualifyingService qualifyingService;
 
     private static final Logger LOG = Logger.getLogger(CarClassCompetitionController.class);
 
@@ -264,7 +264,6 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addTestRace")
     public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
         try {
-        	QualifyingService  qualifyingService = new  QualifyingServiceImpl();
         	CarClassCompetition carClassCompetition = carClassCompetitionService.
         			getCarClassCompetitionById(id);
             map.put("race", new Race());
