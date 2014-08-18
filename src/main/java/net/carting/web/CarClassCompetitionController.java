@@ -1,5 +1,6 @@
 package net.carting.web;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
@@ -19,6 +21,8 @@ import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
+import net.carting.service.QualifyingService;
+import net.carting.service.QualifyingServiceImpl;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerCarClassNumberService;
@@ -72,6 +76,8 @@ public class CarClassCompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private CompetitionService competitionService;
+    /*@Autowired
+    private QualifyingService qualifyingService;*/
 
     private static final Logger LOG = Logger.getLogger(CarClassCompetitionController.class);
 
@@ -235,20 +241,7 @@ public class CarClassCompetitionController {
         }
         return "competition_carclass_results_add_edit";
     }
-    
-    @RequestMapping(value = "/{id}/addTestRace")
-    public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
-        try {
-    		
-            map.put("race", new Race());
-            map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
-            map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-            map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "competition_carclass_testrace_add_edit";
-    }
+
 
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,
@@ -266,6 +259,76 @@ public class CarClassCompetitionController {
                 + " in car class competition " + carClassCompetition.getCarClass().getName()
                 + " in competition " + carClassCompetition.getCompetition().getName());
         return "redirect:/carclass/" + id;
+    }
+    
+    @RequestMapping(value = "/{id}/addTestRace")
+    public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
+        try {
+        	QualifyingService  qualifyingService = new  QualifyingServiceImpl();
+        	CarClassCompetition carClassCompetition = carClassCompetitionService.
+        			getCarClassCompetitionById(id);
+            map.put("race", new Race());
+            map.put("carClassCompetition",carClassCompetition);
+            map.put("membersCount", racerCarClassCompetitionNumberService.
+            		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+            map.put("qualifyingList", qualifyingService.
+            		getQualifyingsByCarClassCompetition(carClassCompetition));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "competition_carclass_testrace_add_edit";
+    }
+    
+    @RequestMapping(value = "/{id}/addQualifying", method = RequestMethod.POST)
+    public String addQualifyings(@PathVariable("id") int id,
+    		@RequestParam("timeResult") String times, Map<String,Object>map) {
+    	
+    	List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
+    	int count = racerCarClassCompetitionNumberService.
+        		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id);
+    	String[] timesArray= times.split(",");
+    	Integer[]places=new Integer[count];
+    	int max=0; 
+    	for (int i = max+1;i<count;i++) {
+    		if (timesArray[max].compareToIgnoreCase(timesArray[i])<0) {
+    			max=i;
+    		}
+    	}
+    	places[max]=count;
+    	for (int j=0;j<count-1;j++){
+	    	int min=0;
+	    	for (int i = min+1;i<count;i++) {
+	    		if (timesArray[min].compareToIgnoreCase(timesArray[i])>0) {
+	    			min=i;
+	    		}
+	    	}places[min]=j+1;
+	    	timesArray[min]=timesArray[max];
+    	}
+    	timesArray= times.split(",");
+    	Time[]timeAr= new Time[count];
+    	for(int i=0;i<count;i++) {
+    		if (timesArray[i].length()==5) {
+    			timesArray[i]="00:"+timesArray[i];
+    		}
+    		timeAr[i]=Time.valueOf(timesArray[i]);
+    	}
+    	QualifyingService  qualifyingService = new  QualifyingServiceImpl();
+    	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+    	for (int i=0;i<count;i++) {
+    		Qualifying qualifying = new Qualifying();
+    		qualifying.setCarClassCompetition(carClassCompetition);
+    		try{
+    		qualifying.setRacerTime(timeAr[i]);
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+    		qualifying.setRacerNumber(racers.get(i));
+    		qualifying.setRacerPlace(places[i]);
+    		System.out.println(qualifying);
+    		qualifyingService.addQualifying(qualifying);
+    	}
+    	return "index";
     }
 
     @RequestMapping(value = "/{id}/race/{raceNumber}/edit")

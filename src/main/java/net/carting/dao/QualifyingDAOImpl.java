@@ -32,18 +32,24 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 
 	@Override
 	public void addQualifying(Qualifying qualifying) {
-		String sql = "INSERT INTO qualifying "
-				+ "(racer_number,racer_time,racer_place,car_class_id, "
+		System.out.println("2. "+qualifying);
+		try{
+		entityManager.persist(qualifying);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	/*	String sql = "INSERT INTO qualifying "
+				+ "(racer_number,racer_time,racer_place, "
 				+ "car_class_competition_id) values "
-				+ "(:number, :time, :place, :carId, :compId);";
-		Query query = entityManager.createNativeQuery(sql);
+				+ "(:number, :time, :place, :compId);";
+		Query query = entityManager.createQuery(sql);
+		System.out.println(qualifying.getRacerNumber());
 		query.setParameter("number", qualifying.getRacerNumber());
-		query.setParameter("time", qualifying.getRacer_time());
+		query.setParameter("time", qualifying.getRacerTime());
 		query.setParameter("place", qualifying.getRacerPlace());
-		query.setParameter("carId", qualifying.getCarClass());
-		query.setParameter("compId", qualifying.getCarClassCompetition());
-		query.executeUpdate();
-
+		query.setParameter("compId", qualifying.getCarClassCompetition().getId());
+		query.executeUpdate();*/
+		System.out.println(qualifying.getRacerTime());
 	}
 
 	@Override
