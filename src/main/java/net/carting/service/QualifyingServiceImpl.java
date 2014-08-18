@@ -7,14 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.carting.dao.QualifyingDAO;
+import net.carting.dao.QualifyingDAOImpl;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Qualifying;
 
 public class QualifyingServiceImpl implements QualifyingService {
 
 	
-	@Autowired
-	private QualifyingDAO qualifyingDao;
+	private QualifyingDAO qualifyingDao = new QualifyingDAOImpl();
 	
 	@Override
 	public List<Qualifying> getAllQualifyings() {
@@ -44,7 +44,12 @@ public class QualifyingServiceImpl implements QualifyingService {
 	@Override
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
-		return qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
+		try {
+			return qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
+		} catch (NullPointerException e) {
+			System.out.println(e);
+			return null;
+		}
 	}
 	
 	@Override
@@ -52,7 +57,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 			CarClassCompetition carClassCompetition) {
 		List<Time> times = new ArrayList<Time>();
 		for(Qualifying q:qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition)) {
-			times.add(q.getRacer_time());
+			times.add(q.getRacerTime());
 		}
 		return times;
 	}

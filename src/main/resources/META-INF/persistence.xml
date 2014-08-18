@@ -14,6 +14,7 @@
         <class>net.carting.domain.Leader</class>
         <class>net.carting.domain.Person</class>
         <class>net.carting.domain.Race</class>
+        <class>net.carting.domain.Qualifying</class>
         <class>net.carting.domain.Racer</class>
         <class>net.carting.domain.RacerCarClassCompetitionNumber</class>
         <class>net.carting.domain.RacerCarClassNumber</class>

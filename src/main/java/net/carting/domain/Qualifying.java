@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
 @Table(name = "qualifying")
 public class Qualifying {
@@ -22,10 +20,6 @@ public class Qualifying {
     @GeneratedValue
 	private int id;
 	
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_class_id", nullable = false)
-    private CarClass carClass;
-    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_class_competition_id")
     private CarClassCompetition carClassCompetition;
@@ -37,8 +31,7 @@ public class Qualifying {
     private Integer racerPlace;
     
     @Column(name = "racer_time", nullable = false)
-    @DateTimeFormat(pattern = "mm:ss")
-    private Time  racer_time;
+    private Time  racerTime;
 
 	public int getId() {
 		return id;
@@ -46,14 +39,6 @@ public class Qualifying {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public CarClass getCarClass() {
-		return carClass;
-	}
-
-	public void setCarClass(CarClass carClass) {
-		this.carClass = carClass;
 	}
 
 	public CarClassCompetition getCarClassCompetition() {
@@ -80,31 +65,37 @@ public class Qualifying {
 		this.racerPlace = racerPlace;
 	}
 
-	public Time getRacer_time() {
-		return racer_time;
+	public Time getRacerTime() {
+		return racerTime;
 	}
 
-	public void setRacer_time(Time racer_time) {
-		this.racer_time = racer_time;
+	public void setRacerTime(Time racer_time) {
+		this.racerTime = racer_time;
 	}
 	
 	public Qualifying(){
 	}
 
-	public Qualifying(int id, CarClass carClass,
-			CarClassCompetition carClassCompetition, Integer racerNumber,
-			Integer racerPlace, Time racer_time) {
+	public Qualifying(int id, CarClassCompetition carClassCompetition,
+			Integer racerNumber, Integer racerPlace, Time racer_time) {
 		this.id = id;
-		this.carClass = carClass;
 		this.carClassCompetition = carClassCompetition;
 		this.racerNumber = racerNumber;
 		this.racerPlace = racerPlace;
-		this.racer_time = racer_time;
+		this.racerTime = racer_time;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Qualifying id=%d [Carclass=%s, racer number=%d, racer time=%s, "
-				+ " racer place=%d]" , id,carClass , racerNumber , racer_time , racerPlace);
+		return "Qualifying [id=" + id + ", carClassCompetition="
+				+ carClassCompetition + ", racerNumber=" + racerNumber
+				+ ", racerPlace=" + racerPlace + ", racerTime=" + racerTime
+				+ "]";
 	}
+
+/*	@Override
+	public String toString() {
+		return String.format("Qualifying id=%d [CarclasscompId=%d racer number=%d, racer time=%s, "
+				+ " racer place=%d]" , id, carClassCompetition.getId(), racerNumber , racerTime , racerPlace);
+	}*/
 }
