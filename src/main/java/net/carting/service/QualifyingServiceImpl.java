@@ -13,8 +13,8 @@ import net.carting.domain.Qualifying;
 
 public class QualifyingServiceImpl implements QualifyingService {
 
-	
-	private QualifyingDAO qualifyingDao = new QualifyingDAOImpl();
+	@Autowired
+	private QualifyingDAO qualifyingDao;
 	
 	@Override
 	public List<Qualifying> getAllQualifyings() {
