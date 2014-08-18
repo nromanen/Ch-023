@@ -316,7 +316,7 @@ public class CarClassCompetitionController {
     	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
     	Qualifying q = new Qualifying();
     	q = qualifyingService.getAllQualifyings().get(0);
-    	System.out.println(q);
+    	System.out.println("A qualifying = " + q);
     	for (int i=0;i<count;i++) {
     		Qualifying qualifying = new Qualifying();
     		qualifying.setCarClassCompetition(carClassCompetition);
