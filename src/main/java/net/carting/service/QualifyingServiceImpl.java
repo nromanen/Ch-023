@@ -4,6 +4,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.carting.dao.QualifyingDAO;
@@ -16,31 +18,37 @@ public class QualifyingServiceImpl implements QualifyingService {
 	@Autowired
 	private QualifyingDAO qualifyingDao;
 	
+	@Transactional
 	@Override
 	public List<Qualifying> getAllQualifyings() {
 		return qualifyingDao.getAllQualifyings();
 	}
 
+	@Transactional
 	@Override
 	public Qualifying getQualifyingById(int id) {
 		return qualifyingDao.getQualifyingById(id);
 	}
 
+	@Transactional
 	@Override
 	public void addQualifying(Qualifying qualifying) {
 		qualifyingDao.addQualifying(qualifying);
 	}
 
+	@Transactional
 	@Override
 	public void updateQualifying(Qualifying qualifying) {
 		qualifyingDao.updateQualifying(qualifying);
 	}
 
+	@Transactional
 	@Override
 	public void deleteQualifying(Qualifying qualifying) {
 		qualifyingDao.deleteQualifying(qualifying);
 	}
 
+	@Transactional
 	@Override
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
@@ -52,6 +60,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 		}
 	}
 	
+	@Transactional
 	@Override
 	public List<Time> getQualifyingTimesByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
@@ -62,6 +71,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 		return times;
 	}
 
+	@Transactional
 	@Override
 	public List<Integer> getQualifyingNumbersByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
@@ -72,6 +82,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 		return members;
 	}
 
+	@Transactional
 	@Override
 	public List<Integer> getQualifyingPlacesByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
