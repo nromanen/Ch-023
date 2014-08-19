@@ -4,11 +4,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<link href="<c:url value="/resources/style/bootstrap/css/bootstrap-switch.min.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/libs/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.css" />" rel="stylesheet">
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.js" />'></script>
 <script src="<c:url value="/resources/js/lib/bootbox.js" />"></script>
-<script type='text/javascript' src='<c:url value="/resources/style/bootstrap/js/bootstrap-switch.min.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/libs/bootstrap-switch/js/bootstrap-switch.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/admin.js" />'></script>
 
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 20px 40px;">
