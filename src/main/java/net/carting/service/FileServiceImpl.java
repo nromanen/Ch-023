@@ -3,10 +3,12 @@ package net.carting.service;
 import net.carting.dao.FileDAO;
 import net.carting.domain.Document;
 import net.carting.domain.File;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -47,11 +49,15 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public void addFilesToDocument(Document document, List<String> paths) {
-        for (int i = 0; i < paths.size(); i++) {
+    public void addFilesToDocument(Document document, List<byte[]> files) {
+        for (byte[] data : files) {
             File pushedFile = new File();
             pushedFile.setDocument(document);
-            pushedFile.setPath(paths.get(i));
+            pushedFile.setFile(data);
+            String fileName = Document.getStringDocumentType(document.getType())
+                    .replace(" ", "_")
+                    + Calendar.getInstance().getTimeInMillis();
+            pushedFile.setName(fileName);
             addFile(pushedFile);
         }
     }

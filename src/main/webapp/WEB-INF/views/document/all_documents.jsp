@@ -109,9 +109,7 @@
 																</c:choose>		
 																<c:forEach items="${doc.files}" var="file">
 																	&nbsp;
-																	<a href="<c:url value="/resources/documents/${file.path}" />"
-																		class="glyphicon glyphicon-paperclip file-link">
-																	</a>
+																	<a href="data:image/jpg;base64,<c:out value='${file.file}'/>" class="glyphicon glyphicon-paperclip file-link"><c:out value='${file.name}'/></a>
 																</c:forEach>
 															</td>
 														</tr>

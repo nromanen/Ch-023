@@ -12,13 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -153,7 +150,7 @@ public class DocumentServiceTest {
         // Create a document "Racer perental permissions" and check if the
         // settings of document are set correctly
         Document racerPerentalPermissions = new Document();
-        racerPerentalPermissions.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
+        racerPerentalPermissions.setType(Document.TYPE_RACER_PARENTAL_PERMISSIONS);
         racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(startDate),racerPerentalPermissions.getStartDate());
     }

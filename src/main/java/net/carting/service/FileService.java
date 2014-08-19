@@ -22,10 +22,10 @@ public interface FileService {
      * Adds files to document
      *
      * @param document
-     * @param paths    - list of names of files
+     * @param files    - list of names of files
      * @see net.carting.domain.File
      * @see net.carting.domain.Document
      */
-    public void addFilesToDocument(Document document, List<String> paths);
+    public void addFilesToDocument(Document document, List<byte[]> files);
 
 }
