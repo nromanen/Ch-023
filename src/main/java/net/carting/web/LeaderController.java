@@ -97,10 +97,8 @@ public class LeaderController {
             	String message = messages.getMessage(fieldError.getCode(), null, locale);
                 result.put(fieldError.getField(), message);
             }
-            System.out.println(result);
         }
         else {
-        	System.out.println(leader);
         	try {
 				leaderService.registerLeader(leader);
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
