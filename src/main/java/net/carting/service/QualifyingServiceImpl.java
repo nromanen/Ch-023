@@ -7,17 +7,18 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import net.carting.dao.QualifyingDAO;
 import net.carting.dao.QualifyingDAOImpl;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Qualifying;
-
+@Service
 public class QualifyingServiceImpl implements QualifyingService {
 
 	@Autowired
 	private QualifyingDAO qualifyingDao;
-	//added Transactional
+
 	@Transactional
 	@Override
 	public List<Qualifying> getAllQualifyings() {
@@ -65,7 +66,8 @@ public class QualifyingServiceImpl implements QualifyingService {
 	public List<Time> getQualifyingTimesByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
 		List<Time> times = new ArrayList<Time>();
-		for(Qualifying q:qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition)) {
+		List<Qualifying> ques = qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
+		for(Qualifying q:ques) {
 			times.add(q.getRacerTime());
 		}
 		return times;
@@ -76,8 +78,9 @@ public class QualifyingServiceImpl implements QualifyingService {
 	public List<Integer> getQualifyingNumbersByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
 		List<Integer> members = new ArrayList<Integer>();
-		for(Qualifying q:qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition)) {
-			members.add(q.getRacerNumber());
+		List<Qualifying> ques = qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
+		for(int i=0; i<ques.size();i++) {
+			members.add(ques.get(i).getRacerNumber());
 		}
 		return members;
 	}
@@ -87,7 +90,8 @@ public class QualifyingServiceImpl implements QualifyingService {
 	public List<Integer> getQualifyingPlacesByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
 		List<Integer> places = new ArrayList<Integer>();
-		for(Qualifying q:qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition)) {
+		List<Qualifying> ques = qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
+		for(Qualifying q:ques) {
 			places.add(q.getRacerPlace());
 		}
 		return places;

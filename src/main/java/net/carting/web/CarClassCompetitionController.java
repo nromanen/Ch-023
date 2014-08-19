@@ -45,6 +45,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.itextpdf.text.log.SysoCounter;
+
 @Controller
 @RequestMapping(value = "/carclass")
 public class CarClassCompetitionController {
@@ -105,6 +107,10 @@ public class CarClassCompetitionController {
         model.addAttribute("raceListSize", raceService.getRacesByCarClassCompetition(carClassCompetition).size());
         model.addAttribute("absoluteResultsList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
         model.addAttribute("maxRaces", MAX_RACES);
+        model.addAttribute("qualifyingList", qualifyingService.
+        		getQualifyingsByCarClassCompetition(carClassCompetition));
+        model.addAttribute("membersCount", racerCarClassCompetitionNumberService.
+        		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
         return new ModelAndView("competition_carclass");
     }
 
@@ -282,7 +288,14 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addQualifying", method = RequestMethod.POST)
     public String addQualifyings(@PathVariable("id") int id,
     		@RequestParam("timeResult") String times, Map<String,Object>map) {
-    	
+    	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+    	try{
+    		if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()>0)
+    		
+    		return "redirect:/carclass/" + id;
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
     	List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
     	int count = racerCarClassCompetitionNumberService.
         		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id);
@@ -312,25 +325,26 @@ public class CarClassCompetitionController {
     		}
     		timeAr[i]=Time.valueOf(timesArray[i]);
     	}
-    	QualifyingService  qualifyingService = new  QualifyingServiceImpl();
-    	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-    	Qualifying q = new Qualifying();
-    	q = qualifyingService.getAllQualifyings().get(0);
-    	System.out.println("A qualifying = " + q);
     	for (int i=0;i<count;i++) {
-    		Qualifying qualifying = new Qualifying();
-    		qualifying.setCarClassCompetition(carClassCompetition);
-    		try{
-    		qualifying.setRacerTime(timeAr[i]);
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		}
-    		qualifying.setRacerNumber(racers.get(i));
-    		qualifying.setRacerPlace(places[i]);
-    		System.out.println(qualifying);
-    		qualifyingService.addQualifying(qualifying);
+    		Qualifying q = new Qualifying();
+    		q.setCarClassCompetition(carClassCompetition);
+    		q.setRacerTime(timeAr[i]);
+    		q.setRacerNumber(racers.get(i));
+    		q.setRacerPlace(places[i]);
+    		qualifyingService.addQualifying(q);
     	}
-    	return "index";
+		/*System.out.println("CompId"+carClassCompetition.getId());
+		System.out.println("By carClassComp: "+qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition));
+		System.out.println("numbers: "+qualifyingService.getQualifyingNumbersByCarClassCompetition(carClassCompetition));
+		System.out.println("times: "+qualifyingService.getQualifyingTimesByCarClassCompetition(carClassCompetition));
+		System.out.println("places: "+qualifyingService.getQualifyingPlacesByCarClassCompetition(carClassCompetition));
+    	System.out.println("update...");
+		qualifyingService.updateQualifying(q);
+		System.out.println("New"+q);
+		System.out.println("delete...");
+		qualifyingService.deleteQualifying(q);
+		System.out.println("ok!");*/
+    	return "redirect:/carclass/" + id;
     }
 
     @RequestMapping(value = "/{id}/race/{raceNumber}/edit")

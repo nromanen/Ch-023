@@ -87,15 +87,7 @@ public class Qualifying {
 
 	@Override
 	public String toString() {
-		return "Qualifying [id=" + id + ", carClassCompetition="
-				+ carClassCompetition + ", racerNumber=" + racerNumber
-				+ ", racerPlace=" + racerPlace + ", racerTime=" + racerTime
-				+ "]";
-	}
-
-/*	@Override
-	public String toString() {
 		return String.format("Qualifying id=%d [CarclasscompId=%d racer number=%d, racer time=%s, "
 				+ " racer place=%d]" , id, carClassCompetition.getId(), racerNumber , racerTime , racerPlace);
-	}*/
+	}
 }

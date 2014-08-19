@@ -42,23 +42,23 @@ pageEncoding="utf-8"%>
 	</c:if>
 
  <script type="text/javascript">
-function Go() {
-	var str="";
-	var mas=[];
-	$('#addTestRace [id^=id]').each(
-		function() {
-			if(this.value!='') {
-				if(mas.indexOf(this.value)<0) {
-				mas.push(this.value);
+	function Go() {
+		var str="";
+		var mas=[];
+		$('#addTestRace [id^=id]').each(
+			function() {
+				if(this.value!='') {
+					if(mas.indexOf(this.value)<0) {
+					mas.push(this.value);
+					} else {
+						this.value='';
+						document.getElementById('addTestRacesubmit').disabled=true;
+					}
 				} else {
-					this.value='';
 					document.getElementById('addTestRacesubmit').disabled=true;
 				}
-			} else {
-				document.getElementById('addTestRacesubmit').disabled=true;
 			}
-		}
-	);
-	document.getElementById('time').value=mas;
-}
+		);
+		document.getElementById('time').value=mas;
+	}
 </script> 
