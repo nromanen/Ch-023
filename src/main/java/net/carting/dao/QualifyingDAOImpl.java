@@ -1,14 +1,20 @@
 package net.carting.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.stereotype.Repository;
+
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Qualifying;
+import net.carting.domain.Racer;
 
+@Repository
 public class QualifyingDAOImpl implements QualifyingDAO {
 
     @PersistenceContext(unitName = "entityManager")
@@ -18,13 +24,12 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 	@Override
 	public List<Qualifying> getAllQualifyings() {
 		 return entityManager
-	                .createQuery("from Qualifying")
+	                .createQuery("from Qualifying order by car_class_competition_id,racer_place")
 	                .getResultList();
 	}
 
 	@Override
 	public Qualifying getQualifyingById(int id) {
-		// TODO Auto-generated method stub
 		return (Qualifying)entityManager.createQuery
 				("from Qualifying where id= :id").
 				setParameter("id",id).getSingleResult();
@@ -32,24 +37,11 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 
 	@Override
 	public void addQualifying(Qualifying qualifying) {
-		System.out.println("2. "+qualifying);
 		try{
 		entityManager.persist(qualifying);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	/*	String sql = "INSERT INTO qualifying "
-				+ "(racer_number,racer_time,racer_place, "
-				+ "car_class_competition_id) values "
-				+ "(:number, :time, :place, :compId);";
-		Query query = entityManager.createQuery(sql);
-		System.out.println(qualifying.getRacerNumber());
-		query.setParameter("number", qualifying.getRacerNumber());
-		query.setParameter("time", qualifying.getRacerTime());
-		query.setParameter("place", qualifying.getRacerPlace());
-		query.setParameter("compId", qualifying.getCarClassCompetition().getId());
-		query.executeUpdate();*/
-		System.out.println(qualifying.getRacerTime());
 	}
 
 	@Override
@@ -59,23 +51,27 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 
 	@Override
 	public void deleteQualifying(Qualifying qualifying) {
-        Query query = entityManager.createQuery(
-                "DELETE FROM Race c WHERE c.id = :id");
-        query.setParameter("id", qualifying.getId());
-        query.executeUpdate();
+		CarClassCompetition ccc = entityManager.find(CarClassCompetition.class,qualifying.getCarClassCompetition().getId());
+		Qualifying q = entityManager.find(Qualifying.class, qualifying.getId());
+		Set<Qualifying>ques = ccc.getQualifyings();
+		ques.remove(qualifying);
+		ccc.setQualifyings(ques);
+		entityManager.merge(ccc);
+		entityManager.remove(q);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
-		List<Qualifying> qualifyings;
-		Query query = entityManager.createQuery("from Race " +
-                        "where carClassCompetition = :carClassCompetition " +
-                        "order by racerPlace");
-        query.setParameter("carClassCompetition", carClassCompetition);
-        qualifyings = query.getResultList();
-        return qualifyings;
+		List<Qualifying> qualifyings = getAllQualifyings();
+		List<Qualifying> resultList = new ArrayList<Qualifying>();
+		for(Qualifying q:qualifyings) {
+			if (q.getCarClassCompetition().getId()==carClassCompetition.getId()) {
+				System.out.println(q.getCarClassCompetition().getId()+"=?"+carClassCompetition.getId());
+				resultList.add(q);
+			}
+		}
+        return resultList;
 	}
 
 }
