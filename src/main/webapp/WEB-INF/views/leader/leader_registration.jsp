@@ -36,7 +36,7 @@
 		<input type="text" class="form-control" name="firstName"
 			placeholder="<spring:message code="placeholder.firstname" />"
 			id="first_name" required
-			pattern=".{1,30}"
+			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
 			data-error="<spring:message code="dataerror.firstname" />" />
 		<div class="help-block with-errors"></div>
 	</div>
