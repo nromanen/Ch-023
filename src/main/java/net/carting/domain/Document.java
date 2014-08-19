@@ -11,7 +11,7 @@ public class Document {
     public static final int TYPE_RACER_LICENCE = 1;
     public static final int TYPE_RACER_INSURANCE = 2;
     public static final int TYPE_RACER_MEDICAL_CERTIFICATE = 3;
-    public static final int TYPE_RACER_PERENTAL_PERMISSIONS = 4;
+    public static final int TYPE_RACER_PARENTAL_PERMISSIONS = 4;
 
     @Id
     @GeneratedValue
@@ -137,7 +137,7 @@ public class Document {
             case TYPE_RACER_MEDICAL_CERTIFICATE:
                 stringDocumentType = "Racer's medical certificate";
                 break;
-            case TYPE_RACER_PERENTAL_PERMISSIONS:
+            case TYPE_RACER_PARENTAL_PERMISSIONS:
                 stringDocumentType = "Racer's parental permission";
                 break;
             default:
@@ -159,7 +159,7 @@ public class Document {
             case TYPE_RACER_MEDICAL_CERTIFICATE:
                 stringDocumentType = "Racer's medical certificate";
                 break;
-            case TYPE_RACER_PERENTAL_PERMISSIONS:
+            case TYPE_RACER_PARENTAL_PERMISSIONS:
                 stringDocumentType = "Racer's parental permission";
                 break;
             default:
@@ -173,7 +173,7 @@ public class Document {
         Team team = null;
         if (type == TYPE_RACER_LICENCE || type == TYPE_RACER_INSURANCE
                 || type == TYPE_RACER_MEDICAL_CERTIFICATE
-                || type == TYPE_RACER_PERENTAL_PERMISSIONS) {
+                || type == TYPE_RACER_PARENTAL_PERMISSIONS) {
             for (Racer racer : this.racers) {
                 return racer.getTeam();
             }

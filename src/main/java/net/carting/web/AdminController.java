@@ -1,8 +1,6 @@
 package net.carting.web;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.Leader;
-import net.carting.domain.User;
+import net.carting.domain.*;
 import net.carting.service.*;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
@@ -36,7 +34,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
     @Autowired
-    private FilesService filesService;
+    private FileService fileService;
 
     private static final Logger LOG = Logger.getLogger(AdminController.class);
 
@@ -175,7 +173,17 @@ public class AdminController {
     String uploadFiles() {
         String result = "success";
         try {
-            filesService.uploadAll();
+
+            File file = new File();
+            Document document = new Document();
+            document.setName("test");
+            document.setApproved(false);
+            document.setChecked(false);
+//file.setFile();
+            file.setDocument(document);
+            fileService.addFile(file);
+
+            //documentService.addDocument();
             LOG.info("Admin has uploaded documents to DB");
         } catch (Exception e) {
             result = "fail";
@@ -190,7 +198,7 @@ public class AdminController {
     String saveFiles() {
         String result = "success";
         try {
-            filesService.downloadAll();
+//            filesService.downloadAll();
             LOG.info("Admin has downloaded documents from DB");
         } catch (Exception e) {
             result = "fail";

@@ -131,7 +131,7 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team) {
         Set<Racer> allTeamRecersNeedingPerentalPermision = getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
-                Document.TYPE_RACER_PERENTAL_PERMISSIONS, team);
+                Document.TYPE_RACER_PARENTAL_PERMISSIONS, team);
         Iterator<Racer> it = allTeamRecersNeedingPerentalPermision
                 .iterator();
         adminSettingsDAO.getAdminSettings().getParentalPermissionYears();

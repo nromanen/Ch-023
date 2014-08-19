@@ -87,7 +87,7 @@ public class TeamInCompetitionServiceTest {
         document13.setApproved(true);
 
         Document document14 = new Document();
-        document14.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
+        document14.setType(Document.TYPE_RACER_PARENTAL_PERMISSIONS);
         document14.setFinishDate(DateUtil.getDateFromString("2015-07-24"));
         document14.setApproved(true);
 

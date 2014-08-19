@@ -86,18 +86,22 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
                                             String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
-        Document document = new Document();
-        document.setType(documentType);
-        document = setDocumentParametersByType(document, number, startDate, finishDate);
-        addDocument(document);
-        List<String> paths = null;
         try {
-            paths = getPathsAndWriteFilesToServer(files, documentType, leader.getId());
-        } catch (IOException e) {
+            Document document = new Document();
+            document.setType(documentType);
+            document = setDocumentParametersByType(document, number, startDate, finishDate);
+            addDocument(document);
+            List<byte[]> fileList = new ArrayList<>();
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    fileList.add(file.getBytes());
+                }
+            }
+            fileService.addFilesToDocument(document, fileList);
+            racerService.setDocumentToRacers(document, racersId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        fileService.addFilesToDocument(document, paths);
-        racerService.setDocumentToRacers(document, racersId);
     }
 
 
@@ -114,9 +118,15 @@ public class DocumentServiceImpl implements DocumentService {
         updateDocument(document);
 
         int documentType = document.getType();
-        List<String> paths = getPathsAndWriteFilesToServer(files, documentType,
-                document.getTeamOwner().getLeader().getId());
-        fileService.addFilesToDocument(document, paths);
+        List<byte[]> fileList = new ArrayList<byte[]>();
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                fileList.add(file.getBytes());
+            }
+        }
+                //getPathsAndWriteFilesToServer(files, documentType,
+                //document.getTeamOwner().getLeader().getId());
+        fileService.addFilesToDocument(document, fileList);
         logger.info("Leader "
                 + document.getTeamOwner().getLeader().getFirstName() + " "
                 + document.getTeamOwner().getLeader().getLastName()
@@ -129,8 +139,7 @@ public class DocumentServiceImpl implements DocumentService {
     public List<String> getPathsAndWriteFilesToServer(MultipartFile[] files,
                                                       int documentType, int leaderId) throws IOException {
         List<String> pathsToFiles = new ArrayList<String>();
-        for (int i = 0; i < files.length; i++) {
-            MultipartFile file = files[i];
+        for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 byte[] bytes = file.getBytes();
                 String fileName = Document.getStringDocumentType(documentType)
@@ -164,7 +173,7 @@ public class DocumentServiceImpl implements DocumentService {
                 document.setName(number);
                 document.setFinishDate(DateUtil.getDateFromString(finishDate));
                 break;
-            case Document.TYPE_RACER_PERENTAL_PERMISSIONS:
+            case Document.TYPE_RACER_PARENTAL_PERMISSIONS:
                 document.setStartDate(DateUtil.getDateFromString(startDate));
                 break;
             case Document.TYPE_RACER_MEDICAL_CERTIFICATE:
