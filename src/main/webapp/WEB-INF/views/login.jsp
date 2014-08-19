@@ -21,7 +21,7 @@
 </script>
 
 
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-4 col-md-offset-4">
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title"><strong><spring:message code="label.authorization" /></strong></h3>
