@@ -12,8 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "leaders")
 @AttributeOverrides({
@@ -36,7 +34,6 @@ public class Leader extends Person {
     private User user;
 
     @Column(name = "license", nullable = false)
-    @NotEmpty
     private String license;
 
     public Leader() {

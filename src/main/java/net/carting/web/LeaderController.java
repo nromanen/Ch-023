@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import net.carting.service.RoleService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.DateUtil;
+import net.carting.util.LeaderValidator;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,36 +87,25 @@ public class LeaderController {
     @RequestMapping(value = "/addLeader", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, String> addLeader(@Valid Leader leader,  BindingResult bindingResult) {
+    Map<String, String> addLeader(@Valid Leader leader, Locale locale,  BindingResult bindingResult) {
         Map<String, String> result = new HashMap<String, String>();
+        LeaderValidator validator = new LeaderValidator();
+        validator.validate(leader, bindingResult);
         if (bindingResult.hasErrors()) {
         	List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        	System.out.println(fieldErrors);
             for (FieldError fieldError : fieldErrors) {
-                String[] resolveMessageCodes = bindingResult.resolveMessageCodes(fieldError.getCode());
-                String string = resolveMessageCodes[0];
-                System.out.println("resolveMessageCodes : "+string);
-                String message = messages.getMessage(string+"."+fieldError.getField(), new Object[]{fieldError.getRejectedValue()}, null);
-                System.out.println("Message : "+message);
-                result.put(fieldError.getField(), message)    ;
+            	String message = messages.getMessage(fieldError.getCode(), null, locale);
+                result.put(fieldError.getField(), message);
             }
+            System.out.println(result);
         }
         else {
-        	
-        	User user = leader.getUser();
-        	System.out.println(user.getRole().getRole() + " " + user.getRole().getId());
-        	System.out.println(leader + " " + user);
+        	System.out.println(leader);
         	try {
-				user.setPassword(userService.getEncodedPassword(user.getPassword()));
+				leaderService.registerLeader(leader);
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-        	user.setEnabled(false);
-        	userService.addUser(user);
-        	leader.setUser(user);
-        	leader.setRegistrationDate(new Date());
-        	leaderService.addLeader(leader);
-        	System.out.println(leader + " " + user);
         }
         return result;
     }

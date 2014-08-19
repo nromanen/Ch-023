@@ -76,76 +76,45 @@ $(document).ready(function(){
 	};  
 
 	$('#new_leader').submit(function(e){
-		/*$("#ajax_loader").css("display", "inline-block");		
-    		
-		var first_name = $('#first_name').val();
-	    var last_name = $('#last_name').val();
-	    var birthday = $('#birthday').val();
-	    var document = $('#document').val();
-	    var address = $('#address').val();
-	    var license = $('#license').val();
+		$("div[id*='Id']").remove();
+		$("#ajax_loader").css("display", "inline-block");	
 	    var username = $('#username').val();
-	    var password = $('#password').val();
-	    var email = $('#email').val();
-	    
-	    var json = { 
-	    			 "firstName" : first_name, 
-	    			 "lastName" : last_name,
-	    			 "birthday" : birthday, 
-	    			 "document" : document, 
-	    			 "address" : address, 
-	    			 "license" : license,
-	    			 "username" : username,
-	    			 "password" : password,
-	    			 "email" : email
-	    		   };
-
-	    var jsonCheck = {"username" : username};
-	    var urlCheck = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetUser';
-	    $.ajax({  
-	        url: urlCheck,  
-	        data: JSON.stringify(jsonCheck),  
-	        contentType: 'application/json',
-	        type: "POST",	        
-	        success: function(response) {  
-	        	if(response == false){
-				    $.ajax({  
-				        url: $("#new_leader").attr("action"),  
-				        data: JSON.stringify(json),  
-				        contentType: 'application/json',
-				        type: "POST",
-				        success: function(response) {  
-				        	$("#ajax_loader").css("display", "none");
-				        	if(response){
-				        		bootbox.alert($("#error_encoding_passwords").val());
-				        		$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/loginPage');
-				        	} else {
-				        		bootbox.alert($("#error_encoding_passwords").val());
-				    		}
-				        } 
-				    });   
-	        	}
-	    	    else {
-	        		$("#ajax_loader").css("display", "none");
-	        		$("#user_exists").css("display", "block");
-	        	}
-	        }
-
-	    });*/
-		jQuery(".formFieldError").remove();
-        jQuery.ajax({
-                url: jQuery(this).attr("action"),
-                context: document.body,
-                type: 'post',
-                data:jQuery(this).serialize()
-            }).done(function(res) {
-                if (res.length == 0) {
-                	console.log("good");
-                }
-                else {
-                	console.log(res);
-                }
-            });
+		var jsonCheck = {"username" : username};
+		var urlCheck = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetUser';
+		$.ajax({  
+		    url: urlCheck,  
+		    data: JSON.stringify(jsonCheck),  
+		    contentType: 'application/json',
+		    type: "POST",	        
+		    success: function(response) {
+		     	if(response == false){
+		      		jQuery(".formFieldError").remove();
+		      		var json = $('#new_leader').serialize();
+		            $.ajax({
+		                url: $('#new_leader').attr("action"),
+		                context: document.body,
+		                type: "POST",
+		                data: json,
+		                success: function(response) {
+		                    if ($.isEmptyObject(response)) {
+		                       	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/loginPage');
+		                    }
+		                    else {
+		                    	 for(var key in response){
+		                             var err="<div class=\"alert alert-danger\"  style=\"margin-top: 10px; padding: 0px 0px 0px 20px; height: 25px;\" id=\""+key+"Id\">" +
+		                             		response[key]+"</div>";
+		                             jQuery("[name^='"+key+"']").after(err);
+		                         }
+		                    }
+		                }
+		            });
+		     	}
+		       	else {
+		       		$("#ajax_loader").css("display", "none");
+		       		$("#user_exists").css("display", "block");
+		       	}
+		     }
+		});
 		return false;
 	});
 	
@@ -166,10 +135,7 @@ $(document).ready(function(){
 	        		$('#email_exists').css("display", "none");
 	        	}
 	        }
-
-	    });
-		
-		
+	    });	
 	});
 	
 	$(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );

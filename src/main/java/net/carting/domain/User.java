@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,18 +37,15 @@ public class User implements Serializable, UserDetails {
     private Integer id;
     
     @Column(name = "username")
-    @NotEmpty
     private String username;
 
     @Column(name = "enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled;
 
     @Column(name = "password")
-    @NotEmpty
     private String password;
     
     @Column(name = "email", nullable = false)
-    @Email
     private String email;
     
     @Column(name = "reset_pass_link")

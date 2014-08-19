@@ -36,7 +36,7 @@
 		<input type="text" class="form-control" name="firstName"
 			placeholder="<spring:message code="placeholder.firstname" />"
 			id="first_name" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
+			pattern=".{1,30}"
 			data-error="<spring:message code="dataerror.firstname" />" />
 		<div class="help-block with-errors"></div>
 	</div>
@@ -139,8 +139,6 @@
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
 		<div class="help-block with-errors"></div>
 	</div>
-	<input type="hidden" name="user.role.id" value="2">
-	<input type="hidden" name="user.role.role" value="ROLE_TEAM_LEADER">
 	
 	<div class="alert alert-danger" id="email_exists"
 		style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
