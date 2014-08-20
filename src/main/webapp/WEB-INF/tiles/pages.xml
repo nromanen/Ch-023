@@ -171,6 +171,11 @@
         <put-attribute name="content" value="/WEB-INF/views/admin/admin_cabinet.jsp"/>
     </definition>
 
+    <definition name="logs" extends="base-template">
+        <put-attribute name="title" value="Logs"/>
+        <put-attribute name="content" value="/WEB-INF/views/admin/logs.jsp"/>
+    </definition>
+
     <definition name="start" extends="base-template">
         <put-attribute name="title" value="Start statement"/>
         <put-attribute name="content" value="/WEB-INF/views/document/start.jsp"/>

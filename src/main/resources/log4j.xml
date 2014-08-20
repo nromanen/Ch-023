@@ -11,76 +11,51 @@
         </layout>
     </appender>
 
-    <!-- FILE Appender for administrator needs -->
-    <appender name="admin" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="src/main/webapp/resources/logs/admin/admin_log.log "/>
-        <param name="MaxFileSize" value="20MB"/>
-        <param name="Encoding" value="UTF-8"/>
-        <!-- Keep one backup file -->
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%p: %d{yyyy-MM-dd HH:mm:ss} -  %m%n"/>
-        </layout>
-    </appender>
-
-    <!-- FILE Appender for developer needs -->
-    <appender name="dev" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="src/main/webapp/resources/logs/developers/dev_log.log "/>
-        <param name="MaxFileSize" value="5MB"/>
-        <param name="MaxBackupIndex" value="3"/>
-        <param name="Encoding" value="UTF-8"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %p %c{4} - %m%n"/>
-        </layout>
-    </appender>
-
-    <!-- FILE Appender for recording logs of all package -->
-    <appender name="general" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="src/main/webapp/resources/logs/general/gen_log.log "/>
-        <param name="MaxFileSize" value="5MB"/>
-        <param name="MaxBackupIndex" value="3"/>
-        <param name="Encoding" value="UTF-8"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %p %c{4} - %m%n"/>
-        </layout>
+    <!-- DATABASE appender -->
+    <appender name="database" class="org.apache.log4j.jdbc.JDBCAppender">
+        <param name="URL" value="jdbc:mysql://localhost:3306/carting" />
+        <param name="user" value="root" />
+        <param name="password" value="root" />
+        <param name="driver" value="com.mysql.jdbc.Driver" />
+        <param name="sql" value="INSERT INTO LOGS VALUES('%C','%p','%m','%d')" />
     </appender>
 
     <!-- Application Loggers -->
     <logger name="net.carting">
         <level value="info"/>
-        <appender-ref ref="admin"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <!-- 3rdparty Loggers -->
     <logger name="org.springframework.core">
         <level value="warn"/>
-        <appender-ref ref="dev"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <logger name="org.springframework.beans">
         <level value="warn"/>
-        <appender-ref ref="dev"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <logger name="org.springframework.context">
         <level value="warn"/>
-        <appender-ref ref="dev"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <logger name="org.springframework.web">
         <level value="warn"/>
-        <appender-ref ref="dev"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <logger name="org.hibernate">
         <level value="warn"/>
-        <appender-ref ref="dev"/>
+        <appender-ref ref="database"/>
     </logger>
 
     <!-- Root Logger -->
     <root>
         <priority value="warn"/>
         <appender-ref ref="console"/>
-        <appender-ref ref="general"/>
     </root>
 
 </log4j:configuration>
