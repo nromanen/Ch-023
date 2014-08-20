@@ -3,10 +3,13 @@ package net.carting.web;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Competition;
+import net.carting.domain.Qualifying;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
+import net.carting.service.QualifyingService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +40,9 @@ public class SHKPController {
 
         @Autowired
         RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
+        
+        @Autowired
+        QualifyingService qualifyingService;
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
@@ -50,7 +57,23 @@ public class SHKPController {
 
             List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
-
+            
+            
+            try{
+            	List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+                List<Qualifying> resultQ = new ArrayList<Qualifying>();
+	            for (int i=0;i<beforeQ.size();i++) {
+	            	for (int j=0; j<beforeQ.size();j++) {
+	            		if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition()==beforeQ.get(j).getRacerNumber()) {
+	            			resultQ.add(beforeQ.get(j));
+	            		}
+	            	}
+	            }
+	            model.addAttribute("qualifyingList", resultQ);
+	        } catch (Exception e) {
+            	e.printStackTrace();
+            }
+            
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
