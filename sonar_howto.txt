@@ -1,0 +1,32 @@
+1. Download sonar and sonar-runner
+2. Sonar & sonar-runner use H2 as default database so we should update config files for MySQL:
+	a) sonarqube/conf/sonar.properties:
+	- comment this line: sonar.jdbc.url=jdbc:h2:tcp://localhost:9092/sonar
+	- uncomment this line: sonar.jdbc.url=jdbc:mysql://...
+	b) sonar-runner/conf/sonar-runner.properties:
+	- uncoment this line: sonar.jdbc.url=jdbc:mysql://...
+
+3. Run this SQL on your MySQL server for creating new mysql user "sonar":
+
+CREATE USER 'sonar' IDENTIFIED BY 'sonar';
+GRANT ALL ON sonar.* TO 'sonar'@'%' IDENTIFIED BY 'sonar';
+GRANT ALL ON sonar.* TO 'sonar'@'localhost' IDENTIFIED BY 'sonar';
+FLUSH PRIVILEGES;
+
+4. Create MySQL database: sonar under user:password sonar:sonar
+5. Set a new environment variable as SONAR_RUNNER_HOME. And its value should be sonar-runner directory
+6. Update PATH variable - add sonar-runner/bin directory
+7. Start Sonar server with SONAR_HOME\bin\windows-x86-32\StartSonar.bat
+8. After staring the server you can browse to http://localhost:9000
+9. There are few ways how to analyze your project:
+	a) goto project directory and run sonar-runner and than you can check you project at http://localhost:9000
+	b) you can install Sonar Eclipse plugin and than analyze your project in Eclipse IDE
+	c) 
+		- add sonar-maven-plugin to pom.xml
+		- configure maven settings.xml (more info here: http://docs.codehaus.org/display/SONAR/Installing+and+Configuring+Maven)
+		- run a Maven project with goal: sonar:sonar
+
+Read more: 
+http://www.javatips.net/blog/2013/10/sonarqube-tutorial
+http://www.javatips.net/blog/2013/10/eclipse-sonar-tutorial
+http://docs.codehaus.org/display/SONAR/Analyzing+with+Maven
