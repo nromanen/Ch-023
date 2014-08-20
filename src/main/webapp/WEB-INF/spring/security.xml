@@ -1,0 +1,82 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <http access-denied-page="/403">
+        <intercept-url pattern="/resources/logs/**" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/resources/documents/**" access="ROLE_ADMIN,ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/team/add" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/team/edit/*" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/team/delete" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/index*"
+                       access="ROLE_TEAM_LEADER,ROLE_ANONYMOUS,ROLE_ADMIN"/>
+        <intercept-url pattern="/leader/edit/*" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/racer/*" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+        <intercept-url pattern="/racer/add" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+        <intercept-url pattern="/racer/edit/*" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+
+        <intercept-url pattern="/competition/add" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/competition/addCompetition" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/competition/edit/*" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/competition/editAction" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/competition/teamRegistration"
+                       access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/competition/chooseCompetition"
+                       access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/competition/setEnabled" access="ROLE_ADMIN" />
+        <intercept-url pattern="/competition/*/personal" access="ROLE_ADMIN" />
+
+        <intercept-url pattern="/document/checkingDocuments/*"
+                       access="ROLE_ADMIN"/>
+        <intercept-url pattern="/document/chooseType" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/document/addDocument" access="ROLE_TEAM_LEADER"/>
+        <intercept-url pattern="/document/allDocuments" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/document/**" access="ROLE_TEAM_LEADER,ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/addResults" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/addTestRace" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/editTestRace" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/editSummaryResults" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/race/*/edit" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/setCalculateByTableB" access="ROLE_ADMIN"/>
+        
+        <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/admin/downloadFiles" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/admin/uploadFiles" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/feedback" access="ROLE_TEAM_LEADER"/>
+
+        <intercept-url pattern="/SHKP/**" access="ROLE_ADMIN"/>
+
+        <form-login login-page="/loginPage" default-target-url="/index"
+                    authentication-failure-handler-ref="exceptionFilter"/>
+
+        <logout logout-url="/logout" logout-success-url="/index"/>
+        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS"/>
+        <remember-me/>
+    </http>
+
+    <beans:bean id="exceptionFilter"
+                class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+        <beans:property name="exceptionMappings">
+            <beans:props>
+                <beans:prop key="org.springframework.security.authentication.DisabledException">
+                    /loginPage?error=userDisabled
+                </beans:prop>
+                <beans:prop key="org.springframework.security.authentication.BadCredentialsException">
+                    /loginPage?error=BadCredentialsException
+                </beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="userDetailsServiceImpl">
+            <password-encoder hash="sha-256">
+            </password-encoder>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>
