@@ -1,11 +1,10 @@
 package net.carting.service;
 
-import net.carting.domain.Leader;
-
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
+
+import net.carting.domain.Leader;
 
 public interface LeaderService {
     public List<Leader> getAllLeaders();
@@ -41,6 +40,6 @@ public interface LeaderService {
      *                </ul>
      * @author Volodymyr Semaniv
      */
-    public void registerLeader(Map<String, Object> formMap) throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    public void registerLeader(Leader leader) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
 }

@@ -1,0 +1,38 @@
+Hudson/Jenkins configuration on linux.
+
+1. Start tomcat7.
+2. Download Hudson/Jenkins war file.
+3. Deploy it using gui-manager or simple copy war file to tomcat_home/webapp (/usr/share/tomcat7/webapp).
+4. Need to resolve permission conflicts:
+  a) Create hidden folder for jenkins (same for hudson)
+    $ sudo mkdir .jenkins
+    $ sudo chown tomcat7:tomcat7 .jenkins
+  b) Create repo-dir for maven.
+    $ sudo mkdir /usr/share/tomcat7/.m2
+    $ sudo /usr/share/tomcat7/.m2/repository
+    $ sudo chown -R tomcat7:tomcat7 /usr/share/tomcat7/.m2/repository
+5. Restart tomcat7.
+6. Navigate to http://localhost:8080/hudson/ (default path).
+7. You will be promt to install plugins. Select "Deploy to container Plugin" and "GIT plugin".
+8. After plugins were installed create new job. http://localhost:8080/hudson/view/All/newJob.
+ a) Set job name
+ b) Select "Build a free-style software project"
+ c) Click "OK"
+9. Set GIT as source code management and add repo link, default branch and additional settings you need.
+10. Look out for "Build" section Provide Maven build parameters. Set root POM as pom.xml and goals: "clean install"
+11. Add a post build action that will deployed the war file to remote tomcat server.
+ a) Click on button "Add post build action"
+ b) Select the option "Deploy war/ear to a container"
+ c) Enter war file name, path, server (target/Carting.war), (Carting), (Tomcat 7.x)
+ d) Enter server credentials
+12. If needed add new trigger - "Poll SCM" and set schedule in cron format.
+13. Save everything.
+14. Now we need to configure Hudson/Jenkins. Goto Settings (http://localhost:8080/hudson/configure)
+15. Set JDK name and path (or set to install it automatically). (JDK7, /opt/java)
+16. Set Maven configuration: Set any name and set maven path, where it was installed. (/opt/maven)
+17. Set Credentials for git plugin  user.name and email.
+18. Now goto your job (http://localhost:8080/hudson/job/Carting/) and build it.
+
+Additional links:
+1. http://www.nomachetejuggling.com/2011/07/31/ubuntu-tomcat-jenkins-git-ssh-togethe/
+2. http://paxcel.net/blog/automation-of-warear-deployment-using-jenkins/

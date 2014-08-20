@@ -42,6 +42,7 @@
         <intercept-url pattern="/carclass/*/setCalculateByTableB" access="ROLE_ADMIN"/>
         
         <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/admin/logs" access="ROLE_ADMIN"/>
         <intercept-url pattern="/admin/downloadFiles" access="ROLE_ADMIN"/>
         <intercept-url pattern="/admin/uploadFiles" access="ROLE_ADMIN"/>
         <intercept-url pattern="/feedback" access="ROLE_TEAM_LEADER"/>

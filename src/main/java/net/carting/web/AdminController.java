@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,6 +36,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private LogsService logsService;
 
     private static final Logger LOG = Logger.getLogger(AdminController.class);
 
@@ -194,6 +197,14 @@ public class AdminController {
             LOG.info("Admin has failed to download DB Dump");
         }
         return result;
+    }
+
+    @RequestMapping(value = "/logs", method = RequestMethod.GET)
+    public
+    String getLogs(Model model) {
+        List<Logs> list = logsService.getAllLogs();
+        model.addAttribute("logs", list);
+        return "logs";
     }
 
 }

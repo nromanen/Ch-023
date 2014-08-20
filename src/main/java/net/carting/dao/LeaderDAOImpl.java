@@ -1,12 +1,14 @@
 package net.carting.dao;
 
-import net.carting.domain.Leader;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.Leader;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class LeaderDAOImpl implements LeaderDAO {

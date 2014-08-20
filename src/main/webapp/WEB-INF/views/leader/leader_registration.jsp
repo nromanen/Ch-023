@@ -33,7 +33,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message
 				code="label.firstname" /><span class="text-danger">*</span>:&nbsp;</label>
-		<input type="text" class="form-control"
+		<input type="text" class="form-control" name="firstName"
 			placeholder="<spring:message code="placeholder.firstname" />"
 			id="first_name" required
 			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
@@ -44,7 +44,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.lastname" /><span
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
-			class="form-control"
+			class="form-control" name="lastName"
 			placeholder="<spring:message code="placeholder.lastname" />"
 			id="last_name" required
 			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
@@ -56,7 +56,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message
 				code="label.date_of_birth" /><span class="text-danger">*</span>:&nbsp;</label>
-		<input type="text" class="form-control datepicker"
+		<input type="text" class="form-control datepicker" name="birthday"
 			placeholder="<spring:message code="placeholder.date_of_birth" />"
 			id="birthday" required
 			data-error="<spring:message code="dataerror.field_required" />" />
@@ -66,7 +66,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message
 				code="label.identification" /><span class="text-danger">*</span>:&nbsp;</label>
-		<input type="text" class="form-control"
+		<input type="text" class="form-control" name="document"
 			placeholder="<spring:message
 				code="placeholder.identification" />"
 			id="document" required pattern="[^<>\&\^\$]{1,50}"
@@ -77,7 +77,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.address" /><span
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
-			class="form-control"
+			class="form-control" name="address"
 			placeholder="<spring:message code="placeholder.address" />"
 			id="address" required pattern="[^<>\&\^\$]{1,100}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
@@ -87,7 +87,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message
 				code="label.license_number" /><span class="text-danger">*</span>:&nbsp;</label>
-		<input type="text" class="form-control"
+		<input type="text" class="form-control" name="license"
 			placeholder="<spring:message code="placeholder.license_number" />"
 			id="license" required pattern="[^<>\&\^\$]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
@@ -97,7 +97,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.login" /><span
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
-			class="form-control"
+			class="form-control" name="user.username"
 			placeholder="<spring:message code="placeholder.login" />"
 			id="username" required pattern="[^<>\&\^\$]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
@@ -107,7 +107,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.password" /><span
 			class="text-danger">*</span>:&nbsp;</label> <input type="password"
-			class="form-control"
+			class="form-control" name="user.password"
 			placeholder="<spring:message code="placeholder.password" />"
 			id="password" data-minlength="5" required
 			data-error="<spring:message code="dataerror.mimimum_5_characters" />" />
@@ -133,7 +133,7 @@
 	<div class="form-group">
 		<label class="text-info"><spring:message code="label.email" /><span
 			class="text-danger">*</span>:&nbsp;</label> <input type="text"
-			class="form-control"
+			class="form-control" name="user.email"
 			placeholder="<spring:message code="placeholder.email" />"
 			id="email" required pattern="[A-Za-z0-9_\.-]{1,30}@[A-Za-z0-9_\.-]{1,30}"
 			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />

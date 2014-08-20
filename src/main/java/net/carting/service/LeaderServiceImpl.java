@@ -4,12 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import net.carting.dao.LeaderDAO;
 import net.carting.domain.Leader;
 import net.carting.domain.User;
-import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,31 +72,21 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Override
     @Transactional
-    public void registerLeader(Map<String, Object> formMap)
+    public void registerLeader(Leader leader)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String username = formMap.get("username").toString();
-        String email = formMap.get("email").toString();
 
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(userService.getEncodedPassword(formMap.get("password")
-                .toString()));
-        user.setEnabled(false);
-        user.setRole(roleService.getRole(UserService.ROLE_TEAM_LEADER_ID));        
-        userService.addUser(user);
+    	User user = leader.getUser();
+		user.setPassword(userService.getEncodedPassword(user.getPassword()));
+    	user.setEnabled(false);
+    	user.setRole(roleService.getRole(UserService.ROLE_TEAM_LEADER_ID));        
 
-        Leader leader = new Leader();
-        leader.setFirstName(formMap.get("firstName").toString());
-        leader.setLastName(formMap.get("lastName").toString());
-        leader.setBirthday(DateUtil.getDateFromString(formMap.get("birthday").toString()));
-        leader.setDocument(formMap.get("document").toString());
-        leader.setAddress(formMap.get("address").toString());
-        leader.setLicense(formMap.get("license").toString());
-        leader.setRegistrationDate(new Date());
-        leader.setUser(user);
+    	leader.setUser(user);
+    	leader.setRegistrationDate(new Date());
         leaderDAO.addLeader(leader);
-
+        
+        String email = leader.getUser().getEmail();
+        String username = leader.getUser().getUsername();
+        
         //Message to leader
         String to = email;
         String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
