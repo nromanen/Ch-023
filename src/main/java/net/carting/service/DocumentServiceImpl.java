@@ -135,32 +135,6 @@ public class DocumentServiceImpl implements DocumentService {
                 + Document.getStringDocumentType(documentType));
     }
 
-    @Override
-    public List<String> getPathsAndWriteFilesToServer(MultipartFile[] files,
-                                                      int documentType, int leaderId) throws IOException {
-        List<String> pathsToFiles = new ArrayList<String>();
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                byte[] bytes = file.getBytes();
-                String fileName = Document.getStringDocumentType(documentType)
-                        .replace(" ", "_")
-                        + Calendar.getInstance().getTimeInMillis()
-                        + leaderId
-                        + "."
-                        + FilenameUtils
-                        .getExtension(file.getOriginalFilename());
-                String directoryAbsolutePath = createDirectoryForFilesAndGetAbsolutePath();
-                File serverFile = new File(directoryAbsolutePath
-                        + File.separator + fileName);
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
-                pathsToFiles.add(fileName);
-            }
-        }
-        return pathsToFiles;
-    }
 
     @Override
     public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
@@ -185,21 +159,6 @@ public class DocumentServiceImpl implements DocumentService {
         return document;
     }
 
-    public String createDirectoryForFilesAndGetAbsolutePath() {
-        File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
-        if (!dir.exists())
-            dir.mkdirs();
-        return dir.getAbsolutePath();
-    }
-
-    @Override
-    public boolean deleteFileFromServer(String filePath) {
-        File serverFile = new File(createDirectoryForFilesAndGetAbsolutePath() + File.separator + filePath);
-        if (!serverFile.exists()) {
-            return true;
-        }
-        return serverFile.delete();
-    }
 
     @Override
     @Transactional
@@ -210,7 +169,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void createStartStatement(String html) {
         try {
-            String path = createDirectoryForFilesAndGetAbsolutePath() + "/start.pdf";
+            File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
+            if (!dir.exists())
+                dir.mkdirs();
+            String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
         } catch (IOException e) {
             e.printStackTrace();

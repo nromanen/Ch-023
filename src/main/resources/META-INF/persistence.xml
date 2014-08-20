@@ -10,7 +10,6 @@
         <class>net.carting.domain.Competition</class>
         <class>net.carting.domain.Document</class>
         <class>net.carting.domain.File</class>
-        <class>net.carting.domain.Files</class>
         <class>net.carting.domain.Leader</class>
         <class>net.carting.domain.Person</class>
         <class>net.carting.domain.Race</class>
