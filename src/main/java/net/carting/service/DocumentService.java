@@ -47,26 +47,6 @@ public interface DocumentService {
 
     /**
      * <p/>
-     * Implementation of this method writes files to server and returns their
-     * paths
-     *
-     * @param files        - array of files that were given from document_add.jsp
-     * @param documentType - the type of document
-     * @param leaderId     - id of team's leader
-     * @return List<String> of generated names of the files
-     * @throws IOException
-     * @author Volodymyr Semaniv
-     * @see net.carting.domain.Document
-     * @see net.carting.domain.File
-     * @see java.io.BufferedOutputStream
-     * @see java.io.File
-     * @see java.io.FileOutputStream
-     */
-    public List<String> getPathsAndWriteFilesToServer(MultipartFile[] files,
-                                                      int documentType, int leaderId) throws IOException;
-
-    /**
-     * <p/>
      * Implementation of this method sets parameters to the document according
      * to type of document
      * <p/>
@@ -118,19 +98,6 @@ public interface DocumentService {
     public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
                              MultipartFile[] files) throws IOException;
 
-
-    /**
-     * <p/>
-     * Implementation of this method deletes file (instances of
-     * {@link java.io.File File}) from server
-     *
-     * @param fileAbsolutePath - the relative path of the document which is saved in database
-     * @return <code>true</code> if file was deleted successfully,
-     * <code>false</code> otherwise*
-     * @author Volodymyr Semaniv
-     * @see net.carting.domain.File
-     */
-    public boolean deleteFileFromServer(String fileAbsolutePath);
 
     /**
      * <p/>

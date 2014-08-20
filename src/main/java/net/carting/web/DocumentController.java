@@ -1,10 +1,8 @@
 package net.carting.web;
 
-import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Document;
 import net.carting.domain.File;
 import net.carting.domain.Leader;
-import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.Team;
 import net.carting.service.*;
 
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -21,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -125,7 +121,7 @@ public class DocumentController {
         if (teamService.isTeamByLeaderId(leader.getId())) {
             Team team = teamService.getTeamByLeader(leader);
             map.put("documentType", documentType);
-            if (documentType == Document.TYPE_RACER_PERENTAL_PERMISSIONS) {
+            if (documentType == Document.TYPE_RACER_PARENTAL_PERMISSIONS) {
                 map.put("racers", racerService
                         .getSetOfRacersNeedingPerentalPermisionByTeam(team));
             } else {
@@ -238,9 +234,6 @@ public class DocumentController {
                         + " of team " + document.getTeamOwner().getName() + "'");
             }
             if (!documentService.isRacerOwnerOfDocument(documentId)) {
-                for (File file : document.getFiles()) {
-                    documentService.deleteFileFromServer(file.getPath());
-                }
                 documentService.deleteDocument(document);
                 LOG.info(document.getCurrentStringDocumentType()
                         + "was deleted by leader of team '"
@@ -307,9 +300,7 @@ public class DocumentController {
     String deleteFile(@RequestBody Map<String, Object> map) {
         int fileId = Integer.parseInt(map.get("fileId").toString());
         File file = fileService.getFileById(fileId);
-        if (documentService.deleteFileFromServer(file.getPath())) {
-            fileService.deleteFile(file);
-        }
+        fileService.deleteFile(file);
         return "success";
     }
 

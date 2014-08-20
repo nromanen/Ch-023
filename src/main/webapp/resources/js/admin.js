@@ -5,7 +5,7 @@ $(document).ready(function(){
     $('#edit_car_class_form').bootstrapValidator();
 
 	$("#import").click(function() {
-        $.get( "downloadFiles", function(data) {
+        $.get( "downloadDump", function(data) {
             if (data === "success") {
                 $('#documents_loading_success').css("display", "inline-block").hide().fadeIn();
                 $('#documents_loading_success').delay(2000).fadeOut('slow');
@@ -17,7 +17,7 @@ $(document).ready(function(){
 	});
 
 	$("#export").click(function() {
-        $.get( "uploadFiles",   function(data) {
+        $.get( "uploadDump",   function(data) {
             if (data === "success") {
                 $('#documents_loading_success').css("display", "inline-block").hide().fadeIn();
                 $('#documents_loading_success').delay(2000).fadeOut('slow');

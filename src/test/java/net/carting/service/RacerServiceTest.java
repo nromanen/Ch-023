@@ -132,7 +132,7 @@ public class RacerServiceTest {
         Set<Racer> racers = new HashSet<Racer>();
 
         Document documentRacer1 = new Document();
-        documentRacer1.setType(Document.TYPE_RACER_PERENTAL_PERMISSIONS);
+        documentRacer1.setType(Document.TYPE_RACER_PARENTAL_PERMISSIONS);
         Set<Document> documentsRacer1 = new HashSet<Document>();
         documentsRacer1.add(documentRacer1);
         Racer racer1 = new Racer();
@@ -165,7 +165,7 @@ public class RacerServiceTest {
         AdminSettings adminSettings = new AdminSettings();
         adminSettings.setParentalPermissionYears(18);
         when(adminSettingsDAO.getAdminSettings()).thenReturn(adminSettings);
-        when(racerDAO.getListOfRacersWithSetDocumentByDocumentType(Document.TYPE_RACER_PERENTAL_PERMISSIONS)).thenReturn(racersWithSetPerentalPermission);
+        when(racerDAO.getListOfRacersWithSetDocumentByDocumentType(Document.TYPE_RACER_PARENTAL_PERMISSIONS)).thenReturn(racersWithSetPerentalPermission);
 
         assertEquals("Expected 1", 1,
                 racerService.getSetOfRacersNeedingPerentalPermisionByTeam(team).size());

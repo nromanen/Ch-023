@@ -86,18 +86,22 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
                                             String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
-        Document document = new Document();
-        document.setType(documentType);
-        document = setDocumentParametersByType(document, number, startDate, finishDate);
-        addDocument(document);
-        List<String> paths = null;
         try {
-            paths = getPathsAndWriteFilesToServer(files, documentType, leader.getId());
-        } catch (IOException e) {
+            Document document = new Document();
+            document.setType(documentType);
+            document = setDocumentParametersByType(document, number, startDate, finishDate);
+            addDocument(document);
+            List<byte[]> fileList = new ArrayList<>();
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    fileList.add(file.getBytes());
+                }
+            }
+            fileService.addFilesToDocument(document, fileList);
+            racerService.setDocumentToRacers(document, racersId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        fileService.addFilesToDocument(document, paths);
-        racerService.setDocumentToRacers(document, racersId);
     }
 
 
@@ -114,9 +118,15 @@ public class DocumentServiceImpl implements DocumentService {
         updateDocument(document);
 
         int documentType = document.getType();
-        List<String> paths = getPathsAndWriteFilesToServer(files, documentType,
-                document.getTeamOwner().getLeader().getId());
-        fileService.addFilesToDocument(document, paths);
+        List<byte[]> fileList = new ArrayList<byte[]>();
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                fileList.add(file.getBytes());
+            }
+        }
+                //getPathsAndWriteFilesToServer(files, documentType,
+                //document.getTeamOwner().getLeader().getId());
+        fileService.addFilesToDocument(document, fileList);
         logger.info("Leader "
                 + document.getTeamOwner().getLeader().getFirstName() + " "
                 + document.getTeamOwner().getLeader().getLastName()
@@ -125,33 +135,6 @@ public class DocumentServiceImpl implements DocumentService {
                 + Document.getStringDocumentType(documentType));
     }
 
-    @Override
-    public List<String> getPathsAndWriteFilesToServer(MultipartFile[] files,
-                                                      int documentType, int leaderId) throws IOException {
-        List<String> pathsToFiles = new ArrayList<String>();
-        for (int i = 0; i < files.length; i++) {
-            MultipartFile file = files[i];
-            if (!file.isEmpty()) {
-                byte[] bytes = file.getBytes();
-                String fileName = Document.getStringDocumentType(documentType)
-                        .replace(" ", "_")
-                        + Calendar.getInstance().getTimeInMillis()
-                        + leaderId
-                        + "."
-                        + FilenameUtils
-                        .getExtension(file.getOriginalFilename());
-                String directoryAbsolutePath = createDirectoryForFilesAndGetAbsolutePath();
-                File serverFile = new File(directoryAbsolutePath
-                        + File.separator + fileName);
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
-                pathsToFiles.add(fileName);
-            }
-        }
-        return pathsToFiles;
-    }
 
     @Override
     public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
@@ -164,7 +147,7 @@ public class DocumentServiceImpl implements DocumentService {
                 document.setName(number);
                 document.setFinishDate(DateUtil.getDateFromString(finishDate));
                 break;
-            case Document.TYPE_RACER_PERENTAL_PERMISSIONS:
+            case Document.TYPE_RACER_PARENTAL_PERMISSIONS:
                 document.setStartDate(DateUtil.getDateFromString(startDate));
                 break;
             case Document.TYPE_RACER_MEDICAL_CERTIFICATE:
@@ -176,21 +159,6 @@ public class DocumentServiceImpl implements DocumentService {
         return document;
     }
 
-    public String createDirectoryForFilesAndGetAbsolutePath() {
-        File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
-        if (!dir.exists())
-            dir.mkdirs();
-        return dir.getAbsolutePath();
-    }
-
-    @Override
-    public boolean deleteFileFromServer(String filePath) {
-        File serverFile = new File(createDirectoryForFilesAndGetAbsolutePath() + File.separator + filePath);
-        if (!serverFile.exists()) {
-            return true;
-        }
-        return serverFile.delete();
-    }
 
     @Override
     @Transactional
@@ -201,7 +169,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void createStartStatement(String html) {
         try {
-            String path = createDirectoryForFilesAndGetAbsolutePath() + "/start.pdf";
+            File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
+            if (!dir.exists())
+                dir.mkdirs();
+            String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
         } catch (IOException e) {
             e.printStackTrace();

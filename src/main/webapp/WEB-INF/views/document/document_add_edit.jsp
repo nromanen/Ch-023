@@ -124,7 +124,7 @@
 			<table class="table">
 				<c:forEach items="${document.files}" var="file">
 					<tr>
-						<td><a href="<c:url value="/resources/documents/${file.path}" />" class="glyphicon glyphicon-paperclip file-link fl-right">${file.path}</a></td>
+						<td><a href="data:image/jpg;base64,<c:out value='${file.file}'/>" class="glyphicon glyphicon-paperclip file-link"><c:out value='${file.name}'/></a>/td>
 						<td><button type="button" id="${file.id}" class="btn btn-danger btn-sm delete_file_btn" style="float: right">
 								<spring:message code="label.delete" />
 							</button>

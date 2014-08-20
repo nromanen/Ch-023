@@ -93,9 +93,10 @@
 		</c:if>
 		<c:forEach items="${document.files}" var="file">
 			<div>
-				<a href="<c:url value="/resources/documents/${file.path}" />"
-					class="glyphicon glyphicon-paperclip file-link">${file.path} </a>
-			</div>
+				<a href="data:image/jpg;base64,<c:out value='${file.file}'/>"
+					class="glyphicon glyphicon-paperclip file-link"><c:out value='${file.name}'/>
+				</a>
+				</div>
 		</c:forEach>
 
 		<c:if test="${document.reason != null && !document.reason.equals('')}">

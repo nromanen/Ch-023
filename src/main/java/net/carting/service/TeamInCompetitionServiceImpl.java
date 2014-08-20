@@ -102,7 +102,7 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
             return false;
         }
         if (racer.getAge() < perentalPermissionsYears) {
-            if (!isValidDocumentInCompetition(racer.getDocumentByType(Document.TYPE_RACER_PERENTAL_PERMISSIONS), competition)) {
+            if (!isValidDocumentInCompetition(racer.getDocumentByType(Document.TYPE_RACER_PARENTAL_PERMISSIONS), competition)) {
                 return false;
             }
         }

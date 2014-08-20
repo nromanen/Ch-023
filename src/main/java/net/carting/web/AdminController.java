@@ -1,8 +1,6 @@
 package net.carting.web;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.Leader;
-import net.carting.domain.User;
+import net.carting.domain.*;
 import net.carting.service.*;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
@@ -36,7 +34,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
     @Autowired
-    private FilesService filesService;
+    private FileService fileService;
 
     private static final Logger LOG = Logger.getLogger(AdminController.class);
 
@@ -169,32 +167,31 @@ public class AdminController {
         return "success";
     }
 
-    @RequestMapping(value = "/uploadFiles", method = RequestMethod.GET)
+    @RequestMapping(value = "/uploadDump", method = RequestMethod.GET)
     public
     @ResponseBody
-    String uploadFiles() {
+    String uploadDump() {
         String result = "success";
         try {
-            filesService.uploadAll();
-            LOG.info("Admin has uploaded documents to DB");
+            LOG.info("Admin has uploaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to upload documents to DB");
+            LOG.info("Admin has failed to upload DB dump");
         }
         return result;
     }
 
-    @RequestMapping(value = "/downloadFiles", method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadDump", method = RequestMethod.GET)
     public
     @ResponseBody
-    String saveFiles() {
+    String saveDump() {
         String result = "success";
         try {
-            filesService.downloadAll();
-            LOG.info("Admin has downloaded documents from DB");
+
+            LOG.info("Admin has downloaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to download documents from DB");
+            LOG.info("Admin has failed to download DB Dump");
         }
         return result;
     }

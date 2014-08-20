@@ -1,5 +1,7 @@
 package net.carting.domain;
 
+import org.springframework.security.crypto.codec.Base64;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,8 +17,19 @@ public class File {
     @JoinColumn(name = "document_id", nullable = false)
     private Document document;
 
-    @Column(name = "path", nullable = false)
-    private String path;
+    @Column(name = "file", nullable = false)
+    private byte[] file;
+
+    @Column(name="name")
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -34,20 +47,21 @@ public class File {
         this.document = document;
     }
 
-    public String getPath() {
-        return path;
+    public String getFile() {
+        return new String(Base64.encode(file));
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFile(byte[] file) {
+        this.file = file;
     }
+
 
     public File() {
     }
 
-    public File(Document document, String path) {
+    public File(Document document, byte[] path) {
         this.setDocument(document);
-        this.setPath(path);
+        this.setFile(path);
     }
 
 }

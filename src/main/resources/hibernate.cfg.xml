@@ -35,7 +35,6 @@
         <mapping class="net.carting.domain.TeamInCompetition"/>
         <mapping class="net.carting.domain.CarClassCompetitionResult"/>
         <mapping class="net.carting.domain.File"/>
-        <mapping class="net.carting.domain.Files"/>
         <mapping class="net.carting.domain.Document"/>
         <mapping class="net.carting.domain.AdminSettings"/>
     </session-factory>
