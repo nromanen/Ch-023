@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,6 +53,7 @@ public class User implements Serializable, UserDetails {
 
 	@ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "role_id", nullable = false)
+	@Valid
     private Role role;
 
     // Getters & Setters for original props
