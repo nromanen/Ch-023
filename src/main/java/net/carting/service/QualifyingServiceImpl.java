@@ -56,7 +56,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 		try {
 			return qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
 		} catch (NullPointerException e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return null;
 		}
 	}

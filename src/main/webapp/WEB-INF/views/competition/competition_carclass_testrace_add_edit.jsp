@@ -4,15 +4,29 @@ pageEncoding="utf-8"%>
 
 <script type='text/javascript' src='<c:url value="/resources/js/competition_carclass.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.js" />'></script>
-<h2 class="user-info-name">Add test race</h2>
+<c:choose>
+	<c:when test="${!empty qualifyingList}">
+		<h2 class="user-info-name">Edit qualifying</h2>
+	</c:when>
+	<c:otherwise>
+		<h2 class="user-info-name">Add qualifying</h2>
+	</c:otherwise>
+</c:choose>
 	<c:if test="${membersCount > 0 }">
-		<form role="form" id="addTestRace" action="addQualifying" method="post">
+		<c:choose>
+			<c:when test="${!empty qualifyingList}">
+				<form role="form" id="testRace" action="editQualifying" method="post">
+			</c:when>
+			<c:otherwise>
+				<form role="form" id="testRace" action="addQualifying" method="post">
+			</c:otherwise>
+		</c:choose>
 			<div class="form-group" style="max-width: 250px">
 				<table width="200" class="table">
 					<thead>
 						<tr>
 							<th>Number</th>
-							<th>Time</th>
+							<th>Time<span style="color:red">*</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -21,22 +35,20 @@ pageEncoding="utf-8"%>
 								<td style="width: 100px; text-align: center">
 									<h4>${number}</h4>
 								</td>
-								<td style="width: 100px;" class="time"><input type="hidden" value="${number}">
-									<input style="width: 100px;" required type="text" class="form-control time" onchange='Go()' placeholder="mm:ss" id='id_${counter.index}' name="time_${counter.index}"
-									pattern="^\d\d:[0-5]\d$"
-									data-bv-regexp-message="The full name can consist of alphabetical characters and spaces only"
-									data-bv-notempty
-									data-bv-notempty-message='<spring:message code="dataerror.field_required"/>'
-									>
+								<td style="width: 100px;" class="time">
+									<input style="width: 100px;" type="text" class="form-control time" onchange='Go()' placeholder="[HH:]mm:ss" id='id_${counter.index}' name="time_${counter.index}"
+										<c:if test='${!empty qualifyingList }'>value="${qualifyingList.get(counter.index).racerTime.toString()}"</c:if>
+										pattern="^(\d\d:)?[0-5]\d:[0-5]\d$" required 
+										data-bv-regexp-message="The full name can consist of alphabetical characters and spaces only"
+										data-bv-notempty
+										data-bv-notempty-message='<spring:message code="dataerror.field_required"/>'>
 								</td>
 							</tr>
-							<input type="hidden" value="${number}" name="number_${counter.index}" id="n_${counter.index}">
-							
 						</c:forEach>
  					</tbody>
 				</table>
 				<input type="text" class="times" name="timeResult" id="time">
-				<input type="submit" class="btn btn-success" id="addTestRacesubmit" value="Add">
+				<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" value="Add">
 			</div>
 		</form>
 	</c:if>
@@ -45,11 +57,11 @@ pageEncoding="utf-8"%>
 	function Go() {
 		var str="";
 		var mas=[];
-		$('#addTestRace [id^=id]').each(
+		$('#testRace [id^=id]').each(
 			function() {
 				if(this.value!='') {
 					if(mas.indexOf(this.value)<0) {
-					mas.push(this.value);
+					mas.push(this.value.trim());
 					} else {
 						this.value='';
 						document.getElementById('addTestRacesubmit').disabled=true;

@@ -145,17 +145,9 @@ $(document).ready(function(){
 	        }
 	    });
 	});
-	if ($('#addTestRace').length != 0) {
-	$('#addTestRace').bootstrapValidator();
+	if ($('#testRace').length != 0) {
+	$('#testRace').bootstrapValidator();
 	}
 	
-	$("#addTestRacesubmit").click(function(){
-		$('#addTestRace tbody tr').each(function(){
-			 $(this).find('td.time').each(function(){
-				 
-			 });
-		});
-		
-	});
 	
 });
