@@ -1,30 +1,37 @@
 package net.carting.web;
 
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Document;
-import net.carting.domain.File;
-import net.carting.domain.Leader;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.Team;
-import net.carting.service.*;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import net.carting.domain.Document;
+import net.carting.domain.File;
+import net.carting.domain.Leader;
+import net.carting.domain.Team;
+import net.carting.service.DocumentService;
+import net.carting.service.FileService;
+import net.carting.service.LeaderService;
+import net.carting.service.RacerService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value = "/document")
@@ -54,7 +61,7 @@ public class DocumentController {
     @Autowired
     private RacerService racerService;
 
-    private static final Logger LOG = Logger.getLogger(DocumentController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -99,10 +106,8 @@ public class DocumentController {
 				 * page of his team
 				 */
 
-                LOG.info("Leader of team " + team.getName()
-                        + "tried to see a document of team "
-                        + teamOwner.getName()
-                        + ", but was redirected to page of his team");
+                LOG.info("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
+                		team.getName(), teamOwner.getName());
                 return "redirect:/team/" + team.getId();
             }
         } else {
@@ -110,9 +115,8 @@ public class DocumentController {
 			 * If team leader don't has a team, he is redirected to page in
 			 * which he can add team
 			 */
-            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
-                    + "tried to see a document of team " + teamOwner.getName()
-                    + ", but was redirected to add team, because he didn't has a team");
+            LOG.info("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
+            		leader.getFirstName(), leader.getLastName(), teamOwner.getName());
             return "redirect:/team/add";
         }
 
@@ -133,13 +137,12 @@ public class DocumentController {
                         .getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                                 documentType, team));
             }
-            LOG.info("Leader of team " + team.getName()
-                    + " tried to add document "
-                    + Document.getStringDocumentType(documentType));
+            LOG.info("Leader of team {} tried to add document {}",
+            		team.getName(), Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.info("Leader " + leader.getFirstName() + " " + leader.getLastName()
-                    + "tried to add document , but was redirected to add team, because he didn't has a team");
+            LOG.info("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team", 
+            		leader.getFirstName(), leader.getLastName());
             return "redirect:/team/add";
         }
     }
@@ -176,8 +179,8 @@ public class DocumentController {
                      documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
                  } catch (IOException e) {
                      map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
-                     LOG.error("Leader " + leader.getFirstName() + " " + leader.getLastName()
-                             + " tried to add document, but happened some problem with writing files to server");
+                     LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                     leader.getFirstName(), leader.getLastName());
                      return "custom_generic_exception";
                  }
                  return "redirect:/team/" + team.getId();
@@ -227,24 +230,17 @@ public class DocumentController {
                 racersId[i] = Integer.parseInt(racersIdString[i]);
                 documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
                         documentId, racersId[i]);
-                LOG.info("'" + document.getCurrentStringDocumentType() + "'"
-                        + " was deleted from racer "
-                        + racerService.getRacerById(racersId[i]).getFirstName()
-                        + " "
-                        + racerService.getRacerById(racersId[i]).getLastName()
-                        + " by leader "
-                        + document.getTeamOwner().getLeader().getFirstName() + " "
-                        + document.getTeamOwner().getLeader().getLastName()
-                        + " of team " + document.getTeamOwner().getName() + "'");
+                LOG.info("'{}' was deleted from racer {} {} by leader {} {} of team {}",
+                		document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
+                        racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(), 
+                        document.getTeamOwner().getLeader().getLastName(), document.getTeamOwner().getName());
             }
             if (!documentService.isRacerOwnerOfDocument(documentId)) {
                 for (File file : document.getFiles()) {
                     documentService.deleteFileFromServer(file.getPath());
                 }
                 documentService.deleteDocument(document);
-                LOG.info(document.getCurrentStringDocumentType()
-                        + "was deleted by leader of team '"
-                        + document.getTeamOwner().getName() + "'");
+                LOG.info("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
             }
         return "success";
     }
@@ -292,11 +288,8 @@ public class DocumentController {
             String username = userService.getCurrentUserName();
             Leader leader = leaderService.getLeaderByUserName(username);
             map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
-            LOG.error("Leader "
-                    + leader.getFirstName()
-                    + " "
-                    + leader.getLastName()
-                    + " tried to add document, but happened some problem with writing files to server");
+            LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                    leader.getFirstName(), leader.getLastName());
             return "custom_generic_exception";
         }
     }

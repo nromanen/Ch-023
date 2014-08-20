@@ -28,7 +28,8 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.DateUtil;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,7 +74,7 @@ public class CarClassCompetitionController {
     @Autowired
     private CompetitionService competitionService;
 
-    private static final Logger LOG = Logger.getLogger(CarClassCompetitionController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CarClassCompetitionController.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
@@ -110,13 +111,11 @@ public class CarClassCompetitionController {
                 .getCarClassCompetitionById(Integer.parseInt(map.get("id").toString()));
         try {
             carClassCompetitionService.deleteCarClassCompetition(carClassCompetition);
-            LOG.info("Admin has deleted car class " + carClassCompetition.getCarClass().getName()
-                    + " from competition " + carClassCompetition.getCompetition().getName() + ""
-                    + "(id = " + carClassCompetition.getCompetition().getId() + ")");
+            LOG.info("Admin has deleted car class {} from competition {} (id = {})", carClassCompetition.getCarClass().getName(),
+                    				carClassCompetition.getCompetition().getName(), carClassCompetition.getCompetition().getId());
         } catch (Exception e) {
-            LOG.info("Admin trying to delete car class " + carClassCompetition.getCarClass().getName()
-                    + " from competition " + carClassCompetition.getCompetition().getName() + " "
-                    + "(id = " + carClassCompetition.getCompetition().getId() + ")");
+        	LOG.info("Admin trying to delete car class {} from competition {} (id = {})", carClassCompetition.getCarClass().getName(),
+    				carClassCompetition.getCompetition().getName(), carClassCompetition.getCompetition().getId());
             return "error";
         }
         return "success";
@@ -133,7 +132,7 @@ public class CarClassCompetitionController {
         carClassCompetition.setCircleCount(Integer.parseInt(map.get("circleCount").toString()));
         carClassCompetition.setPercentageOffset(Integer.parseInt(map.get("percentageOffset").toString()));
         carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
-        LOG.info("Admin has edited car class competition (id = " + carClassCompetition.getId() + ")");
+        LOG.info("Admin has edited car class competition (id = {})", carClassCompetition.getId());
         return "success";
     }
 
@@ -159,9 +158,9 @@ public class CarClassCompetitionController {
         try {
             racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(carClassCompetitionId, racerId);
 
-            LOG.info(username + " has unregistered racer(id = " + racerId + ") "
-                    + "from competition " + competition.getName() + "(id = " + competition.getId() + ") "
-                    + "from car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitionId + ")");
+            LOG.info("{} has unregistered racer(id = {}) from competition {} (id = {}) from car class {} (id = {})", username, racerId,
+                    competition.getName(), competition.getId(),
+                    carClassCompetition.getCarClass().getName(), carClassCompetitionId);
 
             //if this racer was last from his team in this competition
             //then unregister his team from this competition
@@ -169,16 +168,15 @@ public class CarClassCompetitionController {
                     competition.getId(), team.getId()).size() == 0) {
                 teamInCompetitionService.deleteTeamInCompetitionByTeamIdAndCompetitionId(team.getId(), competition.getId());
 
-                LOG.info(team.getName() + " has unregistered "
-                        + "from competition " + competition.getName() + "(id = " + competition.getId() + ") "
-                        + "because " + username + " has unregistered last racer from his team in this competition");
+                LOG.info("{} has unregistered from competition {} (id = {}) because {} has unregistered last racer from his team in this competition",team.getName(),
+                        competition.getName(), competition.getId(), username);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            LOG.info(username + " trying to unregister racer(id = " + racerId + ") "
-                    + "from competition " + competition.getName() + "(id = " + competition.getId() + ") "
-                    + "from car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitionId + ")");
+            LOG.info("{} trying to unregister racer(id = {}) from competition {} (id = {}) from car class {} (id = {})", username, racerId,
+                    competition.getName(), competition.getId(),
+                    carClassCompetition.getCarClass().getName(), carClassCompetitionId);
             return "error";
         }
         return "success";
@@ -212,10 +210,9 @@ public class CarClassCompetitionController {
 
             String username = userService.getCurrentUserName();
             Competition competition = carClassCompetition.getCompetition();
-            LOG.info(username + " has registered racer " + racer.getFirstName() + " " + racer.getLastName()
-                    + " (id = " + racerId + ") with number " + number + " "
-                    + " to competition " + competition.getName() + "(id = " + competition.getId() + ") "
-                    + " to car class " + carClassCompetition.getCarClass().getName() + "(id = " + carClassCompetitionId + ")");
+            LOG.info("{} has registered racer {} {} (id = {}) with number {} to competition {} (id = {}) to car class {} (id = {})", 
+            		username, racer.getFirstName(), racer.getLastName(), racerId, number, competition.getName(),
+            		competition.getId(), carClassCompetition.getCarClass().getName(), carClassCompetitionId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,10 +244,8 @@ public class CarClassCompetitionController {
         raceService.setResultTable(raceService.getChessRoll(race), race);
         carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
         editRace(race, map, id, race.getRaceNumber(), String.valueOf(race.getNumberOfLaps()));
-        LOG.info("Admin has added race with id=" + race.getId()
-                + " race number " + race.getRaceNumber()
-                + " in car class competition " + carClassCompetition.getCarClass().getName()
-                + " in competition " + carClassCompetition.getCompetition().getName());
+        LOG.info("Admin has added race with id={} race number {} in car class competition {} in competition {}", race.getId(), race.getRaceNumber(),
+        		carClassCompetition.getCarClass().getName(), carClassCompetition.getCompetition().getName());
         return "redirect:/carclass/" + id;
     }
 
@@ -281,10 +276,8 @@ public class CarClassCompetitionController {
             raceService.setResultTable(raceService.getChessRoll(race), race);
             carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
 
-            LOG.info("Admin has edited race with id=" + race.getId()
-                    + " race number " + raceNumber
-                    + " in car class competition " + carClassCompetition.getCarClass().getName()
-                    + " in competition " + carClassCompetition.getCompetition().getName());
+            LOG.info("Admin has edited race with id={} race number {} in car class competition {} in competition {}", race.getId(), raceNumber,
+            		carClassCompetition.getCarClass().getName(), carClassCompetition.getCompetition().getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -306,12 +299,12 @@ public class CarClassCompetitionController {
     String editSummaryResult(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
         ArrayList<HashMap<String, String>> mapsList = (ArrayList<HashMap<String, String>>) map.get("jsonObject");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        LOG.info("Admin has edited  summary results in car class competition " + carClassCompetition.getCarClass().getName());
+        LOG.info("Admin has edited  summary results in car class competition {}", carClassCompetition.getCarClass().getName());
         for (HashMap<String, String> idAndPoint : mapsList) {
             CarClassCompetitionResult result = carClassCompetitionResultService.getCarClassCompetitionResultById(Integer.parseInt(idAndPoint.get("id")));
             result.setAbsolutePoints(Integer.parseInt(idAndPoint.get("resultPoint")));
             carClassCompetitionResultService.updateCarClassCompetitionResult(result);
-            LOG.info("Result with id=" + Integer.parseInt(idAndPoint.get("id")) + " has been changed to value " + Integer.parseInt(idAndPoint.get("resultPoint")));
+            LOG.info("Result with id={} has been changed to value {}", Integer.parseInt(idAndPoint.get("id")), Integer.parseInt(idAndPoint.get("resultPoint")));
         }
         carClassCompetitionResultService.recalculateAbsoluteResults(carClassCompetition);
         LOG.info("Result table has been recalculated ");
@@ -327,8 +320,8 @@ public class CarClassCompetitionController {
 
         carClassCompetitionResult.setAbsolutePoints(carClassCompetitionResult.getAbsolutePoints() + Integer.parseInt(map.get("fineValue").toString()));
         carClassCompetitionResult.setComment(map.get("comment").toString());
-        LOG.info("Result of " + carClassCompetitionResult.getRacerCarClassCompetitionNumber().getRacer().getLastName()
-                + " has been changed by " + carClassCompetitionResult.getComment());
+        LOG.info("Result of {} has been changed by {}", carClassCompetitionResult.getRacerCarClassCompetitionNumber().getRacer().getLastName(),
+        												carClassCompetitionResult.getComment());
         carClassCompetitionResultService.updateCarClassCompetitionResult(carClassCompetitionResult);
         carClassCompetitionResultService.recalculateAbsoluteResults(carClassCompetitionResult.getRacerCarClassCompetitionNumber().getCarClassCompetition());
         LOG.info("Result table has been recalculated ");

@@ -1,14 +1,25 @@
 package net.carting.service;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.carting.dao.RacerCarClassCompetitionNumberDAO;
 import net.carting.dao.TeamInCompetitionDAO;
-import net.carting.domain.*;
-import org.apache.log4j.Logger;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Competition;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.Team;
+import net.carting.domain.TeamInCompetition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassCompetitionNumberService {
@@ -25,7 +36,7 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
 
-    private static final Logger LOG = Logger.getLogger(RacerCarClassCompetitionNumberServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RacerCarClassCompetitionNumberServiceImpl.class);
 
     @Override
     @Transactional
@@ -43,8 +54,8 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
             teamInCompetition.setCompetition(competition);
             teamInCompetition.setTeam(team);
             teamInCompetitionDAO.addTeamInCompetition(teamInCompetition);
-            LOG.info("Team " + team.getName() + "(id = " + team.getId() + ") "
-                    + "has registered on competition " + competition.getName() + "(id = " + competition.getId() + ")");
+            LOG.info("Team {} (id = {}) has registered on competition {} (id = {})",team.getName(),team.getId(), 
+            																		competition.getName(), competition.getId());
         }
         racerCarClassCompetitionNumberDAO.addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
     }
@@ -106,13 +117,9 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
                     .next();
             addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
             racer = racerCarClassCompetitionNumber.getRacer();
-            LOG.info(String
-                    .format("Racer %s %s of team %s had registered on competition in car class %s",
-                            racer.getFirstName(), racer.getLastName(), racer
-                                    .getTeam().getName(),
-                            racerCarClassCompetitionNumber
-                                    .getCarClassCompetition().getCarClass()
-                                    .getName()));
+            LOG.info("Racer {} {} of team {} had registered on competition in car class {}",
+                            racer.getFirstName(), racer.getLastName(), racer.getTeam().getName(),
+                            racerCarClassCompetitionNumber.getCarClassCompetition().getCarClass().getName());
         }
     }
 

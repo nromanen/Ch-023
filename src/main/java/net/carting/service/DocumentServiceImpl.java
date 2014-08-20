@@ -1,6 +1,14 @@
 package net.carting.service;
 
-import com.itextpdf.text.DocumentException;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.servlet.ServletContext;
 
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
@@ -9,25 +17,21 @@ import net.carting.util.DateUtil;
 import net.carting.util.PdfWriter;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import com.itextpdf.text.DocumentException;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
     @Autowired
     ServletContext context;
 
-    Logger logger = Logger.getLogger(DocumentServiceImpl.class);
+    Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     @Autowired
     private DocumentDAO documentDAO;
@@ -117,12 +121,11 @@ public class DocumentServiceImpl implements DocumentService {
         List<String> paths = getPathsAndWriteFilesToServer(files, documentType,
                 document.getTeamOwner().getLeader().getId());
         fileService.addFilesToDocument(document, paths);
-        logger.info("Leader "
-                + document.getTeamOwner().getLeader().getFirstName() + " "
-                + document.getTeamOwner().getLeader().getLastName()
-                + " of team " + document.getTeamOwner().getName()
-                + " edited document "
-                + Document.getStringDocumentType(documentType));
+        logger.info("Leader {} {} of team {} edited document {}",
+                document.getTeamOwner().getLeader().getFirstName(),
+                document.getTeamOwner().getLeader().getLastName(),
+                document.getTeamOwner().getName(),
+                Document.getStringDocumentType(documentType));
     }
 
     @Override

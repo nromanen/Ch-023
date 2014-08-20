@@ -1,14 +1,14 @@
 package net.carting.dao;
 
-import net.carting.domain.Document;
-import net.carting.domain.File;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
-import java.util.Set;
+
+import net.carting.domain.Document;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class DocumentDAOImpl implements DocumentDAO {

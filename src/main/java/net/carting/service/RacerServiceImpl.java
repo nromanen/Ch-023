@@ -1,15 +1,25 @@
 package net.carting.service;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import net.carting.dao.AdminSettingsDAO;
 import net.carting.dao.CarClassDAO;
 import net.carting.dao.RacerDAO;
-import net.carting.domain.*;
-import org.apache.log4j.Logger;
+import net.carting.domain.CarClass;
+import net.carting.domain.Document;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class RacerServiceImpl implements RacerService {
@@ -22,6 +32,8 @@ public class RacerServiceImpl implements RacerService {
 
     @Autowired
     private CarClassDAO carClassDAO;
+    
+    private static final Logger LOG = LoggerFactory.getLogger(RacerServiceImpl.class);
 
     @Override
     @Transactional
@@ -58,8 +70,6 @@ public class RacerServiceImpl implements RacerService {
     public boolean isSetRacer(String firstName, String lastName, Date birthday) {
         return racerDAO.isSetRacer(firstName, lastName, birthday);
     }
-
-    private static final Logger LOG = Logger.getLogger(RacerServiceImpl.class);
 
     @Override
     @Transactional
@@ -155,11 +165,8 @@ public class RacerServiceImpl implements RacerService {
                 Racer racer = getRacerById(Integer.parseInt(racersId[i]));
                 racer.getDocuments().add(document);
                 updateRacer(racer);
-                LOG.info("Leader of team " + racer.getTeam().getName()
-                        + " added '"
-                        + Document.getStringDocumentType(document.getType())
-                        + "'" + " to racer " + racer.getFirstName() + " "
-                        + racer.getLastName());
+                LOG.info("Leader of team {} added '{}' to racer {} {}",racer.getTeam().getName(), Document.getStringDocumentType(document.getType()), 
+                														racer.getFirstName(),racer.getLastName());
             }
         }
     }

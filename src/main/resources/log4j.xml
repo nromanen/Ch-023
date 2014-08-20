@@ -24,7 +24,7 @@
 
     <!-- FILE Appender for developer needs -->
     <appender name="dev" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="src/main/webapp/resources/logs/developers/dev_log.log "/>
+        <param name="File" value="D:/dev_log.log "/>
         <param name="MaxFileSize" value="5MB"/>
         <param name="MaxBackupIndex" value="3"/>
         <param name="Encoding" value="UTF-8"/>
@@ -35,7 +35,7 @@
 
     <!-- FILE Appender for recording logs of all package -->
     <appender name="general" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="src/main/webapp/resources/logs/general/gen_log.log "/>
+        <param name="File" value="D:/gen_log.log "/>
         <param name="MaxFileSize" value="5MB"/>
         <param name="MaxBackupIndex" value="3"/>
         <param name="Encoding" value="UTF-8"/>
@@ -79,8 +79,8 @@
     <!-- Root Logger -->
     <root>
         <priority value="warn"/>
-        <appender-ref ref="console"/>
         <appender-ref ref="general"/>
+        <appender-ref ref="dev"/>
     </root>
 
 </log4j:configuration>

@@ -24,7 +24,8 @@ import net.carting.service.UserService;
 import net.carting.util.DateUtil;
 import net.carting.util.LeaderValidator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
@@ -64,7 +65,7 @@ public class LeaderController {
     @Autowired
     private AdminSettingsService adminSettingsService;
 
-    private static final Logger LOG = Logger.getLogger(LeaderController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LeaderController.class);
 
     private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -153,8 +154,8 @@ public class LeaderController {
         leader.setAddress(formMap.get("address").toString());
         leader.setLicense(formMap.get("license").toString());
         leaderService.updateLeader(leader);
-        LOG.info(String.format("Leader %s %s had edited information abut him",
-                leader.getFirstName(), leader.getLastName()));
+        LOG.info("Leader {} {} had edited information abut him",
+                leader.getFirstName(), leader.getLastName());
 
         return leader.getId();
     }
