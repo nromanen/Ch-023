@@ -170,42 +170,31 @@ public class AdminController {
         return "success";
     }
 
-    @RequestMapping(value = "/uploadFiles", method = RequestMethod.GET)
+    @RequestMapping(value = "/uploadDump", method = RequestMethod.GET)
     public
     @ResponseBody
-    String uploadFiles() {
+    String uploadDump() {
         String result = "success";
         try {
-
-            File file = new File();
-            Document document = new Document();
-            document.setName("test");
-            document.setApproved(false);
-            document.setChecked(false);
-//file.setFile();
-            file.setDocument(document);
-            fileService.addFile(file);
-
-            //documentService.addDocument();
-            LOG.info("Admin has uploaded documents to DB");
+            LOG.info("Admin has uploaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to upload documents to DB");
+            LOG.info("Admin has failed to upload DB dump");
         }
         return result;
     }
 
-    @RequestMapping(value = "/downloadFiles", method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadDump", method = RequestMethod.GET)
     public
     @ResponseBody
-    String saveFiles() {
+    String saveDump() {
         String result = "success";
         try {
-//            filesService.downloadAll();
-            LOG.info("Admin has downloaded documents from DB");
+
+            LOG.info("Admin has downloaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to download documents from DB");
+            LOG.info("Admin has failed to download DB Dump");
         }
         return result;
     }

@@ -234,9 +234,6 @@ public class DocumentController {
                         + " of team " + document.getTeamOwner().getName() + "'");
             }
             if (!documentService.isRacerOwnerOfDocument(documentId)) {
-                /*for (File file : document.getFiles()) {
-                    documentService.deleteFileFromServer(file.getFile());
-                }*/
                 documentService.deleteDocument(document);
                 LOG.info(document.getCurrentStringDocumentType()
                         + "was deleted by leader of team '"
@@ -303,9 +300,7 @@ public class DocumentController {
     String deleteFile(@RequestBody Map<String, Object> map) {
         int fileId = Integer.parseInt(map.get("fileId").toString());
         File file = fileService.getFileById(fileId);
-        /*if (documentService.deleteFileFromServer(file.getFile())) {
-            fileService.deleteFile(file);
-        }*/
+        fileService.deleteFile(file);
         return "success";
     }
 
