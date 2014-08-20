@@ -1,0 +1,2 @@
+1. Follow this tutorial: http://www.javatips.net/blog/2013/10/sonarqube-tutorial
+2. Create MySQL database: sonar under user:password sonar:sonar
