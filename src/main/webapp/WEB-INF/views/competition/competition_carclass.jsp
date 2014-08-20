@@ -253,8 +253,7 @@ pageEncoding="utf-8"%>
 	                    </div>
 	                    <c:if test="${authority.equals('ROLE_ADMIN')}">
 		                    <div class="btn-group" style="float: right;">
-		                    	Edit(production)
-		                       <%--  <a href='<c:url value="/carclass/${carClassCompetition.id}/race/${status.index+1}/edit" />' class="btn btn-info " id="edit_raceresults_button"><spring:message code="label.edit" /></a> --%>
+		                       <a href='<c:url value="/carclass/${carClassCompetition.id}/editTestRace" />' class="btn btn-info " id="edit_qualifying_button"><spring:message code="label.edit" /></a>
 		                    </div>
 	                    </c:if>
 					</div>

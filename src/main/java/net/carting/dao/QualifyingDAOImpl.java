@@ -67,7 +67,6 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 		List<Qualifying> resultList = new ArrayList<Qualifying>();
 		for(Qualifying q:qualifyings) {
 			if (q.getCarClassCompetition().getId()==carClassCompetition.getId()) {
-				System.out.println(q.getCarClassCompetition().getId()+"=?"+carClassCompetition.getId());
 				resultList.add(q);
 			}
 		}

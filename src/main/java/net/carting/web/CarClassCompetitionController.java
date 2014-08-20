@@ -272,17 +272,32 @@ public class CarClassCompetitionController {
         try {
         	CarClassCompetition carClassCompetition = carClassCompetitionService.
         			getCarClassCompetitionById(id);
-            map.put("race", new Race());
             map.put("carClassCompetition",carClassCompetition);
             map.put("membersCount", racerCarClassCompetitionNumberService.
             		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
-            map.put("qualifyingList", qualifyingService.
-            		getQualifyingsByCarClassCompetition(carClassCompetition));
-        } catch (Exception e) {
+           } catch (Exception e) {
             e.printStackTrace();
         }
         return "competition_carclass_testrace_add_edit";
+    }
+    
+    @RequestMapping(value = "/{id}/editTestRace")
+    public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
+    	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+    	try{
+    		if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()==0)
+    		
+    		return "redirect:/carclass/" + id;
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	 map.put("membersCount", racerCarClassCompetitionNumberService.
+         		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+    	 map.put("qualifyingList", qualifyingService.
+         		getQualifyingsByCarClassCompetition(carClassCompetition));
+    	 map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+    	return "competition_carclass_testrace_add_edit";
     }
     
     @RequestMapping(value = "/{id}/addQualifying", method = RequestMethod.POST)
@@ -297,9 +312,21 @@ public class CarClassCompetitionController {
     		e.printStackTrace();
     	}
     	List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
-    	int count = racerCarClassCompetitionNumberService.
-        		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id);
-    	String[] timesArray= times.split(",");
+    	int count = racers.size();
+    	String[] timesArray= times.trim().split(",");
+    	for (int i=0;i<timesArray.length;i++) {
+    		timesArray[i]=timesArray[i].trim();
+    	}
+    	String[]test = timesArray;
+    	if (timesArray.length!=count) {
+    		 return "competition_carclass_results_add_edit";
+    	} else {
+    		for(int i=0;i<count;i++) {
+    			if (!timesArray[i].matches("(\\d\\d:)?[0-5]\\d:[0-5]\\d")) {
+    				return "redirect:/carclass/" + id;	
+    			}	
+    		}
+    	}
     	Integer[]places=new Integer[count];
     	int max=0; 
     	for (int i = max+1;i<count;i++) {
@@ -346,7 +373,88 @@ public class CarClassCompetitionController {
 		System.out.println("ok!");*/
     	return "redirect:/carclass/" + id;
     }
-
+    
+    @RequestMapping(value = "/{id}/editQualifying", method = RequestMethod.POST)
+    public String editQualifyings(@PathVariable("id") int id,
+    		@RequestParam("timeResult") String times, Map<String,Object>map) {
+    	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+    	List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
+    	try{
+    		if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()!=racers.size()) {
+    			LOG.error("Trying to edit null-object of qualifying");
+				System.out.println("Trying to edit null-object of qualifying");
+    			return "redirect:/carclass/" + id;
+    		}
+    	} catch(Exception e) {
+    		LOG.error(e);
+    		e.printStackTrace();
+    	}
+    	
+    	int count = racers.size();
+    	String[] timesArray= times.trim().split(",");
+    	for (int i=0;i<timesArray.length;i++) {
+    		timesArray[i]=timesArray[i].trim();
+    		if (timesArray[i].length()==5) {
+    			timesArray[i]="00:"+timesArray[i];
+    		}
+    	}
+    	if (timesArray.length!=count) {
+    		 return "competition_carclass_results_add_edit";
+    	} else {
+    		for(int i=0,counter=1;i<count;i++) {
+    			if (!timesArray[i].matches("(\\d\\d:)?[0-5]\\d:[0-5]\\d")) {
+    				LOG.warn("Times format are not match the pattern");
+    				System.out.println("Times format are not match the pattern");
+    				return "redirect:/carclass/" + id;
+    			}
+    			if (timesArray[i].equals(qualifyingService.getQualifyingTimesByCarClassCompetition(carClassCompetition).get(i))) {
+    				System.out.println(timesArray[i]);
+    				System.out.println(qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).get(i));
+    				counter++;
+    			}
+    			if (counter==count) {
+    				LOG.info("Trying to put in editing the same data");
+    				System.out.println("Trying to put in editing the same data");
+    				return "redirect:/carclass/" + id;
+    			}
+    		}
+    	}
+    	Integer[]places=new Integer[count];
+    	int max=0; 
+    	for (int i = max+1;i<count;i++) {
+    		if (timesArray[max].compareToIgnoreCase(timesArray[i])<0) {
+    			max=i;
+    		}
+    	}
+    	places[max]=count;
+    	for (int j=0;j<count-1;j++){
+	    	int min=0;
+	    	for (int i = min+1;i<count;i++) {
+	    		if (timesArray[min].compareToIgnoreCase(timesArray[i])>0) {
+	    			min=i;
+	    		}
+	    	}places[min]=j+1;
+	    	timesArray[min]=timesArray[max];
+    	}
+    	timesArray= times.split(",");
+    	for (int i=0;i<timesArray.length;i++) {
+    		timesArray[i]=timesArray[i].trim();
+    		if (timesArray[i].length()==5) {
+    			timesArray[i]="00:"+timesArray[i];
+    		}
+    	}
+    	List<Qualifying> ques = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+    	
+    	for (int i=0;i<ques.size();i++) {
+    		Qualifying q = ques.get(i);
+    		q.setRacerTime(Time.valueOf(timesArray[i]));
+    		q.setRacerPlace(places[i]);
+    		qualifyingService.updateQualifying(q);
+    	}
+    	
+    	return "redirect:/carclass/" + id;
+    }
+    
     @RequestMapping(value = "/{id}/race/{raceNumber}/edit")
     public String editRacePage(Map<String, Object> map, @PathVariable("id") int id, @PathVariable("raceNumber") int raceNumber) {
         map.put("race", raceService.getRaceByNumberAndCarClassCompetition(raceNumber, carClassCompetitionService.getCarClassCompetitionById(id)));
