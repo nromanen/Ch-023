@@ -2,6 +2,7 @@ package net.carting.web;
 
 import net.carting.domain.CarClass;
 import net.carting.domain.Leader;
+import net.carting.domain.Logs;
 import net.carting.domain.User;
 import net.carting.service.*;
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -37,6 +39,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private FilesService filesService;
+    @Autowired
+    private LogsService logsService;
 
     private static final Logger LOG = Logger.getLogger(AdminController.class);
 
@@ -197,6 +201,14 @@ public class AdminController {
             LOG.info("Admin has failed to download documents from DB");
         }
         return result;
+    }
+
+    @RequestMapping(value = "/logs", method = RequestMethod.GET)
+    public
+    String getLogs(Model model) {
+        List<Logs> list = logsService.getAllLogs();
+        model.addAttribute("logs", list);
+        return "logs";
     }
 
 }
