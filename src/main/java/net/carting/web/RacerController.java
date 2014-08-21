@@ -24,7 +24,8 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.DateUtil;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,7 +69,7 @@ public class RacerController {
     @Autowired
     private UserService userService;
 
-    private static final Logger LOG = Logger.getLogger(RacerController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RacerController.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String racerPage(Map<String, Object> map, @PathVariable("id") int id) {
@@ -187,8 +188,8 @@ public class RacerController {
         racerService.updateRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info(String.format("%s had edited racer %s %s (id = %s)", username,
-                racer.getFirstName(), racer.getLastName(), racer.getId()));
+        LOG.info("{} had edited racer {} {} (id = {})", username,
+                racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return racer.getId();
     }
@@ -241,9 +242,9 @@ public class RacerController {
         // --------------------------------------
 
         String username = userService.getCurrentUserName();
-        LOG.info(String.format("%s had added racer %s %s to team %s (id = %s)",
+        LOG.info("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
-                        .getTeam().getName(), racer.getTeam().getId()));
+                        .getTeam().getName(), racer.getTeam().getId());
 
         return racer.getId();
     }
@@ -299,8 +300,8 @@ public class RacerController {
         racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
 
         String username = userService.getCurrentUserName();
-        LOG.info(username + " has added car class" + carClass.getName() + "� with #" + number
-                + " to racer " + racer.getFirstName() + " " + racer.getLastName() + "(id = " + racerId + ")");
+        LOG.info("{} has added car class with {} to racer {} {} (id = {})", 
+        		username, carClass.getName(), number, racer.getFirstName(), racer.getLastName(), racerId);
 
         return "success";
     }
@@ -378,8 +379,8 @@ public class RacerController {
         racerService.deleteRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info(username + " has deleted racer "
-                + racer.getFirstName() + " " + racer.getLastName() + "(id = " + racer.getId() + ")");
+        LOG.info("{} has deleted racer {} {} (id = {})",
+        		username, racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return "success";
     }
@@ -394,8 +395,8 @@ public class RacerController {
         racerService.updateRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info(username + " has " + (enabled ? "enabled" : "disabled") + " racer "
-                + racer.getFirstName() + " " + racer.getLastName() + "(id = " + racer.getId() + ")");
+        LOG.info("{} has {} racer {} {} (id = {})", 
+        		username, (enabled ? "enabled" : "disabled"), racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return "success";
     }

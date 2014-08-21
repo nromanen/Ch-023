@@ -1,15 +1,12 @@
 package net.carting.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import net.carting.domain.Document;
 import net.carting.domain.Leader;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public interface DocumentService {
 
