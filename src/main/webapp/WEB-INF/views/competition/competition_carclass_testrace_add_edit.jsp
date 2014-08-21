@@ -15,7 +15,6 @@ pageEncoding="utf-8"%>
 					</c:otherwise>
 				</c:choose>
 			</div>
-			
 			<c:if test="${membersCount > 0 }">
 				<c:choose>
 					<c:when test="${!empty qualifyingList}">
@@ -73,6 +72,11 @@ pageEncoding="utf-8"%>
 		$('#testRace [id^=id]').each(
 			function() {
 				if(this.value!='') {
+					if(this.value.length==8) {
+						if(this.value.indexOf('00')==0) {
+							this.value=this.value.substring(3,8)
+						}
+					}
 					if(mas.indexOf(this.value)<0) {
 					mas.push(this.value.trim());
 					} else {

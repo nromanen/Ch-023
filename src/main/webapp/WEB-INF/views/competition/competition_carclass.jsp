@@ -13,8 +13,9 @@ pageEncoding="utf-8"%>
 <table class="width-100">
     <tr>
         <td>
-            <h2 class="user-info-name"><spring:message code="label.car_class" /> "${carClassCompetition.carClass.name}"
-            "${qualifyingList.size()} < ${membersCount} ?"</h2>
+        <div class="page-header">
+            <h2 class="user-info-name"><spring:message code="label.car_class" /> "${carClassCompetition.carClass.name}"</h2>
+       </div>
         </td>
         <td style="padding: 15px 0px 0px 20px;">
             <c:if test="${authority.equals('ROLE_ADMIN')}">
