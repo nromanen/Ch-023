@@ -186,7 +186,7 @@ $(document).ready(function() {
 	
 	function filter(table_id, right_char, td_class) {
 		var del = false;
-		$('#' + table_id + ' tbody tr').each(function(){				
+		$('#' + table_id + ' tbody tr.sortable').each(function(){				
 		    $(this).find('td.' + td_class).each(function(){
 		    	var value = "";
 		    	if($(this).children('span.minus').length > 0) {

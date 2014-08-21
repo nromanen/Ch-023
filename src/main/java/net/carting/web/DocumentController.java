@@ -320,10 +320,26 @@ public class DocumentController {
     }
     
     @RequestMapping(value = "/allDocuments", method = RequestMethod.GET)
-    public String allDocuments(Map<String, Object> map) {
+    public String allDocuments(Map<String, Object> map, @RequestParam(value="type",required=false) String type) {
+    	if (type==null) {
+    		type="modern";
+    	}
     	map.put("teams", teamService.getAllTeams());
     	map.put("all_docs", documentService.getAllDocuments());
+    	documentService.getAllDocuments().get(1).getRacers();
     	map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
+    	map.put("type",type);
+    	
         return "all_documents";
     }
+    
+    @RequestMapping(value = "/allDocuments/classic", method = RequestMethod.GET)
+    public String allDocumentsClassic(Map<String, Object> map, @RequestParam(value="type",required=false) String type) {
+    	if (type==null) {
+    		type="classic";
+    	}
+    	map.put("type", type);
+    	return "redirect:/document/allDocuments";
+    }
+    
 }
