@@ -1,4 +1,51 @@
-$(document).ready(function(){	
+$(document).ready(function(){
+	
+	if ($('#new_leader').length != 0) {
+		$('#new_leader').bootstrapValidator({
+			onSuccess: function(e){
+				$("div[id*='Id']").remove();
+				$("#ajax_loader").css("display", "inline-block");	
+			    var username = $('#username').val();
+				var jsonCheck = {"username" : username};
+				var urlCheck = window.location.protocol + "//" + window.location.host + '/Carting/leader/isSetUser';
+				$.ajax({  
+				    url: urlCheck,  
+				    data: JSON.stringify(jsonCheck),  
+				    contentType: 'application/json',
+				    type: "POST",	        
+				    success: function(response) {
+				     	if(response == false){
+				      		jQuery(".formFieldError").remove();
+				      		var json = $('#new_leader').serialize();
+				            $.ajax({
+				                url: $('#new_leader').attr("action"),
+				                context: document.body,
+				                type: "POST",
+				                data: json,
+				                success: function(response) {
+				                    if ($.isEmptyObject(response)) {
+				                       	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/loginPage');
+				                    }
+				                    else {
+				                    	 for(var key in response){
+				                             var err="<div class=\"alert alert-danger\"  style=\"margin-top: 10px; padding: 0px 0px 0px 20px; height: 25px;\" id=\""+key+"Id\">" +
+				                             		response[key]+"</div>";
+				                             jQuery("[name^='"+key+"']").after(err);
+				                         }
+				                    }
+				                }
+				            });
+				     	}
+				       	else {
+				       		$("#ajax_loader").css("display", "none");
+				       		$("#user_exists").css("display", "block");
+				       	}
+				     }
+				});
+				return false;
+			} 
+		});
+	}
 	
 	$('#edit_leader').submit(function(){
        $("#ajax_loader").css("display", "inline-block");
@@ -57,7 +104,7 @@ $(document).ready(function(){
 		}
 		return false;
 	});
-			
+/*			
 	$('.datepicker').datepicker({
 		format: 'yyyy-mm-dd',
         todayBtn: 'linked',
@@ -68,13 +115,15 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	
 	Date.prototype.yyyymmdd = function() {               
         var yyyy = this.getFullYear().toString();                                    
         var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based         
         var dd  = this.getDate().toString();                                        
         return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
 	};  
-
+*/
+	/*
 	$('#new_leader').submit(function(e){
 		$("div[id*='Id']").remove();
 		$("#ajax_loader").css("display", "inline-block");	
@@ -117,7 +166,7 @@ $(document).ready(function(){
 		});
 		return false;
 	});
-	
+	*/
 	$('#email').on('change', function(){
 		var email = $(this).val();
 		var json = {"email" : email};
@@ -138,13 +187,15 @@ $(document).ready(function(){
 	    });	
 	});
 	
-	$(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+	//$(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
 
 	//set datepickers start and end date
+	/*
 	$('#birthday').datepicker('setEndDate', (new Date()).yyyymmdd());
 	
 	$('#birthday').on('changeDate', function() {
 		$(this).datepicker('hide');
 	});
+	*/
 		
 });
