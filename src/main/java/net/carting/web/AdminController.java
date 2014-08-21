@@ -2,16 +2,19 @@ package net.carting.web;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 import net.carting.domain.CarClass;
 import net.carting.domain.Leader;
+import net.carting.domain.Logs;
 import net.carting.domain.User;
 import net.carting.service.AdminSettingsService;
 import net.carting.service.CarClassService;
 import net.carting.service.DocumentService;
-import net.carting.service.FilesService;
+import net.carting.service.FileService;
 import net.carting.service.LeaderService;
+import net.carting.service.LogsService;
 import net.carting.service.TeamService;
 import net.carting.service.UserService;
 
@@ -26,11 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -204,7 +202,6 @@ public class AdminController {
     String saveDump() {
         String result = "success";
         try {
-
             LOG.info("Admin has downloaded DB dump");
         } catch (Exception e) {
             result = "fail";
