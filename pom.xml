@@ -14,7 +14,7 @@
         <org.springframework.security-version>3.2.3.RELEASE</org.springframework.security-version>
         <org.hibernate.version>4.3.6.Final</org.hibernate.version>
         <org.aspectj-version>1.6.9</org.aspectj-version>
-        <org.slf4j-version>1.5.10</org.slf4j-version>
+        <org.slf4j-version>1.7.7</org.slf4j-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

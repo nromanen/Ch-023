@@ -9,7 +9,8 @@ import net.carting.dao.LeaderDAO;
 import net.carting.domain.Leader;
 import net.carting.domain.User;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class LeaderServiceImpl implements LeaderService {
     @Autowired
     private MailService mailService;
 
-    private static final Logger LOG = Logger.getLogger(LeaderServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LeaderServiceImpl.class);
 
     @Override
     @Transactional
@@ -102,8 +103,7 @@ public class LeaderServiceImpl implements LeaderService {
                 leader.getFirstName(), leader.getLastName());
         mailService.sendMail(to, from, subject, message);
 
-        LOG.info(String
-                .format("Registrated new leader with login %s", username));
+        LOG.info("Registrated new leader with login {}", username);
     }
 
 }

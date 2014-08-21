@@ -34,7 +34,8 @@ import net.carting.service.UserService;
 import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,7 +77,7 @@ public class CompetitionController {
     @Autowired
     private AdminSettingsService adminSettingsService;
 
-    private static final Logger LOG = Logger.getLogger(CompetitionController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CompetitionController.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
@@ -122,12 +123,12 @@ public class CompetitionController {
         CompetitionValidator validator = new CompetitionValidator();
         validator.validate(competition, result);
         if (result.hasErrors()) {
-            LOG.info("Admin failed adding new competition " + competition.getName() + " (id = " + competition.getId() + ")");
+            LOG.info("Admin failed adding new competition {} (id = {})", competition.getName(), competition.getId());
             return "fail";
         }
         competition.setPointsByPlaces(adminSettingsService.getAdminSettings().getPointsByPlaces());
         competitionService.addCompetition(competition);
-        LOG.info("Admin has added new competition " + competition.getName() + " (id = " + competition.getId() + ")");
+        LOG.info("Admin has added new competition {} (id = {}))", competition.getName(), competition.getId());
         return String.valueOf(competition.getId());
     }
 
@@ -138,9 +139,9 @@ public class CompetitionController {
         Competition competition = competitionService.getCompetitionById(Integer.parseInt(map.get("id").toString()));
         try {
             competitionService.deleteCompetition(competition);
-            LOG.info("Admin has deleted competition " + competition.getName() + " (id = " + competition.getId() + ")");
+            LOG.info("Admin has deleted competition {} (id = {})", competition.getName(), competition.getId());
         } catch (Exception e) {
-            LOG.info("Admin trying to delete competition " + competition.getName() + " (id = " + competition.getId() + ")");
+            LOG.info("Admin trying to delete competition {} (id = {})", competition.getName(), competition.getId());
             return "error";
         }
         return "success";
@@ -171,7 +172,7 @@ public class CompetitionController {
             	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
             }
         }
-        LOG.info("Admin has edited competition " + competition.getName() + " (id = " + competition.getId() + ")");
+        LOG.info("Admin has edited competition {} (id = {})", competition.getName(), competition.getId());
         return "redirect:/competition/" + competition.getId();
     }
 
@@ -189,8 +190,7 @@ public class CompetitionController {
         carClassCompetition.setCircleCount(Integer.parseInt(map.get("lapCount").toString()));
         carClassCompetition.setPercentageOffset(Integer.parseInt(map.get("percentageOffset").toString()));
         carClassCompetitionService.addCarClassCompetition(carClassCompetition);
-        LOG.info("Admin has added car class " + carClassCompetition.getCarClass().getName() + " to "
-                + "competition with name " + competition.getName() + " (id = )" + competition.getId());
+        LOG.info("Admin has added car class {} to competition with name {} (id = {})", carClassCompetition.getCarClass().getName(), competition.getName(), competition.getId());
         return Integer.toString(carClassCompetition.getId());
     }
 
@@ -246,7 +246,7 @@ public class CompetitionController {
         int competitionId = Integer.parseInt(map.get("competitionId").toString());
         boolean enabled = Boolean.parseBoolean(map.get("enabled").toString());
         competitionService.setEnabled(competitionId, enabled);
-        LOG.info("Admin has " + (enabled ? "enabled" : "disabled") + " competition (id = " + competitionId + ")");
+        LOG.info("Admin has {} competition (id = {})", (enabled ? "enabled" : "disabled"),  competitionId);
         return "success";
     }
 
@@ -258,7 +258,7 @@ public class CompetitionController {
         int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(competitonId, racerId);
-        LOG.info("Admin has unregistered racer(id = " + racerId + ") from competition(id = " + competitonId + ")");
+        LOG.info("Admin has unregistered racer(id = {}) from competition (id = {})", racerId, competitonId);
         return "success";
     }
 
