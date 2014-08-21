@@ -11,6 +11,7 @@ $(document).ready(function(){
 	                    }
 	                }
 	            },
+
 	            password2: {
 	            	validators: {
 	                    identical: {
@@ -66,6 +67,13 @@ $(document).ready(function(){
 			} 
 		});
 	}
+	
+	$('#password').change(function(){
+	    if ($('#new_leader').data('bootstrapValidator').isValidField('#password2')) {
+	        $('#password2').val('');
+	        $('#new_leader').data('bootstrapValidator').revalidateField('password2',true);	        
+	    }
+	});
 	
 	$('#edit_leader').submit(function(){
        $("#ajax_loader").css("display", "inline-block");
