@@ -2,7 +2,27 @@ $(document).ready(function(){
 	
 	if ($('#new_leader').length != 0) {
 		$('#new_leader').bootstrapValidator({
+			fields: {
+	            birthday: {
+	                validators: {
+	                    date: {
+	                        format: 'YYYY-MM-DD',
+	                        message: $('#birthday').attr('data-bv-date-message'),
+	                    }
+	                }
+	            },
+	            password2: {
+	            	validators: {
+	                    identical: {
+	                        field: 'user.password',
+	                        message: $('#password2').attr('data-bv-identical-message'),
+	                    }
+	                }
+	            }
+	        },
 			onSuccess: function(e){
+				e.preventDefault();
+				
 				$("div[id*='Id']").remove();
 				$("#ajax_loader").css("display", "inline-block");	
 			    var username = $('#username').val();
@@ -27,6 +47,7 @@ $(document).ready(function(){
 				                       	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/loginPage');
 				                    }
 				                    else {
+				                    	 $("#ajax_loader").css("display", "none");
 				                    	 for(var key in response){
 				                             var err="<div class=\"alert alert-danger\"  style=\"margin-top: 10px; padding: 0px 0px 0px 20px; height: 25px;\" id=\""+key+"Id\">" +
 				                             		response[key]+"</div>";
@@ -42,7 +63,6 @@ $(document).ready(function(){
 				       	}
 				     }
 				});
-				return false;
 			} 
 		});
 	}

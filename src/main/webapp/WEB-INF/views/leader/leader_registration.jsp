@@ -51,11 +51,13 @@
 		<div class="form-group col-sm-6">
 			<label class="text-info"><spring:message
 					code="label.date_of_birth" /><span class="text-danger">*</span>:&nbsp;</label>
-			<input 
-				type="text" 
+			<input type="text" 
 				class="form-control" 
 				name="birthday"
+				id="birthday"
 				placeholder="<spring:message code="placeholder.date_of_birth" />"
+				data-bv-notempty="true"
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 				data-bv-date-format="YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 			<div class="help-block with-errors"></div>
@@ -119,14 +121,13 @@
 		
 		<div class="form-group col-sm-6">
 			<label class="text-info"><spring:message code="label.email" /><span
-				class="text-danger">*</span>:&nbsp;</label> <input type="text"
+				class="text-danger">*</span>:&nbsp;</label> <input type="email"
 				class="form-control" name="user.email"
 				placeholder="<spring:message code="placeholder.email" />"
 				id="email"
 				data-bv-notempty="true"
 				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
-				pattern="[A-Za-z0-9_\.-]{1,30}@[A-Za-z0-9_\.-]{1,30}"
-				data-bv-regexp-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
+				data-bv-emailaddress-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
 			<div class="help-block with-errors"></div>
 		</div>
 		
@@ -144,7 +145,8 @@
 				placeholder="<spring:message code="placeholder.password" />"
 				id="password" 
 				data-minlength="5" 
-				required
+				data-bv-notempty="true"
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 				data-error="<spring:message code="dataerror.mimimum_5_characters" />" />
 			<div class="help-block with-errors"></div>
 		</div>
@@ -153,10 +155,13 @@
 			<label class="text-info"><spring:message
 					code="label.confirm_password" /><span class="text-danger">*</span>:&nbsp;</label>
 			<input type="password" class="form-control"
+				name="password2"
 				placeholder="<spring:message code="placeholder.confirm_password" />"
-				id="password2" data-match="#password" required
-				data-match-error="<spring:message code="dataerror.passwords_don't_match" />"
-				data-error="<spring:message code="dataerror.field_required" />" />
+				id="password2" 				
+				data-bv-notempty="true"
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+				data-bv-identical-field="user.password"
+				data-bv-identical-message="<spring:message code="dataerror.passwords_don't_match" />" />
 			<div class="help-block with-errors"></div>
 			<div id="error_password" style="display: none"></div>
 			<div class="alert alert-danger" id="password_error"
@@ -166,18 +171,12 @@
 		</div>
 	</div>
 	
-	<br> <input type="submit" class="btn btn-success"
-		value=<spring:message
-				code="label.register" /> id="register">
-	<img src='<c:url value="/resources/img/ajax-loader.gif" />'
-		style="display: none;" id="ajax_loader"> <br> <br>
-	<div class="alert alert-danger" id="user_exists"
-		style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
+	<br> <input type="submit" class="btn btn-success" value=<spring:message code="label.register" /> id="register">
+	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader"> <br> <br>
+	<div class="alert alert-danger" id="user_exists" style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
 		<spring:message code="message.user_exist" />
 	</div>
-	<input type="hidden" id="error_encoding_passwords"
-		value="<spring:message code="dataerror.error_encoding_passwords" />">
-	<input type="hidden" id="message_after_registration"
-		value="<spring:message code="message.after_leader_registration" />">
+	<input type="hidden" id="error_encoding_passwords" value="<spring:message code="dataerror.error_encoding_passwords" />">
+	<input type="hidden" id="message_after_registration" value="<spring:message code="message.after_leader_registration" />">
 
 </form>

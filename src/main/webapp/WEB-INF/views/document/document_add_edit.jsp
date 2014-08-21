@@ -68,7 +68,7 @@
 				placeholder="<spring:message code="placeholder.date" />"
 				id="doc_date_picker"
 				data-bv-notempty="true"
-				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
+				data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 				data-bv-date-format = "YYYY-MM-DD"
 				data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
 			<div class="help-block with-errors"></div>
