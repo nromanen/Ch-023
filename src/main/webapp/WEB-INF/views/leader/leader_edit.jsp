@@ -1,96 +1,114 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<link href='<c:url value="/resources/style/datepicker.css" />'
-	rel="stylesheet">
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/validator.js" />'></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />'
-	charset="UTF-8"></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />'
-	charset="UTF-8"></script>
-<script type='text/javascript'
-	src='<c:url value="/resources/js/leader.js" />'></script>
+<link href='<c:url value="/resources/libs/bootstrapValidator/css/bootstrapValidator.min.css" />' rel="stylesheet">
+<script type='text/javascript' src='<c:url value="/resources/js/leader.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 
 <input type="hidden" id="locale" value="${locale }">
 <h2 class="user-info-name">${leader.firstName}&nbsp;${leader.lastName}</h2>
 <form class="well" method="POST" action="/Carting/leader/editLeader"
-	role="form" name="edit_leader" id="edit_leader" data-toggle="validator">
+    role="form" name="edit_leader" id="edit_leader">
 
-	<input type="hidden" id="id" value="${leader.id}">
-	<p style="margin-top: 15px;">
-	<div class="form-group">
-		<label class="text-info"><spring:message
-				code="label.firstname" /><span class="text-danger">*</span>:&nbsp;
-		</label> <input type="text" class="form-control" placeholder="<spring:message code="placeholder.firstname" />"
-			value="${leader.firstName}" id="first_name" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}"
-			data-error="<spring:message code="dataerror.firstname" />" />
-		<div class="help-block with-errors"></div>
-	</div>
+    <input type="hidden" id="id" value="${leader.id}">
+    <p style="margin-top: 15px;">
+        <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message code="label.firstname" /><span class="text-danger">*</span>:&nbsp;</label>
+            <input type="text" class="form-control" name="firstName"
+                placeholder="<spring:message code="placeholder.firstname" />"
+                id="first_name"
+                value="${leader.firstName}"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
+                data-bv-regexp-message="<spring:message code="dataerror.firstname" />" />
+            <div class="help-block with-errors"></div>
+        </div>
+    
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message code="label.lastname" /><span
+                class="text-danger">*</span>:&nbsp;</label> <input type="text"
+                class="form-control" name="lastName"
+                placeholder="<spring:message code="placeholder.lastname" />"
+                id="last_name"
+                value="${leader.lastName}"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,30}"
+                data-bv-regexp-message="<spring:message code="dataerror.lastname" />" />
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
 
-	<div class="form-group">
-		<label class="text-info"><spring:message code="label.lastname" /><span
-			class="text-danger">*</span>:&nbsp; </label> <input type="text"
-			class="form-control" placeholder="<spring:message code="placeholder.lastname" />"
-			value="${leader.lastName}" id="last_name" required
-			pattern="[A-ZА-ЯІЇЄ]{1}[A-ZА-ЯІЇЄa-zа-яіїє\s-]{1,50}"
-			data-error="<spring:message code="dataerror.lastname" />" />
-		<div class="help-block with-errors"></div>
-	</div>
 
-	<div class="form-group">
-		<label class="text-info"><spring:message
-				code="label.date_of_birth" /><span class="text-danger">*</span>:&nbsp;
-		</label> <input type="text" class="form-control datepicker"
-			placeholder="<spring:message code="placeholder.date_of_birth" />"
-			value="${leaderBirthday}" required id="birthday"
-			data-error="<spring:message code="dataerror.field_required" />"/>
-		<div class="help-block with-errors"></div>
-	</div>
-	<div class="form-group">
-		<label class="text-info"><spring:message
-				code="label.identification" /><span class="text-danger">*</span>:&nbsp;
-		</label> <input type="text" class="form-control"
-			placeholder="<spring:message
-				code="placeholder.identification" />"
-			required pattern="[^<>\&\^\$]{1,50}"
-			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;50."
-			value=${leader.document } id="document" />
-		<div class="help-block with-errors"></div>
-	</div>
-
-	<div class="form-group">
-		<label class="text-info"><spring:message code="label.address" /><span
-			class="text-danger">*</span>:&nbsp; </label> <input type="text"
-			class="form-control"
-			placeholder="<spring:message code="placeholder.address" />"
-			value="${leader.address}" id="address" required pattern="[^<>\&\^\$]{1,100}"
-			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
-		<div class="help-block with-errors"></div>
-	</div>
-
-	<div class="form-group">
-		<label class="text-info"><spring:message
-				code="label.license_number" /><span class="text-danger">*</span>:&nbsp;
-		</label> <input type="text" class="form-control"
-			placeholder="<spring:message code="placeholder.license_number" />"
-			value="${leader.license}" id="license" required pattern="[^<>\&\^\$]{1,30}"
-			data-error="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30."
-			id="document" />
-		<div class="help-block with-errors"></div>
-	</div>
-	<br> <input type="submit" class="btn btn-primary"
-		value="<spring:message code="label.accept" />" id="edit_leader_button">
-	<a href="/Carting/leader/${leader.id}"> <input type="button"
-		class="btn btn-default" value="<spring:message code="label.cancel" />" />
-	</a> <img src='<c:url value="/resources/img/ajax-loader.gif" />'
-		style="display: none;" id="ajax_loader">
+    
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message
+                    code="label.date_of_birth" /><span class="text-danger">*</span>:&nbsp;</label>
+            <input type="text" 
+                class="form-control" 
+                name="birthday"
+                id="birthday"
+                value="${leaderBirthday}"
+                placeholder="<spring:message code="placeholder.date_of_birth" />"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                data-bv-date-format="YYYY-MM-DD"
+                data-bv-date-message="<spring:message code="dataerror.valid_date_yyyy_mm_dd" />" />
+            <div class="help-block with-errors"></div>
+        </div>
+    
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message
+                    code="label.identification" /><span class="text-danger">*</span>:&nbsp;</label>
+            <input type="text" class="form-control" name="document"
+                placeholder="<spring:message code="placeholder.identification" />"
+                id="document"
+                value=${leader.document }
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                pattern="[^<>\&\^\$]{1,50}"
+                data-bv-regexp-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;50." />
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message code="label.address" /><span
+                class="text-danger">*</span>:&nbsp;</label> <input type="text"
+                class="form-control" name="address"
+                placeholder="<spring:message code="placeholder.address" />"
+                id="address"
+                value="${leader.address}"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />" 
+                pattern="[^<>\&\^\$]{1,100}"
+                data-bv-regexp-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;100." />
+            <div class="help-block with-errors"></div>
+        </div>
+    
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message
+                    code="label.license_number" /><span class="text-danger">*</span>:&nbsp;</label>
+            <input type="text" class="form-control" name="license"
+                placeholder="<spring:message code="placeholder.license_number" />"
+                id="license"
+                value="${leader.license}"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                pattern="[^<>\&\^\$]{1,30}"
+                data-bv-regexp-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
+    <br> <input type="submit" class="btn btn-primary"
+        value="<spring:message code="label.accept" />" id="edit_leader_button">
+    <a href="/Carting/leader/${leader.id}"> <input type="button"
+        class="btn btn-default" value="<spring:message code="label.cancel" />" />
+    </a> <img src='<c:url value="/resources/img/ajax-loader.gif" />'
+        style="display: none;" id="ajax_loader">
 </form>
