@@ -145,5 +145,9 @@ $(document).ready(function(){
 	        }
 	    });
 	});
+	if ($('#testRace').length != 0) {
+	$('#testRace').bootstrapValidator();
+	}
+	
 	
 });

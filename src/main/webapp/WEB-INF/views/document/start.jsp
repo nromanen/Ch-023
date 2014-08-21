@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type='text/javascript'>
 $(document).ready(function(){
-
+	
     function updatePDF() {
         $.ajax({
             url: "/Carting/SHKP/start",
@@ -56,6 +56,11 @@ $(document).ready(function(){
             $('#incorrectPositions').delay(2000).fadeOut('slow');
         }
     });
+    var s = $("#qual_count").val()
+    if (s>0) {
+    	$("#save").click()
+    }
+    
 });
 </script>
 
@@ -76,7 +81,7 @@ $(document).ready(function(){
                         </thead>
                         <tbody>
                             <% int number = 1; %>
-                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus='counter'>
                                 <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                     <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
                                     <td><%= number %></td>
@@ -94,7 +99,12 @@ $(document).ready(function(){
                                     </td>
                                     <td>
                                             <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}" 
-                                            pattern="[0-9]{2}">
+                                            pattern="[0-9]{2}"
+                                            <c:if test="${!empty qualifyingList}">
+                                            	value="${qualifyingList.get(counter.index).racerPlace}"
+                                            </c:if>
+                                            >
+                                            <input type="hidden" value="${qualifyingList.size()}" id="qual_count">
                                     </td>
                                 </tr>
                                 <% number++; %>

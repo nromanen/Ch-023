@@ -14,6 +14,7 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.RacerCarClassCompetitionNumber;
@@ -25,6 +26,7 @@ import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
+import net.carting.service.QualifyingService;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerService;
@@ -75,6 +77,8 @@ public class CompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private AdminSettingsService adminSettingsService;
+    @Autowired
+    private QualifyingService qualifyingService;
 
     private static final Logger LOG = Logger.getLogger(CompetitionController.class);
 
@@ -226,11 +230,13 @@ public class CompetitionController {
                 .getCarClassCompetitionsByCompetitionId(id);
     	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
     	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+    	List<List<Qualifying>> qualifyingResults = new ArrayList<List<Qualifying>>();
     	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
     		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
     		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+    		qualifyingResults.add(qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition));
     	}
-    	
+    	map.put("qualifyingLists", qualifyingResults);
     	map.put("carClassCompetitions", carClassCompetitions);
     	map.put("raceResultsLists", raceResults);
     	map.put("absoluteResultsList", carClassCompetitionResults);
