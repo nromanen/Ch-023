@@ -154,7 +154,7 @@ public class LeaderController {
         leader.setAddress(formMap.get("address").toString());
         leader.setLicense(formMap.get("license").toString());
         leaderService.updateLeader(leader);
-        LOG.info("Leader {} {} had edited information abut him",
+        LOG.trace("Leader {} {} had edited tracermation abut him",
                 leader.getFirstName(), leader.getLastName());
 
         return leader.getId();

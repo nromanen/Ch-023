@@ -188,7 +188,7 @@ public class RacerController {
         racerService.updateRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} had edited racer {} {} (id = {})", username,
+        LOG.trace("{} had edited racer {} {} (id = {})", username,
                 racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return racer.getId();
@@ -242,7 +242,7 @@ public class RacerController {
         // --------------------------------------
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} had added racer {} {} to team {} (id = {})",
+        LOG.trace("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
 
@@ -300,7 +300,7 @@ public class RacerController {
         racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} has added car class with {} to racer {} {} (id = {})", 
+        LOG.trace("{} has added car class with {} to racer {} {} (id = {})", 
         		username, carClass.getName(), number, racer.getFirstName(), racer.getLastName(), racerId);
 
         return "success";
@@ -379,7 +379,7 @@ public class RacerController {
         racerService.deleteRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} has deleted racer {} {} (id = {})",
+        LOG.trace("{} has deleted racer {} {} (id = {})",
         		username, racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return "success";
@@ -395,7 +395,7 @@ public class RacerController {
         racerService.updateRacer(racer);
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} has {} racer {} {} (id = {})", 
+        LOG.trace("{} has {} racer {} {} (id = {})", 
         		username, (enabled ? "enabled" : "disabled"), racer.getFirstName(), racer.getLastName(), racer.getId());
 
         return "success";
