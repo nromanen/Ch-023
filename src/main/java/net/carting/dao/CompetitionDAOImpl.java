@@ -1,26 +1,32 @@
 package net.carting.dao;
 
-import net.carting.domain.Competition;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.Competition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class CompetitionDAOImpl implements CompetitionDAO {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CompetitionDAOImpl.class);
+	
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
-    public static final int COMPETITION_PER_PAGE = 1;
+    //public static final int COMPETITION_PER_PAGE = 1;
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Competition> getAllCompetitions() {
-
         Query query = entityManager.createQuery("from Competition ORDER BY dateStart DESC");
+        LOG.debug("Get all competitions");
         return query.getResultList();
     }
 
@@ -29,6 +35,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
     public List<Competition> getAllEnabledCompetitions() {
         Query query = entityManager
                 .createQuery("from Competition WHERE enabled = '1' ORDER BY dateStart DESC");
+        LOG.debug("Get all enabled competitions");
         return query.getResultList();
     }
 
@@ -38,9 +45,11 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         Query query = entityManager
                 .createQuery("from Competition WHERE YEAR(dateStart) = :year ORDER BY dateStart DESC");
         query.setParameter("year", year);
+        LOG.debug("Get competitions by the year = {}", year);
         return query.getResultList();
     }
 
+   /* unused method
     @SuppressWarnings("unchecked")
     @Override
     public List<Competition> getAllCompetitionsByPage(int page) {
@@ -49,10 +58,11 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         query.setFirstResult((page - 1) * COMPETITION_PER_PAGE);
         query.setMaxResults(COMPETITION_PER_PAGE);
         return query.getResultList();
-    }
+    }*/
 
     @Override
     public Competition getCompetitionById(int id) {
+    	LOG.debug("Get competition with id = {}", id);
         return (Competition) entityManager.createQuery("from Competition where id = :id")
                 .setParameter("id", id).getSingleResult();
     }
@@ -60,17 +70,14 @@ public class CompetitionDAOImpl implements CompetitionDAO {
     @Override
     public void addCompetition(Competition competition) {
         entityManager.persist(competition);
+    	LOG.debug("Add competition {}", competition);
 
     }
 
     @Override
     public void updateCompetition(Competition competition) {
-        try {
-            entityManager.merge(competition);
-        } catch (Exception e) {
-            System.out.println("updateCompetition");
-        }
-
+        entityManager.merge(competition);
+        LOG.debug("Updated competititon with id = {}", competition.getId());
     }
 
     @Override
@@ -80,11 +87,13 @@ public class CompetitionDAOImpl implements CompetitionDAO {
                     "DELETE FROM car_class_competition WHERE competition_id = :id");
             query.setParameter("id", competition.getId());
             query.executeUpdate();
+            LOG.debug("Deleted all car class competitions with competition_id = {}", competition.getId());
 
             Competition c = entityManager.find(Competition.class, competition.getId());
             entityManager.remove(c);
+            LOG.debug("Deleted competition with id = {}", competition.getId());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error in deleting competititon with id = {}", competition.getId(), e);
         }
     }
 
@@ -96,6 +105,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         query.setParameter("enabled", enabled);
         query.setParameter("id", competitionId);
         query.executeUpdate();
+        LOG.debug("Competition with id = {} is {}", competitionId, (enabled ? "enabled" : "disabled"));
     }
 
     @SuppressWarnings("unchecked")
@@ -105,7 +115,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
                 .createQuery("SELECT YEAR(dateStart) FROM Competition "
                         + "GROUP BY YEAR(dateStart) "
                         + "ORDER BY YEAR(dateStart) DESC");
-
+        LOG.debug("Get all competitions years ordered by desc");
         return query.getResultList();
     }
 

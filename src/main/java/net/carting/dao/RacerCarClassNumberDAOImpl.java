@@ -1,17 +1,23 @@
 package net.carting.dao;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.RacerCarClassNumber;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.CarClass;
+import net.carting.domain.RacerCarClassNumber;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 
 @Repository
 public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(RacerCarClassNumberDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -19,6 +25,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassNumber> getAllRacerCarClassNumbers() {
+    	LOG.debug("Get all racerCarClassNumber");
         return entityManager
                 .createQuery("from RacerCarClassNumber")
                 .getResultList();
@@ -26,6 +33,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
 
     @Override
     public RacerCarClassNumber getRacerCarClassNumberById(int id) {
+    	LOG.debug("Get racerCarClassNumber with id = {}", id);
         return (RacerCarClassNumber) entityManager
                 .createQuery("from RacerCarClassNumber where id = :id")
                 .setParameter("id", id)
@@ -35,11 +43,13 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
     @Override
     public void addCarClass(RacerCarClassNumber racerCarClassNumber) {
         entityManager.persist(racerCarClassNumber);
+        LOG.debug("Add racerCarClassNumber {}", racerCarClassNumber);
     }
 
     @Override
     public void updateCarClass(RacerCarClassNumber racerCarClassNumber) {
         entityManager.merge(racerCarClassNumber);
+        LOG.debug("Updated racerCarClassNumber with id = {}", racerCarClassNumber.getId());
     }
 
     @Override
@@ -47,7 +57,11 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         Query query = entityManager.createQuery(
                 "DELETE FROM RacerCarClassNumber c WHERE c.id = :id");
         query.setParameter("id", racerCarClassNumber.getId());
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted racerCarClassNumber with id = {}", racerCarClassNumber.getId());
+        } else {
+        	LOG.warn("Tried to delete racerCarClassNumber with id = {}", racerCarClassNumber.getId());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +69,8 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
     public List<RacerCarClassNumber> getNumbersByCarClass(CarClass carClass) {
         Query query = entityManager.createQuery("from RacerCarClassNumber where carClass= :carClass ");
         query.setParameter("carClass", carClass);
+        
+        LOG.debug("Get racerCarClassNumbers by carClass with id = {}", carClass.getId());
         return query.getResultList();
     }
 
@@ -64,7 +80,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         Query query = entityManager
                 .createQuery("from RacerCarClassNumber where carClass.id = :carClassId ")
                 .setParameter("carClassId", carClassId);
-
+        LOG.debug("Get racerCarClassNumbers by carClassId = {}", carClassId);
         return query.getResultList();
     }
 
@@ -78,7 +94,8 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         query.setParameter("car_class_id", Integer.toString(carClassId));
         query.setParameter("number", Integer.toString(number));
         List result = query.getResultList();
-
+        
+        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, number = {})", (result.size() > 0 ? "" : "not"), carClassId, number);
         return result.size() > 0;
     }
 
@@ -90,7 +107,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
                         + "rccn.racer.id = :racerId");
         query.setParameter("carClassId", carClassId);
         query.setParameter("racerId", racerId);
-
+        LOG.debug("Get racerCarClassNumber by carClassId({}) and racerId({})", carClassId, racerId);
         return (RacerCarClassNumber) query.getSingleResult();
     }
 
@@ -103,6 +120,7 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
                         setParameter("racerId", racerId);
         List result = query.getResultList();
 
+        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, racerId = {})", (result.size() > 0 ? "" : "not"), carClassId, racerId);
         return result.size() > 0;
     }
 

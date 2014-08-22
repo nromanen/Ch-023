@@ -18,6 +18,10 @@
         <param name="password" value="root" />
         <param name="driver" value="com.mysql.jdbc.Driver" />
         <param name="sql" value="INSERT INTO LOGS VALUES('%C','%p','%m','%d')" />
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="levelMin" value="TRACE" />
+            <param name="levelMax" value="TRACE" />
+        </filter>
     </appender>
 	
 	<!-- FILE appender -->
@@ -28,14 +32,14 @@
             <param name="ConversionPattern" value="%d{ISO8601} %-5p [%l] - %m%n" />
         </layout>
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
-            <param name="levelMin" value="WARN" />
+            <param name="levelMin" value="TRACE" />
             <param name="levelMax" value="FATAL" />
-         </filter>
+        </filter>
     </appender>
     
     <!-- Application Loggers -->
     <logger name="net.carting">
-    	<level value="info"/>
+    	<level value="trace"/>
         <appender-ref ref="database"/>
     </logger>
 

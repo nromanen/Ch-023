@@ -15,6 +15,8 @@ import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CarClassCompetitionResultServiceImpl implements
         CarClassCompetitionResultService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(CarClassCompetitionResultServiceImpl.class);
 
     @Autowired
     private CarClassCompetitionResultDAO carClassCompetitionResultDAO;
@@ -151,7 +155,7 @@ public class CarClassCompetitionResultServiceImpl implements
     @Override
     @Transactional
     public void setAbsoluteResults(CarClassCompetition carClassCompetition, Race race) {
-
+    	LOG.debug("Start of setAbsoluteResults method");
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList = racerCarClassCompetitionNumberService
                 .getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition.getId());
         if (race.getRaceNumber() == 1) {
@@ -178,6 +182,7 @@ public class CarClassCompetitionResultServiceImpl implements
                 }
                 addCarClassCompetitionResult(carClassCompetitionResult);
             }
+            LOG.debug("There is one race in this competition");
         }
         // add results of race#2
         if (race.getRaceNumber() == 2) {
@@ -197,7 +202,9 @@ public class CarClassCompetitionResultServiceImpl implements
                 }
             }
             recalculateAbsoluteResults(carClassCompetition);
+            LOG.debug("There are two races in this competition");
         }
+        LOG.debug("End of setAbsoluteResults method");
     }
 
     /**
@@ -214,6 +221,7 @@ public class CarClassCompetitionResultServiceImpl implements
     @Transactional
     public void recalculateAbsoluteResultsByEditedRace(CarClassCompetition carClassCompetition,
                                                        Race race) {
+    	LOG.debug("Start of recalculateAbsoluteResultsByEditedRace method, that recalculate absolute results after race results was edited");
         List<CarClassCompetitionResult> absoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<List<RaceResult>> raceResultsList = raceService.getRaceResultsByCarClassCompetition(carClassCompetition);
         for (CarClassCompetitionResult carClassCompetitionResult : absoluteResultsList) {
@@ -234,6 +242,7 @@ public class CarClassCompetitionResultServiceImpl implements
             updateCarClassCompetitionResult(carClassCompetitionResult);
         }
         recalculateAbsoluteResults(carClassCompetition);
+        LOG.debug("End of recalculateAbsoluteResultsByEditedRace method");
     }
 
     @Override
@@ -261,7 +270,8 @@ public class CarClassCompetitionResultServiceImpl implements
     @Override
     @Transactional
     public void recalculateAbsoluteResults(CarClassCompetition carClassCompetition) {
-
+    	
+    	LOG.debug("Start of recalculateAbsoluteResults method that overrides comparator for absolute results.");
         List<CarClassCompetitionResult> orderedAbsoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
         Collections.sort(orderedAbsoluteResultsList, new Comparator<CarClassCompetitionResult>() {
             @Override
@@ -307,5 +317,7 @@ public class CarClassCompetitionResultServiceImpl implements
             updateCarClassCompetitionResult(carClassCompetitionResult);
             place++;
         }
+        LOG.debug("End of recalculateAbsoluteResults method");
+        
     }
 }

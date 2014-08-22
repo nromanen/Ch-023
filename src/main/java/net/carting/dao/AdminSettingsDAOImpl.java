@@ -20,7 +20,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
 
     @Override
     public AdminSettings getAdminSettings() {
-    	LOG.warn("Getting admin settings from DB");
+    	LOG.debug("Getting admin settings from DB");
         return (AdminSettings) entityManager.createQuery("from AdminSettings").getSingleResult();
     }
 
@@ -31,7 +31,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET parentalPermissionYears = :parentalPermissionYears");
         query.setParameter("parentalPermissionYears", value);
         query.executeUpdate();
-        LOG.warn("Changed parental permission years to '{}'", value);
+        LOG.debug("Changed parental permission years to {}", value);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET pointsByPlaces = :pointsByPlaces");
         query.setParameter("pointsByPlaces", value);
         query.executeUpdate();
-        LOG.warn("Changed points_by_places in admin settings to {}", value);
+        LOG.debug("Changed points_by_places in admin settings to {}", value);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET feedbackEmail = :feedbackEmail");
         query.setParameter("feedbackEmail", value);
         query.executeUpdate();
-        LOG.warn("Changed feedback email to '{}'", value);
+        LOG.debug("Changed feedback email to {}", value);
     }
 
 }

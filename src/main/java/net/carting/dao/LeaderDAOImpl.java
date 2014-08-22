@@ -8,10 +8,14 @@ import javax.persistence.Query;
 
 import net.carting.domain.Leader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class LeaderDAOImpl implements LeaderDAO {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(LeaderDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -19,6 +23,7 @@ public class LeaderDAOImpl implements LeaderDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<Leader> getAllLeaders() {
+    	LOG.debug("Get all leaders");
         return entityManager
                 .createQuery("from Leader ORDER BY registrationDate DESC, lastName, firstName")
                 .getResultList();
@@ -26,6 +31,7 @@ public class LeaderDAOImpl implements LeaderDAO {
 
     @Override
     public Leader getLeaderById(int id) {
+    	LOG.debug("Get leader with id = {}", id);
         return (Leader) entityManager
                 .createQuery("from Leader where id = :id")
                 .setParameter("id", id)
@@ -34,11 +40,13 @@ public class LeaderDAOImpl implements LeaderDAO {
 
     public void addLeader(Leader leader) {
         entityManager.persist(leader);
+        LOG.debug("Added leader {}", leader);
     }
 
     @Override
     public void updateLeader(Leader leader) {
         entityManager.merge(leader);
+        LOG.debug("Updated leader with id = {}", leader.getId());
     }
 
     @Override
@@ -46,7 +54,11 @@ public class LeaderDAOImpl implements LeaderDAO {
         Query query = entityManager.createQuery(
                 "DELETE FROM Leader c WHERE c.id = :id");
         query.setParameter("id", leader.getId());
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted leader with id = {}", leader.getId());
+        } else {
+        	LOG.warn("Tried to delete leader with id = {}", leader.getId());
+        }
     }
 
     @Override
@@ -54,6 +66,7 @@ public class LeaderDAOImpl implements LeaderDAO {
     	Query query = entityManager.
                 createQuery("FROM Leader WHERE user.username = :username");
         query.setParameter("username", username);
+        LOG.debug("Get leader with username = {}", username);
         return (Leader) query.getSingleResult();
     }
 
