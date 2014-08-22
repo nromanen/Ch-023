@@ -75,7 +75,7 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public Set<RacerCarClassNumber> parseCarClasses(String carClassesId,
                                                     String carClassNumbers, Racer racer) {
-
+    	LOG.debug("Start parseCarClasses method");
         Set<RacerCarClassNumber> racerCarClassNumbers = new HashSet<RacerCarClassNumber>();
         String[] carClassesIdParts = carClassesId.split(",");
         String[] carClassNumbersParts = carClassNumbers.split(",");
@@ -86,7 +86,7 @@ public class RacerServiceImpl implements RacerService {
                     Integer.parseInt(carClassNumbersParts[i].trim()));
             racerCarClassNumbers.add(rccn);
         }
-
+        LOG.debug("End parseCarClasses method");
         return racerCarClassNumbers;
     }
 
@@ -94,7 +94,7 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public Set<RacerCarClassNumber> parseUpdatedRacerCarClassNumbers(
             String updatedRacerCarClassNumbersStr, Racer racer) {
-
+    	LOG.debug("Start parseUpdatedRacerCarClassNumbers method");
         Set<RacerCarClassNumber> racerCarClassNumbers = new HashSet<RacerCarClassNumber>();
         String[] racerCarClassNumbersParts = updatedRacerCarClassNumbersStr
                 .split("#");
@@ -115,7 +115,7 @@ public class RacerServiceImpl implements RacerService {
 
             racerCarClassNumbers.add(racerCarClassNumber);
         }
-
+        LOG.debug("End parseUpdatedRacerCarClassNumbers method");
         return racerCarClassNumbers;
     }
 
@@ -140,6 +140,7 @@ public class RacerServiceImpl implements RacerService {
     @Override
     @Transactional
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team) {
+    	LOG.debug("Start getSetOfRacersNeedingPerentalPermisionByTeam method");
         Set<Racer> allTeamRecersNeedingPerentalPermision = getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                 Document.TYPE_RACER_PARENTAL_PERMISSIONS, team);
         Iterator<Racer> it = allTeamRecersNeedingPerentalPermision
@@ -151,6 +152,7 @@ public class RacerServiceImpl implements RacerService {
                 it.remove();
             }
         }
+        LOG.debug("End getSetOfRacersNeedingPerentalPermisionByTeam method");
         return allTeamRecersNeedingPerentalPermision;
     }
 
@@ -165,7 +167,7 @@ public class RacerServiceImpl implements RacerService {
                 Racer racer = getRacerById(Integer.parseInt(racersId[i]));
                 racer.getDocuments().add(document);
                 updateRacer(racer);
-                LOG.info("Leader of team {} added '{}' to racer {} {}",racer.getTeam().getName(), Document.getStringDocumentType(document.getType()), 
+                LOG.trace("Leader of team {} added '{}' to racer {} {}",racer.getTeam().getName(), Document.getStringDocumentType(document.getType()), 
                 														racer.getFirstName(),racer.getLastName());
             }
         }

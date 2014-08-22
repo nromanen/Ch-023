@@ -1,11 +1,8 @@
 package net.carting.service;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -16,7 +13,6 @@ import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
 import net.carting.util.PdfWriter;
 
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     ServletContext context;
 
-    Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     @Autowired
     private DocumentDAO documentDAO;
@@ -90,6 +86,8 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
                                             String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
+    	LOG.debug("Start addDocumentAndUpdateRacers method");
+    	
         try {
             Document document = new Document();
             document.setType(documentType);
@@ -104,8 +102,10 @@ public class DocumentServiceImpl implements DocumentService {
             fileService.addFilesToDocument(document, fileList);
             racerService.setDocumentToRacers(document, racersId);
         } catch (Exception e) {
+        	LOG.error("Error occured in addDocumentAndUpdateRacers method",e);
             e.printStackTrace();
         }
+        LOG.debug("End addDocumentAndUpdateRacers method");
     }
 
 
@@ -131,7 +131,7 @@ public class DocumentServiceImpl implements DocumentService {
                 //getPathsAndWriteFilesToServer(files, documentType,
                 //document.getTeamOwner().getLeader().getId());
         fileService.addFilesToDocument(document, fileList);
-        logger.info("Leader {} {} of team {} edited document {}",
+        LOG.trace("Leader {} {} of team {} edited document {}",
                 document.getTeamOwner().getLeader().getFirstName(),
                 document.getTeamOwner().getLeader().getLastName(),
                 document.getTeamOwner().getName(),
@@ -171,6 +171,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void createStartStatement(String html) {
+    	LOG.debug("Start createStartStatement method");
         try {
             File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
             if (!dir.exists())
@@ -178,9 +179,12 @@ public class DocumentServiceImpl implements DocumentService {
             String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
         } catch (IOException e) {
+        	LOG.error("Error occured in createStartStatement method",e);
             e.printStackTrace();
         } catch (DocumentException e) {
+        	LOG.error("Error occured in createStartStatement method",e);
             e.printStackTrace();
         }
+        LOG.debug("End createStartStatement method");
     }
 }

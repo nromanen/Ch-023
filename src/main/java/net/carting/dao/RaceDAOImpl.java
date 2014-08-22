@@ -1,16 +1,22 @@
 package net.carting.dao;
 
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Race;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Race;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RaceDAOImpl implements RaceDAO {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(RaceDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -18,6 +24,7 @@ public class RaceDAOImpl implements RaceDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<Race> getAllRaces() {
+    	LOG.debug("Get all races");
         return entityManager
                 .createQuery("from Race")
                 .getResultList();
@@ -25,6 +32,7 @@ public class RaceDAOImpl implements RaceDAO {
 
     @Override
     public Race getRaceById(int id) {
+    	LOG.debug("Get race with id = {}", id);
         return (Race) entityManager
                 .createQuery("from Race where id = :id")
                 .setParameter("id", id)
@@ -45,20 +53,17 @@ public class RaceDAOImpl implements RaceDAO {
             query.setParameter("carId", race.getCarClass().getId());
             query.setParameter("compId", race.getCarClassCompetition().getId());
 
-            query.executeUpdate();
-
-            /*SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            session.save(race);
-            tx.commit();
-            session.close();*/
-
+           if ( query.executeUpdate() != 0) {
+        	   LOG.debug("Added race {}", race);
+           } else {
+        	   LOG.warn("Tried to add race {}", race);
+           }
     }
 
     @Override
     public void updateRace(Race race) {
         entityManager.merge(race);
+        LOG.debug("Updated race with id = {}", race.getId());
     }
 
     @Override
@@ -66,7 +71,11 @@ public class RaceDAOImpl implements RaceDAO {
         Query query = entityManager.createQuery(
                 "DELETE FROM Race c WHERE c.id = :id");
         query.setParameter("id", race.getId());
-        query.executeUpdate();
+        if ( query.executeUpdate() != 0) {
+     	   LOG.debug("Deleted race with id = {}", race.getId());
+        } else {
+     	   LOG.warn("Tried to delete race with id = {}", race.getId());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -80,6 +89,7 @@ public class RaceDAOImpl implements RaceDAO {
                         "order by raceNumber")
                 .setParameter("carClassCompetition", carClassCompetition);
         races = query.getResultList();
+        LOG.debug("Get all races by car class competition with id = {}", carClassCompetition.getId());
         return races;
     }
 
@@ -90,7 +100,7 @@ public class RaceDAOImpl implements RaceDAO {
                         + "(raceNumber = :raceNumber)");
         query.setParameter("carClassCompetition", carClassCompetition);
         query.setParameter("raceNumber", raceNumber);
-
+        LOG.debug("Get race by race number({}) and car class competition(id = {})",raceNumber,  carClassCompetition.getId());
         return (Race) query.getSingleResult();
     }
 

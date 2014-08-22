@@ -1,19 +1,29 @@
 package net.carting.service;
 
-import net.carting.dao.CarClassCompetitionDAO;
-import net.carting.dao.RacerCarClassCompetitionNumberDAO;
-import net.carting.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.carting.dao.CarClassCompetitionDAO;
+import net.carting.dao.RacerCarClassCompetitionNumberDAO;
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class CarClassCompetitionServiceImpl implements CarClassCompetitionService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CarClassCompetitionServiceImpl.class);
+	
     @Autowired
     private CarClassCompetitionDAO carClassCompetitionDAO;
 
@@ -65,10 +75,12 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
     @Override
     @Transactional
     public List<Racer> getNotValidRacersToRegistration(int carClassCompetitionId, Team team) {
-
+    	
+    	
+    	LOG.debug("Start getNotValidRacersToRegistration method");
         List<Racer> racers = new ArrayList<Racer>();
 
-        // put already registred users
+        LOG.debug("put already registred users");
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers =
                 racerCarClassCompetitionNumberDAO.getRacerCarClassCompetitionNumbersByCarClassCompetitionIdAndTeamId(
                         carClassCompetitionId, team.getId());
@@ -79,12 +91,13 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
         }
         //-----------------------------
 
-        // put racers who dont have current carclass and put disabled racers
+        LOG.debug("put racers who dont have current carclass and put disabled racers");
         CarClass carClass = carClassCompetitionDAO.getCarClassCompetitionById(carClassCompetitionId).getCarClass();
         Set<Racer> teamRacers = team.getRacers();
         for (Racer racer : teamRacers) {
             boolean isContainsCarClass = false;
-            if (racer.isEnabled()) { // if racer not disabled - checking if he has specific car class
+            if (racer.isEnabled()) { 
+            	LOG.debug("if racer not disabled - checking if he has specific car class");
                 Set<RacerCarClassNumber> racerCarClassNumbers = racer.getCarClassNumbers();
                 for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
                     CarClass racerCarClass = racerCarClassNumber.getCarClass();
@@ -102,7 +115,7 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
             }
         }
         //-----------------------------------------
-
+        LOG.debug("End getNotValidRacersToRegistration method");
         return racers;
     }
 
