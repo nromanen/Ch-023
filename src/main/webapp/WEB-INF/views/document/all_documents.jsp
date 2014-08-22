@@ -47,7 +47,7 @@
 							</a>
 							<c:set var="has" value="0"/>
 							<c:set var="check" value="0" />
-							<c:forEach items="${teams[status.index].racers}" var="racer">
+							<c:forEach items="${team.racers}" var="racer">
 								<c:if test="${!empty racer.getDocuments()}">
 									<c:set var="has" value="1"/>
 								</c:if>
@@ -180,26 +180,26 @@
 					</c:choose>
 				</td>
 				<c:choose>
-					<c:when test="${doc.checked == false}">
+					<c:when test="${doc.checked}">
 						<td>
-							<span style="color:silver;"class="glyphicon glyphicon-minus minus"></span>
+							<span style="color:silver;"class="glyphicon glyphicon-plus plus"></span>
 						</td>
 					</c:when>
 					<c:otherwise>
 						<td>
-							<span style="color:silver;"class="glyphicon glyphicon-plus plus"></span>
+							<span style="color:silver;"class="glyphicon glyphicon-minus minus"></span>
 						</td>
 					</c:otherwise>
 				</c:choose>
 				<c:choose>
-					<c:when test="${doc.approved == false}">
+					<c:when test="${doc.approved}">
 						<td>
-							<span style="color:silver;"class="glyphicon glyphicon-minus"></span>
+							<span style="color:silver;"class="glyphicon glyphicon-plus"></span>
 						</td>
 					</c:when>
 					<c:otherwise>
 						<td>
-							<span style="color:silver;"class="glyphicon glyphicon-plus"></span>
+							<span style="color:silver;"class="glyphicon glyphicon-minus"></span>
 						</td>
 					</c:otherwise>
 				</c:choose>
@@ -224,11 +224,7 @@
 					</table>
 				</td>
 				<td>
-					<c:forEach items="${doc.racers}" var="racer" varStatus="loop">
-						<c:if test="${loop.index==0}">
-							${racer.team.name }
-						</c:if>
-					</c:forEach>
+						 ${doc.team.name}
 				</td>
 			</tr>
 		</c:forEach>

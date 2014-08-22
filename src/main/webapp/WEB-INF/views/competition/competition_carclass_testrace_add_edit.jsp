@@ -18,13 +18,13 @@ pageEncoding="utf-8"%>
 			<c:if test="${membersCount > 0 }">
 				<c:choose>
 					<c:when test="${!empty qualifyingList}">
-						<form role="form" id="testRace" action="editQualifying" method="post" class="form-horizontal"
+						<form role="form" id="testRace" action="proccesQualifying" method="post" class="form-horizontal"
 							data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
 			                data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
 			                data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
 					</c:when>
 					<c:otherwise>
-						<form role="form" id="testRace" action="addQualifying" method="post"class="form-horizontal"
+						<form role="form" id="testRace" action="proccesQualifying" method="post"class="form-horizontal"
 						data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
 			            data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
 			            data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
@@ -53,6 +53,7 @@ pageEncoding="utf-8"%>
 				</c:forEach>
 					<div class="form-group">
 					<input type="hidden" class="times" name="timeResult" id="time">
+					<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 					<div class="col-lg-9 col-lg-offset-3">
 						
 						<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" value="Add">

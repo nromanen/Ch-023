@@ -53,12 +53,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 	@Override
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
 			CarClassCompetition carClassCompetition) {
-		try {
-			return qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return qualifyingDao.getQualifyingsByCarClassCompetition(carClassCompetition);
 	}
 	
 	@Transactional
@@ -96,5 +91,41 @@ public class QualifyingServiceImpl implements QualifyingService {
 		}
 		return places;
 	}
-
+	
+	@Transactional
+	@Override
+	public boolean setQualifyingTimeFromString(Qualifying q, String time) {
+		time = time.trim();
+		if (time.length()==5) {
+			time="00:"+time;
+		}
+		if (!time.matches("(\\d\\d:)?[0-5]\\d:[0-5]\\d")) {
+			return false;	
+		}
+		try {
+			q.setRacerTime(Time.valueOf(time));
+			updateQualifying(q);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	@Transactional
+	@Override
+	public void setQualifyingPlacesInCarClassCompetition(CarClassCompetition ccc) {
+		List <Qualifying> qList = getQualifyingsByCarClassCompetition(ccc);
+		while (qList.size()>0) {
+			Qualifying q = qList.get(0);
+				for (int j=1;j<qList.size();j++) {
+					if(q.getRacerTime().toString().compareTo(qList.get(j).getRacerTime().toString())<0) {
+						q=qList.get(j);
+					}
+				}
+				q.setRacerPlace(qList.size());
+				updateQualifying(q);
+				qList.remove(q);
+			}
+		}
 }

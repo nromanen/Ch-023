@@ -3,6 +3,7 @@ package net.carting.web;
 import net.carting.domain.Document;
 import net.carting.domain.File;
 import net.carting.domain.Leader;
+import net.carting.domain.Racer;
 import net.carting.domain.Team;
 import net.carting.service.*;
 
@@ -18,9 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 @Controller
 @RequestMapping(value = "/document")
@@ -339,6 +342,21 @@ public class DocumentController {
             type = "modern";
         }
         map.put("teams", teamService.getAllTeams());
+       List<String> teamDocStatus = new ArrayList<String>();
+        for (int i=0;i<teamService.getAllTeams().size();i++) {
+        	String status = "checked";
+        	if (teamService.getAllTeams().get(i).getRacers()!=null) {
+	        	for (Racer racer:teamService.getAllTeams().get(i).getRacers()) {
+	        		if(racer.getDocuments()!=null) {
+		        		for(Document doc:racer.getDocuments()) {
+		        			if (!doc.isChecked()) {
+		        				
+		        			}
+		        		}
+	        		}
+	        	}
+        	}
+        }
         map.put("all_docs", documentService.getAllDocuments());
         map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
         map.put("type", type);

@@ -63,14 +63,19 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 	@Override
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
+		
 		List<Qualifying> qualifyings = getAllQualifyings();
 		List<Qualifying> resultList = new ArrayList<Qualifying>();
-		for(Qualifying q:qualifyings) {
-			if (q.getCarClassCompetition().getId()==carClassCompetition.getId()) {
-				resultList.add(q);
+		if (qualifyings.size()>0) {
+			for(Qualifying q:qualifyings) {
+				if (q.getCarClassCompetition().getId()==carClassCompetition.getId()) {
+					resultList.add(q);
+				}
+			}
+			if (resultList.size()>0) {
+				return resultList;
 			}
 		}
-        return resultList;
+		return null;
 	}
-
 }

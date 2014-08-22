@@ -25,7 +25,7 @@ pageEncoding="utf-8"%>
                     </c:forEach>
                 </div>
                 <div class="btn-group" style="float: right;">
-                	<c:if test="${qualifyingList.size() < membersCount}">
+                	<c:if test="${ empty qualifyingList}">
                 		 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary">Add TestRace</a>
                  	</c:if>
                 	<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">

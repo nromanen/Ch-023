@@ -25,6 +25,9 @@ public class Team {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "team", cascade = CascadeType.ALL)
     private Set<Racer> racers = new HashSet<Racer>();
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<Document> documents = new HashSet<Document>();
 
     @Column(name = "license", nullable = false)
     private String license;

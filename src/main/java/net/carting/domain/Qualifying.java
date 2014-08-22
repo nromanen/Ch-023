@@ -24,13 +24,13 @@ public class Qualifying {
     @JoinColumn(name = "car_class_competition_id")
     private CarClassCompetition carClassCompetition;
         
-    @Column(name = "racer_number", nullable = false)
+    @Column(name = "racer_number")
     private Integer racerNumber;
     
-    @Column(name = "racer_place", nullable = false)
+    @Column(name = "racer_place")
     private Integer racerPlace;
     
-    @Column(name = "racer_time", nullable = false)
+    @Column(name = "racer_time")
     private Time  racerTime;
 
 	public int getId() {

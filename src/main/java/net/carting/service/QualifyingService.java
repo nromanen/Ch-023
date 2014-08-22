@@ -29,4 +29,6 @@ public interface QualifyingService {
 	
 	public List<Integer> getQualifyingPlacesByCarClassCompetition(
 			CarClassCompetition carClassCompetition);
+	public boolean setQualifyingTimeFromString(Qualifying q, String time);
+	public void setQualifyingPlacesInCarClassCompetition(CarClassCompetition ccc);
 }

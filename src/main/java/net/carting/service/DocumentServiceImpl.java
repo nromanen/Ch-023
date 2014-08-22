@@ -90,6 +90,7 @@ public class DocumentServiceImpl implements DocumentService {
             Document document = new Document();
             document.setType(documentType);
             document = setDocumentParametersByType(document, number, startDate, finishDate);
+            document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
             addDocument(document);
             List<byte[]> fileList = new ArrayList<>();
             for (MultipartFile file : files) {
