@@ -112,7 +112,7 @@
 				</c:if>
 				<c:forEach items="${documents.get(index).files}" var="file">
 					<div>
-						<a href="data:image/jpg;base64,<c:out value='${file.file}'/>"
+						<a target="_blank" href="showDocument/<c:out value='${file.id}'/>"
 							class="glyphicon glyphicon-paperclip file-link"><c:out value='${file.name}'/>
 						</a>
 					</div>
