@@ -89,7 +89,15 @@ public class Team {
         this.license = license;
     }
 
-    @Override
+    public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

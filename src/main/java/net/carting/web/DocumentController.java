@@ -343,20 +343,28 @@ public class DocumentController {
         }
         map.put("teams", teamService.getAllTeams());
        List<String> teamDocStatus = new ArrayList<String>();
-        for (int i=0;i<teamService.getAllTeams().size();i++) {
-        	String status = "checked";
-        	if (teamService.getAllTeams().get(i).getRacers()!=null) {
-	        	for (Racer racer:teamService.getAllTeams().get(i).getRacers()) {
-	        		if(racer.getDocuments()!=null) {
-		        		for(Document doc:racer.getDocuments()) {
-		        			if (!doc.isChecked()) {
-		        				
-		        			}
-		        		}
-	        		}
-	        	}
-        	}
-        }
+       String status;
+       
+       for (Team team:teamService.getAllTeams()) {
+    	   status = "checked";
+    	   System.out.println(team.getDocuments());
+    	   if (!team.getDocuments().isEmpty()) {
+    		   for (Racer racer:team.getRacers()) {
+    			   if(racer.getDocuments()!=null) {
+    				   for(Document doc:racer.getDocuments()) {
+    					   if (!doc.isChecked()) {
+    						   status = "unchecked";
+						   }
+					   }
+				   }
+			   }
+		   } else {
+			   System.out.println(team.getName()+" - " + team.getDocuments());
+			   status = "noDocs";
+		   }
+    	   teamDocStatus.add(status);
+    	}
+        map.put("team_doc_status", teamDocStatus);
         map.put("all_docs", documentService.getAllDocuments());
         map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
         map.put("type", type);

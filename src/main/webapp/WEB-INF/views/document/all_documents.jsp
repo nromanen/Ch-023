@@ -45,23 +45,13 @@
 							<a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#team${status.index+1}">
 								<spring:message code="label.team" /> #${status.index+1}: ${team.name}
 							</a>
-							<c:set var="has" value="0"/>
-							<c:set var="check" value="0" />
-							<c:forEach items="${team.racers}" var="racer">
-								<c:if test="${!empty racer.getDocuments()}">
-									<c:set var="has" value="1"/>
+							<c:if test="${!empty team_doc_status}">
+								<c:if test="${team_doc_status[status.index]=='unchecked'}">
+									&nbsp;<span title="There are unchecked files" style="color:white" class="glyphicon glyphicon-exclamation-sign"></span>
 								</c:if>
-									<c:forEach items="${racer.getDocuments()}" var="doc">
-										<c:if test="${doc.checked==false}">
-											<c:set var="check" value="1" />
-										</c:if>
-									</c:forEach>
-							</c:forEach>
-							<c:if test="${has==1}">
-								&nbsp;<span title="There are files" class="glyphicon glyphicon-paperclip file-link"></span>
-							</c:if>
-							<c:if test="${check==1}">
-								&nbsp;<span title="There are unchecked files" style="color:white" class="glyphicon glyphicon-exclamation-sign"></span>
+								<c:if test="${team_doc_status[status.index]!='noDocs}">
+									&nbsp;<span title="There are files" class="glyphicon glyphicon-paperclip file-link"></span>
+								</c:if>
 							</c:if>
 						</div>
 					</div>
