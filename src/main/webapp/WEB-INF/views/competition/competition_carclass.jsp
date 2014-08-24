@@ -21,12 +21,11 @@ pageEncoding="utf-8"%>
                     <c:forEach var="i" begin="1" end="${maxRaces}">
                         <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
                     </c:forEach>
+                    <a href='<c:url value="/SHKP/manevr/${carClassCompetition.id}" />' class="btn btn-success"><spring:message code="label.maneuvering" /></a>
+                    <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
+                            <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
+                    </c:if>
                 </div>
-                <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
-                    <div class="btn-group" style="float: right;">
-                        <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
-                    </div>
-                </c:if>
             </c:if>
         </td>
     </tr>
