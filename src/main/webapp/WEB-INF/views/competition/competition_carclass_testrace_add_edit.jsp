@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <link href='<c:url value="/resources/style/bootstrap/css/bootstrap.min.css" />' rel="stylesheet">
 <script type='text/javascript' src='<c:url value="/resources/js/competition_carclass.js" />'></script>
@@ -8,10 +9,10 @@ pageEncoding="utf-8"%>
 			<div class="page-header">
 				<c:choose>
 					<c:when test="${!empty qualifyingList}">
-						<h2 class="user-info-name">Edit qualifying</h2>
+						<h2 class="user-info-name"><spring:message code="label.edit_qualifying" /></h2>
 					</c:when>
 					<c:otherwise>
-						<h2 class="user-info-name">Add qualifying</h2>
+						<h2 class="user-info-name"><spring:message code="label.add_qualifying" /></h2>
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -31,9 +32,9 @@ pageEncoding="utf-8"%>
 					</c:otherwise>
 				</c:choose>
 				<div class="form-group">
-				<label class="col-lg-3 control-label">Number</label>
+				<label class="col-lg-3 control-label"><spring:message code="label.car_number"/></label>
 				<div class="col-lg-3">
-				<label class="col-lg-3 control-label">Time<span style="color:red">*</span></label>
+				<label class="col-lg-3 control-label"><spring:message code="label.time"/><span style="color:red">*</span></label>
 				</div>
 				</div>
 				<c:forEach items="${validNumbers}" var="number" varStatus="counter">
@@ -44,10 +45,10 @@ pageEncoding="utf-8"%>
 							<input  type="text" class="form-control" onchange='Go()' placeholder="[hh:]mm:ss" id='id_${counter.index}' name="time_${counter.index}"
 								<c:if test='${!empty qualifyingList }'>value="${qualifyingList.get(counter.index).racerTime.toString()}"</c:if>
 								pattern="^(\d\d:)?[0-5]\d:[0-5]\d$" 
-								data-bv-regexp-message="[hh:]mm:ss"
+								data-bv-regexp-message="<spring:message code="qualifying.time_format"/>"
 								
 								data-bv-notempty="true"
-								data-bv-notempty-message='required'>
+								data-bv-notempty-message="<spring:message code="label.all_fields_are_required"/>">
 						</div>
 					</div>
 				</c:forEach>
@@ -55,8 +56,16 @@ pageEncoding="utf-8"%>
 					<input type="hidden" class="times" name="timeResult" id="time">
 					<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 					<div class="col-lg-9 col-lg-offset-3">
-						
-						<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" value="Add">
+						<c:choose>
+							<c:when test="${!empty qualifyingList}">
+								<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" 
+									value="<spring:message code="label.edit"/>">
+							</c:when>
+							<c:otherwise>
+								<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" 
+									value="<spring:message code="label.add"/>">
+							</c:otherwise>
+						</c:choose>
 					</div>
 					</div>
 				</form>

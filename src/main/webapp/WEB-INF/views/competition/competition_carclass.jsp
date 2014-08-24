@@ -26,7 +26,7 @@ pageEncoding="utf-8"%>
                 </div>
                 <div class="btn-group" style="float: right;">
                 	<c:if test="${ empty qualifyingList}">
-                		 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary">Add TestRace</a>
+                		 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary"><spring:message code="label.add_qualifying" /></a>
                  	</c:if>
                 	<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
                         <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
@@ -251,7 +251,7 @@ pageEncoding="utf-8"%>
 					<div class="panel-heading" style="height: 50px;">
 						<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
 		                    <a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race_qualifying">
-		                    	Qualifying results:
+		                    	<spring:message code="label.qualifying_results"/>:
 		                    </a>
 	                    </div>
 	                    <c:if test="${authority.equals('ROLE_ADMIN')}">
@@ -267,7 +267,7 @@ pageEncoding="utf-8"%>
 	                                <th style="text-align: center;"><spring:message code="label.competition.place_in_race" /></th>
 	                                <th style="text-align: center;"><spring:message code="label.car_number" /></th>
 	                                <th style="text-align: center;"><spring:message code="label.racer" /></th>
-	                                <th style="text-align: center;">Time</th>
+	                                <th style="text-align: center;"><spring:message code="label.time" /></th>
 	                            </thead>
 								<c:forEach items="${qualifyingList}" var="qualifying" varStatus="counter">
 									<tr>

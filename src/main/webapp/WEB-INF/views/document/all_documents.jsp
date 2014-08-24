@@ -12,12 +12,12 @@
     	<td>
     	<c:if test='${type=="modern"}'>
 	    	<div class="btn-group" style="float: left; margin-bottom: 10px;">		
-				<a href="/Carting/document/allDocuments/classic" id="show_classic" class="btn btn-primary">Classic view</a>
+				<a href="/Carting/document/allDocuments/classic" id="show_classic" class="btn btn-primary"><spring:message code="label.classic_view"/></a>
 			</div>
     	</c:if>
     	<c:if test='${type=="classic"}'>
 	    	<div class="btn-group" style="float: left; margin-bottom: 10px;">		
-				<a href="/Carting/document/allDocuments" id="show_modern" class="btn btn-primary">Modern view</a>
+				<a href="/Carting/document/allDocuments" id="show_modern" class="btn btn-primary"><spring:message code="label.modern_view"/></a>
 			</div>
     	</c:if>
      	
@@ -46,12 +46,12 @@
 								<spring:message code="label.team" /> #${status.index+1}: ${team.name}
 							</a>
 							<c:if test="${!empty team_doc_status}">
-								<c:if test="${team_doc_status[status.index]=='unchecked'}">
-									&nbsp;<span title="There are unchecked files" style="color:white" class="glyphicon glyphicon-exclamation-sign"></span>
-								</c:if>
-								<c:if test="${team_doc_status[status.index]!='noDocs}">
-									&nbsp;<span title="There are files" class="glyphicon glyphicon-paperclip file-link"></span>
-								</c:if>
+									<c:if test="${team_doc_status[status.index]=='unchecked'}">
+										&nbsp;<span title='<spring:message code="label.documents_unchecked"/>' style="color:white" class="glyphicon glyphicon-exclamation-sign"></span>
+									</c:if>
+									<c:if test="${team_doc_status[status.index]=='hasDocs'||team_doc_status[status.index]=='unchecked'}">
+										&nbsp;<span title='<spring:message code="label.document_attached_files"/>' class="glyphicon glyphicon-paperclip file-link"></span>
+									</c:if>
 							</c:if>
 						</div>
 					</div>
@@ -130,12 +130,16 @@
 <c:if test='${type=="classic"}'>
 <table id="doc_table" class="table table-bordered table-hover table-condensed table-responsive">
 	<thead>
-		<th style="text-align: center;">Type of document</th>
-		<th style="text-align: center;">Checked</th>
-		<th style="text-align: center;">Approved</th>
-		<th style="text-align: center;">Files</th>
-		<th style="text-align: center;">Racers</th>
-		<th style="text-align: center;">Team</th>
+		<tr style="vertical-align: middle;">
+			<th style="text-align: center;"><spring:message code="label.type_of_document"/></th>
+			<th style="text-align: center;"><spring:message code="label.document_checked"/></th>
+			<th style="text-align: center;"><spring:message code="label.approved"/></th>
+			<th style="text-align: center;"><spring:message code="label.document_attached_files"/></th>
+			<th style="text-align: center;"><spring:message code="label.document_date_start"/></th>
+			<th style="text-align: center;"><spring:message code="label.document_valid_until"/></th>
+			<th style="text-align: center;"><spring:message code="label.racers"/></th>
+			<th style="text-align: center;"><spring:message code="label.list_of_teams"/></th>
+		</tr>
 	</thead>
 	<tbody>
 		<c:forEach items="${all_docs}" var="doc" varStatus="status">
@@ -169,37 +173,54 @@
 						</c:otherwise>
 					</c:choose>
 				</td>
+				<td style="text-align: center;">
 				<c:choose>
 					<c:when test="${doc.checked}">
-						<td>
+						
 							<span style="color:silver;"class="glyphicon glyphicon-plus plus"></span>
-						</td>
 					</c:when>
 					<c:otherwise>
-						<td>
 							<span style="color:silver;"class="glyphicon glyphicon-minus minus"></span>
-						</td>
 					</c:otherwise>
 				</c:choose>
+				</td>
+				<td style="text-align: center;">
 				<c:choose>
 					<c:when test="${doc.approved}">
-						<td>
 							<span style="color:silver;"class="glyphicon glyphicon-plus"></span>
-						</td>
 					</c:when>
 					<c:otherwise>
-						<td>
 							<span style="color:silver;"class="glyphicon glyphicon-minus"></span>
-						</td>
 					</c:otherwise>
 				</c:choose>
-				<td>
+				</td>
+				<td style="text-align: center;">
 					<c:forEach items="${doc.files}" var="file">
 						&nbsp;
 						<a href="data:image/jpg;base64,<c:out value="${file.file}" />"
 							class="glyphicon glyphicon-paperclip file-link">
 						</a>
 					</c:forEach>
+				</td>
+				<td style="text-align: center;"> 
+					<c:choose>
+						<c:when test="${doc.startDate.toString().length() > 0}">
+						 	${doc.startDate.toString().substring(0,10)}
+						 </c:when>
+						 <c:otherwise>
+						 	<span style="color:silver;"class="glyphicon glyphicon-minus"></span>
+						 </c:otherwise>
+					</c:choose>
+				</td>
+				<td style="text-align: center;">
+					 <c:choose>
+						<c:when test="${doc.finishDate.toString().length() > 0}">
+						 	${doc.finishDate.toString().substring(0,10)}
+						 </c:when>
+						 <c:otherwise>
+						 	<span style="color:silver;"class="glyphicon glyphicon-minus"></span>
+						 </c:otherwise>
+					</c:choose> 
 				</td>
 				<td>
 					<table >
@@ -214,7 +235,7 @@
 					</table>
 				</td>
 				<td>
-						 ${doc.team.name}
+					${doc.team.name}
 				</td>
 			</tr>
 		</c:forEach>

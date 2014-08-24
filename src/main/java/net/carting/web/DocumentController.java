@@ -346,7 +346,7 @@ public class DocumentController {
        String status;
        
        for (Team team:teamService.getAllTeams()) {
-    	   status = "checked";
+    	   status = "hasDocs";
     	   System.out.println(team.getDocuments());
     	   if (!team.getDocuments().isEmpty()) {
     		   for (Racer racer:team.getRacers()) {
