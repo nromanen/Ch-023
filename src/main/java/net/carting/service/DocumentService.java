@@ -60,7 +60,7 @@ public interface DocumentService {
      * @author Volodymyr Semaniv
      * @see net.carting.domain.Document
      */
-    public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate);
+    public void setDocumentParametersByType(Document document, String number, String startDate, String finishDate);
 
     /**
      * <p/>
