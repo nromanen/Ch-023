@@ -25,6 +25,9 @@ public class Team {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "team", cascade = CascadeType.ALL)
     private Set<Racer> racers = new HashSet<Racer>();
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<Document> documents = new HashSet<Document>();
 
     @Column(name = "license", nullable = false)
     private String license;
@@ -86,7 +89,15 @@ public class Team {
         this.license = license;
     }
 
-    @Override
+    public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

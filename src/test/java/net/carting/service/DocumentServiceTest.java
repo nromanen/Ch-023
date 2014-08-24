@@ -129,14 +129,14 @@ public class DocumentServiceTest {
         // document are set correctly
         Document racerLicence = new Document();
         racerLicence.setType(Document.TYPE_RACER_LICENCE);
-        racerLicence = documentService.setDocumentParametersByType(racerLicence, documentNumber, startDate, finishDate);
+        documentService.setDocumentParametersByType(racerLicence, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerLicence.getName());
 
         // Create a document "Racer insurance" and check if the settings of
         // document are set correctly
         Document racerInsurance = new Document();
         racerInsurance.setType(Document.TYPE_RACER_INSURANCE);
-        racerInsurance = documentService.setDocumentParametersByType(racerInsurance, documentNumber, startDate, finishDate);
+        documentService.setDocumentParametersByType(racerInsurance, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", "FG1234", racerInsurance.getName());
         assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate), racerInsurance.getFinishDate());
 
@@ -144,14 +144,14 @@ public class DocumentServiceTest {
         // settings of document are set correctly
         Document racerMedicalCertificate = new Document();
         racerMedicalCertificate.setType(Document.TYPE_RACER_MEDICAL_CERTIFICATE);
-        racerMedicalCertificate = documentService.setDocumentParametersByType(racerMedicalCertificate, documentNumber, startDate, finishDate);
+        documentService.setDocumentParametersByType(racerMedicalCertificate, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(finishDate),racerMedicalCertificate.getFinishDate());
 
         // Create a document "Racer perental permissions" and check if the
         // settings of document are set correctly
         Document racerPerentalPermissions = new Document();
         racerPerentalPermissions.setType(Document.TYPE_RACER_PARENTAL_PERMISSIONS);
-        racerPerentalPermissions = documentService.setDocumentParametersByType(racerPerentalPermissions, documentNumber, startDate, finishDate);
+        documentService.setDocumentParametersByType(racerPerentalPermissions, documentNumber, startDate, finishDate);
         assertEquals("Expected 'FG1234'", DateUtil.getDateFromString(startDate),racerPerentalPermissions.getStartDate());
     }
 

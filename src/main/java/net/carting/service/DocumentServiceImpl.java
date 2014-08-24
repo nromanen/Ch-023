@@ -93,7 +93,15 @@ public class DocumentServiceImpl implements DocumentService {
         try {
             Document document = new Document();
             document.setType(documentType);
-            document = setDocumentParametersByType(document, number, startDate, finishDate);
+            setDocumentParametersByType(document, number, startDate, finishDate);
+            boolean set = false;
+            for(String racerId:racersId) {
+            	if(set) continue;
+            	if(!racerId.equals("-1")) {
+                	document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
+                	set = true;
+                }
+            }
             addDocument(document);
             List<byte[]> fileList = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -118,7 +126,7 @@ public class DocumentServiceImpl implements DocumentService {
         document.setApproved(false);
         document.setChecked(false);
         document.setReason("");
-        document = setDocumentParametersByType(document, number, startDate, finishDate);
+        setDocumentParametersByType(document, number, startDate, finishDate);
         updateDocument(document);
 
         int documentType = document.getType();
@@ -140,7 +148,7 @@ public class DocumentServiceImpl implements DocumentService {
 
 
     @Override
-    public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
+    public void setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
         int documentType = document.getType();
         switch (documentType) {
             case Document.TYPE_RACER_LICENCE:
@@ -159,7 +167,6 @@ public class DocumentServiceImpl implements DocumentService {
             default:
                 break;
         }
-        return document;
     }
 
 

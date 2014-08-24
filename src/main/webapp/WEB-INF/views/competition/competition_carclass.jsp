@@ -9,11 +9,13 @@ pageEncoding="utf-8"%>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
 
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 60px 30px;">
-
+              
 <table class="width-100">
     <tr>
         <td>
+        <div class="page-header">
             <h2 class="user-info-name"><spring:message code="label.car_class" /> "${carClassCompetition.carClass.name}"</h2>
+       </div>
         </td>
         <td style="padding: 15px 0px 0px 20px;">
             <c:if test="${authority.equals('ROLE_ADMIN')}">
@@ -22,16 +24,18 @@ pageEncoding="utf-8"%>
                         <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
                     </c:forEach>
                 </div>
-                <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
-                    <div class="btn-group" style="float: right;">
+                <div class="btn-group" style="float: right;">
+                	<c:if test="${ empty qualifyingList}">
+                		 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary"><spring:message code="label.add_qualifying" /></a>
+                 	</c:if>
+                	<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
                         <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
-                    </div>
-                </c:if>
+                	</c:if>
+                </div>
             </c:if>
         </td>
     </tr>
 </table>
-
 <div><label class="text-info"><spring:message code="label.competition_name" />&nbsp;</label>${carClassCompetition.competition.name}</div>
 <div><label class="text-info"><spring:message code="label.competition.first_race_date" />&nbsp;</label>
     <fmt:formatDate value="${carClassCompetition.firstRaceTime}" pattern="HH:mm" />&nbsp;
@@ -240,7 +244,50 @@ pageEncoding="utf-8"%>
     </c:if>
 </c:if>
 </div>
-
+	<div>
+		<c:if test="${!empty qualifyingList}">
+			<div class="panel-group" id="accordition">
+				<div class="panel panel-primary">
+					<div class="panel-heading" style="height: 50px;">
+						<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
+		                    <a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race_qualifying">
+		                    	<spring:message code="label.qualifying_results"/>:
+		                    </a>
+	                    </div>
+	                    <c:if test="${authority.equals('ROLE_ADMIN')}">
+		                    <div class="btn-group" style="float: right;">
+		                       <a href='<c:url value="/carclass/${carClassCompetition.id}/editTestRace" />' class="btn btn-info " id="edit_qualifying_button"><spring:message code="label.edit" /></a>
+		                    </div>
+	                    </c:if>
+					</div>
+					<div id="race_qualifying" class=" testcollapsing panel-collapse collapse" >
+						<div class="panel-body" >
+							 <table id="qualifying-table" class="table table-hover table-bordered" style="text-align: center;">
+								<thead class="well" style="font-weight: 100;">
+	                                <th style="text-align: center;"><spring:message code="label.competition.place_in_race" /></th>
+	                                <th style="text-align: center;"><spring:message code="label.car_number" /></th>
+	                                <th style="text-align: center;"><spring:message code="label.racer" /></th>
+	                                <th style="text-align: center;"><spring:message code="label.time" /></th>
+	                            </thead>
+								<c:forEach items="${qualifyingList}" var="qualifying" varStatus="counter">
+									<tr>
+										 <td>${qualifying.racerPlace}</td>
+										 <td>${qualifying.racerNumber}</td>
+										 <td>
+											 <a href='<c:url value="/racer/${raceResultsLists.get(0).get(counter.index).racer.id}" />'>
+											 	${raceResultsLists.get(0).get(counter.index).racer.firstName}&nbsp;${raceResultsLists.get(0).get(counter.index).racer.lastName}
+											 </a>
+										 </td>
+										 <td>${qualifying.racerTime}</td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</c:if>
+	</div>
     <div>
         <c:if test="${!empty raceResultsLists}">
             <c:forEach items="${raceResultsLists}" var="raceResultsList" varStatus="status">
@@ -296,7 +343,7 @@ pageEncoding="utf-8"%>
                                             <td>${raceResult.fullLaps}</td>
                                             <td>${raceResult.points}</td>
                                         </tr>
-                                    </c:forEach>
+                                    </c:forEach>		
                                 </c:if>
                             </tbody>
                         </table>

@@ -72,42 +72,44 @@ public class DocumentController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String documentPage(Map<String, Object> map,
-                               @PathVariable("id") int id, HttpServletRequest request) {
+            @PathVariable("id") int id, HttpServletRequest request) {
         Document document = documentService.getDocumentById(id);
         map.put("document", document);
         map.put("request", request);
         if (userService.getCurrentAuthority().equals(UserService.ROLE_ADMIN)) {
             /*
-			 * If user is administrator, he is redirected to page of document
-			 */
+             * If user is administrator, he is redirected to page of document
+             */
             return "document";
         }
-		/*
-		 * Gets team that is owner of this document
-		 */
+        /*
+         * Gets team that is owner of this document
+         */
         Team teamOwner = document.getTeamOwner();
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
-		/*
-		 * Compares team whose leader is authorized and team that is owner of
-		 * this document
-		 */
+        /*
+         * Compares team whose leader is authorized and team that is owner of
+         * this document
+         */
         if (teamService.isTeamByLeaderId(leader.getId())) {
             Team team = teamService.getTeamByLeader(leader);
             if (team.getId() == teamOwner.getId()) {
-				/*
-				 * If user is owner of document, he is redirected to page of
-				 * document
-				 */
+                /*
+                 * If user is owner of document, he is redirected to page of
+                 * document
+                 */
                 return "document";
             } else {
-				/*
-				 * If team leader isn't owner of document, he is redirected to
-				 * page of his team
-				 */
+                /*
+                 * If team leader isn't owner of document, he is redirected to
+                 * page of his team
+                 */
 
-                LOG.info("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
-                		team.getName(), teamOwner.getName());
+                LOG.info("Leader of team " + team.getName()
+                        + "tried to see a document of team "
+                        + teamOwner.getName()
+                        + ", but was redirected to page of his team");
                 return "redirect:/team/" + team.getId();
             }
         } else {
@@ -315,12 +317,52 @@ public class DocumentController {
 
         return "checking_documents";
     }
-    
+
     @RequestMapping(value = "/allDocuments", method = RequestMethod.GET)
-    public String allDocuments(Map<String, Object> map) {
-    	map.put("teams", teamService.getAllTeams());
-    	map.put("all_docs", documentService.getAllDocuments());
-    	map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
+    public String allDocuments(Map<String, Object> map,
+            @RequestParam(value = "type", required = false) String type) {
+        if (type == null) {
+            type = "modern";
+        }
+        map.put("teams", teamService.getAllTeams());
+       List<String> teamDocStatus = new ArrayList<String>();
+       String status;
+       
+       for (Team team:teamService.getAllTeams()) {
+    	   status = "hasDocs";
+    	   System.out.println(team.getDocuments());
+    	   if (!team.getDocuments().isEmpty()) {
+    		   for (Racer racer:team.getRacers()) {
+    			   if(racer.getDocuments()!=null) {
+    				   for(Document doc:racer.getDocuments()) {
+    					   if (!doc.isChecked()) {
+    						   status = "unchecked";
+						   }
+					   }
+				   }
+			   }
+		   } else {
+			   System.out.println(team.getName()+" - " + team.getDocuments());
+			   status = "noDocs";
+		   }
+    	   teamDocStatus.add(status);
+    	}
+        map.put("team_doc_status", teamDocStatus);
+        map.put("all_docs", documentService.getAllDocuments());
+        map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
+        map.put("type", type);
+
         return "all_documents";
     }
+
+    @RequestMapping(value = "/allDocuments/classic", method = RequestMethod.GET)
+    public String allDocumentsClassic(Map<String, Object> map,
+            @RequestParam(value = "type", required = false) String type) {
+        if (type == null) {
+            type = "classic";
+        }
+        map.put("type", type);
+        return "redirect:/document/allDocuments";
+    }
+
 }
