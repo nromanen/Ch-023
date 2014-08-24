@@ -6,7 +6,8 @@ import java.util.List;
 
 import net.carting.dao.UserDAO;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,12 +18,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Service("userDetailsServiceImpl")
+
 @Service
 @Transactional(readOnly=true)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private static final Logger LOG = Logger.getLogger(UserDetailsServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     private UserDAO userDAO;
 
@@ -50,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		boolean accountNonLocked = true;
 
 		domainUser.setUserAuthorities(userDAO.getAuthoritiesByUserName(username));
-        LOG.info(String.format("%s had logged successfully", domainUser.getUsername()));
+        LOG.info("{} had logged successfully", domainUser.getUsername());
 		return new User (
 				domainUser.getUsername(),
 				domainUser.getPassword(),
