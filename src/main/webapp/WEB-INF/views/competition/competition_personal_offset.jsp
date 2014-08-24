@@ -58,8 +58,7 @@
 					<td>${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
-					<c:forEach items="${qualifyingLists}" var="qualifyingList" varStatus="qLoop">
-						<c:if test="${qLoop.index==loop.index}">
+					<c:set  var="qualifyingList" value="${qualifyingLists[loop.index]}" />
 							<c:choose>
 								<c:when test="${!empty qualifyingList }">
 									<c:forEach items="${qualifyingList}" var="qualifying">
@@ -74,8 +73,6 @@
 									<td></td>
 								</c:otherwise>
 							</c:choose>
-						</c:if>
-					</c:forEach>
 					<c:set var="countOfResults"	 value="2" />
 					<c:forEach items="${raceResultsLists}" var="raceResultsList">
 						<c:forEach items="${raceResultsList}" var="raceResults">

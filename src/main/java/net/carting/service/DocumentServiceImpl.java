@@ -90,7 +90,14 @@ public class DocumentServiceImpl implements DocumentService {
             Document document = new Document();
             document.setType(documentType);
             document = setDocumentParametersByType(document, number, startDate, finishDate);
-            document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
+            boolean set = false;
+            for(String racerId:racersId) {
+            	if(set) continue;
+            	if(!racerId.equals("-1")) {
+                	document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
+                	set = true;
+                }
+            }
             addDocument(document);
             List<byte[]> fileList = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -100,6 +107,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
             fileService.addFilesToDocument(document, fileList);
             racerService.setDocumentToRacers(document, racersId);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
