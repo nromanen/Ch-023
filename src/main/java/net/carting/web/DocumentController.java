@@ -221,6 +221,7 @@ public class DocumentController {
     public
     @ResponseBody
     String deleteDocument(@RequestBody Map<String, Object> map) {
+    	LOG.debug("Start deleteDocument method");
             int documentId = Integer.parseInt(map.get("document_id").toString());
             Document document = documentService.getDocumentById(documentId);
             String[] racersIdString = map.get("racers_id_string").toString()
@@ -239,6 +240,7 @@ public class DocumentController {
                 documentService.deleteDocument(document);
                 LOG.trace("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
             }
+            LOG.debug("End deleteDocument method");
         return "success";
     }
 

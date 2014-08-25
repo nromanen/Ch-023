@@ -167,6 +167,7 @@ public class RacerController {
     public
     @ResponseBody
     int editRacerAction(@RequestBody Map<String, Object> racerMap) {
+    	LOG.debug("Start editRacerAction method");
         Racer racer = new Racer();
         racer.setId(Integer.parseInt(racerMap.get("id").toString()));
         racer.setFirstName(racerMap.get("firstName").toString());
@@ -190,7 +191,7 @@ public class RacerController {
         String username = userService.getCurrentUserName();
         LOG.trace("{} had edited racer {} {} (id = {})", username,
                 racer.getFirstName(), racer.getLastName(), racer.getId());
-
+        LOG.debug("End editRacerAction method");
         return racer.getId();
     }
 
@@ -210,7 +211,8 @@ public class RacerController {
     public
     @ResponseBody
     int addRacerAction(@RequestBody Map<String, Object> racerMap) {
-
+    	
+    	LOG.debug("Start addRacerAction method");
         Racer racer = new Racer();
         racer.setFirstName(racerMap.get("firstName").toString());
         racer.setLastName(racerMap.get("lastName").toString());
@@ -245,7 +247,7 @@ public class RacerController {
         LOG.trace("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
-
+        LOG.debug("End addRacerAction method");
         return racer.getId();
     }
 

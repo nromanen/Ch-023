@@ -89,6 +89,7 @@ public class LeaderController {
     public
     @ResponseBody
     Map<String, String> addLeader(@Valid Leader leader, Locale locale,  BindingResult bindingResult) {
+    	LOG.debug("Start addLeader method");
         Map<String, String> result = new HashMap<String, String>();
         LeaderValidator validator = new LeaderValidator();
         validator.validate(leader, bindingResult);
@@ -106,6 +107,7 @@ public class LeaderController {
 				e.printStackTrace();
 			}
         }
+        LOG.debug("End addLeader method");
         return result;
     }
 
@@ -143,7 +145,7 @@ public class LeaderController {
     public
     @ResponseBody
     int editLeader(@RequestBody Map<String, Object> formMap) {
-
+    	LOG.debug("Start editLeader method");
         Leader leader = leaderService.getLeaderById(Integer.parseInt(formMap
                 .get("id").toString()));
         leader.setFirstName(formMap.get("firstName").toString());
@@ -156,7 +158,7 @@ public class LeaderController {
         leaderService.updateLeader(leader);
         LOG.trace("Leader {} {} had edited tracermation abut him",
                 leader.getFirstName(), leader.getLastName());
-
+        LOG.debug("End editLeader method");
         return leader.getId();
     }
 
@@ -196,9 +198,7 @@ public class LeaderController {
     @ResponseBody
     String sendSecureCode(@RequestBody Map<String, Object> map) {
     	String email = map.get("email").toString();
-    	System.out.println(email);
     	User user = userService.getUserByEmail(email);
-    	System.out.println(user);
     	userService.sendSecureCode(user);
     	return "success";
     }
@@ -230,10 +230,8 @@ public class LeaderController {
     		try {
 				userService.changePassword(user, password);
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         	return "success";

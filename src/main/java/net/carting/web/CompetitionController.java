@@ -277,6 +277,7 @@ public class CompetitionController {
     }
 
     // team registration view
+    /*TODO  Remove HttpServletRequest*/
     @RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
     public String registrationTeamOnCompetitionView(Map<String, Object> map,
                                                     HttpServletRequest request) {
@@ -333,6 +334,7 @@ public class CompetitionController {
     public
     @ResponseBody
     String changePointsByPlaces(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+    	LOG.debug("Start changePointsByPlaces method");
         Competition competition = competitionService.getCompetitionById(id);
         String pointsByPlaces = map.get("pointsByPlaces").toString();
         competition.setPointsByPlaces(pointsByPlaces);
@@ -344,6 +346,7 @@ public class CompetitionController {
             	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
             }
         }
+    	LOG.debug("End changePointsByPlaces method");
         return "success";
     }
 

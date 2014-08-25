@@ -196,7 +196,8 @@ public class CarClassCompetitionController {
     public
     @ResponseBody
     String registerRacerToCarClassCompetitionAction(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        try {
+        LOG.debug("Start registerRacerToCarClassCompetitionAction method");
+    	try {
             int carClassCompetitionId = id;
             int racerId = Integer.parseInt(map.get("racerId").toString());
             int number = Integer.parseInt(map.get("number").toString());
@@ -216,6 +217,7 @@ public class CarClassCompetitionController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    	LOG.debug("End registerRacerToCarClassCompetitionAction method");
         return "success";
     }
 
@@ -236,6 +238,7 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(@ModelAttribute("race") Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
+    	LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         race.setCarClassCompetition(carClassCompetition);
         race.setCarClass(carClassCompetition.getCarClass());
@@ -246,6 +249,7 @@ public class CarClassCompetitionController {
         editRace(race, map, id, race.getRaceNumber(), String.valueOf(race.getNumberOfLaps()));
         LOG.trace("Admin has added race with id={} race number {} in car class competition {} in competition {}", race.getId(), race.getRaceNumber(),
         		carClassCompetition.getCarClass().getName(), carClassCompetition.getCompetition().getName());
+        LOG.debug("End addRace method");
         return "redirect:/carclass/" + id;
     }
 
@@ -265,6 +269,7 @@ public class CarClassCompetitionController {
                            Map<String, Object> map, @PathVariable("id") int id,
                            @PathVariable("raceNumber") int raceNumber,
                            @RequestParam("numberOfLaps") String lapsNumber) {
+    	LOG.debug("Start editRace method");
         try {
             int laps = Integer.parseInt(lapsNumber);
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
@@ -281,6 +286,7 @@ public class CarClassCompetitionController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        LOG.debug("End editRace method");
         return "redirect:/carclass/" + id;
     }
 
