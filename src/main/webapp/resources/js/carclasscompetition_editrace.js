@@ -161,8 +161,7 @@ $(document).ready(function(){
 		} //else  array_of_numbers = array_of_numbers.slice(0, array_of_numbers.length-1);
 		if (array_of_numbers[array_of_numbers.length-1] == '') {
 			array_of_numbers = array_of_numbers.slice(0, array_of_numbers.length-1);
-		}
-		alert (array_of_numbers);
+		}		
 		if (array_of_numbers.length == 0) {			
 			emptyField = 1;
 		}
