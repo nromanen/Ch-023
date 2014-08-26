@@ -265,8 +265,12 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addTestRace")
     public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
         try {
+           
         	CarClassCompetition carClassCompetition = carClassCompetitionService.
         			getCarClassCompetitionById(id);
+        	if (!raceService.getRaceResultsByCarClassCompetition(carClassCompetition).isEmpty()) {
+        	    return "redirect:/carclass/" + id;
+        	}
             map.put("carClassCompetition",carClassCompetition);
             map.put("membersCount", racerCarClassCompetitionNumberService.
             		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));

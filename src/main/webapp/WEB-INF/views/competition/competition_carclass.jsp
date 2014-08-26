@@ -25,7 +25,7 @@ pageEncoding="utf-8"%>
                     </c:forEach>
                 </div>
                 <div class="btn-group" style="float: right;">
-                	<c:if test="${ empty qualifyingList}">
+                	<c:if test="${empty qualifyingList && raceListSize==0}">
                 		 <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary"><spring:message code="label.add_qualifying" /></a>
                  	</c:if>
                 	<c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
@@ -242,30 +242,6 @@ pageEncoding="utf-8"%>
     </c:if>
 </c:if>
 </div>
-<%-- <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="position">
-                            <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
-                                <td style="text-align: left; padding-left: 20px;">
-                                    <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
-                                        id="racer${racerCarClassCompetitionNumber.racer.id}">
-                                        ${racerCarClassCompetitionNumber.racer.firstName} ${racerCarClassCompetitionNumber.racer.lastName}
-                                    </a>
-                                    <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
-                                        <span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
-                                    </c:if>
-                                </td>
-                                <td>
-                                    ${racerCarClassCompetitionNumber.numberInCompetition}
-                                </td>
-                                <c:if test="${authority.equals('ROLE_TEAM_LEADER') && carClassCompetition.competition.enabled }">
-                                    <td>
-                                        <c:if test="${racerCarClassCompetitionNumber.racer.team.id==teamByLeader.id}">
-                                            <a href="#" class="btn btn-danger btn-xs unreg_racer_btn"
-                                               id="unreg${racerCarClassCompetitionNumber.racer.id}">Unregister</a>
-                                        </c:if>
-                                    </td>
-                                </c:if>
-                            </tr>
-                        </c:forEach> --%>
 	<div>
 		<c:if test="${!empty qualifyingList}">
 			<div class="panel-group" id="accordition">
