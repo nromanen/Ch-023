@@ -64,6 +64,7 @@ public class LeaderServiceImpl implements LeaderService {
     @Transactional
     public void deleteLeader(Leader leader) {
         leaderDAO.deleteLeader(leader);
+        userService.deleteUser(leader.getUser());
     }
 
     @Override
@@ -90,7 +91,7 @@ public class LeaderServiceImpl implements LeaderService {
         String username = leader.getUser().getUsername();
         
         String to = email;
-        String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
+        String from = "admin@bender.org.ua";
         String subject = "Welcome to Carting";
         String message = String.format("Dear %s %s, welcome to Carting, please wait the confirmation of your account ",
                 leader.getFirstName(), leader.getLastName());
