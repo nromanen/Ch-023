@@ -155,8 +155,8 @@ $(document).ready(function(){
             <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
         </tr>
         <tr>
-            <td align='center' colspan='2'><spring:message code="label.car_classes" />: <b><c:out value="${carClassName}"/></b></td>
-            <td align='center' colspan='2'><spring:message code="label.car_classes" />: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
         </tr>
         <tr>
             <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>

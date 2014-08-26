@@ -181,6 +181,11 @@
         <put-attribute name="content" value="/WEB-INF/views/document/start.jsp"/>
     </definition>
 
+    <definition name="maneuver" extends="base-template">
+        <put-attribute name="title" value="Maneuver statement"/>
+        <put-attribute name="content" value="/WEB-INF/views/document/maneuver.jsp"/>
+    </definition>
+
     <!-- Feedback -->
     <definition name="feedback" extends="base-template">
         <put-attribute name="title" value="Feedback"/>

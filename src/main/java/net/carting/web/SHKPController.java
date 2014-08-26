@@ -1,9 +1,6 @@
 package net.carting.web;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Competition;
-import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.*;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +38,21 @@ public class SHKPController {
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
         public void createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            documentService.createStartStatement(table);
+            try {
+                documentService.createStartStatement(table);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @RequestMapping(value = "maneuver", method = RequestMethod.POST)
+        @ResponseBody
+        public void createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+            try {
+                documentService.createManeuverStatement(table);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @RequestMapping(value = "start/{id}/{raceId}", method = RequestMethod.GET)
@@ -62,7 +74,6 @@ public class SHKPController {
 
             model.addAttribute("allowedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("secretaryName", competition.getSecretaryName());
-            CarClass carClass = competition.getCarClassCompetitions().iterator().next().getCarClass();
             Date time;
             Date date;
             if (raceId == 1) {
@@ -72,7 +83,7 @@ public class SHKPController {
                 date = competition.getSecondRaceDate();
                 time = carClassCompetition.getSecondRaceTime();
             }
-            model.addAttribute("carClassName", carClass.getName());
+            model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
             model.addAttribute("carClassTime", timeFormat.format(time));
             model.addAttribute("carClassDate", dateFormat.format(date));
             model.addAttribute("carClassRace", raceId);
@@ -82,4 +93,32 @@ public class SHKPController {
             model.addAttribute("pdfLink", DocumentService.START_STATEMENT_PATH);
             return new ModelAndView("start");
         }
+
+    @RequestMapping(value = "maneuver/{id}", method = RequestMethod.GET)
+    public ModelAndView createManeuverStatement(Model model, @PathVariable("id") int id) {
+        try {
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+            Competition competition = carClassCompetition.getCompetition();
+
+            List<RacerCarClassCompetitionNumber> racers =
+                    racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
+
+            model.addAttribute("racers", racers);
+
+            model.addAttribute("competitionName", competition.getName());
+            model.addAttribute("competitionPlace", competition.getPlace());
+            model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+            model.addAttribute("pdfLink", DocumentService.MANEUVER_STATEMENT_PATH);
+            model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+            model.addAttribute("secretaryName", competition.getSecretaryName());
+            model.addAttribute("directorName", competition.getDirectorName());
+            model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
+        }
+        catch (Exception e) {
+           // e.printStackTrace();
+        }
+        return new ModelAndView("maneuver");
+    }
 }

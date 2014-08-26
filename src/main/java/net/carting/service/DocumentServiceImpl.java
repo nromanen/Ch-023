@@ -177,9 +177,20 @@ public class DocumentServiceImpl implements DocumentService {
                 dir.mkdirs();
             String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
-        } catch (IOException e) {
+        } catch (IOException | DocumentException e) {
             e.printStackTrace();
-        } catch (DocumentException e) {
+        }
+    }
+
+    @Override
+    public void createManeuverStatement(String html) {
+        try {
+            File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
+            if (!dir.exists())
+                dir.mkdirs();
+            String path = dir.getAbsolutePath() + "/maneuver.pdf";
+            PdfWriter.createManeuverStatement(path, html);
+        } catch (IOException | DocumentException e) {
             e.printStackTrace();
         }
     }
