@@ -14,6 +14,8 @@ public interface DocumentService {
 
     public static final String START_STATEMENT_PATH = "/Carting" + DOCUMENTS_UPLOAD_DIR + "/start.pdf";
 
+    public static final String MANEUVER_STATEMENT_PATH = "/Carting" + DOCUMENTS_UPLOAD_DIR + "/maneuver.pdf";
+
     public List<Document> getAllDocuments();
 
     public Document getDocumentById(int id);
@@ -110,5 +112,7 @@ public interface DocumentService {
     public List<Document> gelAllUncheckedDocuments();
 
     public void createStartStatement(String html);
+
+    public void createManeuverStatement(String html);
 
 }

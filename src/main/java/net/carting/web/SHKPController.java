@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Competition;
-import net.carting.domain.Qualifying;
-import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.*;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.QualifyingService;
@@ -27,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 /**
     * Carting
     * Created by manson on 8/5/14.
@@ -37,7 +34,7 @@ public class SHKPController {
 
         // MAX_CAR_POSITIONS - max cart positions on the track, const.
         public static final int MAX_CAR_POSITIONS = 36;
-        
+
         private static final Logger LOG = LoggerFactory.getLogger(SHKPController.class);
 
         @Autowired
@@ -48,14 +45,28 @@ public class SHKPController {
 
         @Autowired
         RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
-        
+
         @Autowired
         QualifyingService qualifyingService;
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
         public void createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            documentService.createStartStatement(table);
+            try {
+                documentService.createStartStatement(table);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @RequestMapping(value = "maneuver", method = RequestMethod.POST)
+        @ResponseBody
+        public void createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+            try {
+                documentService.createManeuverStatement(table);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @RequestMapping(value = "start/{id}/{raceId}", method = RequestMethod.GET)
@@ -65,23 +76,23 @@ public class SHKPController {
 
             List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
-            
-            
+
+
             try{
-            	List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+                List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
                 List<Qualifying> resultQ = new ArrayList<Qualifying>();
-	            for (int i=0;i<beforeQ.size();i++) {
-	            	for (int j=0; j<beforeQ.size();j++) {
-	            		if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition()==beforeQ.get(j).getRacerNumber()) {
-	            			resultQ.add(beforeQ.get(j));
-	            		}
-	            	}
-	            }
-	            model.addAttribute("qualifyingList", resultQ);
-	        } catch (Exception e) {
-            	LOG.error("Errors in start method", e);
+                for (int i=0;i<beforeQ.size();i++) {
+                    for (int j=0; j<beforeQ.size();j++) {
+                        if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition()==beforeQ.get(j).getRacerNumber()) {
+                            resultQ.add(beforeQ.get(j));
+                        }
+                    }
+                }
+                model.addAttribute("qualifyingList", resultQ);
+            } catch (Exception e) {
+                LOG.error("Errors in start method", e);
             }
-            
+
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
@@ -93,7 +104,6 @@ public class SHKPController {
 
             model.addAttribute("allowedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("secretaryName", competition.getSecretaryName());
-            CarClass carClass = competition.getCarClassCompetitions().iterator().next().getCarClass();
             Date time;
             Date date;
             if (raceId == 1) {
@@ -103,7 +113,7 @@ public class SHKPController {
                 date = competition.getSecondRaceDate();
                 time = carClassCompetition.getSecondRaceTime();
             }
-            model.addAttribute("carClassName", carClass.getName());
+            model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
             model.addAttribute("carClassTime", timeFormat.format(time));
             model.addAttribute("carClassDate", dateFormat.format(date));
             model.addAttribute("carClassRace", raceId);
@@ -113,4 +123,32 @@ public class SHKPController {
             model.addAttribute("pdfLink", DocumentService.START_STATEMENT_PATH);
             return new ModelAndView("start");
         }
+
+    @RequestMapping(value = "maneuver/{id}", method = RequestMethod.GET)
+    public ModelAndView createManeuverStatement(Model model, @PathVariable("id") int id) {
+        try {
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+            Competition competition = carClassCompetition.getCompetition();
+
+            List<RacerCarClassCompetitionNumber> racers =
+                    racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
+
+            model.addAttribute("racers", racers);
+
+            model.addAttribute("competitionName", competition.getName());
+            model.addAttribute("competitionPlace", competition.getPlace());
+            model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+            model.addAttribute("pdfLink", DocumentService.MANEUVER_STATEMENT_PATH);
+            model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+            model.addAttribute("secretaryName", competition.getSecretaryName());
+            model.addAttribute("directorName", competition.getDirectorName());
+            model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
+        }
+        catch (Exception e) {
+           // e.printStackTrace();
+        }
+        return new ModelAndView("maneuver");
+    }
 }
