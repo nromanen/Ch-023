@@ -75,11 +75,10 @@ pageEncoding="utf-8"%>
                         </c:if>
                     </thead>
                     <tbody>
-                        <% int number = 1; %>
-                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+                        <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="position">
                             <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                 <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-                                <td><%= number %></td>
+                                <td>${position.index+1}</td>
                                 <td style="text-align: left; padding-left: 20px;">
                                     <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
                                         id="racer${racerCarClassCompetitionNumber.racer.id}">
@@ -101,7 +100,6 @@ pageEncoding="utf-8"%>
                                     </td>
                                 </c:if>
                             </tr>
-                            <% number++; %>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -244,6 +242,30 @@ pageEncoding="utf-8"%>
     </c:if>
 </c:if>
 </div>
+<%-- <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="position">
+                            <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
+                                <td style="text-align: left; padding-left: 20px;">
+                                    <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
+                                        id="racer${racerCarClassCompetitionNumber.racer.id}">
+                                        ${racerCarClassCompetitionNumber.racer.firstName} ${racerCarClassCompetitionNumber.racer.lastName}
+                                    </a>
+                                    <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
+                                        <span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
+                                    </c:if>
+                                </td>
+                                <td>
+                                    ${racerCarClassCompetitionNumber.numberInCompetition}
+                                </td>
+                                <c:if test="${authority.equals('ROLE_TEAM_LEADER') && carClassCompetition.competition.enabled }">
+                                    <td>
+                                        <c:if test="${racerCarClassCompetitionNumber.racer.team.id==teamByLeader.id}">
+                                            <a href="#" class="btn btn-danger btn-xs unreg_racer_btn"
+                                               id="unreg${racerCarClassCompetitionNumber.racer.id}">Unregister</a>
+                                        </c:if>
+                                    </td>
+                                </c:if>
+                            </tr>
+                        </c:forEach> --%>
 	<div>
 		<c:if test="${!empty qualifyingList}">
 			<div class="panel-group" id="accordition">
@@ -274,9 +296,13 @@ pageEncoding="utf-8"%>
 										 <td>${qualifying.racerPlace}</td>
 										 <td>${qualifying.racerNumber}</td>
 										 <td>
-											 <a href='<c:url value="/racer/${raceResultsLists.get(0).get(counter.index).racer.id}" />'>
-											 	${raceResultsLists.get(0).get(counter.index).racer.firstName}&nbsp;${raceResultsLists.get(0).get(counter.index).racer.lastName}
-											 </a>
+											 <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+											 	<c:if test="${racerCarClassCompetitionNumber.numberInCompetition==qualifying.racerNumber}">
+												 	<a href='<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />'>
+													 	${racerCarClassCompetitionNumber.racer.firstName}&nbsp;${racerCarClassCompetitionNumber.racer.lastName}
+													 </a>
+											 	</c:if>
+											 </c:forEach>
 										 </td>
 										 <td>${qualifying.racerTime}</td>
 									</tr>
