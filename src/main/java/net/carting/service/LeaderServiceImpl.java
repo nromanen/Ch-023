@@ -64,6 +64,7 @@ public class LeaderServiceImpl implements LeaderService {
     @Transactional
     public void deleteLeader(Leader leader) {
         leaderDAO.deleteLeader(leader);
+        userService.deleteUser(leader.getUser());
     }
 
     @Override
