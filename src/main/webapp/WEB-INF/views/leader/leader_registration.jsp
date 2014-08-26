@@ -128,11 +128,6 @@
                 data-bv-emailaddress-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
             <div class="help-block with-errors"></div>
         </div>
-        
-        <div class="alert alert-danger" id="email_exists"
-            style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
-            <spring:message code="message.email_exist" />
-        </div>
     </div>    
 
     <div class="row">
@@ -175,6 +170,9 @@
     <div class="alert alert-danger" id="user_exists" style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
         <spring:message code="message.user_exist" />
     </div>
+	<div class="alert alert-danger" id="email_exists" style="display: none; padding: 0px 0px 0px 20px; height: 25px;">
+            <spring:message code="message.email_exist" />
+	</div>
     <input type="hidden" id="error_encoding_passwords" value="<spring:message code="dataerror.error_encoding_passwords" />">
     <input type="hidden" id="message_after_registration" value="<spring:message code="message.after_leader_registration" />">
 
