@@ -144,7 +144,8 @@ $(document).ready(function(){
 		return array_of_numbers;
 	}
 	
-		
+	
+	
 	$('#edit_race_btn').click(function(){
 		
 		var arr = $('#validNumbers').data('validnumbers');
@@ -152,19 +153,13 @@ $(document).ready(function(){
 		var mass = arr.split(',');
 		
 		var hasErrors=0;
-		var emptyField = 0;
 		var values_with_html =$('#editor').html();
 		values_with_html=values_with_html.replace(/\D/gm,' ');		
 		var array_of_numbers = parse_editor(values_with_html);
 		if (array_of_numbers[0] == ''){
 			array_of_numbers = array_of_numbers.slice(1, array_of_numbers.length-1);	
-		} //else  array_of_numbers = array_of_numbers.slice(0, array_of_numbers.length-1);
-		if (array_of_numbers[array_of_numbers.length-1] == '') {
-			array_of_numbers = array_of_numbers.slice(0, array_of_numbers.length-1);
-		}		
-		if (array_of_numbers.length == 0) {			
-			emptyField = 1;
-		}
+		} else array_of_numbers = array_of_numbers.slice(0, array_of_numbers.length-1);
+				
 		for (var i=0; i<array_of_numbers.length; i++){
 				if	($.inArray(array_of_numbers[i], mass) == -1){
 					hasErrors=1;
@@ -172,10 +167,6 @@ $(document).ready(function(){
 			}
 			if (hasErrors==1){
 				$('.error').html('<span style="color:red"> Please, validate your numbers first!</span>');
-				return false;
-				}
-			if (emptyField==1){
-				$('.error').html('<span style="color:red"> Enter your numbers!</span>');
 				return false;
 				}
 		
@@ -187,7 +178,7 @@ $(document).ready(function(){
 		var members=$('#number_of_members').val();
 		
 		var string_of_edited_numbers=$('#result_sequance').val();
-		var array_of_edited_numbers= string_of_edited_numbers.split(' ');		
+		var array_of_edited_numbers= string_of_edited_numbers.split(' ');
 		
 		//get the valid numbers
 		var arr = $('#validNumbers').data('validnumbers');
