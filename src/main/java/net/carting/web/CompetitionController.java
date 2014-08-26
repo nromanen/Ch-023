@@ -15,6 +15,7 @@ import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
 import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
@@ -80,7 +81,10 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
+        Date checkdate = competition.getDateStart();
+        List<Racer> racersBirthday = racerService.getBirthdayRacers(checkdate);       
         model.addAttribute("competition", competition);
+        model.addAttribute("racersBirthday", racersBirthday);
         List<CarClass> carClasses = carClassService.getAllCarClasses();
         List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(id);
         model.addAttribute("carClassList", competitionService

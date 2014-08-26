@@ -4,6 +4,7 @@ import net.carting.dao.AdminSettingsDAO;
 import net.carting.dao.CarClassDAO;
 import net.carting.dao.RacerDAO;
 import net.carting.domain.*;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,25 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public List<Racer> getAllRacers() {
         return racerDAO.getAllRacers();
+    }
+    
+    @Override
+    public List<Racer> getBirthdayRacers(Date checkdate){		
+    List<Racer> racers = racerDAO.getAllRacers();
+    List<Racer> resultRacers = new ArrayList();    
+    for (int i = 0; i < racers.size(); i++)
+    {
+    	if (checkdate.getMonth() == racers.get(i).getBirthday().getMonth()) {
+    		if ((checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == 0) || 
+    				(checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == 1) || 
+    				(checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == -1)) {
+    			resultRacers.add(racers.get(i));
+    		}
+    	}
+    }    	
+    
+    return resultRacers;
+    	
     }
 
     @Override

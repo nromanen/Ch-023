@@ -8,7 +8,7 @@ import java.util.List;
 public interface RacerDAO {
 
     public List<Racer> getAllRacers();
-
+        
     public Racer getRacerById(int id);
 
     public void addRacer(Racer racer);
@@ -21,5 +21,7 @@ public interface RacerDAO {
 
     public List<Racer> getListOfRacersWithSetDocumentByDocumentType(
             int documentType);
+
+	public List<Racer> getBirthdayRacers(Date checkdate);
 
 }

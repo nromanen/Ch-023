@@ -4,11 +4,15 @@ import net.carting.domain.Document;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +28,26 @@ public class RacerDAOImpl implements RacerDAO {
     public List<Racer> getAllRacers() {
         return entityManager.createQuery("from Racer").getResultList();
     }
-
+    
+    @Override
+    public List<Racer> getBirthdayRacers(Date checkdate){		
+    List<Racer> racers = entityManager.createQuery("from Racer").getResultList();
+    List<Racer> resultRacers = new ArrayList();    
+    for (int i = 0; i < racers.size(); i++)
+    {
+    	if (checkdate.getMonth() == racers.get(i).getBirthday().getMonth()) {
+    		if ((checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == 0) || 
+    				(checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == 1) || 
+    				(checkdate.getDay()+1 - racers.get(i).getBirthday().getDay() == -1)) {
+    			resultRacers.add(racers.get(i));
+    		}
+    	}
+    }    	
+    
+    return resultRacers;
+    	
+    }
+    
     @Override
     public Racer getRacerById(int id) {
         return (Racer) entityManager

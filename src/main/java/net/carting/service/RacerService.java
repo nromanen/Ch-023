@@ -47,4 +47,6 @@ public interface RacerService {
      * @see net.carting.domain.Document
      */
     public void setDocumentToRacers(Document document, String[] racersId);
+
+	public List<Racer> getBirthdayRacers(Date checkdate);
 }
