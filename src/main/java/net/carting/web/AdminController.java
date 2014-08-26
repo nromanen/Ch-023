@@ -71,7 +71,7 @@ public class AdminController {
         carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
         carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
         carClassService.addCarClass(carClass);
-        LOG.info("Admin has added new car class {}", carClass.getName());
+        LOG.trace("Admin has added new car class {}", carClass.getName());
         return Integer.toString(carClass.getId());
     }
 
@@ -85,7 +85,7 @@ public class AdminController {
         carClass.setLowerYearsLimit(Integer.parseInt(map.get("lowerYearsLimit").toString()));
         carClass.setUpperYearsLimit(Integer.parseInt(map.get("upperYearsLimit").toString()));
         carClassService.updateCarClass(carClass);
-        LOG.info("Admin has edited car class {} (id = {})", carClass.getName(), carClass.getId());
+        LOG.trace("Admin has edited car class {} (id = {})", carClass.getName(), carClass.getId());
         return "success";
     }
 
@@ -97,7 +97,7 @@ public class AdminController {
         int id = Integer.parseInt(map.get("id").toString());
         try {
             carClassService.deleteCarClassById(id);
-            LOG.info("Admin has deleted car class with id = {}", id);
+            LOG.trace("Admin has deleted car class with id = {}", id);
         } catch (ConstraintViolationException e) {
             LOG.error("Admin hasn't deleted car class with id = {}", id);
             result = "fail";
@@ -111,7 +111,7 @@ public class AdminController {
     String changePerentalPermissionYearsAction(@RequestBody Map<String, Object> map) {
         int perentalPermissionYears = Integer.parseInt(map.get("perentalPermissionYears").toString());
         adminSettingsService.updatePerentalPermissionYears(perentalPermissionYears);
-        LOG.info("Admin has changed perental permission years to {}", perentalPermissionYears);
+        LOG.trace("Admin has changed perental permission years to {}", perentalPermissionYears);
         return "success";
     }
 
@@ -121,7 +121,7 @@ public class AdminController {
     String changePointsByPlacesAction(@RequestBody Map<String, Object> map) {
         String pointsByPlaces = map.get("pointsByPlaces").toString();
         adminSettingsService.updatePointsByPlaces(pointsByPlaces);
-        LOG.info("Admin has changed points by places to {}", pointsByPlaces);
+        LOG.trace("Admin has changed points by places to {}", pointsByPlaces);
         return "success";
     }
 
@@ -131,7 +131,7 @@ public class AdminController {
     String changeFeedbackEmailAction(@RequestBody Map<String, Object> map) {
         String feedbackEmail = map.get("feedbackEmail").toString();
         adminSettingsService.updateFeedbackEmail(feedbackEmail);
-        LOG.info("Admin has changed feedback email to {}", feedbackEmail);
+        LOG.trace("Admin has changed feedback email to {}", feedbackEmail);
         return "success";
     }
 
@@ -147,12 +147,12 @@ public class AdminController {
         String username = userService.getCurrentUserName();
         User user = userService.getUserByUserName(username);
         if (!user.getPassword().equals(userService.getEncodedPassword(oldPassword))) {
-            LOG.info("{} trying to change their password but incorrectly entered old password", username);
+            LOG.trace("{} trying to change their password but incorrectly entered old password", username);
             return "error";
         }
 
         userService.changePassword(user, newPassword);
-        LOG.info("{} has successfuly changed their password", username);
+        LOG.trace("{} has successfuly changed their password", username);
         return "success";
     }
 
@@ -166,7 +166,7 @@ public class AdminController {
         }
         Leader leader = leaderService.getLeaderById(leaderId);
         leaderService.deleteLeader(leader);
-        LOG.info("Admin has deleted leader {} {}", leader.getFirstName(), leader.getLastName());
+        LOG.trace("Admin has deleted leader {} {}", leader.getFirstName(), leader.getLastName());
         return "success";
     }
 
@@ -178,7 +178,7 @@ public class AdminController {
         int leaderId = Integer.parseInt(map.get("id").toString());
         Leader leader = leaderService.getLeaderById(leaderId);
         userService.resetPassword(leader.getUser());
-        LOG.info("Admin has reseted leader({} {}) password to default",leader.getFirstName(), leader.getLastName());
+        LOG.trace("Admin has reseted leader({} {}) password to default",leader.getFirstName(), leader.getLastName());
         return "success";
     }
 
@@ -188,10 +188,10 @@ public class AdminController {
     String uploadDump() {
         String result = "success";
         try {
-            LOG.info("Admin has uploaded DB dump");
+            LOG.trace("Admin has uploaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to upload DB dump");
+            LOG.trace("Admin has failed to upload DB dump");
         }
         return result;
     }
@@ -202,10 +202,10 @@ public class AdminController {
     String saveDump() {
         String result = "success";
         try {
-            LOG.info("Admin has downloaded DB dump");
+            LOG.trace("Admin has downloaded DB dump");
         } catch (Exception e) {
             result = "fail";
-            LOG.info("Admin has failed to download DB Dump");
+            LOG.trace("Admin has failed to download DB Dump");
         }
         return result;
     }

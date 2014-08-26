@@ -17,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LeaderServiceImpl implements LeaderService {
-    @Autowired
+    
+	private static final Logger LOG = LoggerFactory.getLogger(LeaderServiceImpl.class);
+	
+	@Autowired
     private LeaderDAO leaderDAO;
 
     @Autowired
@@ -32,8 +35,6 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Autowired
     private MailService mailService;
-
-    private static final Logger LOG = LoggerFactory.getLogger(LeaderServiceImpl.class);
 
     @Override
     @Transactional
@@ -88,22 +89,22 @@ public class LeaderServiceImpl implements LeaderService {
         String email = leader.getUser().getEmail();
         String username = leader.getUser().getUsername();
         
-        //Message to leader
         String to = email;
         String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
         String subject = "Welcome to Carting";
         String message = String.format("Dear %s %s, welcome to Carting, please wait the confirmation of your account ",
                 leader.getFirstName(), leader.getLastName());
         mailService.sendMail(to, from, subject, message);
+        LOG.debug("Sent message to leader about his registration");
         
-        //Message to admin
         to = adminSettingsService.getAdminSettings().getFeedbackEmail();
         subject = "Leader registration";
         message = String.format("Registered a new team leader - %s %s ",
                 leader.getFirstName(), leader.getLastName());
         mailService.sendMail(to, from, subject, message);
+        LOG.debug("Sent message to leader about his registration");
 
-        LOG.info("Registrated new leader with login {}", username);
+        LOG.trace("Registrated new leader with login {}", username);
     }
 
 }

@@ -9,6 +9,8 @@ import java.util.List;
 import net.carting.dao.UserDAO;
 import net.carting.domain.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
+	
     @Autowired
     private UserDAO userDao;
     
@@ -94,6 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String getCurrentAuthority() {
+    	LOG.debug("Start getCurrentAuthority method");
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         String authority = null;
@@ -101,6 +106,7 @@ public class UserServiceImpl implements UserService {
         while (iterator.hasNext()) {
             authority = (String) iterator.next().toString();
         }
+        LOG.debug("End getCurrentAuthority method");
         return authority;
     }
 
@@ -119,6 +125,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getEncodedPassword(String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    	LOG.debug("Start getEncodedPassword method");
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-256");
         md.update(password.getBytes("UTF-8"));
@@ -130,6 +137,7 @@ public class UserServiceImpl implements UserService {
                 hexPassword.append('0');
             hexPassword.append(hex);
         }
+        LOG.debug("End getEncodedPassword method");
         return hexPassword.toString();
     }
 
@@ -160,6 +168,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void sendSecureCode(User user) {
+    	LOG.debug("Start senSecureCode method");
     	try {
 			String secureCode = getEncodedPassword(user.getUsername() + user.getPassword());
 			user.setResetPassLink(secureCode);
@@ -170,10 +179,13 @@ public class UserServiceImpl implements UserService {
 			String subject = "Password recovery on Carting";
 			String message = secureCode;
 			mailService.sendMail(to, from, subject, message);
+			LOG.debug("Sent secure code to user(username = {})", user.getUsername());
 			
 		} catch (NoSuchAlgorithmException e) {
+			LOG.debug("Error has occured in sendSecureCode method", e);
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
+			LOG.debug("Error has occured in sendSecureCode method", e);
 			e.printStackTrace();
 		}
     }

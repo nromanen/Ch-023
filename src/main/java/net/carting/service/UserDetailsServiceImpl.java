@@ -51,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		boolean accountNonLocked = true;
 
 		domainUser.setUserAuthorities(userDAO.getAuthoritiesByUserName(username));
-        LOG.info("{} had logged successfully", domainUser.getUsername());
+        LOG.trace("{} had logged successfully", domainUser.getUsername());
 		return new User (
 				domainUser.getUsername(),
 				domainUser.getPassword(),

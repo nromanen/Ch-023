@@ -11,6 +11,8 @@ import net.carting.domain.Competition;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.Team;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CompetitionServiceImpl.class);
+	
     @Autowired
     private CompetitionDAO competitionDAO;
 
@@ -38,13 +42,13 @@ public class CompetitionServiceImpl implements CompetitionService {
     public List<Competition> getCompetitionsByYear(int year) {
         return competitionDAO.getCompetitionsByYear(year);
     }
-
+/* unused method
     @Override
     @Transactional
     public List<Competition> getAllCompetitionsByPage(int page) {
         return competitionDAO.getAllCompetitionsByPage(page);
     }
-
+*/
     @Override
     @Transactional
     public Competition getCompetitionById(int id) {
@@ -85,7 +89,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public List<CarClass>
     getDifferenceBetweenCarClassesAndCarClassCompetitions(List<CarClass> carClasses,
                                                           List<CarClassCompetition> carClassCompetitions) {
-
+    	LOG.debug("Start getDifferenceBetweenCarClassesAndCarClassCompetitions method");
         List<CarClass> carClassesResult = new ArrayList<CarClass>();
         for (int i = 0; i < carClasses.size(); i++) {
             boolean notExists = true;
@@ -100,6 +104,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                 carClassesResult.add(tempCarClass);
             }
         }
+        LOG.debug("End getDifferenceBetweenCarClassesAndCarClassCompetitions method");
         return carClassesResult;
     }
 
@@ -120,6 +125,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public List<String> getPointsByPlacesList(Competition competition) {
         String pointsByPlacesStr = competition.getPointsByPlaces();
+        LOG.debug("Get pointsByPlaces string and transformed it to the list of points by places");
         List<String> pointsByPlacesList = Arrays.asList(pointsByPlacesStr.split(","));
         return pointsByPlacesList;
     }

@@ -1,22 +1,29 @@
 package net.carting.dao;
 
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.RacerCarClassCompetitionNumber;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompetitionNumberDAO {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RacerCarClassCompetitionNumberDAOImpl.class);
+	
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getAllRacerCarClassCompetitionNumbers() {
+    	LOG.debug("Get all racerCarClassCompetitionNumbers");
         return entityManager
                 .createQuery("from RacerCarClassCompetitionNumber")
                 .getResultList();
@@ -24,6 +31,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
 
     @Override
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumberById(int id) {
+    	LOG.debug("Get racerCarClassCompetitionNumber with id = {}", id);
         return (RacerCarClassCompetitionNumber) entityManager
                 .createQuery("from RacerCarClassCompetitionNumber where id = :id")
                 .setParameter("id", id)
@@ -33,11 +41,13 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
     @Override
     public void addRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.persist(racerCarClassCompetitionNumber);
+        LOG.debug("Added racerCarClassCompetititonNumber {}", racerCarClassCompetitionNumber);
     }
 
     @Override
     public void updateRacerCarClassCompetitionNumber(RacerCarClassCompetitionNumber racerCarClassCompetitionNumber) {
         entityManager.merge(racerCarClassCompetitionNumber);
+        LOG.debug("Updated racerCarClassCompetititonNumber with id = {}", racerCarClassCompetitionNumber.getId());
     }
 
     @Override
@@ -45,23 +55,24 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         Query query = entityManager.createQuery(
                 "DELETE FROM RacerCarClassCompetitionNumber c WHERE c.id = :id");
         query.setParameter("id", racerCarClassCompetitionNumber.getId());
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted racerCarClassCompetition number with id = {}", racerCarClassCompetitionNumber.getId());
+        } else {
+        	LOG.warn("Tried to delete racerCarClassCompetition number with id = {}", racerCarClassCompetitionNumber.getId());
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCarClassCompetitionId(int id) {
         List<RacerCarClassCompetitionNumber> list = null;
-        try {
-            Query query = entityManager.
-                    createQuery("FROM RacerCarClassCompetitionNumber rcccn "
-                            + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
-                            + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
-            query.setParameter("carClassCompetitionId", id);
-            list = query.getResultList();
-        } catch (Exception e) {
-            System.out.println("getRacerCarClassCompetitionNumbersByCarClassCompetitionId");
-        }
+        Query query = entityManager.
+                createQuery("FROM RacerCarClassCompetitionNumber rcccn "
+                        + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "
+                        + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
+        query.setParameter("carClassCompetitionId", id);
+        list = query.getResultList();
+        LOG.debug("Get racerCarClassCompetitionNumbers by carClassCompetition with id = {}", id);
         return list;
     }
 
@@ -75,7 +86,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "ORDER BY rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("carClassCompetitionid", carClassCompetitionid);
         query.setParameter("teamId", teamId);
-
+        LOG.debug("Get racerCarClassCompetitionNumbers by carClassCompetition(id = {}) and team(id = {})", carClassCompetitionid, teamId);
         return query.getResultList();
     }
 
@@ -86,6 +97,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "WHERE car_class_competition_id = :car_class_competition_id");
         query.setParameter("car_class_competition_id", Integer.toString(id));
         Long racersCount = (Long) query.getSingleResult();
+        LOG.debug("Get count of racerCarClassCompetitionNumbers by carClassCompetition(id = {}). Count = {}", id, racersCount);
         return racersCount.intValue();
     }
 
@@ -97,7 +109,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "WHERE rcccn.carClassCompetition.competition.id = :id "
                         + "ORDER BY rcccn.racer.team.name, rcccn.racer.firstName, rcccn.racer.lastName");
         query.setParameter("id", id);
-
+        LOG.debug("Get racerCarClassCompetitionNumbers by competition with id = {}", id);
         return query.getResultList();
     }
 
@@ -109,7 +121,11 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "(rcccn.racer.id = :racerId)");
         query.setParameter("carClassCompetitionId", carClassCompetitionId);
         query.setParameter("racerId", racerId);
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted racerCarClassCompetititonNumber by carClassCompetititon(id = {}) and racer(id = {})", carClassCompetitionId, racerId);
+        } else {
+        	LOG.warn("Tried to delete racerCarClassCompetititonNumber by carClassCompetititon(id = {}) and racer(id = {})", carClassCompetitionId, racerId);
+        }
 
     }
 
@@ -121,7 +137,11 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
                         + "(rcccn.racer.id = :racerId)");
         query.setParameter("competitionId", competitionId);
         query.setParameter("racerId", racerId);
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted racerCarClassCompetititonNumber by competititon(id = {}) and racer(id = {})", competitionId, racerId);
+        } else {
+        	LOG.warn("Tried to delete racerCarClassCompetititonNumber by competititon(id = {}) and racer(id = {})", competitionId, racerId);
+        }
 
     }
 
@@ -135,6 +155,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         query.setParameter("competitionid", competitionId);
         query.setParameter("teamId", teamId);
 
+        LOG.debug("Get racerCarClassCompetitionNumbers by competition(id = {}) and team(id = {})", competitionId, teamId);
         return query.getResultList();
     }
 

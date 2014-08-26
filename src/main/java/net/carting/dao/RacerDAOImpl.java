@@ -11,22 +11,28 @@ import javax.persistence.Query;
 import net.carting.domain.Racer;
 import net.carting.domain.Team;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RacerDAOImpl implements RacerDAO {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RacerDAOImpl.class);
+	
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Racer> getAllRacers() {
+    	LOG.debug("Get all racers");
         return entityManager.createQuery("from Racer").getResultList();
     }
 
     @Override
     public Racer getRacerById(int id) {
+    	LOG.debug("Get racer with id = {}", id);
         return (Racer) entityManager
                 .createQuery("from Racer where id = :id")
                 .setParameter("id", id)
@@ -42,14 +48,16 @@ public class RacerDAOImpl implements RacerDAO {
             team.setRacers(racers);
             entityManager.persist(racer);
             entityManager.merge(team);
+            LOG.debug("Added racer {}", racer);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Tried to add racer {}", racer, e);
         }
     }
 
     @Override
     public void updateRacer(Racer racer) {
         entityManager.merge(racer);
+        LOG.debug("Updated racer with id = {}", racer.getId());
     }
 
     @Override
@@ -59,10 +67,13 @@ public class RacerDAOImpl implements RacerDAO {
             Racer r = entityManager.find(Racer.class, racer.getId());
             Set<Racer> racers = team.getRacers();
             racers.remove(racer);
+            LOG.debug("Removed racer(id = {}) from team(id = {})", racer.getId(), team.getId());
             team.setRacers(racers);
             entityManager.merge(team);
             entityManager.remove(r);
+            LOG.debug("Deleted racer with id = {}", racer.getId());
         } catch (Exception e) {
+        	LOG.error("Tried to delete racer with id = {} but error has occured", racer.getId());
             e.printStackTrace();
         }
     }
@@ -75,6 +86,7 @@ public class RacerDAOImpl implements RacerDAO {
                 .setParameter("lastName", lastName)
                 .setParameter("birthday", birthday);
         List result = query.getResultList();
+        LOG.debug("Racer with (firstName = {}, lastName = {}, birthday = {}) {} exist ", firstName, lastName, birthday, (result.size() > 0 ? "" : "does not"));
         return result.size() > 0;
     }
 
@@ -85,7 +97,7 @@ public class RacerDAOImpl implements RacerDAO {
         String hql = "from Racer racer JOIN racer.documents document WHERE document.type = :documentType";
         Query query = entityManager.createQuery(hql);
         query.setParameter("documentType", documentType);
-
+        LOG.debug("Get racers with documents(documentType = {})", documentType);
         return query.getResultList();
     }
 

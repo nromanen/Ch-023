@@ -10,10 +10,14 @@ import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RaceResultDAOImpl implements RaceResultDAO {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(RaceResultDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -21,11 +25,13 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getAllRaceResults() {
+    	LOG.debug("Get all raceResults");
         return entityManager.createQuery("from RaceResult").getResultList();
     }
 
     @Override
     public RaceResult getRaceResultById(int id) {
+    	LOG.debug("Get race result with id = {}", id);
         return (RaceResult) entityManager
                 .createQuery("from RaceResult where id = :id")
                 .setParameter("id", id)
@@ -34,12 +40,6 @@ public class RaceResultDAOImpl implements RaceResultDAO {
 
     @Override
     public void addRaceResult(RaceResult raceResult) {
-           /* SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            session.save(raceResult);
-            tx.commit();
-            session.close();*/
             Race race = raceResult.getRace();
 
             String sql = "INSERT INTO race_results " +
@@ -53,12 +53,17 @@ public class RaceResultDAOImpl implements RaceResultDAO {
             query.setParameter("points", raceResult.getPoints());
             query.setParameter("race", race.getId());
             query.setParameter("racer", raceResult.getRacer().getId());
-            query.executeUpdate();
+            if (query.executeUpdate() != 0) {
+            	LOG.debug("Added raceResult {}", raceResult);
+            } else {
+            	LOG.warn("Tried to add raceResult {}", raceResult);
+            }
     }
 
     @Override
     public void updateRaceResult(RaceResult raceResult) {
         entityManager.merge(raceResult);
+        LOG.debug("Updated raceResult with id = {}", raceResult.getId());
     }
 
     @Override
@@ -66,21 +71,23 @@ public class RaceResultDAOImpl implements RaceResultDAO {
         Query query = entityManager.createQuery(
                 "DELETE FROM RaceResult c WHERE c.id = :id");
         query.setParameter("id", raceResult.getId());
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted raceResult with id = {}", raceResult.getId());
+        } else {
+        	LOG.warn("Tried to delete raceResult with id = {}", raceResult.getId());
+        }
+
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getRaceResultsByRace(Race race) {
         List<RaceResult> list = null;
-        try {
-            list = entityManager
-                    .createQuery("from RaceResult where race= :race order by place ")
-                    .setParameter("race", race)
-                    .getResultList();
-        } catch (Exception e) {
-            System.out.println("getRaceResultsByRace");
-        }
+        list = entityManager
+                .createQuery("from RaceResult where race= :race order by place ")
+                .setParameter("race", race)
+                .getResultList();
+        LOG.debug("Get race results by race with id = {}", race.getId());
         return list;
     }
     
@@ -91,6 +98,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
                     .createQuery("from RaceResult where race= :race AND racer= :racer");
         	q.setParameter("race", race);
         	q.setParameter("racer", racer);
+        	LOG.debug("Get race results by race(id = {}) and racer(id = {})", race.getId(), racer.getId());
         return (RaceResult) q.getSingleResult();
     }
 
@@ -101,8 +109,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
                         + "WHERE rr.race.raceNumber  = :raceNumber AND racer=:racer");
         query.setParameter("raceNumber", raceNumber);
         query.setParameter("racer", racer);
-
+        LOG.debug("Get race results by raceNumber({}) and racer(id = {})", raceNumber, racer.getId());
         return (RaceResult) query.getSingleResult();
     }
-
 }

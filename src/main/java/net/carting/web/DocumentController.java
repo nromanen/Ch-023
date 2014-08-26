@@ -108,10 +108,8 @@ public class DocumentController {
                  * page of his team
                  */
 
-                LOG.info("Leader of team " + team.getName()
-                        + "tried to see a document of team "
-                        + teamOwner.getName()
-                        + ", but was redirected to page of his team");
+                LOG.trace("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
+                		team.getName(), teamOwner.getName());
                 return "redirect:/team/" + team.getId();
             }
         } else {
@@ -119,7 +117,7 @@ public class DocumentController {
 			 * If team leader don't has a team, he is redirected to page in
 			 * which he can add team
 			 */
-            LOG.info("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
+            LOG.trace("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
             		leader.getFirstName(), leader.getLastName(), teamOwner.getName());
             return "redirect:/team/add";
         }
@@ -141,11 +139,11 @@ public class DocumentController {
                         .getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                                 documentType, team));
             }
-            LOG.info("Leader of team {} tried to add document {}",
+            LOG.trace("Leader of team {} tried to add document {}",
             		team.getName(), Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.info("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team", 
+            LOG.trace("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team", 
             		leader.getFirstName(), leader.getLastName());
             return "redirect:/team/add";
         }
@@ -172,7 +170,7 @@ public class DocumentController {
                   * If team leader doesn't choose racers, he is redirected to
                   * page of his team
                   */
-                 LOG.info("Team leader doesn't choose racers...");
+                 LOG.trace("Team leader doesn't choose racers...");
                  return "redirect:/team/" + team.getId();
              } else {
                  /*
@@ -225,6 +223,7 @@ public class DocumentController {
     public
     @ResponseBody
     String deleteDocument(@RequestBody Map<String, Object> map) {
+    	LOG.debug("Start deleteDocument method");
             int documentId = Integer.parseInt(map.get("document_id").toString());
             Document document = documentService.getDocumentById(documentId);
             String[] racersIdString = map.get("racers_id_string").toString()
@@ -234,15 +233,16 @@ public class DocumentController {
                 racersId[i] = Integer.parseInt(racersIdString[i]);
                 documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
                         documentId, racersId[i]);
-                LOG.info("'{}' was deleted from racer {} {} by leader {} {} of team {}",
+                LOG.trace("'{}' was deleted from racer {} {} by leader {} {} of team {}",
                 		document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
                         racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(), 
                         document.getTeamOwner().getLeader().getLastName(), document.getTeamOwner().getName());
             }
             if (!documentService.isRacerOwnerOfDocument(documentId)) {
                 documentService.deleteDocument(document);
-                LOG.info("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
+                LOG.trace("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
             }
+            LOG.debug("End deleteDocument method");
         return "success";
     }
 
