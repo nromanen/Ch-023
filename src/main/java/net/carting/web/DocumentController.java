@@ -70,7 +70,7 @@ public class DocumentController {
             return new SimpleDateFormat("yyyy-MM-dd");
         }
     };
-    /* TODO Remove HttpServletRequest */
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String documentPage(Map<String, Object> map,
             @PathVariable("id") int id, @RequestParam(value="competition_id", required=false) Integer competitionId) {

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import net.carting.domain.Leader;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
 @RequestMapping(value = "/leader")
@@ -73,12 +71,11 @@ public class LeaderController {
             return new SimpleDateFormat("yyyy-MM-dd");
         }
     };
-    /* TODO Remove HttpServletRequest */
+    
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index(Map<String, Object> map, HttpServletRequest request) {
+    public String index(Map<String, Object> map) {
         String authority = userService.getCurrentAuthority();
         if (authority.equals(UserService.ROLE_ANONYMOUS)) {
-            map.put("locale", RequestContextUtils.getLocale(request).toString());
             return "leader_registration";
         } else {
             return "index";
@@ -129,13 +126,12 @@ public class LeaderController {
     /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editLeaderPage(Map<String, Object> map,
-                                 @PathVariable("id") int id, HttpServletRequest request) {
+                                 @PathVariable("id") int id) {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         map.put("leader", leader);
 
         if (teamService.isTeamByLeaderId(leader.getId())) {
-            map.put("locale", RequestContextUtils.getLocale(request).toString());
             Team team = teamService.getTeamByLeader(leader);
             map.put("team", team);
         }
