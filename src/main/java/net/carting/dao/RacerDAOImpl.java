@@ -74,7 +74,6 @@ public class RacerDAOImpl implements RacerDAO {
             LOG.debug("Deleted racer with id = {}", racer.getId());
         } catch (Exception e) {
         	LOG.error("Tried to delete racer with id = {} but error has occured", racer.getId());
-            e.printStackTrace();
         }
     }
 
@@ -86,8 +85,8 @@ public class RacerDAOImpl implements RacerDAO {
                 .setParameter("lastName", lastName)
                 .setParameter("birthday", birthday);
         List result = query.getResultList();
-        LOG.debug("Racer with (firstName = {}, lastName = {}, birthday = {}) {} exist ", firstName, lastName, birthday, (result.size() > 0 ? "" : "does not"));
-        return result.size() > 0;
+        LOG.debug("Racer with (firstName = {}, lastName = {}, birthday = {}) {} exist ", firstName, lastName, birthday, (result.isEmpty() ? "" : "does not"));
+        return !result.isEmpty();
     }
 
     @SuppressWarnings("unchecked")

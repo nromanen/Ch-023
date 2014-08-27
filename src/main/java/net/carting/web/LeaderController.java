@@ -73,7 +73,7 @@ public class LeaderController {
             return new SimpleDateFormat("yyyy-MM-dd");
         }
     };
-
+    /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Map<String, Object> map, HttpServletRequest request) {
         String authority = userService.getCurrentAuthority();
@@ -104,7 +104,8 @@ public class LeaderController {
         	try {
 				leaderService.registerLeader(leader);
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-				e.printStackTrace();
+			    /* TODO : show user an exception */
+				LOG.error("Errors in addLeader method. Tried to add leader({} {})",leader.getFirstName(), leader.getLastName(), e);
 			}
         }
         LOG.debug("End addLeader method");
@@ -124,7 +125,8 @@ public class LeaderController {
         }
         return "leader";
     }
-
+    
+    /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editLeaderPage(Map<String, Object> map,
                                  @PathVariable("id") int id, HttpServletRequest request) {
@@ -229,12 +231,10 @@ public class LeaderController {
     	if (user.getResetPassLink().equals(secureCode)) {
     		try {
 				userService.changePassword(user, password);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e ) {
+				LOG.error("Errors in changePassword method", e);
 			}
-        	return "success";
+    		return "success";
     	}
     	else {
     		return "invalid";
@@ -243,7 +243,7 @@ public class LeaderController {
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
     

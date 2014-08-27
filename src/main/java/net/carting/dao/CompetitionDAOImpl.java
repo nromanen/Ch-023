@@ -105,7 +105,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         query.setParameter("enabled", enabled);
         query.setParameter("id", competitionId);
         query.executeUpdate();
-        LOG.debug("Competition with id = {} is {}", competitionId, (enabled ? "enabled" : "disabled"));
+        LOG.debug("Competition with id = {} is {}", competitionId, enabled ? "enabled" : "disabled");
     }
 
     @SuppressWarnings("unchecked")

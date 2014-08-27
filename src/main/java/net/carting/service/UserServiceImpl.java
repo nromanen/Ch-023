@@ -133,8 +133,9 @@ public class UserServiceImpl implements UserService {
         StringBuffer hexPassword = new StringBuffer();
         for (int i = 0; i < byteData.length; i++) {
             String hex = Integer.toHexString(0xff & byteData[i]);
-            if (hex.length() == 1)
+            if (hex.length() == 1) {
                 hexPassword.append('0');
+            }  
             hexPassword.append(hex);
         }
         LOG.debug("End getEncodedPassword method");
@@ -181,13 +182,9 @@ public class UserServiceImpl implements UserService {
 			mailService.sendMail(to, from, subject, message);
 			LOG.debug("Sent secure code to user(username = {})", user.getUsername());
 			
-		} catch (NoSuchAlgorithmException e) {
-			LOG.debug("Error has occured in sendSecureCode method", e);
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			LOG.debug("Error has occured in sendSecureCode method", e);
-			e.printStackTrace();
-		}
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			LOG.error("Error has occured in sendSecureCode method", e);
+		} 
     }
 
 }

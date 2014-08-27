@@ -6,16 +6,18 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
 
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Qualifying;
-import net.carting.domain.Racer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class QualifyingDAOImpl implements QualifyingDAO {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(QualifyingDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -37,10 +39,10 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 
 	@Override
 	public void addQualifying(Qualifying qualifying) {
-		try{
-		entityManager.persist(qualifying);
+		try {
+		    entityManager.persist(qualifying);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error("Errors in addQualifying method", e);
 		}
 	}
 
@@ -66,13 +68,13 @@ public class QualifyingDAOImpl implements QualifyingDAO {
 		
 		List<Qualifying> qualifyings = getAllQualifyings();
 		List<Qualifying> resultList = new ArrayList<Qualifying>();
-		if (qualifyings.size()>0) {
+		if (!qualifyings.isEmpty()) {
 			for(Qualifying q:qualifyings) {
 				if (q.getCarClassCompetition().getId()==carClassCompetition.getId()) {
 					resultList.add(q);
 				}
 			}
-			if (resultList.size()>0) {
+			if (!resultList.isEmpty()) {
 				return resultList;
 			}
 		}

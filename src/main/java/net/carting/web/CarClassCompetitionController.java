@@ -1,6 +1,5 @@
 package net.carting.web;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
 import net.carting.service.QualifyingService;
-import net.carting.service.QualifyingServiceImpl;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerCarClassNumberService;
@@ -45,8 +43,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.itextpdf.text.log.SysoCounter;
 
 @Controller
 @RequestMapping(value = "/carclass")
@@ -177,7 +173,7 @@ public class CarClassCompetitionController {
             //if this racer was last from his team in this competition
             //then unregister his team from this competition
             if (racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCompetitionIdAndTeamId(
-                    competition.getId(), team.getId()).size() == 0) {
+                    competition.getId(), team.getId()).isEmpty()) {
                 teamInCompetitionService.deleteTeamInCompetitionByTeamIdAndCompetitionId(team.getId(), competition.getId());
 
                 LOG.trace("{} has unregistered from competition {} (id = {}) because {} has unregistered last racer from his team in this competition",team.getName(),
@@ -185,7 +181,7 @@ public class CarClassCompetitionController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Errors in unregisterRacerFromCarClassCompetitionAction method", e);
             LOG.trace("{} trying to unregister racer(id = {}) from competition {} (id = {}) from car class {} (id = {})", username, racerId,
                     competition.getName(), competition.getId(),
                     carClassCompetition.getCarClass().getName(), carClassCompetitionId);
@@ -227,7 +223,7 @@ public class CarClassCompetitionController {
             		username, racer.getFirstName(), racer.getLastName(), racerId, number, competition.getName(),
             		competition.getId(), carClassCompetition.getCarClass().getName(), carClassCompetitionId);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Errors in registerRacerToCarClassCompetitionAction method", e);
         }
     	LOG.debug("End registerRacerToCarClassCompetitionAction method");
         return "success";
@@ -242,7 +238,7 @@ public class CarClassCompetitionController {
             map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Errors in addRacePage method", e);
         }
         return "competition_carclass_results_add_edit";
     }
@@ -280,7 +276,7 @@ public class CarClassCompetitionController {
             		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
            } catch (Exception e) {
-            e.printStackTrace();
+               LOG.error("Errors in addTestRacePage method", e);
         }
         return "competition_carclass_testrace_add_edit";
     }
@@ -289,11 +285,11 @@ public class CarClassCompetitionController {
     public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
     	CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
     	try{
-    		if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()==0)
-    		
-    		return "redirect:/carclass/" + id;
+    		if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).isEmpty()) {
+    	          return "redirect:/carclass/" + id;
+    		}
     	} catch(Exception e) {
-    		e.printStackTrace();
+    	    LOG.error("Errors in editQualifyings",e);
     	}
     	 map.put("membersCount", racerCarClassCompetitionNumberService.
          		getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
@@ -370,7 +366,7 @@ public class CarClassCompetitionController {
             LOG.trace("Admin has edited race with id={} race number {} in car class competition {} in competition {}", race.getId(), raceNumber,
             		carClassCompetition.getCarClass().getName(), carClassCompetition.getCompetition().getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Errors in editRace method", e);
         }
         LOG.debug("End editRace method");
         return "redirect:/carclass/" + id;
@@ -389,7 +385,7 @@ public class CarClassCompetitionController {
     public
     @ResponseBody
     String editSummaryResult(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        ArrayList<HashMap<String, String>> mapsList = (ArrayList<HashMap<String, String>>) map.get("jsonObject");
+        List<HashMap<String, String>> mapsList = (ArrayList<HashMap<String, String>>) map.get("jsonObject");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         LOG.trace("Admin has edited  summary results in car class competition {}", carClassCompetition.getCarClass().getName());
         for (HashMap<String, String> idAndPoint : mapsList) {
