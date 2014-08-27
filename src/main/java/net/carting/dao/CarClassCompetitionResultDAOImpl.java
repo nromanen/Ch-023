@@ -59,8 +59,7 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
         query.setParameter("id", carClassCompetitionResult.getId());
         if (query.executeUpdate() != 0) {
         	LOG.debug("Deleted car class competition result with id = {}", carClassCompetitionResult.getId());
-        }
-        else {
+        } else {
         	LOG.debug("Trying to delete car class competition result with id = {}", carClassCompetitionResult.getId());
         }
     }

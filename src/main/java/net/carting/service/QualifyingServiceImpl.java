@@ -6,16 +6,19 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import net.carting.dao.QualifyingDAO;
-import net.carting.dao.QualifyingDAOImpl;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Qualifying;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 @Service
 public class QualifyingServiceImpl implements QualifyingService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(QualifyingServiceImpl.class);
+    
 	@Autowired
 	private QualifyingDAO qualifyingDao;
 
@@ -106,7 +109,7 @@ public class QualifyingServiceImpl implements QualifyingService {
 			q.setRacerTime(Time.valueOf(time));
 			updateQualifying(q);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			LOG.error("Errors in setQualifyingTimeFromString method.", e);
 			return false;
 		}
 		return true;

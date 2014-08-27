@@ -62,8 +62,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
         if (query.executeUpdate() != 0) {
         	LOG.debug("Updated car class competition with id = {}", carClassCompetition.getId());
-        }
-        else {
+        } else {
         	LOG.debug("Trying to update car class competition with id = {}", carClassCompetition.getId());
         }
         
@@ -79,8 +78,7 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
         
         if (query.executeUpdate() != 0) {
         	LOG.debug("Deleted car class competition with id = {}", carClassCompetition.getId());
-        }
-        else {
+        } else {
         	LOG.debug("Trying to delete car class competition with id = {}", carClassCompetition.getId());
         }
         

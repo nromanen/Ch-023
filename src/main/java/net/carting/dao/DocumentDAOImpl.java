@@ -98,7 +98,7 @@ public class DocumentDAOImpl implements DocumentDAO {
         String sql = "SELECT racer_id FROM racer_document WHERE document_id= :documentId  ";
         Query query = entityManager.createNativeQuery(sql).setParameter("documentId", documentId);
         boolean emptyList = query.getResultList().isEmpty();
-        LOG.debug("There is {} owner of document with id = {}", (emptyList ? "not" : ""), documentId);
+        LOG.debug("There is {} owner of document with id = {}", emptyList ? "not" : "", documentId);
         return !emptyList;
     }
 

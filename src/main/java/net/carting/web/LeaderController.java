@@ -104,7 +104,8 @@ public class LeaderController {
         	try {
 				leaderService.registerLeader(leader);
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-				e.printStackTrace();
+			    /* TODO : show user an exception */
+				LOG.error("Errors in addLeader method. Tried to add leader({} {})",leader.getFirstName(), leader.getLastName(), e);
 			}
         }
         LOG.debug("End addLeader method");
@@ -230,12 +231,10 @@ public class LeaderController {
     	if (user.getResetPassLink().equals(secureCode)) {
     		try {
 				userService.changePassword(user, password);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e ) {
+				LOG.error("Errors in changePassword method", e);
 			}
-        	return "success";
+    		return "success";
     	}
     	else {
     		return "invalid";
