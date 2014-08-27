@@ -32,7 +32,7 @@ public class RacerServiceImpl implements RacerService {
 
     @Autowired
     private CarClassDAO carClassDAO;
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(RacerServiceImpl.class);
 
     @Override
@@ -75,7 +75,7 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public Set<RacerCarClassNumber> parseCarClasses(String carClassesId,
                                                     String carClassNumbers, Racer racer) {
-    	LOG.debug("Start parseCarClasses method");
+        LOG.debug("Start parseCarClasses method");
         Set<RacerCarClassNumber> racerCarClassNumbers = new HashSet<RacerCarClassNumber>();
         String[] carClassesIdParts = carClassesId.split(",");
         String[] carClassNumbersParts = carClassNumbers.split(",");
@@ -94,7 +94,7 @@ public class RacerServiceImpl implements RacerService {
     @Transactional
     public Set<RacerCarClassNumber> parseUpdatedRacerCarClassNumbers(
             String updatedRacerCarClassNumbersStr, Racer racer) {
-    	LOG.debug("Start parseUpdatedRacerCarClassNumbers method");
+        LOG.debug("Start parseUpdatedRacerCarClassNumbers method");
         Set<RacerCarClassNumber> racerCarClassNumbers = new HashSet<RacerCarClassNumber>();
         String[] racerCarClassNumbersParts = updatedRacerCarClassNumbersStr
                 .split("#");
@@ -140,7 +140,7 @@ public class RacerServiceImpl implements RacerService {
     @Override
     @Transactional
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team) {
-    	LOG.debug("Start getSetOfRacersNeedingPerentalPermisionByTeam method");
+        LOG.debug("Start getSetOfRacersNeedingPerentalPermisionByTeam method");
         Set<Racer> allTeamRecersNeedingPerentalPermision = getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                 Document.TYPE_RACER_PARENTAL_PERMISSIONS, team);
         Iterator<Racer> it = allTeamRecersNeedingPerentalPermision
@@ -161,14 +161,14 @@ public class RacerServiceImpl implements RacerService {
     public void setDocumentToRacers(Document document, String[] racersId) {
         for (int i = 0; i < racersId.length; i++) {
             /*
-			 * -1 - it's gag in case none of racers hasn't been checked
-			 */
+             * -1 - it's gag in case none of racers hasn't been checked
+             */
             if (!racersId[i].equals("-1")) {
                 Racer racer = getRacerById(Integer.parseInt(racersId[i]));
                 racer.getDocuments().add(document);
                 updateRacer(racer);
-                LOG.trace("Leader of team {} added '{}' to racer {} {}",racer.getTeam().getName(), Document.getStringDocumentType(document.getType()), 
-                														racer.getFirstName(),racer.getLastName());
+                LOG.trace("Leader of team {} added '{}' to racer {} {}",racer.getTeam().getName(), Document.getStringDocumentType(document.getType()),
+                                                                        racer.getFirstName(),racer.getLastName());
             }
         }
     }
