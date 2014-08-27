@@ -13,7 +13,7 @@
 </h2>
 <!-- Checks whether competition was chosen-->
 <input type="text" style="visibility: hidden" id="competitionId"
-	value="${request.getParameter('competition')}">
+	value="${ competitionId}">
 <input type="text" style="visibility: hidden" id="teamId"
 	value="${team.id}">
 <c:choose>
@@ -144,7 +144,7 @@
 					<spring:message code="label.back" />
 				</button>
 				<a
-					href='<c:url value="/competition/${request.getParameter('competition')}" />'
+					href='<c:url value="/competition/${ competitionId}" />'
 					class="btn btn-primary"><spring:message code="label.accept" /></a>
 			</div>
 		</div>
