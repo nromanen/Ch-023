@@ -8,10 +8,10 @@
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 
         <!-- SMTP settings -->
-        <property name="host" value="smtp.gmail.com"/>
+        <property name="host" value="bender.org.ua"/>
         <property name="port" value="587"/>
-        <property name="username" value="softserve.karting@gmail.com"/>
-        <property name="password" value="karting1234"/>
+        <property name="username" value="anonymous"/>
+        <property name="password" value="anonymous"/>
 
         <property name="javaMailProperties">
             <!-- additional properties specific to JavaMail -->

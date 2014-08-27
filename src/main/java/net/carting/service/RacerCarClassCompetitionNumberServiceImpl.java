@@ -54,7 +54,7 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
             teamInCompetition.setCompetition(competition);
             teamInCompetition.setTeam(team);
             teamInCompetitionDAO.addTeamInCompetition(teamInCompetition);
-            LOG.info("Team {} (id = {}) has registered on competition {} (id = {})",team.getName(),team.getId(), 
+            LOG.trace("Team {} (id = {}) has registered on competition {} (id = {})",team.getName(),team.getId(), 
             																		competition.getName(), competition.getId());
         }
         racerCarClassCompetitionNumberDAO.addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
@@ -117,7 +117,7 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
                     .next();
             addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
             racer = racerCarClassCompetitionNumber.getRacer();
-            LOG.info("Racer {} {} of team {} had registered on competition in car class {}",
+            LOG.trace("Racer {} {} of team {} had registered on competition in car class {}",
                             racer.getFirstName(), racer.getLastName(), racer.getTeam().getName(),
                             racerCarClassCompetitionNumber.getCarClassCompetition().getCarClass().getName());
         }

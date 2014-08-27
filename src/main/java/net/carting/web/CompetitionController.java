@@ -14,6 +14,7 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.Leader;
+import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.RacerCarClassCompetitionNumber;
@@ -25,6 +26,7 @@ import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
+import net.carting.service.QualifyingService;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerService;
@@ -76,6 +78,8 @@ public class CompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private AdminSettingsService adminSettingsService;
+    @Autowired
+    private QualifyingService qualifyingService;
 
     private static final Logger LOG = LoggerFactory.getLogger(CompetitionController.class);
 
@@ -123,12 +127,12 @@ public class CompetitionController {
         CompetitionValidator validator = new CompetitionValidator();
         validator.validate(competition, result);
         if (result.hasErrors()) {
-            LOG.info("Admin failed adding new competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin failed adding new competition {} (id = {})", competition.getName(), competition.getId());
             return "fail";
         }
         competition.setPointsByPlaces(adminSettingsService.getAdminSettings().getPointsByPlaces());
         competitionService.addCompetition(competition);
-        LOG.info("Admin has added new competition {} (id = {}))", competition.getName(), competition.getId());
+        LOG.trace("Admin has added new competition {} (id = {}))", competition.getName(), competition.getId());
         return String.valueOf(competition.getId());
     }
 
@@ -139,9 +143,9 @@ public class CompetitionController {
         Competition competition = competitionService.getCompetitionById(Integer.parseInt(map.get("id").toString()));
         try {
             competitionService.deleteCompetition(competition);
-            LOG.info("Admin has deleted competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin has deleted competition {} (id = {})", competition.getName(), competition.getId());
         } catch (Exception e) {
-            LOG.info("Admin trying to delete competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin trying to delete competition {} (id = {})", competition.getName(), competition.getId());
             return "error";
         }
         return "success";
@@ -172,7 +176,7 @@ public class CompetitionController {
             	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
             }
         }
-        LOG.info("Admin has edited competition {} (id = {})", competition.getName(), competition.getId());
+        LOG.trace("Admin has edited competition {} (id = {})", competition.getName(), competition.getId());
         return "redirect:/competition/" + competition.getId();
     }
 
@@ -190,7 +194,7 @@ public class CompetitionController {
         carClassCompetition.setCircleCount(Integer.parseInt(map.get("lapCount").toString()));
         carClassCompetition.setPercentageOffset(Integer.parseInt(map.get("percentageOffset").toString()));
         carClassCompetitionService.addCarClassCompetition(carClassCompetition);
-        LOG.info("Admin has added car class {} to competition with name {} (id = {})", carClassCompetition.getCarClass().getName(), competition.getName(), competition.getId());
+        LOG.trace("Admin has added car class {} to competition with name {} (id = {})", carClassCompetition.getCarClass().getName(), competition.getName(), competition.getId());
         return Integer.toString(carClassCompetition.getId());
     }
 
@@ -226,11 +230,13 @@ public class CompetitionController {
                 .getCarClassCompetitionsByCompetitionId(id);
     	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
     	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+    	List<List<Qualifying>> qualifyingResults = new ArrayList<List<Qualifying>>();
     	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
     		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
     		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+    		qualifyingResults.add(qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition));
     	}
-    	
+    	map.put("qualifyingLists", qualifyingResults);
     	map.put("carClassCompetitions", carClassCompetitions);
     	map.put("raceResultsLists", raceResults);
     	map.put("absoluteResultsList", carClassCompetitionResults);
@@ -246,7 +252,7 @@ public class CompetitionController {
         int competitionId = Integer.parseInt(map.get("competitionId").toString());
         boolean enabled = Boolean.parseBoolean(map.get("enabled").toString());
         competitionService.setEnabled(competitionId, enabled);
-        LOG.info("Admin has {} competition (id = {})", (enabled ? "enabled" : "disabled"),  competitionId);
+        LOG.trace("Admin has {} competition (id = {})", (enabled ? "enabled" : "disabled"),  competitionId);
         return "success";
     }
 
@@ -258,7 +264,7 @@ public class CompetitionController {
         int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(competitonId, racerId);
-        LOG.info("Admin has unregistered racer(id = {}) from competition (id = {})", racerId, competitonId);
+        LOG.trace("Admin has unregistered racer(id = {}) from competition (id = {})", racerId, competitonId);
         return "success";
     }
 
@@ -277,6 +283,7 @@ public class CompetitionController {
     }
 
     // team registration view
+    /*TODO  Remove HttpServletRequest*/
     @RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
     public String registrationTeamOnCompetitionView(Map<String, Object> map,
                                                     HttpServletRequest request) {
@@ -333,6 +340,7 @@ public class CompetitionController {
     public
     @ResponseBody
     String changePointsByPlaces(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+    	LOG.debug("Start changePointsByPlaces method");
         Competition competition = competitionService.getCompetitionById(id);
         String pointsByPlaces = map.get("pointsByPlaces").toString();
         competition.setPointsByPlaces(pointsByPlaces);
@@ -344,6 +352,7 @@ public class CompetitionController {
             	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
             }
         }
+    	LOG.debug("End changePointsByPlaces method");
         return "success";
     }
 

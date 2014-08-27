@@ -1,15 +1,21 @@
 package net.carting.dao;
 
-import net.carting.domain.TeamInCompetition;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
+
+import net.carting.domain.TeamInCompetition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(TeamInCompetitionDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -21,12 +27,14 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                 .setParameter("team_id", teamId)
                 .setParameter("competition_id", competitionId);
         List result = query.getResultList();
+        LOG.debug("Teamd(id = {}) is {} in competition(id = {})", teamId, (result.size() > 0 ? "" : "not"), competitionId);
         return result.size() > 0;
     }
 
     @Override
     public void addTeamInCompetition(TeamInCompetition teamInCompetition) {
         entityManager.persist(teamInCompetition);
+        LOG.debug("Added teamInCompetition {}", teamInCompetition);
     }
 
     @Override
@@ -34,8 +42,12 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
         Query query = entityManager.createQuery(
                 "DELETE FROM TeamInCompetition c WHERE c.id = :id");
         query.setParameter("id", teamInCompetition.getId());
-        query.executeUpdate();
-    }
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted teamInCompetition with id = {}", teamInCompetition.getId());
+        } else {
+        	LOG.warn("Tried to delete teamInCompetition with id = {}", teamInCompetition.getId());
+        }
+    } 
 
     @SuppressWarnings("unchecked")
     @Override
@@ -45,6 +57,7 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                         + "WHERE team.id = :teamId "
                         + "ORDER BY competition.dateStart");
         query.setParameter("teamId", teamId);
+        LOG.debug("Get teamInCompetition list by team with id = {}", teamId);
         return query.getResultList();
     }
 
@@ -56,7 +69,11 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                         + "(competition.id = :competitionId)");
         query.setParameter("teamId", teamId);
         query.setParameter("competitionId", competitionId);
-        query.executeUpdate();
+        if (query.executeUpdate() != 0) {
+        	LOG.debug("Deleted teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
+        } else {
+        	LOG.warn("Tried to delete teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
+        }
     }
 
 }

@@ -21,7 +21,7 @@
 <div>
 
 	<label class="text-info" style="font-size: 20px; width: 100%; text-align: center; margin-bottom: 20px;">${carClassCompetitions.get(0).competition.name}</label>			
-	<c:forEach items="${carClassCompetitions }" var="carClassCompetition">
+	<c:forEach items="${carClassCompetitions }" var="carClassCompetition" varStatus="loop">
 	<c:if test="${!empty carClassCompetition.racerCarClassCompetitionNumbers }">
 	<table class="table table-hover table-bordered" style="text-align: center;">
 		<caption class="text-left">${carClassCompetition.carClass.name }</caption>
@@ -58,8 +58,21 @@
 					<td>${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
-					<td></td>
-					<td></td>
+					<c:set  var="qualifyingList" value="${qualifyingLists[loop.index]}" />
+							<c:choose>
+								<c:when test="${!empty qualifyingList }">
+									<c:forEach items="${qualifyingList}" var="qualifying">
+										<c:if test="${qualifying.racerNumber==racerCarClassCompetitionNumber.numberInCompetition }">
+											<td>${qualifying.racerTime}</td>
+											<td>${qualifying.racerPlace}</td>
+										</c:if>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<td></td>
+									<td></td>
+								</c:otherwise>
+							</c:choose>
 					<c:set var="countOfResults"	 value="2" />
 					<c:forEach items="${raceResultsLists}" var="raceResultsList">
 						<c:forEach items="${raceResultsList}" var="raceResults">

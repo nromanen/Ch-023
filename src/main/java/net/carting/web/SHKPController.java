@@ -1,10 +1,8 @@
 package net.carting.web;
 
 import net.carting.domain.*;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.DocumentService;
-import net.carting.service.FileService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -37,38 +36,34 @@ public class SHKPController {
         RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
 
         @Autowired
+        QualifyingService qualifyingService;
+
+        @Autowired
         FileService fileService;
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
-        public String createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            String result = "success";
-            try {
-                documentService.createStartStatement(table);
-            } catch (Exception e) {
-                result = "fail";
-                e.printStackTrace();
-            }
-            return result;
+        public void createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+            documentService.createStartStatement(table);
         }
 
-        @RequestMapping(value = "maneuver", method = RequestMethod.POST)
-        @ResponseBody
-        public String createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            String result = "success";
-            try {
-                File f = new File();
-                f.setName("test");
-                f.setFile(fileService.getAllFiles().get(0).getFileBytes());
-                fileService.addFile(f);
+    @RequestMapping(value = "maneuver", method = RequestMethod.POST)
+    @ResponseBody
+    public String createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+        String result = "success";
+        try {
+            File f = new File();
+            f.setName("test");
+            f.setFile(fileService.getAllFiles().get(0).getFileBytes());
+            fileService.addFile(f);
 
-                documentService.createManeuverStatement(table);
-            } catch (Exception e) {
-                result = "fail";
-                e.printStackTrace();
-            }
-            return result;
+            documentService.createManeuverStatement(table);
+        } catch (Exception e) {
+            result = "fail";
+            e.printStackTrace();
         }
+        return result;
+    }
 
         @RequestMapping(value = "start/{id}/{raceId}", method = RequestMethod.GET)
         public ModelAndView start(Model model, @PathVariable("id") int id, @PathVariable("raceId") int raceId) {
@@ -77,6 +72,22 @@ public class SHKPController {
 
             List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
+
+
+            try{
+                List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+                List<Qualifying> resultQ = new ArrayList<Qualifying>();
+                for (int i=0;i<beforeQ.size();i++) {
+                    for (int j=0; j<beforeQ.size();j++) {
+                        if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition()==beforeQ.get(j).getRacerNumber()) {
+                            resultQ.add(beforeQ.get(j));
+                        }
+                    }
+                }
+                model.addAttribute("qualifyingList", resultQ);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
@@ -132,7 +143,7 @@ public class SHKPController {
             model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
         }
         catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
         return new ModelAndView("maneuver");
     }

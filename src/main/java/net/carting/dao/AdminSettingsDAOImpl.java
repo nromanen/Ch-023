@@ -1,19 +1,26 @@
 package net.carting.dao;
 
-import net.carting.domain.AdminSettings;
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import net.carting.domain.AdminSettings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
 @Repository
 public class AdminSettingsDAOImpl implements AdminSettingsDAO {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
     @Override
     public AdminSettings getAdminSettings() {
+        LOG.debug("Getting admin settings from DB");
         return (AdminSettings) entityManager.createQuery("from AdminSettings").getSingleResult();
     }
 
@@ -24,6 +31,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET parentalPermissionYears = :parentalPermissionYears");
         query.setParameter("parentalPermissionYears", value);
         query.executeUpdate();
+        LOG.debug("Changed parental permission years to {}", value);
     }
 
     @Override
@@ -33,6 +41,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET pointsByPlaces = :pointsByPlaces");
         query.setParameter("pointsByPlaces", value);
         query.executeUpdate();
+        LOG.debug("Changed points_by_places in admin settings to {}", value);
     }
 
     @Override
@@ -42,6 +51,7 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
                         + "SET feedbackEmail = :feedbackEmail");
         query.setParameter("feedbackEmail", value);
         query.executeUpdate();
+        LOG.debug("Changed feedback email to {}", value);
     }
 
 }

@@ -1,21 +1,30 @@
 package net.carting.service;
 
-import net.carting.dao.AdminSettingsDAO;
-import net.carting.dao.RacerCarClassCompetitionNumberDAO;
-import net.carting.dao.TeamInCompetitionDAO;
-import net.carting.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.carting.dao.AdminSettingsDAO;
+import net.carting.dao.RacerCarClassCompetitionNumberDAO;
+import net.carting.dao.TeamInCompetitionDAO;
+import net.carting.domain.Competition;
+import net.carting.domain.Document;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.TeamInCompetition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(TeamInCompetitionServiceImpl.class);
+	
     @Autowired
     private TeamInCompetitionDAO teamInCompetitionDAO;
     @Autowired
@@ -56,7 +65,7 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
     @Override
     @Transactional
     public Map<TeamInCompetition, Boolean> isValidTeamInCompetitionMap(List<TeamInCompetition> teamInCompetitionList) {
-
+    	LOG.debug("Start isValidTeamInCompetitionMap method");
         Map<TeamInCompetition, Boolean> result = new LinkedHashMap<TeamInCompetition, Boolean>();
 
         for (TeamInCompetition teamInCompetition : teamInCompetitionList) {
@@ -76,6 +85,7 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
             }
             result.put(teamInCompetition, isValid);
         }
+        LOG.debug("End isValidTeamInCompetitionMap method");
         return result;
     }
 

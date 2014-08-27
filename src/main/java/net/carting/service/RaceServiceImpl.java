@@ -23,6 +23,8 @@ import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RaceServiceImpl implements RaceService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RaceServiceImpl.class);
+	
     @Autowired
     private RaceDAO raceDAO;
 
@@ -135,6 +139,7 @@ public class RaceServiceImpl implements RaceService {
      */
     @Override
     public List<Set<Integer>> getChessRoll(Race race) {
+    	LOG.debug("Start getChessRoll method");
         boolean isLastLap = false;
         String[] numberSequance = race.getResultSequance().trim().split("\\W+");
         int laps = race.getNumberOfLaps();
@@ -163,6 +168,7 @@ public class RaceServiceImpl implements RaceService {
                 }
             }
         }
+        LOG.debug("End getChessRoll method");
         return chessRoll;
     }
 
@@ -181,6 +187,7 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public void setResultTable(List<Set<Integer>> chessRoll,
                                Race race) {
+    	LOG.debug("Start setResultTable method");
         try {
             Map<Integer, Integer> resultFullLaps = new LinkedHashMap<Integer, Integer>();
             Map<Integer, Integer> resultPoints = new LinkedHashMap<Integer, Integer>();
@@ -265,8 +272,10 @@ public class RaceServiceImpl implements RaceService {
                 }
             }
         } catch (Exception e) {
+        	LOG.error("Error has occured in setResultTable method", e);
             e.printStackTrace();
         }
+        LOG.debug("End setResultTable method");
     }
 
     /**

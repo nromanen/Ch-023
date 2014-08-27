@@ -46,7 +46,7 @@ public class FeedbackController {
         mailService.sendMail(to, from, subject, message);
 
         String username = userService.getCurrentUserName();
-        LOG.info("{} (email = {}) sent letter to admin", username, from);
+        LOG.trace("{} (email = {}) sent letter to admin", username, from);
 
         return "success";
     }

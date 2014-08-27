@@ -1,8 +1,8 @@
 package net.carting.dao;
 
-import net.carting.domain.Competition;
-
 import java.util.List;
+
+import net.carting.domain.Competition;
 
 public interface CompetitionDAO {
 
@@ -22,7 +22,9 @@ public interface CompetitionDAO {
 
     public List<Competition> getCompetitionsByYear(int year);
 
+   /* unused method
     public List<Competition> getAllCompetitionsByPage(int page);
+   */
 
     public List<Integer> getCompetitionsYearsList();
 

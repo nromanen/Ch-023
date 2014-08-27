@@ -2,6 +2,7 @@ package net.carting.web;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.carting.domain.Document;
 import net.carting.domain.File;
 import net.carting.domain.Leader;
+import net.carting.domain.Racer;
 import net.carting.domain.Team;
 import net.carting.service.DocumentService;
 import net.carting.service.FileService;
@@ -39,25 +41,25 @@ public class DocumentController {
 
     @Autowired
     ServletContext context;
-
+    
     @Autowired
     private MessageSource messageSource;
-
+    
     @Autowired
     private FileService fileService;
-
+    
     @Autowired
     private DocumentService documentService;
-
+    
     @Autowired
     private TeamService teamService;
-
+    
     @Autowired
     private UserService userService;
-
+    
     @Autowired
     private LeaderService leaderService;
-
+    
     @Autowired
     private RacerService racerService;
 
@@ -72,42 +74,42 @@ public class DocumentController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String documentPage(Map<String, Object> map,
-                               @PathVariable("id") int id, HttpServletRequest request) {
+            @PathVariable("id") int id, HttpServletRequest request) {
         Document document = documentService.getDocumentById(id);
         map.put("document", document);
         map.put("request", request);
         if (userService.getCurrentAuthority().equals(UserService.ROLE_ADMIN)) {
             /*
-			 * If user is administrator, he is redirected to page of document
-			 */
+             * If user is administrator, he is redirected to page of document
+             */
             return "document";
         }
-		/*
-		 * Gets team that is owner of this document
-		 */
+        /*
+         * Gets team that is owner of this document
+         */
         Team teamOwner = document.getTeamOwner();
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
-		/*
-		 * Compares team whose leader is authorized and team that is owner of
-		 * this document
-		 */
+        /*
+         * Compares team whose leader is authorized and team that is owner of
+         * this document
+         */
         if (teamService.isTeamByLeaderId(leader.getId())) {
             Team team = teamService.getTeamByLeader(leader);
             if (team.getId() == teamOwner.getId()) {
-				/*
-				 * If user is owner of document, he is redirected to page of
-				 * document
-				 */
+                /*
+                 * If user is owner of document, he is redirected to page of
+                 * document
+                 */
                 return "document";
             } else {
-				/*
-				 * If team leader isn't owner of document, he is redirected to
-				 * page of his team
-				 */
+                /*
+                 * If team leader isn't owner of document, he is redirected to
+                 * page of his team
+                 */
 
-                LOG.info("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
-                        team.getName(), teamOwner.getName());
+                LOG.trace("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
+                		team.getName(), teamOwner.getName());
                 return "redirect:/team/" + team.getId();
             }
         } else {
@@ -115,8 +117,8 @@ public class DocumentController {
 			 * If team leader don't has a team, he is redirected to page in
 			 * which he can add team
 			 */
-            LOG.info("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
-                    leader.getFirstName(), leader.getLastName(), teamOwner.getName());
+            LOG.trace("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
+            		leader.getFirstName(), leader.getLastName(), teamOwner.getName());
             return "redirect:/team/add";
         }
 
@@ -137,58 +139,58 @@ public class DocumentController {
                         .getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                                 documentType, team));
             }
-            LOG.info("Leader of team {} tried to add document {}",
-                    team.getName(), Document.getStringDocumentType(documentType));
+            LOG.trace("Leader of team {} tried to add document {}",
+            		team.getName(), Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.info("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team",
-                    leader.getFirstName(), leader.getLastName());
+            LOG.trace("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team", 
+            		leader.getFirstName(), leader.getLastName());
             return "redirect:/team/add";
         }
     }
 
     @RequestMapping(value = "/addDocument", method = RequestMethod.POST)
     public String addDocument(@RequestParam("racer_id") String[] racersId,
-                              @RequestParam(value = "document_type") Integer documentType,
-                              @RequestParam(value = "number", required = false) String number,
-                              @RequestParam(value = "start_date", required = false) String startDate,
-                              @RequestParam(value = "finish_date", required = false) String finishDate,
+                              @RequestParam(value="document_type") Integer documentType,
+                              @RequestParam(value="number", required=false) String number,
+                              @RequestParam(value="start_date", required=false) String startDate,
+                              @RequestParam(value="finish_date", required=false) String finishDate,
                               @RequestParam("file") MultipartFile[] files,
                               Locale locale,
                               Map<String, Object> map) {
     	/* Getting current leader */
+    	
+    	 String username = userService.getCurrentUserName();
+         Leader leader = leaderService.getLeaderByUserName(username);
 
-        String username = userService.getCurrentUserName();
-        Leader leader = leaderService.getLeaderByUserName(username);
-
-        if (teamService.isTeamByLeaderId(leader.getId())) {
-            Team team = teamService.getTeamByLeader(leader);
-            if (racersId.length == 0) {
+         if (teamService.isTeamByLeaderId(leader.getId())) {
+             Team team = teamService.getTeamByLeader(leader);
+             if (racersId.length == 0) {
                  /*
                   * If team leader doesn't choose racers, he is redirected to
                   * page of his team
                   */
-                LOG.info("Team leader doesn't choose racers...");
-                return "redirect:/team/" + team.getId();
-            } else {
+                 LOG.trace("Team leader doesn't choose racers...");
+                 return "redirect:/team/" + team.getId();
+             } else {
                  /*
                   * Getting document data from form and creating object
                   * 'Document'
                   */
-                try {
-                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
-                } catch (IOException e) {
-                    map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
-                    LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
-                            leader.getFirstName(), leader.getLastName());
-                    return "custom_generic_exception";
-                }
-                return "redirect:/team/" + team.getId();
-            }
-        } else {
-            LOG.error("Team leader doesn't exists...");
-            return "redirect:/team/add";
-        }
+                 try {
+                     documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
+                 } catch (IOException e) {
+                     map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
+                     LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                     leader.getFirstName(), leader.getLastName());
+                     return "custom_generic_exception";
+                 }
+                 return "redirect:/team/" + team.getId();
+             }
+         } else {
+             LOG.error("Team leader doesn't exists...");
+             return "redirect:/team/add";
+         }
     }
 
     @RequestMapping(value = "/setApproved", method = RequestMethod.POST, headers = {"content-type=application/json"})
@@ -221,24 +223,26 @@ public class DocumentController {
     public
     @ResponseBody
     String deleteDocument(@RequestBody Map<String, Object> map) {
-        int documentId = Integer.parseInt(map.get("document_id").toString());
-        Document document = documentService.getDocumentById(documentId);
-        String[] racersIdString = map.get("racers_id_string").toString()
-                .split("#");
-        int[] racersId = new int[racersIdString.length];
-        for (int i = 0; i < racersIdString.length; i++) {
-            racersId[i] = Integer.parseInt(racersIdString[i]);
-            documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
-                    documentId, racersId[i]);
-            LOG.info("'{}' was deleted from racer {} {} by leader {} {} of team {}",
-                    document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
-                    racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(),
-                    document.getTeamOwner().getLeader().getLastName(), document.getTeamOwner().getName());
-        }
-        if (!documentService.isRacerOwnerOfDocument(documentId)) {
-            documentService.deleteDocument(document);
-            LOG.info("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
-        }
+    	LOG.debug("Start deleteDocument method");
+            int documentId = Integer.parseInt(map.get("document_id").toString());
+            Document document = documentService.getDocumentById(documentId);
+            String[] racersIdString = map.get("racers_id_string").toString()
+                    .split("#");
+            int[] racersId = new int[racersIdString.length];
+            for (int i = 0; i < racersIdString.length; i++) {
+                racersId[i] = Integer.parseInt(racersIdString[i]);
+                documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
+                        documentId, racersId[i]);
+                LOG.trace("'{}' was deleted from racer {} {} by leader {} {} of team {}",
+                		document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
+                        racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(), 
+                        document.getTeamOwner().getLeader().getLastName(), document.getTeamOwner().getName());
+            }
+            if (!documentService.isRacerOwnerOfDocument(documentId)) {
+                documentService.deleteDocument(document);
+                LOG.trace("{} was deleted by leader of team '{}'", document.getCurrentStringDocumentType(), document.getTeamOwner().getName());
+            }
+            LOG.debug("End deleteDocument method");
         return "success";
     }
 
@@ -271,13 +275,13 @@ public class DocumentController {
 
     @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
     public String editDocument(@RequestParam("document_id") Integer documentId,
-                               @RequestParam(value = "number", required = false) String number,
-                               @RequestParam(value = "start_date", required = false) String startDate,
-                               @RequestParam(value = "finish_date", required = false) String finishDate,
-                               @RequestParam("file") MultipartFile[] files,
+                               @RequestParam(value="number", required=false) String number,
+                               @RequestParam(value="start_date", required=false) String startDate,
+                               @RequestParam(value="finish_date", required=false) String finishDate,
+                               @RequestParam("file") MultipartFile[] files, 
                                Locale locale,
                                Map<String, Object> map) {
-
+        
         try {
             documentService.editDocument(documentId, number, startDate, finishDate, files);
             return "redirect:/document/" + documentId;
@@ -317,11 +321,50 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/allDocuments", method = RequestMethod.GET)
-    public String allDocuments(Map<String, Object> map) {
+    public String allDocuments(Map<String, Object> map,
+            @RequestParam(value = "type", required = false) String type) {
+        if (type == null) {
+            type = "modern";
+        }
         map.put("teams", teamService.getAllTeams());
+       List<String> teamDocStatus = new ArrayList<String>();
+       String status;
+       
+       for (Team team:teamService.getAllTeams()) {
+    	   status = "hasDocs";
+    	   System.out.println(team.getDocuments());
+    	   if (!team.getDocuments().isEmpty()) {
+    		   for (Racer racer:team.getRacers()) {
+    			   if(racer.getDocuments()!=null) {
+    				   for(Document doc:racer.getDocuments()) {
+    					   if (!doc.isChecked()) {
+    						   status = "unchecked";
+						   }
+					   }
+				   }
+			   }
+		   } else {
+			   System.out.println(team.getName()+" - " + team.getDocuments());
+			   status = "noDocs";
+		   }
+    	   teamDocStatus.add(status);
+    	}
+        map.put("team_doc_status", teamDocStatus);
         map.put("all_docs", documentService.getAllDocuments());
         map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
+        map.put("type", type);
+
         return "all_documents";
+    }
+
+    @RequestMapping(value = "/allDocuments/classic", method = RequestMethod.GET)
+    public String allDocumentsClassic(Map<String, Object> map,
+            @RequestParam(value = "type", required = false) String type) {
+        if (type == null) {
+            type = "classic";
+        }
+        map.put("type", type);
+        return "redirect:/document/allDocuments";
     }
 
     @RequestMapping(value = "/showDocument/{id}", method = RequestMethod.GET)
@@ -331,4 +374,5 @@ public class DocumentController {
         base64 += fileService.getFileById(id).getFile();
         return "<img src=\"" + base64 + "\" />";
     }
+
 }

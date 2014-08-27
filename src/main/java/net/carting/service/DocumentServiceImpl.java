@@ -27,7 +27,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     ServletContext context;
 
-    Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     @Autowired
     private DocumentDAO documentDAO;
@@ -84,12 +84,22 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
-                                            String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
+    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
+                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException {
+        LOG.debug("Start addDocumentAndUpdateRacers method");
+
         try {
             Document document = new Document();
             document.setType(documentType);
-            document = setDocumentParametersByType(document, number, startDate, finishDate);
+            setDocumentParametersByType(document, number, startDate, finishDate);
+            boolean set = false;
+            for (String racerId : racersId) {
+                if (set) continue;
+                if (!racerId.equals("-1")) {
+                    document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length - 1])).getTeam());
+                    set = true;
+                }
+            }
             addDocument(document);
             List<byte[]> fileList = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -100,21 +110,23 @@ public class DocumentServiceImpl implements DocumentService {
             fileService.addFilesToDocument(document, fileList);
             racerService.setDocumentToRacers(document, racersId);
         } catch (Exception e) {
+            LOG.error("Error occured in addDocumentAndUpdateRacers method", e);
             e.printStackTrace();
         }
+        LOG.debug("End addDocumentAndUpdateRacers method");
     }
 
 
     @Override
     @Transactional
-    public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
+    public void editDocument(Integer documentId, String number, String startDate, String finishDate,
                              MultipartFile[] files) throws IOException {
- 
+
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);
         document.setReason("");
-        document = setDocumentParametersByType(document, number, startDate, finishDate);
+        setDocumentParametersByType(document, number, startDate, finishDate);
         updateDocument(document);
 
         int documentType = document.getType();
@@ -124,10 +136,10 @@ public class DocumentServiceImpl implements DocumentService {
                 fileList.add(file.getBytes());
             }
         }
-                //getPathsAndWriteFilesToServer(files, documentType,
-                //document.getTeamOwner().getLeader().getId());
+        //getPathsAndWriteFilesToServer(files, documentType,
+        //document.getTeamOwner().getLeader().getId());
         fileService.addFilesToDocument(document, fileList);
-        logger.info("Leader {} {} of team {} edited document {}",
+        LOG.trace("Leader {} {} of team {} edited document {}",
                 document.getTeamOwner().getLeader().getFirstName(),
                 document.getTeamOwner().getLeader().getLastName(),
                 document.getTeamOwner().getName(),
@@ -136,7 +148,7 @@ public class DocumentServiceImpl implements DocumentService {
 
 
     @Override
-    public Document setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
+    public void setDocumentParametersByType(Document document, String number, String startDate, String finishDate) {
         int documentType = document.getType();
         switch (documentType) {
             case Document.TYPE_RACER_LICENCE:
@@ -155,7 +167,6 @@ public class DocumentServiceImpl implements DocumentService {
             default:
                 break;
         }
-        return document;
     }
 
 
@@ -167,15 +178,21 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void createStartStatement(String html) {
+        LOG.debug("Start createStartStatement method");
         try {
             File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
             if (!dir.exists())
                 dir.mkdirs();
             String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
-        } catch (IOException | DocumentException e) {
+        } catch (IOException e) {
+            LOG.error("Error occured in createStartStatement method", e);
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            LOG.error("Error occured in createStartStatement method", e);
             e.printStackTrace();
         }
+        LOG.debug("End createStartStatement method");
     }
 
     @Override

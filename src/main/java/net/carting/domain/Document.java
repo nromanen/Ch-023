@@ -1,6 +1,7 @@
 package net.carting.domain;
 
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -30,6 +31,10 @@ public class Document {
     @Column(name = "finish_date")
     private Date finishDate;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id")
+    private Team team;
+    
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "documents")
     private Set<Racer> racers;
 
@@ -125,7 +130,15 @@ public class Document {
         this.checked = checked;
     }
 
-    public static String getStringDocumentType(int documentType) {
+    public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public static String getStringDocumentType(int documentType) {
         String stringDocumentType;
         switch (documentType) {
             case TYPE_RACER_LICENCE:
