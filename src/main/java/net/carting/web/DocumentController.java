@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import net.carting.domain.Document;
 import net.carting.domain.File;
@@ -74,10 +73,12 @@ public class DocumentController {
     /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String documentPage(Map<String, Object> map,
-            @PathVariable("id") int id, HttpServletRequest request) {
+            @PathVariable("id") int id, @RequestParam(value="competition_id", required=false) Integer competitionId) {
         Document document = documentService.getDocumentById(id);
         map.put("document", document);
-        map.put("request", request);
+        if (competitionId != null){
+            map.put("competitionId",  competitionId);
+        }
         if (userService.getCurrentAuthority().equals(UserService.ROLE_ADMIN)) {
             /*
              * If user is administrator, he is redirected to page of document

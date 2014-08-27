@@ -133,8 +133,8 @@
 	</div>
 </div>
 
-<c:if test="${request.getParameter('competition_id') != null}">
-	<a href="/Carting/competition/${request.getParameter('competition_id')}/mandat" class="btn btn-primary"><spring:message code="label.document_return_to_mandat_statement" /></a>
+<c:if test="${ competitionId != null}">
+	<a href="/Carting/competition/${competitionId}/mandat" class="btn btn-primary"><spring:message code="label.document_return_to_mandat_statement" /></a>
 </c:if>
 
 <!-- Modal window for deleting document   -->
