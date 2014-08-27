@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
@@ -47,6 +45,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -285,17 +284,14 @@ public class CompetitionController {
     // team registration view
     /*TODO  Remove HttpServletRequest*/
     @RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
-    public String registrationTeamOnCompetitionView(Map<String, Object> map,
-                                                    HttpServletRequest request) {
-        String competitionIdStr = request.getParameter("competition");
-        if (competitionIdStr != null) {
+    public String registrationTeamOnCompetitionView(Map<String, Object> map, @RequestParam(value="competition", required=false) Integer competitionId) {
+        if (competitionId != null) {
             String username = userService.getCurrentUserName();
             Leader leader = leaderService.getLeaderByUserName(username);
             if (teamService.isTeamByLeaderId(leader.getId())) {
                 Team team = teamService.getTeamByLeader(leader);
                 map.put("team", team);
                 int teamId = team.getId();
-                int competitionId = Integer.parseInt(competitionIdStr);
                 boolean isTeamInCompetition = teamInCompetitionService
                         .isTeamInCompetition(teamId, competitionId);
                 map.put("isTeamInCompetition", isTeamInCompetition);
@@ -316,7 +312,7 @@ public class CompetitionController {
             }
             map.put("carClassesCompetition", carClassCompetitionService.getAllCarClassCompetitions()); // ?
             map.put("racerCarClassNumber", new RacerCarClassNumber());
-            map.put("request", request);
+            map.put("competitionId", competitionId);
             return "competition_team_add";
         } else {
 
@@ -333,6 +329,7 @@ public class CompetitionController {
                 .registrationTeamRacersOnCompetition(formMap);
         int competitionId = Integer.parseInt(formMap.get("competitionId")
                 .toString());
+        System.out.println(competitionId);
         return competitionId;
     }
     

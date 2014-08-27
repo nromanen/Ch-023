@@ -95,8 +95,8 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
         query.setParameter("number", Integer.toString(number));
         List result = query.getResultList();
         
-        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, number = {})", (result.size() > 0 ? "" : "not"), carClassId, number);
-        return result.size() > 0;
+        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, number = {})", !result.isEmpty() ? "" : "not", carClassId, number);
+        return !result.isEmpty();
     }
 
     @Override
@@ -120,8 +120,8 @@ public class RacerCarClassNumberDAOImpl implements RacerCarClassNumberDAO {
                         setParameter("racerId", racerId);
         List result = query.getResultList();
 
-        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, racerId = {})", (result.size() > 0 ? "" : "not"), carClassId, racerId);
-        return result.size() > 0;
+        LOG.debug("RacerCarClassNumber is {} set.(carClassId = {}, racerId = {})", !result.isEmpty() ? "" : "not", carClassId, racerId);
+        return !result.isEmpty();
     }
 
 }

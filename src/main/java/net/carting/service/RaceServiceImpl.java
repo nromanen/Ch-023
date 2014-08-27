@@ -160,8 +160,9 @@ public class RaceServiceImpl implements RaceService {
                     if (isLastLap) {
                         if (!lastLap.contains(carNumber)) {
                             lastLap.add(carNumber);
-                        } else
+                        } else {
                             break;
+                        }
                     }
                     chessRoll.get(lapIndex).add(carNumber);
                     break;
@@ -222,8 +223,7 @@ public class RaceServiceImpl implements RaceService {
             List<String> pointsList;
             if (race.getCarClassCompetition().getCompetition().isCalculateByTableB()) {
             	pointsList = Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racersByClassCompetition.size()).split(","));
-            }
-            else {
+            } else {
             	pointsList = competitionService.getPointsByPlacesList(race.getCarClassCompetition().getCompetition());
             }
             
@@ -254,7 +254,7 @@ public class RaceServiceImpl implements RaceService {
                     try {
                         raceResultService.addRaceResult(raceResult);
                     } catch (PersistenceException e) {
-                        System.out.println("Oops");
+                        LOG.error("Errors in setResultTable method during adding race results", e);
                     }
                 }
             } else {
@@ -273,7 +273,6 @@ public class RaceServiceImpl implements RaceService {
             }
         } catch (Exception e) {
         	LOG.error("Error has occured in setResultTable method", e);
-            e.printStackTrace();
         }
         LOG.debug("End setResultTable method");
     }

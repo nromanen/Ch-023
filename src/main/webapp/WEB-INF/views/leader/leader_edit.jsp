@@ -6,7 +6,6 @@
 <script type='text/javascript' src='<c:url value="/resources/js/leader.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 
-<input type="hidden" id="locale" value="${locale }">
 <h2 class="user-info-name">${leader.firstName}&nbsp;${leader.lastName}</h2>
 <form class="well" method="POST" action="/Carting/leader/editLeader"
     role="form" name="edit_leader" id="edit_leader">

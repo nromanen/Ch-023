@@ -9,7 +9,6 @@
 <h2 class="user-info-name">
     <spring:message code="label.registration" />
 </h2>
-<input type="hidden" id="locale" value="${locale }">
 <form class="well" method="POST" action="/Carting/leader/addLeader"
     data-toggle="validator" role="form" name="new_leader" id="new_leader">
     <p style="margin-top: 15px;">

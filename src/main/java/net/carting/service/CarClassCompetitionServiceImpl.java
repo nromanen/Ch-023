@@ -101,12 +101,10 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
                 Set<RacerCarClassNumber> racerCarClassNumbers = racer.getCarClassNumbers();
                 for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
                     CarClass racerCarClass = racerCarClassNumber.getCarClass();
-                    if (racerCarClass.equals(carClass)) {
-                        if ((racer.getAge() >= racerCarClass.getLowerYearsLimit()) &&
-                                (racer.getAge() <= racerCarClass.getUpperYearsLimit())) {
+                    if (racerCarClass.equals(carClass) && (racer.getAge() >= racerCarClass.getLowerYearsLimit()) &&
+                                            (racer.getAge() <= racerCarClass.getUpperYearsLimit())) {
                             isContainsCarClass = true;
                             break;
-                        }
                     }
                 }
             }

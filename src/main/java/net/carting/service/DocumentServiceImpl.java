@@ -94,7 +94,9 @@ public class DocumentServiceImpl implements DocumentService {
             setDocumentParametersByType(document, number, startDate, finishDate);
             boolean set = false;
             for(String racerId:racersId) {
-            	if(set) continue;
+            	if(set) {
+            	    continue;
+            	} 
             	if(!racerId.equals("-1")) {
                 	document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
                 	set = true;
@@ -111,7 +113,6 @@ public class DocumentServiceImpl implements DocumentService {
             racerService.setDocumentToRacers(document, racersId);
         } catch (Exception e) {
         	LOG.error("Error occured in addDocumentAndUpdateRacers method",e);
-            e.printStackTrace();
         }
         LOG.debug("End addDocumentAndUpdateRacers method");
     }
@@ -181,16 +182,15 @@ public class DocumentServiceImpl implements DocumentService {
     	LOG.debug("Start createStartStatement method");
         try {
             File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
-            if (!dir.exists())
+            if (!dir.exists()) {
                 dir.mkdirs();
+            }
             String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
         } catch (IOException e) {
         	LOG.error("Error occured in createStartStatement method",e);
-            e.printStackTrace();
         } catch (DocumentException e) {
         	LOG.error("Error occured in createStartStatement method",e);
-            e.printStackTrace();
         }
         LOG.debug("End createStartStatement method");
     }

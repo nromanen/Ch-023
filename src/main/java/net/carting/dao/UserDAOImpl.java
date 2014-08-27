@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
         	LOG.debug("Get user(email = {})", email);
             return user;
         } catch (NoResultException e) {
-        	LOG.error("Tried to get user(email = {})", email,e);
+        	LOG.error("Tried to get user(email = {})", email, e);
             return null;
         }
     }

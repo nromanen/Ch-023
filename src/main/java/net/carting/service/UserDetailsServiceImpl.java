@@ -36,9 +36,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
+	    net.carting.domain.User domainUser;
 	    net.carting.domain.User userByUsername = userDAO.getUserByUserName(username);
-	    net.carting.domain.User userByEmail = userDAO.getUserByEmail(username);
-		net.carting.domain.User domainUser = (userByUsername != null ? userByUsername : userByEmail);
+	    if (userByUsername == null) {
+	        net.carting.domain.User userByEmail = userDAO.getUserByEmail(username);
+	        domainUser = userByEmail;
+	    } else {
+	        domainUser = userByUsername;
+	    }
 		
 		if (domainUser == null) {
             String msg = String.format("User %s not found", username);

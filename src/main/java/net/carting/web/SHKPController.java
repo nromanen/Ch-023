@@ -1,5 +1,10 @@
 package net.carting.web;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Competition;
@@ -10,16 +15,17 @@ import net.carting.service.DocumentService;
 import net.carting.service.QualifyingService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
     * Carting
@@ -31,6 +37,8 @@ public class SHKPController {
 
         // MAX_CAR_POSITIONS - max cart positions on the track, const.
         public static final int MAX_CAR_POSITIONS = 36;
+        
+        private static final Logger LOG = LoggerFactory.getLogger(SHKPController.class);
 
         @Autowired
         DocumentService documentService;
@@ -71,7 +79,7 @@ public class SHKPController {
 	            }
 	            model.addAttribute("qualifyingList", resultQ);
 	        } catch (Exception e) {
-            	e.printStackTrace();
+            	LOG.error("Errors in start method", e);
             }
             
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());

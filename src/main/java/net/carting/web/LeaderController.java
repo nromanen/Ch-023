@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import net.carting.domain.Leader;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
 @RequestMapping(value = "/leader")
@@ -73,12 +71,11 @@ public class LeaderController {
             return new SimpleDateFormat("yyyy-MM-dd");
         }
     };
-
+    
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index(Map<String, Object> map, HttpServletRequest request) {
+    public String index(Map<String, Object> map) {
         String authority = userService.getCurrentAuthority();
         if (authority.equals(UserService.ROLE_ANONYMOUS)) {
-            map.put("locale", RequestContextUtils.getLocale(request).toString());
             return "leader_registration";
         } else {
             return "index";
@@ -104,7 +101,8 @@ public class LeaderController {
         	try {
 				leaderService.registerLeader(leader);
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-				e.printStackTrace();
+			    /* TODO : show user an exception */
+				LOG.error("Errors in addLeader method. Tried to add leader({} {})",leader.getFirstName(), leader.getLastName(), e);
 			}
         }
         LOG.debug("End addLeader method");
@@ -124,16 +122,16 @@ public class LeaderController {
         }
         return "leader";
     }
-
+    
+    /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editLeaderPage(Map<String, Object> map,
-                                 @PathVariable("id") int id, HttpServletRequest request) {
+                                 @PathVariable("id") int id) {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         map.put("leader", leader);
 
         if (teamService.isTeamByLeaderId(leader.getId())) {
-            map.put("locale", RequestContextUtils.getLocale(request).toString());
             Team team = teamService.getTeamByLeader(leader);
             map.put("team", team);
         }
@@ -229,12 +227,10 @@ public class LeaderController {
     	if (user.getResetPassLink().equals(secureCode)) {
     		try {
 				userService.changePassword(user, password);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e ) {
+				LOG.error("Errors in changePassword method", e);
 			}
-        	return "success";
+    		return "success";
     	}
     	else {
     		return "invalid";
@@ -243,7 +239,7 @@ public class LeaderController {
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
     
