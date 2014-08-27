@@ -12,7 +12,6 @@ import net.carting.domain.User;
 import net.carting.service.AdminSettingsService;
 import net.carting.service.CarClassService;
 import net.carting.service.DocumentService;
-import net.carting.service.FileService;
 import net.carting.service.LeaderService;
 import net.carting.service.LogsService;
 import net.carting.service.TeamService;
@@ -48,8 +47,6 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private LogsService logsService;
-    @Autowired
-    private FileService fileService;
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
 

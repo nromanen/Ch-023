@@ -3,7 +3,6 @@ package net.carting.service;
 import net.carting.dao.FileDAO;
 import net.carting.domain.Document;
 import net.carting.domain.File;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

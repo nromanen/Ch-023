@@ -43,7 +43,6 @@ public class AdminSettingsServiceImpl implements AdminSettingsService {
     @Transactional
     public List<String> getPointsByPlacesList() {
         String pointsByPlacesStr = adminSettingsDAO.getAdminSettings().getPointsByPlaces();
-        List<String> pointsByPlacesList = Arrays.asList(pointsByPlacesStr.split(","));
-        return pointsByPlacesList;
+        return Arrays.asList(pointsByPlacesStr.split(","));
     }
 }

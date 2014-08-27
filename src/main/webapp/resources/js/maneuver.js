@@ -6,6 +6,9 @@ $(document).ready(function(){
             type: "POST",
             data: {
                 table: $('#maneuver').html()
+            },
+            success: function(response) {
+                $("#pdf").removeAttr("disabled");
             }
         });
     }
@@ -63,14 +66,14 @@ $(document).ready(function(){
     $('#save').click(function() {
         for (var i = 1; i <= $("#racersCount").val(); i++) {
             var racerId = $("#id" + i).val();
-            var snake = Number($("#snake" + racerId).text());
-            var flower = Number($("#flower" + racerId).text());
-            var stop = Number($("#stopLine" + racerId).text());
-            var hall = Number($("#hall" + racerId).text());
-            var cirLeft = Number($("#leftCircle" + racerId).text());
-            var cirRig = Number($("#rightCircle" + racerId).text());
-            var colLeft = Number($("#leftCol" + racerId).text());
-            var colRig = Number($("#rightCol" + racerId).text());
+            var snake = Number($("#snake" + racerId).text()) * Number($("#penalty").val());
+            var flower = Number($("#flower" + racerId).text()) * Number($("#penalty").val());
+            var stop = Number($("#stopLine" + racerId).text()) * Number($("#penalty").val());
+            var hall = Number($("#hall" + racerId).text()) * Number($("#penalty").val());
+            var cirLeft = Number($("#leftCircle" + racerId).text()) * Number($("#penalty").val());
+            var cirRig = Number($("#rightCircle" + racerId).text()) * Number($("#penalty").val());
+            var colLeft = Number($("#leftCol" + racerId).text()) * Number($("#penalty").val());
+            var colRig = Number($("#rightCol" + racerId).text()) * Number($("#penalty").val());
             var time = Number($("#time" + racerId).text());
 
             var sum = (isNaN(snake) ? 0 : snake) + (isNaN(flower) ? 0 : flower) + (isNaN(stop) ? 0 : stop) + (isNaN(hall) ? 0 : hall) + (isNaN(cirLeft) ? 0 : cirLeft) + (isNaN(cirRig) ? 0 : cirRig) + (isNaN(colLeft) ? 0 : colLeft) + (isNaN(colRig) ? 0 : colRig) + (isNaN(time) ? 0 : time);
