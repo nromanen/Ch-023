@@ -5,6 +5,7 @@ import net.carting.dao.CarClassDAO;
 import net.carting.dao.RacerDAO;
 import net.carting.domain.*;
 import net.carting.util.CompetitionValidator;
+import net.carting.util.DateUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,36 +39,28 @@ public class RacerServiceImpl implements RacerService {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(checkdate);
 		int checkYear = cal.get(Calendar.YEAR);
-		CompetitionValidator competitionValidator = new CompetitionValidator();
-		int daysInCheckYear = competitionValidator.isLeapYear(checkYear);
+		DateUtil dateUtil = new DateUtil();
+		int daysInCheckYear = dateUtil.getDaysCount(checkYear);
 		int checkday = cal.get(Calendar.DAY_OF_YEAR);
 		for (int i = 0; i < racers.size(); i++) {
 			cal.setTime(racers.get(i).getBirthday());
 			int racerBirthdayYear = cal.get(Calendar.YEAR);
+			int daysInRacerBirthdayYear = dateUtil
+					.getDaysCount(racerBirthdayYear);
 			int birthday = cal.get(Calendar.DAY_OF_YEAR);
-			if (daysInCheckYear == competitionValidator
-					.isLeapYear(racerBirthdayYear)) {
-				if ((checkday - birthday == 0) || (checkday - birthday == 1)
-						|| (checkday - birthday == -1)) {
-					System.out.println("checkday" + " " + checkday);
-					System.out.println("birthday" + " " + birthday);
-					resultRacers.add(racers.get(i));
-				}
-			} else {
+			if (daysInCheckYear != daysInRacerBirthdayYear) {
 				if (birthday >= 60) {
 					birthday = birthday - 1;
 				}
-				if ((checkday - birthday == 0) || (checkday - birthday == 1)
-						|| (checkday - birthday == -1)) {
-					System.out.println("checkday" + " " + checkday);
-					System.out.println("birthday" + " " + birthday);
-					resultRacers.add(racers.get(i));
-				}
+			}			
+			int dayDifference = checkday - birthday;
+			if ((dayDifference == 0) || (dayDifference == 1)
+					|| (dayDifference == -1)) {				
+				resultRacers.add(racers.get(i));
 			}
-		}
-		
-		return resultRacers;
 
+		}		
+		return resultRacers;
 	}
 
 	@Override
