@@ -102,7 +102,7 @@
         <put-attribute name="title" value="Mandat"/>
         <put-attribute name="content" value="/WEB-INF/views/competition/competition_mandat.jsp"/>
     </definition>
-    
+
     <definition name="competition_personal_offset" extends="wide-template">
         <put-attribute name="title" value="Personal offset"/>
         <put-attribute name="content" value="/WEB-INF/views/competition/competition_personal_offset.jsp"/>
@@ -117,7 +117,7 @@
         <put-attribute name="title" value="Edit CarClass summary results"/>
         <put-attribute name="content" value="/WEB-INF/views/competition/competetition_carclass_absoluteresults_edit.jsp"/>
     </definition>
-    
+
     <definition name="competition_carclass_testrace_add_edit"
     			extends="base-template">
     	<put-attribute name="title" value="Add and Edit test race"/>
@@ -140,7 +140,7 @@
         <put-attribute name="title" value="Login"/>
         <put-attribute name="content" value="/WEB-INF/views/login.jsp"/>
     </definition>
-    
+
     <!-- Password Recovery -->
     <definition name="password_recovery" extends="base-template">
         <put-attribute name="title" value="Password Recovery"/>
@@ -164,7 +164,7 @@
         <put-attribute name="title" value="Checking documents "/>
         <put-attribute name="content" value="/WEB-INF/views/document/checking_documents.jsp"/>
     </definition>
-    
+
     <!-- All documents -->
     <definition name="all_documents" extends="base-template">
         <put-attribute name="title" value="All documents "/>

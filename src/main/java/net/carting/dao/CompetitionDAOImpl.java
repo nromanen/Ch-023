@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CompetitionDAOImpl implements CompetitionDAO {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CompetitionDAOImpl.class);
-	
+    private static final Logger LOG = LoggerFactory.getLogger(CompetitionDAOImpl.class);
+
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
@@ -62,7 +62,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
 
     @Override
     public Competition getCompetitionById(int id) {
-    	LOG.debug("Get competition with id = {}", id);
+        LOG.debug("Get competition with id = {}", id);
         return (Competition) entityManager.createQuery("from Competition where id = :id")
                 .setParameter("id", id).getSingleResult();
     }
@@ -70,7 +70,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
     @Override
     public void addCompetition(Competition competition) {
         entityManager.persist(competition);
-    	LOG.debug("Add competition {}", competition);
+        LOG.debug("Add competition {}", competition);
 
     }
 

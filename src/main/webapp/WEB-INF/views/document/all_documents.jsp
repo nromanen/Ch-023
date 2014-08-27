@@ -195,8 +195,7 @@
 				<td style="text-align: center;">
 					<c:forEach items="${doc.files}" var="file">
 						&nbsp;
-						<a href="data:image/jpg;base64,<c:out value="${file.file}" />"
-							class="glyphicon glyphicon-paperclip file-link">
+						<a target="_blank" href="showDocument/<c:out value='${file.id}'/>" class="glyphicon glyphicon-paperclip file-link"><c:out value='${file.name}'/></a>
 						</a>
 					</c:forEach>
 				</td>

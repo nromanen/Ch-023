@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService {
 	
     @Autowired
     private UserDAO userDao;
-    
+
     @Autowired
     private AdminSettingsService adminSettingsService;
-    
+
     @Autowired
     private MailService mailService;
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByUserName(String userName) {
         return userDao.getUserByUserName(userName);
     }
-    
+
     @Override
     @Transactional
     public User getUserByEmail(String email) {
@@ -92,13 +92,13 @@ public class UserServiceImpl implements UserService {
                 .getAuthentication();
         return auth.getName();
     }
-    
+
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
     public String getCurrentAuthority() {
-    	LOG.debug("Start getCurrentAuthority method");
+        LOG.debug("Start getCurrentAuthority method");
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         String authority = null;
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public boolean isSetUser(String userName) {
         return userDao.isSetUser(userName);
     }
-    
+
     @Override
     @Transactional
     public boolean isSetEmail(String email) {
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getEncodedPassword(String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
-    	LOG.debug("Start getEncodedPassword method");
+        LOG.debug("Start getEncodedPassword method");
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-256");
         md.update(password.getBytes("UTF-8"));
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(getEncodedPassword(password));
         userDao.updateUser(user);
     }
-    
+
     @Override
     @Transactional
     public void sendSecureCode(User user) {
