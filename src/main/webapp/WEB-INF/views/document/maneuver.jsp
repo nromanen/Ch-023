@@ -74,22 +74,28 @@
                             </c:forEach>
                         </tbody>
                     </table>
-                    <center>
-                        <a class="btn btn-lg btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
-                        <a class="btn btn-lg btn-success" id="pdf" href="${pdfLink}" target="_blank"><spring:message code="label.document_download_pdf" /></a>
-                        <select id="del">
-                            <option class="snake">Змійка</option>
-                            <option class="leftCircle">Коло ліве</option>
-                            <option class="rightCircle">Коло праве</option>
-                            <option class="flower">Квітка</option>
-                            <option class="hall">Коридор</option>
-                            <option class="rightCol">Колія права</option>
-                            <option class="leftCol">Колія ліва</option>
-                            <option class="stopLine">Лінія "стоп"</option>     
-                            <option>Пусто</option>
-                        </select>
-                        <input class="btn btn-lg btn-warning" type="button" id="remove" value="Remove"><p>
-                    </center>
+                    <table>
+                        <tr>
+                            <td><span align="left"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span></td>
+                            <td><span align="left"><a class="btn btn-success btn-sm" id="pdf" href="${pdfLink}" target="_blank" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
+ </tr><tr>
+                            <td><span align="right"><select id="del">
+                                <option class="snake">Змійка</option>
+                                <option class="leftCircle">Коло ліве</option>
+                                <option class="rightCircle">Коло праве</option>
+                                <option class="flower">Квітка</option>
+                                <option class="hall">Коридор</option>
+                                <option class="rightCol">Колія права</option>
+                                <option class="leftCol">Колія ліва</option>
+                                <option class="stopLine">Лінія "стоп"</option>     
+                                <option>Пусто</option>
+                            </select>
+                            <input class="btn btn-lg btn-warning btn-sm" type="button" id="remove" value="Remove">
+                            <input class="btn btn-lg btn-default btn-sm" type="button" id="add" value="Add"></span></td>
+                            <tr><td><span align="right">Штраф за збиту кеглю: <input type="text" id="penalty" value="5" size="1"></span></td></tr>
+                            
+                        </tr>
+                    </table><p>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -112,15 +118,14 @@
         <spring:message code="label.data_save_success" />
     </div>     
 <div id="maneuver">
-<meta charset="utf-8">
 <style>
     table {
-        font-family: 'Times New Roman', Times, serif;
+        font-family: "Arial", Times, monospace;
     }
     span {
-        font-family: 'Times New Roman', Times, serif;
-    }    
-</style>    
+        font-family: "Arial", Times, monospace;
+    }
+</style>
     <center><span align="center" style="font-weight:bold;font-size:20pt"><c:out value="${competitionName}"/></span></center>
     <table width="100%" align="center">
         <theader>

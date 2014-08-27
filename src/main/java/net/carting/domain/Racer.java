@@ -98,9 +98,8 @@ public class Racer extends Person {
         currentDate.setTime(new Date());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(birthday);
-        int age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
+        return currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
                 - (calendar.get(Calendar.MONTH) + 6) / 12;
-        return age;
     }
 
     public String getStringSportsCategory() {

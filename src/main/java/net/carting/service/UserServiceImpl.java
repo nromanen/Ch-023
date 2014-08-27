@@ -152,18 +152,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void resetPassword(User user)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        User userToUpdate = user;
-        userToUpdate.setPassword(getEncodedPassword(User.DEFAULT_PASSWORD));
-        userDao.updateUser(userToUpdate);
+        user.setPassword(getEncodedPassword(User.DEFAULT_PASSWORD));
+        userDao.updateUser(user);
     }
 
     @Override
     @Transactional
     public void changePassword(User user, String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        User userToUpdate = user;
-        userToUpdate.setPassword(getEncodedPassword(password));
-        userDao.updateUser(userToUpdate);
+        user.setPassword(getEncodedPassword(password));
+        userDao.updateUser(user);
     }
     
     @Override
@@ -178,8 +176,7 @@ public class UserServiceImpl implements UserService {
 			String to = user.getEmail();
 			String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
 			String subject = "Password recovery on Carting";
-			String message = secureCode;
-			mailService.sendMail(to, from, subject, message);
+            mailService.sendMail(to, from, subject, secureCode);
 			LOG.debug("Sent secure code to user(username = {})", user.getUsername());
 			
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {

@@ -51,6 +51,10 @@ public class File {
         return new String(Base64.encode(file));
     }
 
+    public byte[] getFileBytes() {
+        return file;
+    }
+
     public void setFile(byte[] file) {
         this.file = file;
     }

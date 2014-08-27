@@ -141,11 +141,11 @@ $(document).ready(function(){
 <meta charset="utf-8">
 <style>
     table {
-        font-family: 'Times New Roman', Times, serif;
+        font-family: "Arial", Times, monospace;
     }
     .place {
      font-size: 250%;
-     font-family: serif;
+     font-family: monospace;
      position: relative;
      left: 20px;
      text-decoration: underline;

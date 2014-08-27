@@ -32,7 +32,7 @@ public class PdfWriter {
     }
 
     public static void createManeuverStatement(String path, String html) throws IOException, DocumentException {
-        InputStream stream = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
+        InputStream stream = new ByteArrayInputStream(html.getBytes());
         Document document = new Document(PageSize.A1);
         FileOutputStream fos = new FileOutputStream(path);
         com.itextpdf.text.pdf.PdfWriter writer = com.itextpdf.text.pdf.PdfWriter.getInstance(document, fos);

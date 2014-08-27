@@ -9,6 +9,7 @@ import net.carting.domain.*;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.QualifyingService;
+import net.carting.service.FileService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 
 import org.slf4j.Logger;
@@ -49,24 +50,38 @@ public class SHKPController {
         @Autowired
         QualifyingService qualifyingService;
 
+        @Autowired
+        FileService fileService;
+
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
-        public void createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+        public String createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+            String result = "success";
             try {
                 documentService.createStartStatement(table);
             } catch (Exception e) {
+                result = "fail";
                 e.printStackTrace();
             }
+            return result;
         }
 
         @RequestMapping(value = "maneuver", method = RequestMethod.POST)
         @ResponseBody
-        public void createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+        public String createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
+            String result = "success";
             try {
+                File f = new File();
+                f.setName("test");
+                f.setFile(fileService.getAllFiles().get(0).getFileBytes());
+                fileService.addFile(f);
+
                 documentService.createManeuverStatement(table);
             } catch (Exception e) {
+                result = "fail";
                 e.printStackTrace();
             }
+            return result;
         }
 
         @RequestMapping(value = "start/{id}/{raceId}", method = RequestMethod.GET)
