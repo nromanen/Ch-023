@@ -47,7 +47,11 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
     @Override
     public void updateCarClassCompetition(CarClassCompetition carClassCompetition) {
-        entityManager.merge(carClassCompetition);
+        try {
+            entityManager.merge(carClassCompetition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         LOG.debug("Updated car class competition with id = {}", carClassCompetition.getId());
     }
 

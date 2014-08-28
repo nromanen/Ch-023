@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FileDAOImpl implements FileDAO {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(FileDAOImpl.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(FileDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -23,7 +23,7 @@ public class FileDAOImpl implements FileDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<File> getAllFiles() {
-    	LOG.debug("Get all files");
+        LOG.debug("Get all files");
         return entityManager
                 .createQuery("from File")
                 .getResultList();
@@ -31,7 +31,7 @@ public class FileDAOImpl implements FileDAO {
 
     @Override
     public File getFileById(int id) {
-    	LOG.debug("Get file with id = {}", id);
+        LOG.debug("Get file with id = {}", id);
         return (File) entityManager
                 .createQuery("from File where id = :id")
                 .setParameter("id", id)
@@ -41,14 +41,14 @@ public class FileDAOImpl implements FileDAO {
     @Override
     public void addFile(File file) {
         entityManager.persist(file);
-    	LOG.debug("Added file {}", file);
+        LOG.debug("Added file {}", file);
 
     }
 
     @Override
     public void updateFile(File file) {
         entityManager.merge(file);
-    	LOG.debug("Updated file with id = {}", file.getId());
+        LOG.debug("Updated file with id = {}", file.getId());
 
     }
 
@@ -58,9 +58,9 @@ public class FileDAOImpl implements FileDAO {
                 "DELETE FROM File c WHERE c.id = :id");
         query.setParameter("id", file.getId());
         if (query.executeUpdate() != 0) {
-        	LOG.debug("Deleted file with id = {}", file.getId());
+            LOG.debug("Deleted file with id = {}", file.getId());
         } else {
-        	LOG.warn("Tried to delete file with id = {}", file.getId());
+            LOG.warn("Tried to delete file with id = {}", file.getId());
         }
     }
 }

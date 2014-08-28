@@ -1,5 +1,7 @@
 package net.carting.web;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +15,7 @@ import net.carting.service.FileService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 
 import org.slf4j.Logger;
+import net.carting.util.PdfWriter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.*;
 /**
     * Carting
     * Created by manson on 8/5/14.
@@ -50,17 +54,46 @@ public class SHKPController {
         @Autowired
         QualifyingService qualifyingService;
 
-        @Autowired
-        FileService fileService;
-
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
-        public String createStartStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            String result = "success";
+        public int createStartStatement(Model model, @RequestParam(value = "table") String table,
+                                         @RequestParam(value = "raceId") int raceId,
+                                         @RequestParam(value = "startId") int startId) {
+            int result;
             try {
-                documentService.createStartStatement(table);
+                CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(raceId);
+                File start;
+                if (startId == 1) {
+                    if (carClassCompetition.getFirstRaceStartStatement() == null) {
+                        start = new File();
+                    } else {
+                        start = carClassCompetition.getFirstRaceStartStatement();
+                    }
+                } else {
+                    if (carClassCompetition.getSecondRaceStartStatement() == null) {
+                        start = new File();
+                    } else {
+                        start = carClassCompetition.getSecondRaceStartStatement();
+                    }
+                }
+                start.setFile(PdfWriter.getFileBytes(table, PageSize.A4_LANDSCAPE));
+                String fileName = "StartStatement_" + raceId + "_"
+                        + Calendar.getInstance().getTimeInMillis();
+                start.setName(fileName);
+                if (startId == 1) {
+                    carClassCompetition.setFirstRaceStartStatement(start);
+                } else {
+                    carClassCompetition.setSecondRaceStartStatement(start);
+                }
+                carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
+
+                if (startId == 1) {
+                    result = carClassCompetitionService.getCarClassCompetitionById(raceId).getFirstRaceStartStatement().getId();
+                } else {
+                    result = carClassCompetitionService.getCarClassCompetitionById(raceId).getSecondRaceStartStatement().getId();
+                }
             } catch (Exception e) {
-                result = "fail";
+                result = 0;
                 e.printStackTrace();
             }
             return result;
@@ -68,17 +101,26 @@ public class SHKPController {
 
         @RequestMapping(value = "maneuver", method = RequestMethod.POST)
         @ResponseBody
-        public String createManeuverStatement(Model model, @RequestParam(value = "table", required = false) String table) {
-            String result = "success";
+    public int createManeuverStatement(Model model, @RequestParam(value = "table") String table,
+                                          @RequestParam(value = "raceId") int raceId) {
+        int result;
             try {
-                File f = new File();
-                f.setName("test");
-                f.setFile(fileService.getAllFiles().get(0).getFileBytes());
-                fileService.addFile(f);
-
-                documentService.createManeuverStatement(table);
+            CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(raceId);
+            File maneuver;
+            if (carClassCompetition.getManeuverStatement() == null) {
+                maneuver = new File();
+            } else {
+                maneuver = carClassCompetition.getManeuverStatement();
+            }
+            maneuver.setFile(PdfWriter.getFileBytes(table, PageSize.A1));
+            String fileName = "ManeuverStatement_" + raceId + "_"
+                    + Calendar.getInstance().getTimeInMillis();
+            maneuver.setName(fileName);
+            carClassCompetition.setManeuverStatement(maneuver);
+            carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
+            result = carClassCompetitionService.getCarClassCompetitionById(raceId).getManeuverStatement().getId();
             } catch (Exception e) {
-                result = "fail";
+            result = 0;
                 e.printStackTrace();
             }
             return result;
@@ -93,21 +135,25 @@ public class SHKPController {
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
 
 
-            try{
+            try {
                 List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
                 List<Qualifying> resultQ = new ArrayList<Qualifying>();
-                for (int i=0;i<beforeQ.size();i++) {
-                    for (int j=0; j<beforeQ.size();j++) {
-                        if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition()==beforeQ.get(j).getRacerNumber()) {
-                            resultQ.add(beforeQ.get(j));
+                if (beforeQ != null) {
+                    for (int i = 0; i < beforeQ.size(); i++) {
+                        for (Qualifying aBeforeQ : beforeQ) {
+                            if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition() == aBeforeQ.getRacerNumber()) {
+                                resultQ.add(aBeforeQ);
+                            }
                         }
                     }
+                    model.addAttribute("qualifyingList", resultQ);
                 }
-                model.addAttribute("qualifyingList", resultQ);
             } catch (Exception e) {
                 LOG.error("Errors in start method", e);
             }
 
+            model.addAttribute("startId", raceId);
+            model.addAttribute("raceId", id);
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
@@ -121,21 +167,27 @@ public class SHKPController {
             model.addAttribute("secretaryName", competition.getSecretaryName());
             Date time;
             Date date;
+
             if (raceId == 1) {
                 date = competition.getFirstRaceDate();
                 time = carClassCompetition.getFirstRaceTime();
+                if (carClassCompetition.getFirstRaceStartStatement() != null) {
+                    model.addAttribute("oldDoc", carClassCompetition.getFirstRaceStartStatement().getId());
+                }
             } else {
                 date = competition.getSecondRaceDate();
                 time = carClassCompetition.getSecondRaceTime();
+                if (carClassCompetition.getSecondRaceStartStatement() != null) {
+                    model.addAttribute("oldDoc", carClassCompetition.getSecondRaceStartStatement().getId());
+                }
             }
+
             model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
             model.addAttribute("carClassTime", timeFormat.format(time));
             model.addAttribute("carClassDate", dateFormat.format(date));
             model.addAttribute("carClassRace", raceId);
-
             model.addAttribute("maxPositions", MAX_CAR_POSITIONS);
             model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
-            model.addAttribute("pdfLink", DocumentService.START_STATEMENT_PATH);
             return new ModelAndView("start");
         }
 
@@ -149,20 +201,25 @@ public class SHKPController {
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
 
             model.addAttribute("racers", racers);
-
+            model.addAttribute("raceId", id);
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionPlace", competition.getPlace());
             model.addAttribute("carClassName", carClassCompetition.getCarClass().getName());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-            model.addAttribute("pdfLink", DocumentService.MANEUVER_STATEMENT_PATH);
+            if (carClassCompetition.getManeuverStatement() != null) {
+                model.addAttribute("oldDoc", carClassCompetition.getManeuverStatement().getId());
+            } else {
+                model.addAttribute("oldDoc", null);
+            }
+
             model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
             model.addAttribute("secretaryName", competition.getSecretaryName());
             model.addAttribute("directorName", competition.getDirectorName());
             model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
         }
         catch (Exception e) {
-           // e.printStackTrace();
+             e.printStackTrace();
         }
         return new ModelAndView("maneuver");
     }

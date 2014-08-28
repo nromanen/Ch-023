@@ -17,15 +17,15 @@
         <param name="user" value="root" />
         <param name="password" value="root" />
         <param name="driver" value="com.mysql.jdbc.Driver" />
-        <param name="sql" value="INSERT INTO LOGS VALUES('%C','%p','%m','%d')" />
+        <param name="sql" value="INSERT INTO logs VALUES('%C','%p','%m','%d')" />
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="levelMin" value="TRACE" />
             <param name="levelMax" value="TRACE" />
         </filter>
     </appender>
-	
-	<!-- FILE appender -->
-	<appender name="developer" class="org.apache.log4j.FileAppender">
+
+    <!-- FILE appender -->
+    <appender name="developer" class="org.apache.log4j.FileAppender">
         <param name="file" value="dev_log.log" />
         <param name="append" value="true" />
         <layout class="org.apache.log4j.PatternLayout">
@@ -36,10 +36,10 @@
             <param name="levelMax" value="FATAL" />
         </filter>
     </appender>
-    
+
     <!-- Application Loggers -->
     <logger name="net.carting">
-    	<level value="trace"/>
+        <level value="trace"/>
         <appender-ref ref="database"/>
     </logger>
 

@@ -11,7 +11,16 @@ $(document).ready(function(){
             url: "/Carting/SHKP/start",
             type: "POST",
             data: {
-                table: $('#table').html()
+                table: $('#table').html(),
+                startId: $('#startId').val(),
+                raceId: $('#raceId').val()
+            },
+            success: function(response) {
+                if (response !== '0') {
+                    $("#fileId").val(response);
+                    $("#pdf").removeAttr("disabled");
+                    $("#prevVersion").remove();
+                }
             }
         });
     }
@@ -21,6 +30,10 @@ $(document).ready(function(){
             $(this).text("");
         });
     }
+
+    $("#pdf").click(function() {
+        window.open("../../../document/showFile/" + $("#fileId").val() ,'_blank');
+    });
 
     $("#save").click(function() {    
         clearTable();
@@ -112,8 +125,11 @@ $(document).ready(function(){
                         </tbody>
                     </table>
                     <center>
-                        <a class="btn btn-lg btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
-                        <a class="btn btn-lg btn-success" id="pdf" href="${pdfLink}" target="_blank"><spring:message code="label.document_download_pdf" /></a><p>
+                        <a class="btn btn-sml btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
+                        <a class="btn btn-sml btn-success" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a>
+                        <c:if test="${oldDoc > 0}">
+                            <a id="prevVersion" class="btn btn-sml btn-warning" href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a>
+                        </c:if><p>
                     </center>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
@@ -135,7 +151,10 @@ $(document).ready(function(){
     <div class="alert alert-success" id="correctPositions"
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
         <spring:message code="label.data_save_success" />
-    </div>    
+    </div>
+<input type="hidden" id="fileId" value="0">
+<input type="hidden" id="raceId" value="${raceId}">
+<input type="hidden" id="startId" value="${startId}">
 <input type="hidden" id="maxPos" value="${maxPositions}">
 <div id='table'>
 <meta charset="utf-8">

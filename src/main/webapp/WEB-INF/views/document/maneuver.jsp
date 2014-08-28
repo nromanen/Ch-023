@@ -19,6 +19,9 @@
         text-align: center;
     }      
   </style>
+<input type="hidden" id="fileId" value="0">
+<input type="hidden" id="fileId" value="0">
+<input type="hidden" id="raceId" value="${raceId}">
 <input id="racersCount" type="hidden" value="<c:out value="${racers.size()}"/>">
 <input type="hidden" id="add" value="Add">
 <input type="hidden" id="tableB" value="${tableB}">
@@ -77,7 +80,10 @@
                     <table>
                         <tr>
                             <td><span align="left"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span></td>
-                            <td><span align="left"><a class="btn btn-success btn-sm" id="pdf" href="${pdfLink}" target="_blank" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
+                            <td><span align="left"><a class="btn btn-success btn-sm" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
+                            <td><c:if test="${oldDoc > 0}">
+                                <span align="left"><a id="prevVersion" class="btn btn-sm btn-warning" href="../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a></span>
+                            </c:if></d>
  </tr><tr>
                             <td><span align="right"><select id="del">
                                 <option class="snake">Змійка</option>
