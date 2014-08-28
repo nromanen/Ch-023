@@ -198,12 +198,14 @@
 						<td><spring:message code="label.racer" /></td>
 						<td><spring:message code="label.enable" /></td>
 						<td><spring:message code="label.car_classes" /></td>
+						<td><spring:message code="label.date_of_birth" /></td>
 						<td><spring:message code="label.age" /></td>
 					</tr>
 					<%
 						int racerNumber = 1;
 					%>
 					<c:forEach items="${racersBirthday}" var="racer">
+					<fmt:formatDate value="${racer.birthday}" var="dateString" pattern="dd/MM/yyyy" />
 						<tr>
 							<td style="width: 4%;"><%=racerNumber%></td>
 							<td style="text-align: left;"><a
@@ -220,6 +222,7 @@
 									var="carClassNumber">
 									<b>${carClassNumber.carClass.name}</b>(№${carClassNumber.number})
 								</c:forEach></td>
+							<td>${dateString}</td>
 							<td>${racer.getAge()}</td>
 						</tr>
 						<%
