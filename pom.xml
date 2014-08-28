@@ -369,8 +369,9 @@
                 <version>2.2</version>
                 <configuration>
                     <warFile>target/Carting.war</warFile>
-                    <url>http://localhost:8080/manager/text</url>
-                    <server>local</server>
+                    <url>http://localhost:58080/manager/text</url>
+                    <username>manson</username>
+        	    <password>tomcat</password>
                     <update>true</update>
                 </configuration>
             </plugin>
