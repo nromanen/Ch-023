@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 	$('#editor').wysiwyg({
-	      
+
 	});
 	$('#validate_btn').click(function(){
 		$('.error').html('');
@@ -40,7 +40,7 @@ $(document).ready(function(){
 		}
 	  }
 	});
-	
+
 	function getValidNumbers (array_of_numbers, mass){
 		var array = [];
 		for (var i = 0; i < array_of_numbers.length; i++){
@@ -95,7 +95,7 @@ $(document).ready(function(){
 		}
 		return temp;
 	}
-	
+
 	//parse from editor with html tags to array of numbers
 	function parse_editor(values_with_html){		
 		values_with_html=values_with_html.replace(/(<([^>]+)>)/ig,' ');
@@ -113,10 +113,7 @@ $(document).ready(function(){
 		var mass = arr.split(',');
 		var hasErrors=0;
 		var values_with_html =$('#editor').html();
-		values_with_html=values_with_html.replace(/(<([^>]+)>)/ig," ");
-		values_with_html=values_with_html.trim();
-		var values_with_spaces=values_with_html.replace(/\s{2,}/g, ' ');
-		var array_of_numbers = values_with_spaces.split(' ');
+		var array_of_numbers = parse_editor(values_with_html);
 		for (var i=0; i<array_of_numbers.length; i++){
 				if	($.inArray(array_of_numbers[i], mass) == -1){
 					hasErrors=1;
