@@ -41,9 +41,6 @@
 						<td><spring:message code="label.date_of_birth" /></td>
 						<td><spring:message code="label.age" /></td>
 					</tr>
-					<%
-						int racerNumber = 1;
-					%>
 					<c:forEach items="${racers}" var="racer">
 					<fmt:formatDate value="${racer.birthday}" var="dateString" pattern="dd/MM/yyyy" />
 						<tr>
@@ -53,10 +50,7 @@
 							<td>${dateString}</td>
 							<td>${racer.getAge()}</td>
 						</tr>
-						<%
-							racerNumber++;
-						%>
-					</c:forEach>
+						</c:forEach>
 				</table>
 			</c:when>
 		</c:choose>
