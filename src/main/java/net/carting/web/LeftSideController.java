@@ -39,7 +39,7 @@ public class LeftSideController extends ViewPreparerSupport implements Serializa
         Map<String, Object> response = tilesContext.getRequestScope();       
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         Date today = new Date();
-        List<Racer> racers = racerService.getBirthdayRacers(today);        
+        List<Racer> racers = racerService.getBirthdayRacers(today);
         response.put("currentYear", currentYear);
         response.put("competitionListByCurrentYear", competitionService.getCompetitionsByYear(currentYear));
         response.put("racers", racers);
