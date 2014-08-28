@@ -20,10 +20,9 @@
     }      
   </style>
 <input type="hidden" id="fileId" value="0">
-<input type="hidden" id="fileId" value="0">
 <input type="hidden" id="raceId" value="${raceId}">
 <input id="racersCount" type="hidden" value="<c:out value="${racers.size()}"/>">
-<input type="hidden" id="add" value="Add">
+
 <input type="hidden" id="tableB" value="${tableB}">
 <c:if test="${authority.equals('ROLE_ADMIN')}">
     <div class="panel panel-primary">
@@ -77,31 +76,38 @@
                             </c:forEach>
                         </tbody>
                     </table>
-                    <table>
-                        <tr>
-                            <td><span align="left"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span></td>
-                            <td><span align="left"><a class="btn btn-success btn-sm" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
-                            <td><c:if test="${oldDoc > 0}">
-                                <span align="left"><a id="prevVersion" class="btn btn-sm btn-warning" href="../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a></span>
-                            </c:if></d>
- </tr><tr>
-                            <td><span align="right"><select id="del">
-                                <option class="snake">Змійка</option>
-                                <option class="leftCircle">Коло ліве</option>
-                                <option class="rightCircle">Коло праве</option>
-                                <option class="flower">Квітка</option>
-                                <option class="hall">Коридор</option>
-                                <option class="rightCol">Колія права</option>
-                                <option class="leftCol">Колія ліва</option>
-                                <option class="stopLine">Лінія "стоп"</option>     
-                                <option>Пусто</option>
-                            </select>
-                            <input class="btn btn-lg btn-warning btn-sm" type="button" id="remove" value="Remove">
-                            <input class="btn btn-lg btn-default btn-sm" type="button" id="add" value="Add"></span></td>
-                            <tr><td><span align="right">Штраф за збиту кеглю: <input type="text" id="penalty" value="5" size="1"></span></td></tr>
-                            
-                        </tr>
-                    </table><p>
+
+    <table width="100%" align="center">
+        <theader>
+            <tr>
+                <td>
+                    <span align="left">
+                        <select id="del">
+                            <option class="snake">Змійка</option>
+                            <option class="leftCircle">Коло ліве</option>
+                            <option class="rightCircle">Коло праве</option>
+                            <option class="flower">Квітка</option>
+                            <option class="hall">Коридор</option>
+                            <option class="rightCol">Колія права</option>
+                            <option class="leftCol">Колія ліва</option>
+                            <option class="stopLine">Лінія "стоп"</option>
+                            <option>Пусто</option>
+                        </select>
+                        <input class="btn btn-lg btn-warning btn-sm" type="button" id="remove" value="Remove">
+                        <input class="btn btn-lg btn-default btn-sm" type="button" id="add" value="Add">
+                    </span>
+                </td>
+                <td><span align="right"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span></td>
+                <td><span align="right"><a class="btn btn-success btn-sm" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
+                <td>
+                    <c:if test="${oldDoc > 0}">
+                        <span align="right"><a id="prevVersion" class="btn btn-sm btn-warning" href="../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a></span>
+                    </c:if>
+                </td>
+            </tr>
+        </theader>
+    </table><p><p>
+                    <span align="right">Штраф за збиту кеглю: <input type="text" id="penalty" value="5" size="1"></span>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -150,7 +156,7 @@
                         <td>Прізвище, ім'я</td>
                         <td>Назва команди</td>
                         <td>Спортивний розряд</td>
-                        <td>Ст. №</td>
+                        <td id="addCol">Ст. №</td>
                         <td class="snake">Змійка</td>
                         <td class="leftCircle">Коло ліве</td>
                         <td class="rightCircle">Коло праве</td>
