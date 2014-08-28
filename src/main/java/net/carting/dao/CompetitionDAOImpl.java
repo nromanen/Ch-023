@@ -82,19 +82,15 @@ public class CompetitionDAOImpl implements CompetitionDAO {
 
     @Override
     public void deleteCompetition(Competition competition) {
-        try {
-            Query query = entityManager.createNativeQuery(
-                    "DELETE FROM car_class_competition WHERE competition_id = :id");
-            query.setParameter("id", competition.getId());
-            query.executeUpdate();
-            LOG.debug("Deleted all car class competitions with competition_id = {}", competition.getId());
+        Query query = entityManager.createNativeQuery(
+                "DELETE FROM car_class_competition WHERE competition_id = :id");
+        query.setParameter("id", competition.getId());
+        query.executeUpdate();
+        LOG.debug("Deleted all car class competitions with competition_id = {}", competition.getId());
 
-            Competition c = entityManager.find(Competition.class, competition.getId());
-            entityManager.remove(c);
-            LOG.debug("Deleted competition with id = {}", competition.getId());
-        } catch (Exception e) {
-            LOG.error("Error in deleting competititon with id = {}", competition.getId(), e);
-        }
+        Competition c = entityManager.find(Competition.class, competition.getId());
+        entityManager.remove(c);
+        LOG.debug("Deleted competition with id = {}", competition.getId());
     }
 
     @Override
