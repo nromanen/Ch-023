@@ -8,11 +8,12 @@ $(document).ready(function(){
 		var laps =$('#number_of_laps').val();
 		var members=$('#number_of_members').val();
 		var values_with_html =$('#editor').html();
-		//get parsed array of numbers
-		var array_of_numbers = parse_editor(values_with_html);
 		var arr = $('#validNumbers').data('validnumbers');
 		arr=arr+'';
 		var mass = arr.split(',');
+		//get parsed array of numbers
+		var array_of_numbers = parse_editor(values_with_html);
+		
 		//get the valid numbers	
 		var correctNumbers = getValidNumbers(array_of_numbers, mass);
 		showAllEnteredCharacters (values_with_html, mass);
@@ -97,9 +98,9 @@ $(document).ready(function(){
 	
 	//parse from editor with html tags to array of numbers
 	function parse_editor(values_with_html){		
-		values_with_html=values_with_html.replace(/(<([^>]+)>)/ig," ");
-		values_with_html=values_with_html.replace(/\D/gm,' ');	
-		values_with_html=values_with_html.trim()
+		values_with_html=values_with_html.replace(/(<([^>]+)>)/ig,' ');
+		values_with_html=values_with_html.replace(/(&nbsp;){1,}/ig,' ');
+		values_with_html=values_with_html.trim();
 		var values_with_spaces=values_with_html.replace(/\s{2,}/g, ' ');
 		var array_of_numbers = values_with_spaces.split(' ');	
 		return array_of_numbers;
@@ -112,8 +113,10 @@ $(document).ready(function(){
 		var mass = arr.split(',');
 		var hasErrors=0;
 		var values_with_html =$('#editor').html();
-		values_with_html=values_with_html.replace(/\D/gm,' ');		
-		var array_of_numbers = parse_editor(values_with_html);
+		values_with_html=values_with_html.replace(/(<([^>]+)>)/ig," ");
+		values_with_html=values_with_html.trim();
+		var values_with_spaces=values_with_html.replace(/\s{2,}/g, ' ');
+		var array_of_numbers = values_with_spaces.split(' ');
 		for (var i=0; i<array_of_numbers.length; i++){
 				if	($.inArray(array_of_numbers[i], mass) == -1){
 					hasErrors=1;
