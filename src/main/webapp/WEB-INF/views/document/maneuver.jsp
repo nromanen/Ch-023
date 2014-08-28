@@ -27,7 +27,7 @@
 <c:if test="${authority.equals('ROLE_ADMIN')}">
     <div class="panel panel-primary">
          <div class="panel-heading" style="height: 50px;">
-            <div class="text-info" style="color: #fff; font-size: 20px; float: left;">Штрафні очки</div>
+            <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.penalty_points" /></div>
          </div>
          <div class="panel-body" style="padding: 0px;">
             <c:choose>
@@ -37,15 +37,15 @@
                             <th style="text-align: center;">№</th>
                             <th style="text-align: center;"><spring:message code="label.racer" /></th>
                             <th style="text-align: center;"><spring:message code="label.number" /></th>
-                            <th class="snake">Змійка</th>
-                            <th class="leftCircle">Коло ліве</th>
-                            <th class="rightCircle">Коло праве</th>
-                            <th class="flower">Квітка</th>
-                            <th class="hall">Коридор</th>
-                            <th class="rightCol">Колія права</th>
-                            <th class="leftCol">Колія ліва</th>
-                            <th class="stopLine">Лінія "стоп"</th>
-                            <th>Час</th>
+                            <th class="snake"><spring:message code="label.snake" /></th>
+                            <th class="leftCircle"><spring:message code="label.leftCircle" /></th>
+                            <th class="rightCircle"><spring:message code="label.rightCircle" /></th>
+                            <th class="flower"><spring:message code="label.flower" /></th>
+                            <th class="hall"><spring:message code="label.hall" /></th>
+                            <th class="rightCol"><spring:message code="label.rightCol" /></th>
+                            <th class="leftCol"><spring:message code="label.leftCol" /></th>
+                            <th class="stopLine"><spring:message code="label.stopLine" /></th>
+                            <th><spring:message code="label.time" /></th>
                         </thead>
                         <tbody>
                             <c:forEach items="${racers}" var="racerCarClassCompetitionNumber" varStatus="index">
@@ -83,31 +83,30 @@
                 <td>
                     <span align="left">
                         <select id="del">
-                            <option class="snake">Змійка</option>
-                            <option class="leftCircle">Коло ліве</option>
-                            <option class="rightCircle">Коло праве</option>
-                            <option class="flower">Квітка</option>
-                            <option class="hall">Коридор</option>
-                            <option class="rightCol">Колія права</option>
-                            <option class="leftCol">Колія ліва</option>
-                            <option class="stopLine">Лінія "стоп"</option>
-                            <option>Пусто</option>
+                            <option class="snake"><spring:message code="label.snake" /></option>
+                            <option class="leftCircle"><spring:message code="label.leftCircle" /></option>
+                            <option class="rightCircle"><spring:message code="label.rightCircle" /></option>
+                            <option class="flower"><spring:message code="label.flower" /></option>
+                            <option class="hall"><spring:message code="label.hall" /></option>
+                            <option class="rightCol"><spring:message code="label.rightCol" /></option>
+                            <option class="leftCol"><spring:message code="label.leftCol" /></option>
+                            <option class="stopLine"><spring:message code="label.stopLine" /></option>
+                            <option><spring:message code="label.empty" /></option>
                         </select>
-                        <input class="btn btn-lg btn-warning btn-sm" type="button" id="remove" value="Remove">
-                        <input class="btn btn-lg btn-default btn-sm" type="button" id="add" value="Add">
+                        <input class="btn btn-lg btn-warning btn-sm" type="button" id="remove" value='<spring:message code="label.delete" />'>
+                <!----        <input class="btn btn-lg btn-default btn-sm" type="button" id="add" value="Add"> --->
                     </span>
                 </td>
-                <td><span align="right"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span></td>
-                <td><span align="right"><a class="btn btn-success btn-sm" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a></span></td>
-                <td>
-                    <c:if test="${oldDoc > 0}">
-                        <span align="right"><a id="prevVersion" class="btn btn-sm btn-warning" href="../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a></span>
-                    </c:if>
+                <td><span align="right"><a class="btn btn-primary btn-sm" id="save" ><spring:message code="label.accept_changes" /></a></span>
+                <span align="right"><a class="btn btn-success btn-sm" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a></span>
+                <c:if test="${oldDoc > 0}">
+                    <span align="right"><a id="prevVersion" class="btn btn-sm btn-warning" href="../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a></span>
+                </c:if>
                 </td>
             </tr>
         </theader>
     </table><p><p>
-                    <span align="right">Штраф за збиту кеглю: <input type="text" id="penalty" value="5" size="1"></span>
+                    <center><span align="right"><spring:message code="label.skittle_fine" />: <input type="text" id="penalty" value="5" size="1"></span></center><p>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -153,22 +152,22 @@
                 <tr class="well" id="head">
                     <theader>
                         <td>№ п/п</td>
-                        <td>Прізвище, ім'я</td>
-                        <td>Назва команди</td>
-                        <td>Спортивний розряд</td>
-                        <td id="addCol">Ст. №</td>
-                        <td class="snake">Змійка</td>
-                        <td class="leftCircle">Коло ліве</td>
-                        <td class="rightCircle">Коло праве</td>
-                        <td class="flower">Квітка</td>
-                        <td class="hall">Коридор</td>
-                        <td class="rightCol">Колія права</td>
-                        <td class="leftCol">Колія ліва</td>
-                        <td class="stopLine">Лінія "стоп"</td>   
-                        <td>Час</td>
-                        <td>Сума очок</td>
-                        <td>Зайняте місце</td>
-                        <td>Сума очок по табл. Б</td>   
+                        <td><spring:message code="label.lastname_firstname" /></td>
+                        <td><spring:message code="label.team_name" /></td>
+                        <td><spring:message code="sportcategory.sport_category" /></td>
+                        <td><spring:message code="label.start_number" /></td>
+                        <td class="snake"><spring:message code="label.snake" /></td>
+                        <td class="leftCircle"><spring:message code="label.leftCircle" /></td>
+                        <td class="rightCircle"><spring:message code="label.rightCircle" /></td>
+                        <td class="flower"><spring:message code="label.flower" /></td>
+                        <td class="hall"><spring:message code="label.hall" /></td>
+                        <td class="rightCol"><spring:message code="label.rightCol" /></td>
+                        <td class="leftCol"><spring:message code="label.leftCol" /></td>
+                        <td class="stopLine"><spring:message code="label.stopLine" /></td>
+                        <td><spring:message code="label.time" /></td>
+                        <td><spring:message code="label.points_sum" /></td>
+                        <td><spring:message code="label.place" /></td>
+                        <td><spring:message code="label.points_by_table_b" /></td>
                     </theader>
                 </tr>
             <c:forEach items="${racers}" var="racer" varStatus="index">
@@ -197,11 +196,11 @@
     <table width="100%" align="center">
         <theader>
             <tr>
-                <td><div align="left">Головний секретар змагань:</div></td>
+                <td><div align="left"><spring:message code="label.main_secretary" />:</div></td>
                 <td><div align="right"><c:out value="${secretaryName}"/></div></td>
             </tr>
             <tr>
-                <td><div align="left">Директор перегонів:</div></td>
+                <td><div align="left"><spring:message code="label.competition.director_name" />:</div></td>
                 <td><div align="right"><c:out value="${directorName}"/></div></td>
             </tr>
         </theader>

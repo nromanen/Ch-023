@@ -145,7 +145,7 @@ public class SHKPController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-
+//TODO: usersTMP in LEADERS delete
             model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
 
             model.addAttribute("allowedNumber", racerCarClassCompetitionNumberList.size());
