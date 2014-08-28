@@ -112,9 +112,9 @@ $(document).ready(function(){
         arr.sort(sortNumber);
         var tableBarr = $("#tableB").val().replace('[', '').replace(']', '').split(',');
         console.log(tableBarr);
-        for (var j = 1; j <= count; j++) {
+        for (var j = count; j >= 1; j--) {
             var racerId = $("#id" + j).val();
-            for (var i = 1; i <= count; i++) {
+            for (var i = count; i >= 1; i--) {
                 var sum = Number($("#sum" + racerId).text());
                 if (sum == Number(arr[i-1])) {
                     $("#place" + racerId).text(i);
