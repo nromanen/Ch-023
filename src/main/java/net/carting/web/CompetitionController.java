@@ -329,7 +329,6 @@ public class CompetitionController {
                 .registrationTeamRacersOnCompetition(formMap);
         int competitionId = Integer.parseInt(formMap.get("competitionId")
                 .toString());
-        System.out.println(competitionId);
         return competitionId;
     }
     
