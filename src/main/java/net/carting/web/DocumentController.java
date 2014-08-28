@@ -381,13 +381,14 @@ public class DocumentController {
     @ResponseBody
     public String showFile(@PathVariable("id") int id) {
         String base64 = "data:application/pdf;base64,";
-        base64 += fileService.getFileById(id).getFile();
+        File f = fileService.getFileById(id);
+        base64 += f.getFile();
 //"<iframe src='http://docs.google.com/gview?url=' + base64 +'&embedded=true'frameborder='0'></iframe>";
         //return "<object  data='" + base64 + "' type='application/pdf' ></object>";
         //return "<iframe src='http://docs.google.com/gview?url=" + base64 +"&embedded=true' frameborder='0'></iframe>";
 //"<embed width='100%' height='100%' name='plugin' src=' + base64 +' type='application/pdf'>";
-//TODO: doesn't work in IE and Opera. Chrome and FF works fine.
-        return "<a href='" + base64 + "'></a><embed width='100%' height='100%' name='plugin' src='" + base64 + "' type='application/pdf'>";
+        //TODO: embed plugin doesn't work in IE and Opera. Chrome and FF works fine.
+        return "<center><a href='" + base64 + "'>" + f.getName() + "</a></center><embed width='100%' height='100%' name='plugin' src='" + base64 + "' type='application/pdf'>";
     }
 
 

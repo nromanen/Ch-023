@@ -213,21 +213,6 @@
 			</div>
 		</div>
 	</form>
-		<br><label class="text-info" style="font-size: 20px;">
-    		6.&nbsp;<spring:message code="label.db_imp_exp" />:
-    	</label><br><br>
-        <center>
-            <button type="button" id="import" class="btn btn-primary"><spring:message code="label.db_import" /></button>
-            <button type="button" id="export" class="btn btn-success"><spring:message code="label.db_export" /></button>
-        </center>
-			<div class="alert alert-success" id="documents_loading_success"
-				 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-				 <spring:message code="label.data_save_success" />!
-			</div>
-			<div class="alert alert-danger" id="documents_loading_fail"
-				 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-				 <spring:message code="label.data_save_error" />!
-			</div>
 </div>
 
 

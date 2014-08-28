@@ -23,10 +23,16 @@ $(document).ready(function(){
     });
 
     $('#add').click(function() {
-        $('#head').append('<th class="snake">snake</th>');
-        $('.cols').append('<td class="snake"><input type="text" class="snake${racer.getNumberInCompetition()}" maxlength="4" size="1"></td>');
-        $("#pointsTable").height($("#maneuverTable").height());
-        $("#pointsHead").height($("#head").height());
+        var tblId = 'maneuverTable';
+          $('#maneuverTable').find('tr').each(function(){
+                $(this).find('td').eq(4).after('<td>cell 1a</td>');
+            });
+        //var x=document.getElementById(tblId).rows;
+        //var y=x[0].insertCell(5);
+        //$('#addCol').append('<td class="snake">snake</td>');
+        //$('.cols').append('<td class="snake"><input type="text" class="snake${racer.getNumberInCompetition()}" maxlength="4" size="1"></td>');
+        //$("#pointsTable").height($("#maneuverTable").height());
+        //$("#pointsHead").height($("#head").height());
     });
 
     $('#remove').click(function() {
