@@ -5,13 +5,22 @@ $(document).ready(function(){
             url: "/Carting/SHKP/maneuver",
             type: "POST",
             data: {
-                table: $('#maneuver').html()
+                table: $('#maneuver').html(),
+                raceId: $("#raceId").val()
             },
             success: function(response) {
-                $("#pdf").removeAttr("disabled");
+                if (response !== '0') {
+                    $("#fileId").val(response);
+                    $("#pdf").removeAttr("disabled");
+                    $("#prevVersion").remove();
+                }
             }
         });
     }
+
+    $("#pdf").click(function() {
+        window.open("../../document/showFile/" + $("#fileId").val() ,'_blank');
+    });
 
     $('#add').click(function() {
         $('#head').append('<th class="snake">snake</th>');

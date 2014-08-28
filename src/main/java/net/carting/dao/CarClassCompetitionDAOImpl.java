@@ -47,7 +47,12 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
 
     @Override
     public void updateCarClassCompetition(CarClassCompetition carClassCompetition) {
-        Query query = entityManager.createQuery("UPDATE CarClassCompetition "
+        try {
+            entityManager.merge(carClassCompetition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       /* Query query = entityManager.createQuery("UPDATE CarClassCompetition "
                 + "SET firstRaceTime = :firstRaceTime, "
                 + "secondRaceTime = :secondRaceTime, "
                 + "circleCount = :circleCount, "
@@ -58,14 +63,14 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
         query.setParameter("secondRaceTime", carClassCompetition.getSecondRaceTime());
         query.setParameter("circleCount", carClassCompetition.getCircleCount());
         query.setParameter("percentageOffset", carClassCompetition.getPercentageOffset());
-        query.setParameter("id", carClassCompetition.getId());
+        query.setParameter("id", carClassCompetition.getId());*/
 
-        if (query.executeUpdate() != 0) {
+       /* if (query.executeUpdate() != 0) {
         	LOG.debug("Updated car class competition with id = {}", carClassCompetition.getId());
         }
         else {
         	LOG.debug("Trying to update car class competition with id = {}", carClassCompetition.getId());
-        }
+        }*/
         
         
         

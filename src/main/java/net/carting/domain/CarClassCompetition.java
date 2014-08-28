@@ -52,11 +52,23 @@ public class CarClassCompetition {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
     private Set<Race> races;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
     private Set<Qualifying> qualifyings;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
     private Set<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = new HashSet<RacerCarClassCompetitionNumber>();
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "firstStartStatement_id")
+    private File firstRaceStartStatement;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "secondStartStatement_id")
+    private File secondRaceStartStatement;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "maneuverStatement_id")
+    private File maneuverStatement;
 
     public int getId() {
         return id;
@@ -65,13 +77,37 @@ public class CarClassCompetition {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public Set<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbers() {
-    	return racerCarClassCompetitionNumbers;
+
+    public File getFirstRaceStartStatement() {
+        return firstRaceStartStatement;
     }
-    
+
+    public void setFirstRaceStartStatement(File firstRaceStartStatement) {
+        this.firstRaceStartStatement = firstRaceStartStatement;
+    }
+
+    public File getSecondRaceStartStatement() {
+        return secondRaceStartStatement;
+    }
+
+    public void setSecondRaceStartStatement(File secondRaceStartStatement) {
+        this.secondRaceStartStatement = secondRaceStartStatement;
+    }
+
+    public File getManeuverStatement() {
+        return maneuverStatement;
+    }
+
+    public void setManeuverStatement(File maneuverStatement) {
+        this.maneuverStatement = maneuverStatement;
+    }
+
+    public Set<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbers() {
+        return racerCarClassCompetitionNumbers;
+    }
+
     public void setRacerCarClassCompetitionNumbers(Set<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers) {
-    	this.racerCarClassCompetitionNumbers = racerCarClassCompetitionNumbers;
+        this.racerCarClassCompetitionNumbers = racerCarClassCompetitionNumbers;
     }
 
     public Competition getCompetition() {
@@ -129,14 +165,14 @@ public class CarClassCompetition {
     public void setRaces(Set<Race> races) {
         this.races = races;
     }
-    
-    public Set<Qualifying> getQualifyings() {
-		return qualifyings;
-	}
 
-	public void setQualifyings(Set<Qualifying> qualifyings) {
-		this.qualifyings = qualifyings;
-	}
+    public Set<Qualifying> getQualifyings() {
+        return qualifyings;
+    }
+
+    public void setQualifyings(Set<Qualifying> qualifyings) {
+        this.qualifyings = qualifyings;
+    }
 
     @Override
     public String toString() {

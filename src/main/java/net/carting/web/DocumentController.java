@@ -41,25 +41,25 @@ public class DocumentController {
 
     @Autowired
     ServletContext context;
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     @Autowired
     private FileService fileService;
-    
+
     @Autowired
     private DocumentService documentService;
-    
+
     @Autowired
     private TeamService teamService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private LeaderService leaderService;
-    
+
     @Autowired
     private RacerService racerService;
 
@@ -109,16 +109,16 @@ public class DocumentController {
                  */
 
                 LOG.trace("Leader of team {} tried to see a document of team {}, but was redirected to page of his team",
-                		team.getName(), teamOwner.getName());
+                        team.getName(), teamOwner.getName());
                 return "redirect:/team/" + team.getId();
             }
         } else {
-			/*
-			 * If team leader don't has a team, he is redirected to page in
-			 * which he can add team
-			 */
+            /*
+             * If team leader don't has a team, he is redirected to page in
+             * which he can add team
+             */
             LOG.trace("Leader {} {} tried to see a document of team {}, but was redirected to add team, because he didn't has a team",
-            		leader.getFirstName(), leader.getLastName(), teamOwner.getName());
+                    leader.getFirstName(), leader.getLastName(), teamOwner.getName());
             return "redirect:/team/add";
         }
 
@@ -140,11 +140,11 @@ public class DocumentController {
                                 documentType, team));
             }
             LOG.trace("Leader of team {} tried to add document {}",
-            		team.getName(), Document.getStringDocumentType(documentType));
+                    team.getName(), Document.getStringDocumentType(documentType));
             return "document_add_edit";
         } else {
-            LOG.trace("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team", 
-            		leader.getFirstName(), leader.getLastName());
+            LOG.trace("Leader {} {} tried to add document , but was redirected to add team, because he didn't has a team",
+                    leader.getFirstName(), leader.getLastName());
             return "redirect:/team/add";
         }
     }
@@ -158,9 +158,9 @@ public class DocumentController {
                               @RequestParam("file") MultipartFile[] files,
                               Locale locale,
                               Map<String, Object> map) {
-    	/* Getting current leader */
-    	
-    	 String username = userService.getCurrentUserName();
+        /* Getting current leader */
+
+         String username = userService.getCurrentUserName();
          Leader leader = leaderService.getLeaderByUserName(username);
 
          if (teamService.isTeamByLeaderId(leader.getId())) {
@@ -223,7 +223,7 @@ public class DocumentController {
     public
     @ResponseBody
     String deleteDocument(@RequestBody Map<String, Object> map) {
-    	LOG.debug("Start deleteDocument method");
+        LOG.debug("Start deleteDocument method");
             int documentId = Integer.parseInt(map.get("document_id").toString());
             Document document = documentService.getDocumentById(documentId);
             String[] racersIdString = map.get("racers_id_string").toString()
@@ -234,8 +234,8 @@ public class DocumentController {
                 documentService.deleteDocumentFromRacerByRacerIdAndDocumentId(
                         documentId, racersId[i]);
                 LOG.trace("'{}' was deleted from racer {} {} by leader {} {} of team {}",
-                		document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
-                        racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(), 
+                        document.getCurrentStringDocumentType(), racerService.getRacerById(racersId[i]).getFirstName(),
+                        racerService.getRacerById(racersId[i]).getLastName(), document.getTeamOwner().getLeader().getFirstName(),
                         document.getTeamOwner().getLeader().getLastName(), document.getTeamOwner().getName());
             }
             if (!documentService.isRacerOwnerOfDocument(documentId)) {
@@ -278,10 +278,10 @@ public class DocumentController {
                                @RequestParam(value="number", required=false) String number,
                                @RequestParam(value="start_date", required=false) String startDate,
                                @RequestParam(value="finish_date", required=false) String finishDate,
-                               @RequestParam("file") MultipartFile[] files, 
+                               @RequestParam("file") MultipartFile[] files,
                                Locale locale,
                                Map<String, Object> map) {
-        
+
         try {
             documentService.editDocument(documentId, number, startDate, finishDate, files);
             return "redirect:/document/" + documentId;
@@ -329,26 +329,26 @@ public class DocumentController {
         map.put("teams", teamService.getAllTeams());
        List<String> teamDocStatus = new ArrayList<String>();
        String status;
-       
+
        for (Team team:teamService.getAllTeams()) {
-    	   status = "hasDocs";
-    	   System.out.println(team.getDocuments());
-    	   if (!team.getDocuments().isEmpty()) {
-    		   for (Racer racer:team.getRacers()) {
-    			   if(racer.getDocuments()!=null) {
-    				   for(Document doc:racer.getDocuments()) {
-    					   if (!doc.isChecked()) {
-    						   status = "unchecked";
-						   }
-					   }
-				   }
-			   }
-		   } else {
-			   System.out.println(team.getName()+" - " + team.getDocuments());
-			   status = "noDocs";
-		   }
-    	   teamDocStatus.add(status);
-    	}
+           status = "hasDocs";
+           System.out.println(team.getDocuments());
+           if (!team.getDocuments().isEmpty()) {
+               for (Racer racer:team.getRacers()) {
+                   if(racer.getDocuments()!=null) {
+                       for(Document doc:racer.getDocuments()) {
+                           if (!doc.isChecked()) {
+                               status = "unchecked";
+                           }
+                       }
+                   }
+               }
+           } else {
+               System.out.println(team.getName()+" - " + team.getDocuments());
+               status = "noDocs";
+           }
+           teamDocStatus.add(status);
+        }
         map.put("team_doc_status", teamDocStatus);
         map.put("all_docs", documentService.getAllDocuments());
         map.put("unchecked_docs", documentService.gelAllUncheckedDocuments());
@@ -374,5 +374,20 @@ public class DocumentController {
         base64 += fileService.getFileById(id).getFile();
         return "<img src=\"" + base64 + "\" />";
     }
+
+    @RequestMapping(value = "/showFile/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public String showFile(@PathVariable("id") int id) {
+        String base64 = "data:application/pdf;base64,";
+        base64 += fileService.getFileById(id).getFile();
+//"<iframe src='http://docs.google.com/gview?url=' + base64 +'&embedded=true'frameborder='0'></iframe>";
+        //return "<object  data='" + base64 + "' type='application/pdf' ></object>";
+        //return "<iframe src='http://docs.google.com/gview?url=" + base64 +"&embedded=true' frameborder='0'></iframe>";
+//"<embed width='100%' height='100%' name='plugin' src=' + base64 +' type='application/pdf'>";
+//TODO: doesn't work in IE and Opera. Chrome and FF works fine.
+        return "<a href='" + base64 + "'></a><embed width='100%' height='100%' name='plugin' src='" + base64 + "' type='application/pdf'>";
+    }
+
+
 
 }
