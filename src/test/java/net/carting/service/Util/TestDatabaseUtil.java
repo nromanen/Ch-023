@@ -87,7 +87,7 @@ public class TestDatabaseUtil {
         
         // Insert user
         jt.execute("INSERT INTO `users` (`username`, `enabled`, `password`, `role_id`, `email`, `reset_pass_link`)"+ 
-                                        "VALUES ('jdbc', 0, '123', 2, 'test@test.com', '123');");
+                                        "VALUES ('"+leader.getUser().getUsername()+"', 0, '"+leader.getUser().getPassword()+"', 2, '"+leader.getUser().getUsername()+"', '123');");
         // get id
          String sql = "SELECT id FROM `users` WHERE `username` ='jdbc'";
          int userId = jt.queryForObject(sql, Integer.class);
