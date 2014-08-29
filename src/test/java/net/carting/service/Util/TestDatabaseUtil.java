@@ -72,8 +72,7 @@ public class TestDatabaseUtil {
                 "`document` varchar(255) NOT NULL,"+
                 "`first_name` varchar(255) NOT NULL,"+
                 "`last_name` varchar(255) NOT NULL,"+
-                "`license` varchar(255) DEFAULT NULL,"+
-                "`user_tmp` varchar(255) DEFAULT NULL,"+
+                "`license` varchar(255) DEFAULT NULL,"+               
                 "`registration_date` datetime DEFAULT NULL,"+
                 "PRIMARY KEY (`id`),"+
                 "KEY `user_id` (`user_id`),"+
@@ -87,7 +86,7 @@ public class TestDatabaseUtil {
         
         // Insert user
         jt.execute("INSERT INTO `users` (`username`, `enabled`, `password`, `role_id`, `email`, `reset_pass_link`)"+ 
-                                        "VALUES ('"+leader.getUser().getUsername()+"', 0, '"+leader.getUser().getPassword()+"', 2, '"+leader.getUser().getUsername()+"', '123');");
+                                        "VALUES ('"+leader.getUser().getUsername()+"', 0, '"+leader.getUser().getPassword()+"', 2, '"+leader.getUser().getEmail()+"', '123');");
         // get id
          String sql = "SELECT id FROM `users` WHERE `username` ='jdbc'";
          int userId = jt.queryForObject(sql, Integer.class);
