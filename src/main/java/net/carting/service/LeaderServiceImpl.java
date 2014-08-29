@@ -24,7 +24,6 @@ public class LeaderServiceImpl implements LeaderService {
     private LeaderDAO leaderDAO;
 
     @Autowired
-    //private AuthorityService authorityService;
     private RoleService roleService;
 
     @Autowired
@@ -75,20 +74,29 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Override
     @Transactional
-    public void registerLeader(Leader leader)
+    public boolean registerLeader(Leader leader)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-    	User user = leader.getUser();
-		user.setPassword(userService.getEncodedPassword(user.getPassword()));
-    	user.setEnabled(false);
-    	user.setRole(roleService.getRole(UserService.ROLE_TEAM_LEADER_ID));        
+        User user = leader.getUser();
+        user.setPassword(userService.getEncodedPassword(user.getPassword()));
+        user.setEnabled(false);
+        user.setRole(roleService.getRole(UserService.ROLE_TEAM_LEADER_ID));        
 
-    	leader.setUser(user);
-    	leader.setRegistrationDate(new Date());
-        leaderDAO.addLeader(leader);
-        
-        String email = leader.getUser().getEmail();
+        leader.setUser(user);
+        leader.setRegistrationDate(new Date());
+
+        // register leader only with unique username and email
         String username = leader.getUser().getUsername();
+        String email = leader.getUser().getEmail();
+        User currUserUsername = userService.getUserByUserName(username);
+        User currUserEmail = userService.getUserByEmail(email);
+        
+        if (currUserUsername == null && currUserEmail == null) {
+            leaderDAO.addLeader(leader);
+        } else {
+            LOG.debug("Can't register leader with not unique username or password");
+            return false;
+        } 
         
         String to = email;
         String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
@@ -106,6 +114,8 @@ public class LeaderServiceImpl implements LeaderService {
         LOG.debug("Sent message to leader about his registration");
 
         LOG.trace("Registrated new leader with login {}", username);
+        
+        return true;
     }
 
 }

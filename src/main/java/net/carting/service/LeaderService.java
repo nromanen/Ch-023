@@ -19,27 +19,6 @@ public interface LeaderService {
 
     public Leader getLeaderByUserName(String username);
 
-    /**
-     * <p/>
-     * Implementation of this method registers a leader in a system, namely adds
-     * leader (instances of {@link net.carting.domain.Leader}),
-     * user (instances of {@link net.carting.domain.User}),
-     * authority (instances of {@link net.carting.domain.Authority})
-     * to database and and connects them.
-     *
-     * @param formMap - map with data from form which contains such information:
-     *                <ul>
-     *                <li>firstName</li>
-     *                <li>lastName</li>
-     *                <li>birthday</li>
-     *                <li>document (identefication)</li>
-     *                <li>license (license number) </li>
-     *                <li>address</li>
-     *                <li>username</li>
-     *                <li>password</li>
-     *                </ul>
-     * @author Volodymyr Semaniv
-     */
-    public void registerLeader(Leader leader) throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    public boolean registerLeader(Leader leader) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
 }
