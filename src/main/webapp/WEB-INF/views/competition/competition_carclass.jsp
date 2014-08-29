@@ -23,6 +23,7 @@ pageEncoding="utf-8"%>
                     <c:forEach var="i" begin="1" end="${maxRaces}">
                         <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
                     </c:forEach>
+                    <a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />' class="btn btn-success">sds</a>
                 </div>
                 <div class="btn-group" style="float: right;">
                 	<c:if test="${empty qualifyingList && raceListSize==0}">

@@ -109,6 +109,4 @@ public interface DocumentService {
      */
     public List<Document> gelAllUncheckedDocuments();
 
-    public void createStartStatement(String html);
-
 }

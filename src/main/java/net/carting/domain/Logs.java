@@ -7,13 +7,8 @@ import javax.persistence.*;
  * Created by manson on 8/20/14.
  */
 @Entity
-@Table(name = "LOGS")
+@Table(name = "logs")
 public class Logs {
-
-/*    @Id
-    @Column(name = "id")
-    @GeneratedValue
-    private Integer id;*/
 
     @Column(name = "logger")
     String logger;
