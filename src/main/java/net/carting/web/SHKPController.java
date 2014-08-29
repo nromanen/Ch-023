@@ -203,6 +203,7 @@ public class SHKPController {
             model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
         }
         catch (Exception e) {
+            
              e.printStackTrace();
         }
         return new ModelAndView("maneuver");
