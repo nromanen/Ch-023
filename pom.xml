@@ -367,6 +367,13 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
+                <configuration>
+                    <warFile>target/Carting.war</warFile>
+                    <url>http://localhost:58080/manager/text</url>
+                    <username>manson</username>
+                    <password>tomcat</password>
+                    <update>true</update>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

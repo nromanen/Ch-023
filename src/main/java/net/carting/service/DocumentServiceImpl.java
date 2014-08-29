@@ -177,21 +177,4 @@ public class DocumentServiceImpl implements DocumentService {
         return documentDAO.gelAllUncheckedDocuments();
     }
 
-    @Override
-    public void createStartStatement(String html) {
-    	LOG.debug("Start createStartStatement method");
-        try {
-            File dir = new File(this.context.getRealPath("") + DocumentService.DOCUMENTS_UPLOAD_DIR);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            String path = dir.getAbsolutePath() + "/start.pdf";
-            PdfWriter.createStartStatement(path, html);
-        } catch (IOException e) {
-        	LOG.error("Error occured in createStartStatement method",e);
-        } catch (DocumentException e) {
-        	LOG.error("Error occured in createStartStatement method",e);
-        }
-        LOG.debug("End createStartStatement method");
-    }
 }

@@ -17,7 +17,7 @@
         <param name="user" value="root" />
         <param name="password" value="root" />
         <param name="driver" value="com.mysql.jdbc.Driver" />
-        <param name="sql" value="INSERT INTO LOGS VALUES('%C','%p','%m','%d')" />
+        <param name="sql" value="INSERT INTO logs VALUES('%C','%p','%m','%d')" />
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="levelMin" value="TRACE" />
             <param name="levelMax" value="TRACE" />

@@ -182,34 +182,6 @@ public class AdminController {
         return "success";
     }
 
-    @RequestMapping(value = "/uploadDump", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    String uploadDump() {
-        String result = "success";
-        try {
-            LOG.trace("Admin has uploaded DB dump");
-        } catch (Exception e) {
-            result = "fail";
-            LOG.trace("Admin has failed to upload DB dump");
-        }
-        return result;
-    }
-
-    @RequestMapping(value = "/downloadDump", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    String saveDump() {
-        String result = "success";
-        try {
-            LOG.trace("Admin has downloaded DB dump");
-        } catch (Exception e) {
-            result = "fail";
-            LOG.trace("Admin has failed to download DB Dump");
-        }
-        return result;
-    }
-
     @RequestMapping(value = "/logs", method = RequestMethod.GET)
     public
     String getLogs(Model model) {
