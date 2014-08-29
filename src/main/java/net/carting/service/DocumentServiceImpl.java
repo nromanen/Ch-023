@@ -187,11 +187,9 @@ public class DocumentServiceImpl implements DocumentService {
             }
             String path = dir.getAbsolutePath() + "/start.pdf";
             PdfWriter.createStartStatement(path, html);
-        } catch (IOException e) {
+        } catch (IOException | DocumentException e) {
         	LOG.error("Error occured in createStartStatement method",e);
-        } catch (DocumentException e) {
-        	LOG.error("Error occured in createStartStatement method",e);
-        }
+        } 
         LOG.debug("End createStartStatement method");
     }
 }

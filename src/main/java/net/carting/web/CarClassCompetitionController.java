@@ -133,8 +133,8 @@ public class CarClassCompetitionController {
     public
     @ResponseBody
     String editCarClassCompetitionAction(@RequestBody Map<String, Object> map) {
-        CarClassCompetition carClassCompetition = new CarClassCompetition();
-        carClassCompetition.setId(Integer.parseInt(map.get("id").toString()));
+        int id = Integer.parseInt(map.get("id").toString());
+        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         carClassCompetition.setFirstRaceTime(DateUtil.getTimeFromString(map.get("firstRaceTime").toString()));
         carClassCompetition.setSecondRaceTime(DateUtil.getTimeFromString(map.get("secondRaceTime").toString()));
         carClassCompetition.setCircleCount(Integer.parseInt(map.get("circleCount").toString()));
