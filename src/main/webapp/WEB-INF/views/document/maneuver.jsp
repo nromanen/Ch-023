@@ -131,10 +131,10 @@
 <div id="maneuver">
 <style>
     table {
-        font-family: "Arial", Times, monospace;
+        font-family: 'Arial', Times, monospace;
     }
     span {
-        font-family: "Arial", Times, monospace;
+        font-family: 'Arial', Times, monospace;
     }
 </style>
     <center><span align="center" style="font-weight:bold;font-size:20pt"><c:out value="${competitionName}"/></span></center>
