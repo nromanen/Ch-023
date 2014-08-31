@@ -358,14 +358,6 @@ public class DocumentController {
         return "all_documents";
     }
 
-    @RequestMapping(value = "/showDocument/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public String showDocument(@PathVariable("id") int id) {
-        String base64 = "data:image/jpg;base64,";
-        base64 += fileService.getFileById(id).getFile();
-        return "<img src=\"" + base64 + "\" />";
-    }
-
     @RequestMapping(value = "/allDocuments/classic", method = RequestMethod.GET)
     public String allDocumentsClassic(Map<String, Object> map,
             @RequestParam(value = "type", required = false) String type) {
@@ -394,7 +386,7 @@ public class DocumentController {
         //return "<object  data='" + base64 + "' type='application/pdf' ></object>";
         //return "<iframe src='http://docs.google.com/gview?url=" + base64 +"&embedded=true' frameborder='0'></iframe>";
 //"<embed width='100%' height='100%' name='plugin' src=' + base64 +' type='application/pdf'>";
-        //TODO: embed plugin doesn't work in IE and Opera. Chrome and FF works fine.
+        //TODO: doesn't work in IE.
         return "<center><a href='" + base64 + "'>" + f.getName() + "</a></center><embed width='100%' height='100%' name='plugin' src='" + base64 + "' type='application/pdf'>";
     }
 
