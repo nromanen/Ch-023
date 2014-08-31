@@ -111,7 +111,7 @@ $(document).ready(function(){
                                         ${racerCarClassCompetitionNumber.numberInCompetition}
                                     </td>
                                     <td>
-                                            <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}" 
+                                            <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}"
                                             pattern="[0-9]{2}"
                                             <c:if test="${!empty qualifyingList}">
                                             	value="${qualifyingList.get(counter.index).racerPlace}"
@@ -158,18 +158,18 @@ $(document).ready(function(){
 <input type="hidden" id="maxPos" value="${maxPositions}">
 <div id='table'>
 <meta charset="utf-8">
-<style>
-    table {
+ <style>
+     table {
         font-family: "Arial", Times, monospace;
-     font-family: monospace;
-            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
-            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
-     font-family: monospace;
-     position: relative;
-     left: 20px;
-     text-decoration: underline;
-    }
-</style>
+     }
+     .place {
+      font-size: 250%;
+      font-family: monospace;
+      position: relative;
+      left: 20px;
+      text-decoration: underline;
+     }
+ </style>
   <table style="width:100%" border='1' cellspacing='0' cellpadding='2'>
         <tr>
             <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
