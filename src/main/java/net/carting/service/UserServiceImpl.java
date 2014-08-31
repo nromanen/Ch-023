@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
-	
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserDAO userDao;
 
@@ -167,21 +167,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void sendSecureCode(User user) {
-    	LOG.debug("Start senSecureCode method");
-    	try {
-			String secureCode = getEncodedPassword(user.getUsername() + user.getPassword());
-			user.setResetPassLink(secureCode);
-			userDao.updateUser(user);
-			
-			String to = user.getEmail();
-			String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
-			String subject = "Password recovery on Carting";
-            mailService.sendMail(to, from, subject, secureCode);
-			LOG.debug("Sent secure code to user(username = {})", user.getUsername());
-			
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			LOG.error("Error has occured in sendSecureCode method", e);
-		} 
+        LOG.debug("Start senSecureCode method");
+        try {
+            String secureCode = getEncodedPassword(user.getUsername() + user.getPassword());
+            user.setResetPassLink(secureCode);
+            userDao.updateUser(user);
+
+            String to = user.getEmail();
+            String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
+            String subject = "Password recovery on Carting";
+            String message = secureCode;
+            mailService.sendMail(to, from, subject, message);
+            LOG.debug("Sent secure code to user(username = {})", user.getUsername());
+
+        } catch (NoSuchAlgorithmException e) {
+            LOG.debug("Error has occured in sendSecureCode method", e);
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            LOG.debug("Error has occured in sendSecureCode method", e);
+            e.printStackTrace();
+        }
     }
 
 }

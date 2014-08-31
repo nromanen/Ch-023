@@ -286,18 +286,18 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/editTestRace")
     public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        try {
-            if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size() == 0)
+        try{
+            if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()==0)
 
-                return "redirect:/carclass/" + id;
-        } catch (Exception e) {
+            return "redirect:/carclass/" + id;
+        } catch(Exception e) {
             LOG.error("Errors in editQualifyings", e);
         }
-        map.put("membersCount", racerCarClassCompetitionNumberService.
+         map.put("membersCount", racerCarClassCompetitionNumberService.
                 getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-        map.put("qualifyingList", qualifyingService.
+         map.put("qualifyingList", qualifyingService.
                 getQualifyingsByCarClassCompetition(carClassCompetition));
-        map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+         map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
         return "competition_carclass_testrace_add_edit";
     }
 

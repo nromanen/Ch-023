@@ -52,6 +52,8 @@ public class CarClassCompetitionDAOImpl implements CarClassCompetitionDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
         LOG.debug("Updated car class competition with id = {}", carClassCompetition.getId());
     }
 

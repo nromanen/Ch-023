@@ -84,22 +84,22 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
-                                            String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException  {
-    	LOG.debug("Start addDocumentAndUpdateRacers method");
-    	
+    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
+                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException {
+        LOG.debug("Start addDocumentAndUpdateRacers method");
+
         try {
             Document document = new Document();
             document.setType(documentType);
             setDocumentParametersByType(document, number, startDate, finishDate);
             boolean set = false;
-            for(String racerId:racersId) {
+            for (String racerId : racersId) {
             	if(set) {
             	    continue;
             	} 
-            	if(!racerId.equals("-1")) {
-                	document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length-1])).getTeam());
-                	set = true;
+                if (!racerId.equals("-1")) {
+                    document.setTeam(racerService.getRacerById(Integer.valueOf(racersId[racersId.length - 1])).getTeam());
+                    set = true;
                 }
             }
             addDocument(document);
@@ -112,7 +112,7 @@ public class DocumentServiceImpl implements DocumentService {
             fileService.addFilesToDocument(document, fileList);
             racerService.setDocumentToRacers(document, racersId);
         } catch (Exception e) {
-        	LOG.error("Error occured in addDocumentAndUpdateRacers method",e);
+            LOG.error("Error occured in addDocumentAndUpdateRacers method", e);
         }
         LOG.debug("End addDocumentAndUpdateRacers method");
     }
@@ -120,9 +120,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
+    public void editDocument(Integer documentId, String number, String startDate, String finishDate,
                              MultipartFile[] files) throws IOException {
- 
+
         Document document = getDocumentById(documentId);
         document.setApproved(false);
         document.setChecked(false);
@@ -137,8 +137,8 @@ public class DocumentServiceImpl implements DocumentService {
                 fileList.add(file.getBytes());
             }
         }
-                //getPathsAndWriteFilesToServer(files, documentType,
-                //document.getTeamOwner().getLeader().getId());
+        //getPathsAndWriteFilesToServer(files, documentType,
+        //document.getTeamOwner().getLeader().getId());
         fileService.addFilesToDocument(document, fileList);
         LOG.trace("Leader {} {} of team {} edited document {}",
                 document.getTeamOwner().getLeader().getFirstName(),

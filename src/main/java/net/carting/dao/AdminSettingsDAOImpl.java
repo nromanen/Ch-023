@@ -12,15 +12,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class AdminSettingsDAOImpl implements AdminSettingsDAO {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsDAOImpl.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
     @Override
     public AdminSettings getAdminSettings() {
-    	LOG.debug("Getting admin settings from DB");
+        LOG.debug("Getting admin settings from DB");
         return (AdminSettings) entityManager.createQuery("from AdminSettings").getSingleResult();
     }
 

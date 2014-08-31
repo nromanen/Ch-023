@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type='text/javascript'>
 $(document).ready(function(){
-	
+
     function updatePDF() {
         $.ajax({
             url: "/Carting/SHKP/start",
@@ -94,7 +94,7 @@ $(document).ready(function(){
                         </thead>
                         <tbody>
                             <% int number = 1; %>
-                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus='counter'>
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
                                 <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                     <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
                                     <td><%= number %></td>
@@ -164,3 +164,62 @@ $(document).ready(function(){
      font-family: monospace;
             <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
             <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+     font-family: monospace;
+     position: relative;
+     left: 20px;
+     text-decoration: underline;
+    }
+</style>
+  <table style="width:100%" border='1' cellspacing='0' cellpadding='2'>
+        <tr>
+            <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+        </tr>
+        <tr>
+            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+        </tr>
+        <tr>
+            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+        </tr>
+        <c:forEach var="i" begin="1" end="${maxPositions}" step="2">
+            <c:set var="j" value="${maxPositions-i+1}"/>
+            <c:set var="k" value="${maxPositions-i}"/>
+            <tr>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+            </tr>
+        </c:forEach>
+        <tr>
+            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+        </tr>
+        <tr>
+            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+        </tr>
+        <tr>
+            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+        </tr>
+  </table>
+</div>

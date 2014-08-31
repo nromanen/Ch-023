@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminSettingsServiceImpl implements AdminSettingsService {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsServiceImpl.class);
-	
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminSettingsServiceImpl.class);
+
     @Autowired
     private AdminSettingsDAO adminSettingsDAO;
 

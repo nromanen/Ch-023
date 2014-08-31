@@ -2,17 +2,10 @@ package net.carting.web;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import net.carting.domain.*;
+import net.carting.service.*;
 import java.util.List;
 
-import net.carting.domain.*;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.DocumentService;
-import net.carting.service.QualifyingService;
-import net.carting.service.FileService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
 
 import org.slf4j.Logger;
 import net.carting.util.PdfWriter;
@@ -28,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 /**
     * Carting
@@ -99,12 +93,12 @@ public class SHKPController {
             return result;
         }
 
-        @RequestMapping(value = "maneuver", method = RequestMethod.POST)
-        @ResponseBody
+    @RequestMapping(value = "maneuver", method = RequestMethod.POST)
+    @ResponseBody
     public int createManeuverStatement(Model model, @RequestParam(value = "table") String table,
                                           @RequestParam(value = "raceId") int raceId) {
         int result;
-            try {
+        try {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(raceId);
             File maneuver;
             if (carClassCompetition.getManeuverStatement() == null) {
@@ -119,12 +113,12 @@ public class SHKPController {
             carClassCompetition.setManeuverStatement(maneuver);
             carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
             result = carClassCompetitionService.getCarClassCompetitionById(raceId).getManeuverStatement().getId();
-            } catch (Exception e) {
+        } catch (Exception e) {
             result = 0;
-                e.printStackTrace();
-            }
-            return result;
+            e.printStackTrace();
         }
+        return result;
+    }
 
         @RequestMapping(value = "start/{id}/{raceId}", method = RequestMethod.GET)
         public ModelAndView start(Model model, @PathVariable("id") int id, @PathVariable("raceId") int raceId) {
