@@ -234,8 +234,8 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addResults")
     public String addRacePage(Map<String, Object> map, @PathVariable("id") int id) {
         try {
+            
 
-            map.put("race", new Race());
             map.put("carClassCompetition", carClassCompetitionService.getCarClassCompetitionById(id));
             map.put("membersCount", racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
@@ -247,7 +247,7 @@ public class CarClassCompetitionController {
 
 
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
-    public String addRace(@ModelAttribute("race") Race race,
+    public String addRace(Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
         LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
@@ -255,9 +255,9 @@ public class CarClassCompetitionController {
         race.setCarClass(carClassCompetition.getCarClass());
         raceService.setRaceNumber(carClassCompetition, race);
         raceService.addRace(race);
+        race.setId(raceService.getRaceByNumberAndCarClassCompetition(race.getRaceNumber(), carClassCompetition).getId());
         raceService.setResultTable(raceService.getChessRoll(race), race);
         carClassCompetitionResultService.setAbsoluteResults(carClassCompetition, race);
-        editRace(race, map, id, race.getRaceNumber(), String.valueOf(race.getNumberOfLaps()));
         LOG.trace("Admin has added race with id={} race number {} in car class competition {} in competition {}", race.getId(), race.getRaceNumber(),
                 carClassCompetition.getCarClass().getName(), carClassCompetition.getCompetition().getName());
         LOG.debug("End addRace method");
@@ -355,7 +355,6 @@ public class CarClassCompetitionController {
                            @RequestParam("numberOfLaps") String lapsNumber) {
         LOG.debug("Start editRace method");
         try {
-            int laps = Integer.parseInt(lapsNumber);
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             race.setCarClassCompetition(carClassCompetition);
             race.setId(raceService.getRaceByNumberAndCarClassCompetition(raceNumber, carClassCompetition).getId());
