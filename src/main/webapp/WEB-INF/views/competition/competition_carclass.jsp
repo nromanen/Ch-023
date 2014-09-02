@@ -193,7 +193,7 @@ pageEncoding="utf-8"%>
 
 
 <div>
-<c:if test="${raceListSize==2}">
+<c:if test="${raceListSize!=0}">
     <c:if test="${!empty absoluteResultsList}">
         <div class="panel panel-primary">
                 <div class="panel-heading" style="height: 50px;">
