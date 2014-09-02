@@ -73,6 +73,36 @@ public class Qualifying {
 		this.racerTime = racer_time;
 	}
 	
+	public String getRacerTimeString() {
+		System.out.println(getRacerTime().getTime());
+		String resTime = new String();
+        resTime = getRacerTime().toString();
+        String ms = new String();
+        if (this.racerTime.getTime()%1000>0) {
+            ms = (Long.toString(this.racerTime.getTime()%1000));
+            boolean f = true;
+            while (f) {
+                if (ms.length()!=3) {
+                    ms="0"+ms;
+                } else {
+                    f=false;
+                }
+            }
+            f = true;
+            while(f) {
+                if (ms.lastIndexOf('0')==ms.length()-1) {
+                    ms=ms.substring(0,ms.length()-1);
+                } else {
+                    f=false;
+                }
+            }
+            ms=","+ms;
+        }
+        resTime+=ms;
+        System.out.println(resTime);
+        return resTime;
+	}
+	
 	public Qualifying(){
 	}
 

@@ -3,6 +3,7 @@ package net.carting.service;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.transaction.Transactional;
 
@@ -98,15 +99,15 @@ public class QualifyingServiceImpl implements QualifyingService {
 	@Transactional
 	@Override
 	public boolean setQualifyingTimeFromString(Qualifying q, String time) {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT-00:00"));
+		long timeLong = 0;
 		time = time.trim();
-		if (time.length()==5) {
-			time="00:"+time;
-		}
-		if (!time.matches("(\\d\\d:)?[0-5]\\d:[0-5]\\d")) {
+		if (!time.matches("((\\d{1,2}:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
 			return false;	
 		}
 		try {
-			q.setRacerTime(Time.valueOf(time));
+			timeLong = timeStringToLong(time);
+			q.setRacerTime(new Time(timeLong));
 			updateQualifying(q);
 		} catch (IllegalArgumentException e) {
 			LOG.error("Errors in setQualifyingTimeFromString method.", e);
@@ -114,6 +115,51 @@ public class QualifyingServiceImpl implements QualifyingService {
 		}
 		return true;
 	}
+	/**This method convert strings to long for sql.Time
+	 * In switch-case we choose representation of time - have we hours,minutes or seconds
+	 * @param strTime - String data type of time
+	 * @return time in milliseconds
+	 */
+	 public static long timeStringToLong(String strTime) {
+	        String[]str = strTime.split(":");
+	        long t = 0;
+	        switch(str.length) {
+	        case 1:
+	           t=getMsFromS(str[0]);
+	           break;
+	        case 2:
+	            t=Long.parseLong(str[0])*1000*60;
+	            t=t+getMsFromS(str[1]);
+	            break;
+	        case 3:
+	            t=Long.parseLong(str[0])*1000*3600;
+	            t=t+Long.parseLong(str[1])*1000*60;
+	            t=t+getMsFromS(str[2]);
+	            break;
+	        }
+	        return t;
+	    }
+	 /**In this method we taking millisecond part
+	  * If there is not ms we return only seconds
+	  * @param s - seconds with milliseconds
+	  * @return milliseconds
+	  */
+	    public static long getMsFromS(String s) {
+	        long t= 0;
+	        String[] milisecs=s.split("\\.");
+	        if (milisecs.length==1) {
+	        	return Long.parseLong(milisecs[0])*1000;
+	        }
+	        if (milisecs[1].length()==3){
+	            t=t+Long.parseLong(milisecs[1]);
+	        } else if (milisecs[1].length()==2) {
+	            t=t+(Long.parseLong(milisecs[1])*10);
+	        } else if (milisecs[1].length()==1) {
+	            t=t+(Long.parseLong(milisecs[1])*100);
+	        }
+	        t=t+(Long.parseLong(milisecs[0])*1000);
+	        return t;
+	    }
 	
 	@Transactional
 	@Override
