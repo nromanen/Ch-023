@@ -1,14 +1,16 @@
 package net.carting.scheduler;
 
+import java.util.Date;
+import java.util.List;
+
 import net.carting.domain.Competition;
 import net.carting.service.CompetitionService;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Carting
@@ -17,7 +19,7 @@ import java.util.List;
 @Component
 public class CompetitionScheduler {
 
-    private static final Logger LOG = Logger.getLogger(CompetitionScheduler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CompetitionScheduler.class);
 
     @Autowired
     CompetitionService competitionService;
