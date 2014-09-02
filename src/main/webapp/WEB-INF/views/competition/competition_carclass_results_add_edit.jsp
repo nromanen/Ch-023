@@ -25,7 +25,7 @@
 	</c:when>
 	<c:otherwise>
 		<form class="well" method="post" action="addRace" id="add_race_form"
-			data-toggle="validator" role="form" commandName="race">
+			data-toggle="validator" role="form" >
 	</c:otherwise>
 </c:choose>
 

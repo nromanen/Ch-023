@@ -333,7 +333,6 @@ public class DocumentController {
 
        for (Team team:teamService.getAllTeams()) {
            status = "hasDocs";
-           System.out.println(team.getDocuments());
            if (!team.getDocuments().isEmpty()) {
                for (Racer racer:team.getRacers()) {
                    if(racer.getDocuments()!=null) {
@@ -345,7 +344,6 @@ public class DocumentController {
                    }
                }
            } else {
-               System.out.println(team.getName()+" - " + team.getDocuments());
                status = "noDocs";
            }
            teamDocStatus.add(status);

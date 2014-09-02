@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+    <!-- Appenders -->
+    <Appenders>
+        <!-- CONSOLE appender -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p: [%l] - %m%n"/>
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </Console>
+        <!-- FILE appender -->
+        <File name="developer" fileName="dev_log.log">
+            <PatternLayout pattern="%d{ISO8601} %-5p [%l] - %m%n"/>
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </File>
+        <!-- DATABASE appender -->
+        <JDBC name="database" tableName="logs">
+            <ConnectionFactory class="net.carting.util.ConnectionFactory" method="getDatabaseConnection" />
+            <Column name="message" pattern="%message" />
+            <Column name="date" isEventTimestamp="true" />
+            <Column name="level" pattern="%level" />
+            <Column name="logger" pattern="%logger" />
+            <Filters>
+                <ThresholdFilter level="TRACE"/>
+                <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </JDBC>
+    </Appenders>
+        
+    <Loggers>
+        <!-- Application Loggers -->
+        <Logger name="net.carting" level="trace">
+            <AppenderRef ref="database"/>
+        </Logger>
+        <!-- Root Logger -->
+        <Root>
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="developer"/>
+        </Root>
+    </Loggers>
+</Configuration>
