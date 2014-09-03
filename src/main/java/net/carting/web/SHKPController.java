@@ -1,14 +1,25 @@
 package net.carting.web;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import net.carting.domain.*;
-import net.carting.service.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import net.carting.domain.AdminSettings;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Competition;
+import net.carting.domain.File;
+import net.carting.domain.Qualifying;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.service.CarClassCompetitionService;
+import net.carting.service.DocumentService;
+import net.carting.service.QualifyingService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.util.PdfWriter;
 
 import org.slf4j.Logger;
-import net.carting.util.PdfWriter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.itextpdf.text.PageSize;
 /**
     * Carting
     * Created by manson on 8/5/14.
@@ -89,6 +98,33 @@ public class SHKPController {
             } catch (Exception e) {
                 result = 0;
                 e.printStackTrace();
+            }
+            return result;
+        }
+        
+        @RequestMapping(value = "/personal", method = RequestMethod.POST)
+        @ResponseBody
+        public int createPersonalOffsetStatement(Model model, @RequestParam(value = "table") String table,
+                                         @RequestParam(value = "carClassCompetitionId") int carClassCompetitionId) {
+            int result;
+            try {
+                CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId);
+                File personalOffset;
+                if (carClassCompetition.getPersonalOffset() == null) {
+                    personalOffset = new File();
+                } else {
+                    personalOffset = carClassCompetition.getPersonalOffset();
+                }
+                personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
+                String fileName = "PersonalOffset_" + carClassCompetitionId + "_"
+                        + Calendar.getInstance().getTimeInMillis();
+                personalOffset.setName(fileName);
+                carClassCompetition.setPersonalOffset(personalOffset);
+                carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
+                result = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getPersonalOffset().getId();
+            } catch (Exception e) {
+                result = 0;
+                LOG.error("Errors in creating PDF for personalOffset", e);
             }
             return result;
         }

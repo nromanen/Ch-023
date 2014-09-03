@@ -69,6 +69,10 @@ public class CarClassCompetition {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maneuverStatement_id")
     private File maneuverStatement;
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "personalOffset_id")
+    private File personalOffset;
 
     public int getId() {
         return id;
@@ -172,6 +176,14 @@ public class CarClassCompetition {
 
     public void setQualifyings(Set<Qualifying> qualifyings) {
         this.qualifyings = qualifyings;
+    }
+    
+    public File getPersonalOffset() {
+        return personalOffset;
+    }
+
+    public void setPersonalOffset(File personalOffset) {
+        this.personalOffset = personalOffset;
     }
 
     @Override
