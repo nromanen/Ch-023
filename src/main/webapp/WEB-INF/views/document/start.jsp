@@ -3,80 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<script type='text/javascript'>
-$(document).ready(function(){
-
-    function updatePDF() {
-        $.ajax({
-            url: "/Carting/SHKP/start",
-            type: "POST",
-            data: {
-                table: $('#table').html(),
-                startId: $('#startId').val(),
-                raceId: $('#raceId').val()
-            },
-            success: function(response) {
-                if (response !== '0') {
-                    $("#fileId").val(response);
-                    $("#pdf").removeAttr("disabled");
-                    $("#prevVersion").remove();
-                }
-            }
-        });
-    }
-
-    function clearTable() {
-        $(".place").each(function() {
-            $(this).text("");
-        });
-    }
-
-    $("#pdf").click(function() {
-        window.open("../../../document/showFile/" + $("#fileId").val() ,'_blank');
-    });
-
-    $("#save").click(function() {    
-        clearTable();
-        var arr = [];
-        var max = Number($("#maxPos").val());
-        var valid = true;
-        $(".carPos").each(function() {
-            var racerNum = $(this).attr('racer');
-            var pos = $(this).val();
-            var startPos = ".p" + $(this).val();
-            if (pos >=1 && pos <= max) {
-                $(startPos).each(function() {
-                    $(this).text(racerNum);
-                });
-            } else {
-                valid = false;
-            }
-            arr.push(pos);
-        });
-        var sorted_arr = arr.sort();
-        for (var i = 0; i < arr.length - 1; i++) {
-            if (sorted_arr[i + 1] == sorted_arr[i]) {
-                valid = false;        
-            }
-        }        
-
-        if (valid == true) {
-            $('#correctPositions').css("display", "inline-block").hide().fadeIn();
-            $('#correctPositions').delay(2000).fadeOut('slow');            
-           updatePDF();
-        } else {
-            $('#incorrectPositions').css("display", "inline-block").hide().fadeIn();
-            $('#incorrectPositions').delay(2000).fadeOut('slow');
-        }
-    });
-    var s = $("#qual_count").val()
-    if (s>0) {
-    	$("#save").click()
-    }
-    
-});
-</script>
-
+<script type='text/javascript' src='<c:url value="/resources/js/start.js" />'></script>
 <c:if test="${authority.equals('ROLE_ADMIN')}">
     <div class="panel panel-primary">
          <div class="panel-heading" style="height: 50px;">
@@ -93,11 +20,10 @@ $(document).ready(function(){
                             <th style="text-align: center;"><spring:message code="label.document_start_pos" /></th>
                         </thead>
                         <tbody>
-                            <% int number = 1; %>
-                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="index">
                                 <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                     <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-                                    <td><%= number %></td>
+                                    <td>${index.count}</td>
                                     <td style="text-align: left; padding-left: 20px;">
                                         <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
                                             id="racer${racerCarClassCompetitionNumber.racer.id}">
@@ -111,26 +37,25 @@ $(document).ready(function(){
                                         ${racerCarClassCompetitionNumber.numberInCompetition}
                                     </td>
                                     <td>
-                                            <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}"
-                                            pattern="[0-9]{2}"
-                                            <c:if test="${!empty qualifyingList}">
-                                            	value="${qualifyingList.get(counter.index).racerPlace}"
-                                            </c:if>
-                                            >
-                                            <input type="hidden" value="${qualifyingList.size()}" id="qual_count">
+                                        <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}"
+                                        pattern="[0-9]{2}"
+                                        <c:if test="${!empty qualifyingList}">
+                                            value="${qualifyingList.get(counter.index).racerPlace}"
+                                        </c:if>
+                                        >
+                                        <input type="hidden" value="${qualifyingList.size()}" id="qual_count">
                                     </td>
                                 </tr>
-                                <% number++; %>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <center>
+                    <div style="text-align: center;">
                         <a class="btn btn-sml btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
                         <a class="btn btn-sml btn-success" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a>
                         <c:if test="${oldDoc > 0}">
                             <a id="prevVersion" class="btn btn-sml btn-warning" href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a>
                         </c:if><p>
-                    </center>
+                    </div>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -163,7 +88,7 @@ $(document).ready(function(){
         font-family: "Arial", Times, monospace;
      }
      .place {
-      font-size: 250%;
+      font-size: 200%;
       font-family: monospace;
       position: relative;
       left: 20px;
@@ -172,54 +97,142 @@ $(document).ready(function(){
  </style>
   <table style="width:100%" border='1' cellspacing='0' cellpadding='2'>
         <tr>
-            <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
-            <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
+            <c:forEach var="i" begin="1" end="${tableRows}">
+                <c:choose>
+                    <c:when test="${i == 1}">
+                        <td align='center' colspan='2'><c:out value="${competitionName}"/></td>
+                    </c:when>
+                    <c:otherwise>
+                        <td style="display: none;" align='center' colspan='2'><c:out value="${competitionName}"/></td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
         </tr>
-        <tr>
-            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
-            <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                <td align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+            </c:when>
+            <c:otherwise>
+                <td style="display: none;" align='center' colspan='2'><c:out value="${competitionLoc}"/></td>
+            </c:otherwise>
+            </c:choose>
+            </c:forEach>
         </tr>
-        <tr>
-            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
-            <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+              <c:when test="${i == 1}">
+                <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
+              </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" align='center' colspan='2'><c:out value="${competitionName}"/></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
-            <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+              <c:when test="${i == 1}">
+                <td align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+              </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" align='center' colspan='2'><spring:message code="label.car_class" />: <b><c:out value="${carClassName}"/></b></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
-            <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+                  </c:when>
+                      <c:otherwise>
+                          <td style="display: none;" align='center' colspan='2'><spring:message code="label.date" />: <c:out value="${carClassDate}"/> <spring:message code="label.time" />: <c:out value="${carClassTime}"/></td>
+                      </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
-            <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+                  </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" align='center' colspan='2'><spring:message code="label.run" /> <c:out value="${carClassRace}"/></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
-            <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+                  </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" colspan='2' align='center'><b><spring:message code="label.start_statement" /></b></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
         <c:forEach var="i" begin="1" end="${maxPositions}" step="2">
             <c:set var="j" value="${maxPositions-i+1}"/>
             <c:set var="k" value="${maxPositions-i}"/>
             <tr>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                <c:forEach var="i" begin="1" end="${tableRows}">
+                    <c:choose>
+                        <c:when test="${i == 1}">
+                        <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                        <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td style="display: none;" width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
+                            <td style="display: none;" width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
             </tr>
         </c:forEach>
-        <tr>
-            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
-            <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+                  </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" colspan='2'><spring:message code="label.allowed" /> <c:out value="${allowedNumber}"/></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
-            <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+                  </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" colspan='2'><spring:message code="label.started" /> <c:out value="${startedNumber}"/></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
-        <tr>
-            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
-            <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+      <tr>
+          <c:forEach var="i" begin="1" end="${tableRows}">
+              <c:choose>
+                  <c:when test="${i == 1}">
+                    <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+                  </c:when>
+                  <c:otherwise>
+                      <td style="display: none;" colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+                  </c:otherwise>
+              </c:choose>
+          </c:forEach>
         </tr>
   </table>
 </div>

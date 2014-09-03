@@ -1,5 +1,22 @@
 $(document).ready(function(){
 
+    $('body').on('change', 'input.test', function() {
+        $(this).val($(this).val().replace(',', '.'));
+        var num = Number($(this).val());
+        if (validate(num)) {
+            var classArr = $(this).attr('class').split(" ");
+            var max_allowed_broken_skittles = 6;
+            var loc = classArr[1] + $(this).attr('racer');
+            if (num > max_allowed_broken_skittles) {
+                $(this).val(max_allowed_broken_skittles);
+                num = max_allowed_broken_skittles;
+            }
+            $("#" + loc).text(num);
+        } else {
+            $(this).val(0);
+        }
+    });
+
     function updatePDF() {
         $.ajax({
             url: "/Carting/SHKP/maneuver",
@@ -9,7 +26,7 @@ $(document).ready(function(){
                 raceId: $("#raceId").val()
             },
             success: function(response) {
-                if (response !== '0') {
+                if (response !== 0) {
                     $("#fileId").val(response);
                     $("#pdf").removeAttr("disabled");
                     $("#prevVersion").remove();
@@ -22,81 +39,54 @@ $(document).ready(function(){
         window.open("../../document/showFile/" + $("#fileId").val() ,'_blank');
     });
 
-    $('#add').click(function() {
-        var tblId = 'maneuverTable';
-          $('#maneuverTable').find('tr').each(function(){
-                $(this).find('td').eq(4).after('<td>cell 1a</td>');
-            });
-        //var x=document.getElementById(tblId).rows;
-        //var y=x[0].insertCell(5);
-        //$('#addCol').append('<td class="snake">snake</td>');
-        //$('.cols').append('<td class="snake"><input type="text" class="snake${racer.getNumberInCompetition()}" maxlength="4" size="1"></td>');
-        //$("#pointsTable").height($("#maneuverTable").height());
-        //$("#pointsHead").height($("#head").height());
-    });
-
     $('#remove').click(function() {
-        var selectedClass = $( "#del option:selected" ).attr('class');
+        var selectedClass = $( "#del").find("option:selected" ).attr('class');
         $('.' + selectedClass).remove();
-        //$("#pointsTable").height($("#maneuverTable").height());
-        //$("#pointsHead").height($("#head").height());
-    });
-
-    $( ".snake" ).change(function() {
-        $("#snake" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".flower" ).change(function() {
-        $("#flower" + $(this).attr('racer')).text($(this).val());
     });
 
     $( ".stopLine" ).change(function() {
-        $("#stopLine" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".hall" ).change(function() {
-        $("#hall" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".rightCircle" ).change(function() {
-        $("#rightCircle" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".leftCircle" ).change(function() {
-        $("#leftCircle" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".leftCol" ).change(function() {
-        $("#leftCol" + $(this).attr('racer')).text($(this).val());
-    });
-
-    $( ".rightCol" ).change(function() {
-        $("#rightCol" + $(this).attr('racer')).text($(this).val());
+        var result;
+        var penalty = 50;
+        if($(this).is(":checked")) {
+            result = penalty;
+        } else {
+            result = 0;
+        }
+        $("#stopLine" + $(this).attr('racer')).text(result);
     });
 
     $( ".time" ).change(function() {
-        $("#time" + $(this).attr('racer')).text($(this).val());
+        $(this).val($(this).val().replace(',', '.'));
+        var num = $(this).val();
+        if (validate(num)) {
+            $("#time" + $(this).attr('racer')).text(num);
+        } else {
+            $("#time" + $(this).attr('racer')).text(0);
+        }
     });
 
     $('#save').click(function() {
-        for (var i = 1; i <= $("#racersCount").val(); i++) {
+        for (var i = 1; i <= Number($("#racersCount").val()); i++) {
+            var sum = 0;
             var racerId = $("#id" + i).val();
-            var snake = Number($("#snake" + racerId).text()) * Number($("#penalty").val());
-            var flower = Number($("#flower" + racerId).text()) * Number($("#penalty").val());
-            var stop = Number($("#stopLine" + racerId).text()) * Number($("#penalty").val());
-            var hall = Number($("#hall" + racerId).text()) * Number($("#penalty").val());
-            var cirLeft = Number($("#leftCircle" + racerId).text()) * Number($("#penalty").val());
-            var cirRig = Number($("#rightCircle" + racerId).text()) * Number($("#penalty").val());
-            var colLeft = Number($("#leftCol" + racerId).text()) * Number($("#penalty").val());
-            var colRig = Number($("#rightCol" + racerId).text()) * Number($("#penalty").val());
+            for (var j = 1; j <= Number($("#maneuverCount").val()); j++) {
+                var manId = "#maneuver" + j + racerId;
+                var tmpValue = Number($(manId).text()) * Number($("#penalty").val());
+                sum = sum + (isNaN(tmpValue) ? 0 : tmpValue);
+            }
             var time = Number($("#time" + racerId).text());
-
-            var sum = (isNaN(snake) ? 0 : snake) + (isNaN(flower) ? 0 : flower) + (isNaN(stop) ? 0 : stop) + (isNaN(hall) ? 0 : hall) + (isNaN(cirLeft) ? 0 : cirLeft) + (isNaN(cirRig) ? 0 : cirRig) + (isNaN(colLeft) ? 0 : colLeft) + (isNaN(colRig) ? 0 : colRig) + (isNaN(time) ? 0 : time);
-
+            sum = sum + (isNaN(time) ? 0 : time)
             $("#sum" + racerId).text(sum);
         }
         getPlaces();
+        updatePDF();
     });
+
+    function validate(number) {
+        var intRegex = /^\d+$/;
+        var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
+        return !!(intRegex.test(number) || floatRegex.test(number));
+    }
 
     function sortNumber(a,b) {
         return a - b;
@@ -104,17 +94,18 @@ $(document).ready(function(){
 
     function getPlaces() {
         var arr = [];
+        var racerId;
+        var i;
         var count = Number($("#racersCount").val());
-        for (var i = 1; i <= count; i++) {
-            var racerId = $("#id" + i).val();
+        for (i = 1; i <= count; i++) {
+            racerId = $("#id" + i).val();
             arr.push(Number($("#sum" + racerId).text()));
         }
         arr.sort(sortNumber);
         var tableBarr = $("#tableB").val().replace('[', '').replace(']', '').split(',');
-        console.log(tableBarr);
         for (var j = count; j >= 1; j--) {
-            var racerId = $("#id" + j).val();
-            for (var i = count; i >= 1; i--) {
+            racerId = $("#id" + j).val();
+            for (i = count; i >= 1; i--) {
                 var sum = Number($("#sum" + racerId).text());
                 if (sum == Number(arr[i-1])) {
                     $("#place" + racerId).text(i);
@@ -122,6 +113,5 @@ $(document).ready(function(){
                 }
             }
         }
-        updatePDF();
     }
 });

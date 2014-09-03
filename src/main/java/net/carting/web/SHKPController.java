@@ -32,7 +32,9 @@ import java.util.*;
 public class SHKPController {
 
         // MAX_CAR_POSITIONS - max cart positions on the track, const.
-        public static final int MAX_CAR_POSITIONS = 36;
+        public static final int MAX_CAR_POSITIONS = 24;
+
+        public static final int TABLE_ROWS = 3;
 
         private static final Logger LOG = LoggerFactory.getLogger(SHKPController.class);
 
@@ -47,6 +49,9 @@ public class SHKPController {
 
         @Autowired
         QualifyingService qualifyingService;
+
+        @Autowired
+        ManeuverService maneuverService;
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
@@ -70,8 +75,8 @@ public class SHKPController {
                         start = carClassCompetition.getSecondRaceStartStatement();
                     }
                 }
-                start.setFile(PdfWriter.getFileBytes(table, PageSize.A4_LANDSCAPE));
-                String fileName = "StartStatement_" + raceId + "_"
+                start.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
+                String fileName = "StartStatement_" + raceId + "_" + "_" + startId
                         + Calendar.getInstance().getTimeInMillis();
                 start.setName(fileName);
                 if (startId == 1) {
@@ -106,7 +111,7 @@ public class SHKPController {
             } else {
                 maneuver = carClassCompetition.getManeuverStatement();
             }
-            maneuver.setFile(PdfWriter.getFileBytes(table, PageSize.A1));
+            maneuver.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
             String fileName = "ManeuverStatement_" + raceId + "_"
                     + Calendar.getInstance().getTimeInMillis();
             maneuver.setName(fileName);
@@ -148,6 +153,8 @@ public class SHKPController {
 
             model.addAttribute("startId", raceId);
             model.addAttribute("raceId", id);
+            model.addAttribute("tableRows", TABLE_ROWS);
+
             model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
@@ -209,7 +216,11 @@ public class SHKPController {
             model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
             model.addAttribute("secretaryName", competition.getSecretaryName());
             model.addAttribute("directorName", competition.getDirectorName());
+            model.addAttribute("judgeSecretary", competition.getSecretaryCategoryJudicialLicense());
+            model.addAttribute("judgeDirector", competition.getDirectorCategoryJudicialLicense());
             model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
+
+            model.addAttribute("maneuvers", maneuverService.getAllManeuvers());
         }
         catch (Exception e) {
              e.printStackTrace();

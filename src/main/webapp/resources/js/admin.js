@@ -210,6 +210,7 @@ $(document).ready(function(){
 		        	if(response == "success"){
 		        		$('#edit_place_success').css("display", "block").hide().fadeIn();
 						$('#edit_place_success').delay(2000).fadeOut('slow');
+						location.reload().delay(2000);
 		        	} else {
 		        		$('#edit_place_error').css("display", "block").hide().fadeIn();
 						$('#edit_place_error').delay(2000).fadeOut('slow');
@@ -239,7 +240,7 @@ $(document).ready(function(){
 	        type: "POST",
 	        success: function(response) {
 	        	if (response === "success") {
-	        		location.reload();
+					location.reload().delay(2000);
 	        	} else {
 	        		console.log(response);
 		    		$('#delete_place_error').css("display", "block").hide().fadeIn();
@@ -281,7 +282,6 @@ $(document).ready(function(){
 		pointsStr += ",";
 		pointsStr += $("#points_count").val();
 		editPointsByPlaces(pointsStr);
-		location.reload();
 	});
 	
 	$("#change_feedback_email_form").submit(function(){

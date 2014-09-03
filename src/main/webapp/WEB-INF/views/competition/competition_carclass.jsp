@@ -19,15 +19,20 @@ pageEncoding="utf-8"%>
         </td>
         <td style="padding: 15px 0px 0px 20px;">
             <c:if test="${authority.equals('ROLE_ADMIN')}">
-                <div class="btn-group" style="float: right;">
-                    <c:forEach var="i" begin="1" end="${maxRaces}">
-                        <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
-                    </c:forEach>
-                    <a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />' class="btn btn-success"><spring:message code="label.maneuvering" /></a>
-                    <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
-                            <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
-                    </c:if>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        <spring:message code="label.protocols" /> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <c:forEach var="i" begin="1" end="${maxRaces}">
+                            <li><a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />'><spring:message code="label.document_start" /> <c:out value="${i}"/></a></li>
+                        </c:forEach>
+                        <li><a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />'><spring:message code="label.maneuvering" /></a></li>
+                    </ul>
                 </div>
+                <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
+                        <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
+                </c:if>
             </c:if>
         </td>
     </tr>

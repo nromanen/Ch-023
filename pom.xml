@@ -371,7 +371,7 @@
                     <warFile>target/Carting.war</warFile>
                     <url>http://localhost:58080/manager/text</url>
                     <username>manson</username>
-        	    <password>tomcat</password>
+                    <password>tomcat</password>
                     <update>true</update>
                 </configuration>
             </plugin>
