@@ -33,6 +33,7 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
+import net.carting.util.GlobalData;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,7 @@ public class CompetitionController {
     	if(!competitionService.getCompetitionsYearsList().contains(year)) {
     		year = competitionService.getCompetitionsYearsList().get(0);
     	}
+    	GlobalData.globalYear = year;
         List<Competition> competitionList = competitionService.getCompetitionsByYear(year);
         model.addAttribute("competitionListByYear", competitionList);
         model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
