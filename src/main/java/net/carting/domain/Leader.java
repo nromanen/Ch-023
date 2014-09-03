@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
 
 @Entity
 @Table(name = "leaders")
@@ -30,7 +29,6 @@ public class Leader extends Person {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    @Valid
     private User user;
 
     @Column(name = "license", nullable = false)
