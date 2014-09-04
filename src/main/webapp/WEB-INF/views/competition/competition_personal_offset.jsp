@@ -63,7 +63,7 @@
 								<c:when test="${!empty qualifyingList }">
 									<c:forEach items="${qualifyingList}" var="qualifying">
 										<c:if test="${qualifying.racerNumber==racerCarClassCompetitionNumber.numberInCompetition }">
-											<td>${qualifying.racerTime}</td>
+											<td>${qualifying.getTimeString()}</td>
 											<td>${qualifying.racerPlace}</td>
 										</c:if>
 									</c:forEach>

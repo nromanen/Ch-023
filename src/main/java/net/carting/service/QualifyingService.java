@@ -21,7 +21,7 @@ public interface QualifyingService {
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
 	            CarClassCompetition carClassCompetition);
 	
-	public List<Time> getQualifyingTimesByCarClassCompetition(
+	public List<Integer> getQualifyingTimesByCarClassCompetition(
 			CarClassCompetition carClassCompetition);
 	
 	public List<Integer> getQualifyingNumbersByCarClassCompetition(

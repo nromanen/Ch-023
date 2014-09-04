@@ -24,6 +24,9 @@ pageEncoding="utf-8"%>
                         <a href='<c:url value="/SHKP/start/${carClassCompetition.id}/${i}" />' class="btn btn-success"><spring:message code="label.document_start" /> <c:out value="${i}"/></a>
                     </c:forEach>
                     <a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />' class="btn btn-success"><spring:message code="label.maneuvering" /></a>
+                   <c:if test="${empty qualifyingList && raceListSize==0}">
+                         <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary"><spring:message code="label.add_qualifying" /></a>
+                    </c:if>
                     <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
                             <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
                     </c:if>
@@ -276,7 +279,7 @@ pageEncoding="utf-8"%>
                                                 </c:if>
                                              </c:forEach>
                                          </td>
-                                         <td>${qualifying.racerTime}</td>
+                                         <td>${qualifying.getTimeString()}</td>
                                     </tr>
                                 </c:forEach>
                             </table>
