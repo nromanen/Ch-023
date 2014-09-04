@@ -5,17 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.Leader;
-import net.carting.domain.Logs;
-import net.carting.domain.User;
-import net.carting.service.AdminSettingsService;
-import net.carting.service.CarClassService;
-import net.carting.service.DocumentService;
-import net.carting.service.LeaderService;
-import net.carting.service.LogsService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
+import net.carting.domain.*;
+import net.carting.service.*;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -23,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,6 +35,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private LogsService logsService;
+    @Autowired
+    private ManeuverService maneuverService;
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
 
@@ -56,6 +46,7 @@ public class AdminController {
         model.addAttribute("carClassList", carClassService.getAllCarClasses());
         model.addAttribute("adminSettings", adminSettingsService.getAdminSettings());
         model.addAttribute("pointsByPlacesList", adminSettingsService.getPointsByPlacesList());
+        model.addAttribute("maneuvers", maneuverService.getAllManeuvers());
         return new ModelAndView("admin_cabinet");
     }
 
@@ -105,7 +96,7 @@ public class AdminController {
     @RequestMapping(value = "/changePerentalPermissionYears", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    String changePerentalPermissionYearsAction(@RequestBody Map<String, Object> map) {
+    String changeParentalPermissionYearsAction(@RequestBody Map<String, Object> map) {
         int perentalPermissionYears = Integer.parseInt(map.get("perentalPermissionYears").toString());
         adminSettingsService.updatePerentalPermissionYears(perentalPermissionYears);
         LOG.trace("Admin has changed perental permission years to {}", perentalPermissionYears);
@@ -187,4 +178,49 @@ public class AdminController {
         return "logs";
     }
 
+    @RequestMapping(value = "/addManeuver", method = RequestMethod.POST)
+    @ResponseBody
+    public String addManeuver(@RequestParam(value = "maneuverName") String maneuverName) {
+        String result = "success";
+        try {
+            Maneuver maneuver = new Maneuver();
+            maneuver.setName(maneuverName);
+            maneuverService.addManeuver(maneuver);
+        } catch (Exception e) {
+            result = "fail";
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/deleteManeuver", method = RequestMethod.POST)
+    @ResponseBody
+    public String addManeuver(@RequestParam(value = "id") int id) {
+        String result = "success";
+        try {
+            maneuverService.deleteManeuver(id);
+        } catch (Exception e) {
+            result = "fail";
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/updateManeuver", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateManeuvers(@RequestBody List<Maneuver> maneuvers) {
+        String result = "success";
+        try {
+            for (Maneuver maneuver : maneuvers) {
+                int id = maneuver.getId();
+                String newName = maneuver.getName();
+                Maneuver updatedManeuver = new Maneuver();
+                updatedManeuver.setId(id);
+                updatedManeuver.setName(newName);
+                maneuverService.updateManeuver(updatedManeuver);
+            }
+        } catch (Exception e) {
+            result = "fail";
+        }
+        return result;
+    }
 }

@@ -1,6 +1,7 @@
 package net.carting.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Carting
@@ -21,12 +22,12 @@ public class Logs {
     String message;
 
     @Column(name = "date")
-    String date;
+    Date date;
 
     public Logs() {
     }
 
-    public Logs(String logger, String level, String message, String date) {
+    public Logs(String logger, String level, String message, Date date) {
         this.logger = logger;
         this.level = level;
         this.message = message;
@@ -57,11 +58,11 @@ public class Logs {
         this.message = message;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

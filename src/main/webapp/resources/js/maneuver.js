@@ -5,7 +5,7 @@ $(document).ready(function(){
         var num = Number($(this).val());
         if (validate(num)) {
             var classArr = $(this).attr('class').split(" ");
-            var max_allowed_broken_skittles = 6;
+            var max_allowed_broken_skittles = Number($("#max_skittles").val());
             var loc = classArr[1] + $(this).attr('racer');
             if (num > max_allowed_broken_skittles) {
                 $(this).val(max_allowed_broken_skittles);
@@ -18,12 +18,34 @@ $(document).ready(function(){
     });
 
     function updatePDF() {
+        var idArray = [];
+        var timeArray = [];
+        $(".timetext").each(function () {
+            var id = Number($(this).attr('id').replace('time', ''));
+            var time = Number($(this).text());
+            idArray.push(id);
+            timeArray.push(time);
+        });
+        var table = $('#maneuver').html();
+        table = '<style>' +
+            'table {font-size: 14} ' +
+            '.position {width: 20px}' +
+            '.maneuvers {width: 50px}' +
+            '.racername {width: 80px;} ' +
+            '.sportcategory {width: 80px;} ' +
+            '.teamname {width: 100px;}' +
+            '.time {width: 25px;}' +
+            '.place {width: 40px}' +
+            '</style>' +
+            table;
         $.ajax({
             url: "/Carting/SHKP/maneuver",
             type: "POST",
             data: {
-                table: $('#maneuver').html(),
-                raceId: $("#raceId").val()
+                table: table,
+                raceId: $("#raceId").val(),
+                ids : JSON.stringify(idArray).replace('[','').replace(']',''),
+                times: JSON.stringify(timeArray).replace('[','').replace(']','')
             },
             success: function(response) {
                 if (response !== 0) {

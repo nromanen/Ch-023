@@ -94,7 +94,10 @@
             </tr>
         </theader>
     </table><p><p>
-                    <div style="text-align: center;"><span align="right"><spring:message code="label.skittle_fine" />: <input type="text" id="penalty" value="5" size="1"></span></div><p>
+                    <div style="text-align: center;">
+                        <spring:message code="label.skittle_fine" />: <input type="text" id="penalty" value="5" size="1">&emsp;
+                        <spring:message code="label.max_allowed_broken_skittles" />: <input type="text" id="max_skittles" value="6" size="1">
+                    </div><p>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -116,7 +119,7 @@
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
         <spring:message code="label.data_save_success" />
     </div>     
-<div id="maneuver">
+<div align="center" id="maneuver">
 <meta charset="utf-8">
 <style>
     table {
@@ -126,10 +129,12 @@
         font-family: 'Arial', Arial, monospace;
     }
 </style>
-    <table width="100%" align="center">
+    <table width="100%" align="center" cellspacing='0' cellpadding='2'>
             <tr>
                 <td align='center'>
-                   <span style="font-weight:bold;font-size:20pt;"><c:out value="${competitionName}"/></span>
+                   <span style="font-weight:bold;font-size:18pt"><spring:message code="label.ministry_of_education" /></span><p>
+                   <span style="font-weight:bold;font-size:18pt"><spring:message code="label.state_center" /></span><p>
+                   <span style="font-weight:bold;font-size:18pt;"><c:out value="${competitionName}"/></span>
                 </td>
             </tr>
     </table>
@@ -144,12 +149,12 @@
         <thead>
         <tr>
             <td align='center'>
-                <span style="font-weight:bold;font-size:18pt">Протокол особистого заліку з Швидкісного маневрування</span>
+                <span style="font-weight:bold;font-size:18pt"><spring:message code="label.maneuver_protocol" /></span><p>
             </td>
         </tr>
         </thead>
     </table>
-        <table class="two" border="1" id="maneuverTable">
+        <table border="1" id="maneuverTable">
                 <tr class="well" id="head">
                         <td align='center'>№ п/п</td>
                         <td align='center'><spring:message code="label.lastname_firstname" /></td>
@@ -162,24 +167,24 @@
                         <td align='center' class="stopLine"><spring:message code="label.stopLine" /></td>
                         <td align='center'><spring:message code="label.time" /></td>
                         <td align='center'><spring:message code="label.points_sum" /></td>
-                        <td align='center'><spring:message code="label.place" /></td>
                         <td align='center'><spring:message code="label.points_by_table_b" /></td>
+                        <td align='center'><spring:message code="label.place" /></td>
                 </tr>
             <c:forEach items="${racers}" var="racer" varStatus="index">
                 <tr class="cols">
-                    <td><c:out value="${index.count}"/></td>
-                    <td><c:out value="${racer.getRacer().getLastName()}"/> <c:out value="${racer.getRacer().getFirstName()}"/></td>
-                    <td><c:out value="${racer.getRacer().getTeam().getName()}"/></td>
-                    <td><c:out value="${racer.getRacer().getStringSportsCategory()}"/></td>
-                    <td><c:out value="${racer.getNumberInCompetition()}"/></td>
+                    <td align="center" class="pos"><c:out value="${index.count}"/></td>
+                    <td align="center" class="racername"><c:out value="${racer.getRacer().getLastName()}"/> <c:out value="${racer.getRacer().getFirstName()}"/></td>
+                    <td align="center" class="teamname"><c:out value="${racer.getRacer().getTeam().getName()}"/></td>
+                    <td align="center" class="sportcategory"><c:out value="${racer.getRacer().getStringSportsCategory()}"/></td>
+                    <td align="center" class="pos"><c:out value="${racer.getNumberInCompetition()}"/></td>
                     <c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
-                        <td class="maneuver${index.count}"><span id="maneuver${index.count}${racer.getNumberInCompetition()}">0</span></td>
+                        <td align="center" class="maneuver${index.count} maneuvers"><span id="maneuver${index.count}${racer.getNumberInCompetition()}">0</span></td>
                     </c:forEach>
-                    <td class="stopLine"><span id="stopLine${racer.getNumberInCompetition()}">0</span></td>
-                    <td><span id="time${racer.getNumberInCompetition()}">0</span></td>
-                    <td><span id="sum${racer.getNumberInCompetition()}">0</span></td>
-                    <td><span id="place${racer.getNumberInCompetition()}"></span></td>
-                    <td><span id="tableB${racer.getNumberInCompetition()}"></span></td>
+                    <td align="center" class="stopLine maneuvers"><span id="stopLine${racer.getNumberInCompetition()}">0</span></td>
+                    <td align="center" class="time"><span class="timetext" id="time${racer.getNumberInCompetition()}">0</span></td>
+                    <td align="center" class="maneuvers"><span id="sum${racer.getNumberInCompetition()}">0</span></td>
+                    <td align="center" class="maneuvers"><span id="tableB${racer.getNumberInCompetition()}"></span></td>
+                    <td align="center" class="place"><span id="place${racer.getNumberInCompetition()}"></span></td>
                 </tr>
             </c:forEach> 
         </table>
@@ -187,11 +192,11 @@
     <table width="100%" align="center">
             <tr>
                 <td align='left'><spring:message code="label.main_secretary" /></td>
-                <td align='right'>(<spring:message code="label.judge" /> = <c:out value="${judgeSecretary}"/>) <c:out value="${secretaryName}"/></td>
+                <td align='right'>(<spring:message code="label.judge" />: <c:out value="${judgeSecretary}"/>) <c:out value="${secretaryName}"/></td>
             </tr>
             <tr>
                 <td align="left"><spring:message code="label.competition.director_name" />:</td>
-                <td align="right">(<spring:message code="label.judge" /> = <c:out value="${judgeDirector}"/>) <c:out value="${directorName}"/></td>
+                <td align="right">(<spring:message code="label.judge" />: <c:out value="${judgeDirector}"/>) <c:out value="${directorName}"/></td>
             </tr>
     </table>
 </div>

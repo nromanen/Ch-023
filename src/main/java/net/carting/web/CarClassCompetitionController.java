@@ -102,6 +102,7 @@ public class CarClassCompetitionController {
             model.addAttribute("raceResultsLists", raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
             model.addAttribute("chessRollsList", raceService.getChessRollsByCarClassCompetition(carClassCompetition));
             model.addAttribute("raceListSize", raceService.getRacesByCarClassCompetition(carClassCompetition).size());
+            //TODO: label
             model.addAttribute("absoluteResultsList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
             model.addAttribute("maxRaces", MAX_RACES);
             model.addAttribute("qualifyingList", qualifyingService.

@@ -85,7 +85,7 @@
 <meta charset="utf-8">
  <style>
      table {
-        font-family: "Arial", Times, monospace;
+        font-family: "Arial", Arial, monospace;
      }
      .place {
       font-size: 200%;
@@ -127,7 +127,7 @@
                 <td align='center' colspan='2'><c:out value="${competitionDate}"/></td>
               </c:when>
                   <c:otherwise>
-                      <td style="display: none;" align='center' colspan='2'><c:out value="${competitionName}"/></td>
+                      <td style="display: none;" align='center' colspan='2'><c:out value="${competitionDate}"/></td>
                   </c:otherwise>
               </c:choose>
           </c:forEach>
@@ -229,7 +229,7 @@
                     <td colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
                   </c:when>
                   <c:otherwise>
-                      <td style="display: none;" colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
+                    <td style="display: none;" colspan='2'><spring:message code="label.main_secretary" /> <c:out value="${secretaryName}"/></td>
                   </c:otherwise>
               </c:choose>
           </c:forEach>

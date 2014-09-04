@@ -40,6 +40,11 @@ $(document).ready(function(){
 		$('#add_carclass_modal').modal();
 		return false;
 	});
+
+	$('#add_maneuver').click(function(){
+		$('#add_maneuver_modal').modal();
+		return false;
+	});
 	
 	$("#add_car_class_form").submit(function(){
 		$('#age_error').css("display","none");
@@ -210,7 +215,7 @@ $(document).ready(function(){
 		        	if(response == "success"){
 		        		$('#edit_place_success').css("display", "block").hide().fadeIn();
 						$('#edit_place_success').delay(2000).fadeOut('slow');
-						location.reload().delay(2000);
+						location.reload();
 		        	} else {
 		        		$('#edit_place_error').css("display", "block").hide().fadeIn();
 						$('#edit_place_error').delay(2000).fadeOut('slow');
@@ -268,14 +273,86 @@ $(document).ready(function(){
 	$("#add_place").click(function(){
 		$('#add_place_modal').modal();
 	});
-	
+
 	$("#points_count").keyup(function () {
-		if(!numberTest($(this).val())){ 
+		if(!numberTest($(this).val())){
 			$("#add_place_btn").attr("disabled", "disabled");
 		} else {
 			$("#add_place_btn").removeAttr("disabled");
 		}
 	});
+
+	$(".delete_maneuver").click(function () {
+        $.ajax({
+            url: "deleteManeuver",
+            data: {
+                id: $(this).attr("maneuver")
+            },
+            type: "POST",
+            success: function(response) {
+                if (response === "success") {
+                    location.reload();
+                } else {
+                    console.log(response);
+                    $('#delete_place_error').css("display", "block").hide().fadeIn();
+                    $('#delete_place_error').delay(2000).fadeOut('slow');
+                }
+            }
+        });
+	});
+
+    $("#new_maneuver").keyup(function () {
+        if($(this).val().length <= 0){
+            $("#add_maneuver_btn").attr("disabled", "disabled");
+        } else {
+            $("#add_maneuver_btn").removeAttr("disabled");
+        }
+    });
+
+    $("#edit_maneuver").click(function(){
+        var json = [];
+        $(".man").each(function () {
+            var id = $(this).attr("maneuverId");
+            var name = $(this).val();
+            json.push({id: id, name: name});
+        });
+        $.ajax({
+            url: "/Carting/admin/updateManeuver",
+            data: JSON.stringify(json),
+            contentType: 'application/json',
+            type: "POST",
+            success: function(response) {
+                if(response == "success"){
+                    $('#change_feedback_email_success').css("display", "inline-block").hide().fadeIn();
+                    $('#change_feedback_email_success').delay(2000).fadeOut('slow');
+                } else {
+                    $('#change_feedback_email_error').css("display", "inline-block").hide().fadeIn();
+                    $('#change_feedback_email_error').delay(2000).fadeOut('slow');
+                }
+            }
+        });
+
+    });
+
+	$("#add_maneuver_btn").click(function(){
+        $.ajax({
+            url: "addManeuver",
+            data: {
+                maneuverName: $("#new_maneuver").val()
+            },
+            type: "POST",
+            success: function(response) {
+                if (response === "success") {
+                    location.reload();
+                } else {
+                    console.log(response);
+                    $('#delete_place_error').css("display", "block").hide().fadeIn();
+                    $('#delete_place_error').delay(2000).fadeOut('slow');
+                }
+            }
+        });
+	});
+
 	
 	$("#add_place_btn").click(function(){
 		var pointsStr = getPointsString();

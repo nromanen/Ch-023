@@ -7,6 +7,8 @@ import net.carting.service.*;
 import java.util.List;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import net.carting.util.PdfWriter;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,9 @@ public class SHKPController {
 
         @Autowired
         ManeuverService maneuverService;
+
+        @Autowired
+        CarClassCompetitionResultService carClassCompetitionResultService;
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
@@ -100,8 +105,10 @@ public class SHKPController {
 
     @RequestMapping(value = "maneuver", method = RequestMethod.POST)
     @ResponseBody
-    public int createManeuverStatement(Model model, @RequestParam(value = "table") String table,
-                                          @RequestParam(value = "raceId") int raceId) {
+    public int createManeuverStatement(@RequestParam(value = "table") String table,
+                                          @RequestParam(value = "raceId") int raceId,
+                                          @RequestParam(value = "ids")  List<Integer> idArray,
+                                          @RequestParam(value = "times")  List<Double> timeArray) {
         int result;
         try {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(raceId);
@@ -116,6 +123,17 @@ public class SHKPController {
                     + Calendar.getInstance().getTimeInMillis();
             maneuver.setName(fileName);
             carClassCompetition.setManeuverStatement(maneuver);
+            List<CarClassCompetitionResult> competitionResults = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
+            for (CarClassCompetitionResult competitionResult : competitionResults) {
+                for (int i = 0; i < idArray.size(); i++) {
+                    int racerId = idArray.get(i);
+                    double maneuverTime = timeArray.get(i);
+                    if (competitionResult.getRacerCarClassCompetitionNumber().getNumberInCompetition() == racerId) {
+                        competitionResult.setManeuverTime(maneuverTime);
+                        carClassCompetitionResultService.updateCarClassCompetitionResult(competitionResult);
+                    }
+                }
+            }
             carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
             result = carClassCompetitionService.getCarClassCompetitionById(raceId).getManeuverStatement().getId();
         } catch (Exception e) {

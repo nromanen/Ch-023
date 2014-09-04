@@ -169,66 +169,105 @@
 		 <spring:message code="dataerror.carclass_delete" />
 	</div>
 	<br>
-	<table width="60%">
+	<table width="100%">
 		<th>
-			<label class="text-info" style="font-size: 20px;">
-				5.&nbsp;<spring:message code="label.admin_points_by_places" />:
-			</label>
+			<div align="left">
+				<label class="text-info" style="font-size: 20px;">
+					5.&nbsp;<spring:message code="label.admin_points_by_places" />:
+				</label>
+			</div>
 		</th>
-		<th align="right" class="text-right">
-			<label class="text-info" style="font-size: 20px;">
-				6.&nbsp;<spring:message code="label.admin_points_by_places" />:
-			</label>
+		<th>
+			<div align="center">
+				<label class="text-info" style="font-size: 20px;">
+					6.&nbsp;<spring:message code="label.maneuver" />:
+				</label>
+			</div>
 		</th>
 		<tr>
 			<td>
-				<form data-toggle="validator" role="form">
-					<div class="text-left" style="width: 100%;">
-							<table id="points_table" class="table table-hover text-center"
-								   style="cursor: pointer; width: 25%;">
-								<tr class="warning" style="font-weight: bolder;">
-									<td><spring:message code="label.place" /></td>
-									<td><spring:message code="label.points" /></td>
-									<td></td>
-								</tr>
-								<c:forEach items="${pointsByPlacesList}" var="pointsByPlace" varStatus="count">
-									<tr>
-										<td>${count.count }</td>
-										<td><input type="text" class="points" style="width: 100px;"
-											value="${pointsByPlace}"
-											required pattern="^[0-9]+$" required
-											data-bv-notempty="true"
-											data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
-											/>
-										</td>
-										<td>
-											<c:if test="${pointsByPlacesList.size() == count.count}">
-												<a id="delete_place"><span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="<spring:message code="label.delete_last" />"></span></a>
-											</c:if>
-										</td>
+				<div align="center">
+					<form data-toggle="validator" role="form">
+						<div class="text-left" style="width: 100%;">
+								<table id="points_table" class="table table-hover text-center"
+									   style="cursor: pointer; width: 50%;">
+									<tr class="warning" style="font-weight: bolder;">
+										<td><spring:message code="label.place" /></td>
+										<td><spring:message code="label.points" /></td>
+										<td></td>
 									</tr>
-								</c:forEach>
-							</table>
-						<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
-						<button type="button" class="btn btn-primary" id="add_place">
-							<spring:message code="label.add" />
+									<c:forEach items="${pointsByPlacesList}" var="pointsByPlace" varStatus="count">
+										<tr>
+											<td>${count.count }</td>
+											<td><input type="text" class="points" style="width: 100px;"
+												value="${pointsByPlace}"
+												required pattern="^[0-9]+$" required
+												data-bv-notempty="true"
+												data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+												/>
+											</td>
+											<td>
+												<c:if test="${pointsByPlacesList.size() == count.count}">
+													<button id="delete_place" class="btn btn-default btn-sm glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="<spring:message code="label.delete" />"/>
+												</c:if>
+											</td>
+										</tr>
+									</c:forEach>
+								</table>
+							<div align="right" class="btn-group">
+								<button type="button" class="btn btn-primary btn-sm" id="add_place">
+									<spring:message code="label.add" />
+								</button>
+								<button type="button" class="btn btn-success btn-sm" id="edit_place">
+									<spring:message code="label.accept_changes" />
+								</button>
+							</div>
+							<input type="hidden" id="admin_url" value="<c:url value="/admin" />">
+							<div class="alert alert-success" id="edit_place_success"
+								 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+								 <spring:message code="label.data_save_success" />!
+							</div>
+							<div class="alert alert-danger" id="edit_place_error"
+								 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+								 <spring:message code="label.data_save_error" />!
+							</div>
+						</div>
+					</form>
+				</div>
+			</td>
+			<td align="right">
+				<div align="center">
+					<table id="maneuver_table" class="table table-hover text-center"
+						   style="cursor: pointer; width: 50%;">
+						<tr class="warning" style="font-weight: bolder;">
+							<td><spring:message code="label.number" /></td>
+							<td><spring:message code="label.maneuver" /></td>
+							<td></td>
+						</tr>
+						<c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
+							<tr>
+								<td>${index.count }</td>
+								<td><input maneuverId="${maneuver.getId()}" class="man"  type="text" style="width: 100px;"
+										   value="${maneuver.getName()}" required
+										   data-bv-notempty="true"
+										   data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+										/>
+								</td>
+								<td>
+									<button maneuver="${maneuver.getId()}" class="btn btn-default btn-sm glyphicon glyphicon-remove delete_maneuver" style="color: red; cursor: pointer; float: right;" title="<spring:message code="label.delete" />"/>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+					<div align="center" class="btn-group">
+						<button type="button" class="btn btn-primary btn-sm" id="add_maneuver">
+							<spring:message code="label.add_maneuver" />
 						</button>
-						<button type="button" class="btn btn-success" id="edit_place">
+						<button type="button" class="btn btn-success btn-sm" id="edit_maneuver">
 							<spring:message code="label.accept_changes" />
 						</button>
-						<div class="alert alert-success" id="edit_place_success"
-							 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-							 <spring:message code="label.data_save_success" />!
-						</div>
-						<div class="alert alert-danger" id="edit_place_error"
-							 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
-							 <spring:message code="label.data_save_error" />!
-						</div>
 					</div>
-				</form>
-			</td>
-			<td>
-				werwe
+				</div>
 			</td>
 		</tr>
 	</table>
@@ -408,6 +447,33 @@
 					<spring:message code="label.cancel" />	
 				</button>
 				<button class="btn btn-success" type="button" id="add_place_btn" disabled>
+					<spring:message code="label.add" />
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Add maneuver modal -->
+<div class="modal fade" id="add_maneuver_modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" style="margin-top: 15%;">
+		<div class="modal-content">
+			<div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
+				<h4 class="modal-title"><spring:message code="label.add_maneuver" /></h4>
+			</div>
+			<div class="modal-body">
+				<label class="text-info">
+					<spring:message code="label.maneuver" />:&nbsp;
+				</label>
+				<input type="text" class="form-control"
+					   placeholder="<spring:message code="label.maneuver" />" id="new_maneuver" />
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="button" data-dismiss="modal">
+					<spring:message code="label.cancel" />
+				</button>
+				<button class="btn btn-success" type="button" id="add_maneuver_btn" disabled>
 					<spring:message code="label.add" />
 				</button>
 			</div>

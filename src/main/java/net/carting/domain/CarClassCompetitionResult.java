@@ -29,6 +29,10 @@ public class CarClassCompetitionResult {
     @JoinColumn(name = "racer_competition_carclass_number_id", nullable = false)
     private RacerCarClassCompetitionNumber racerCarClassCompetitionNumber;
 
+    //TODO: label
+    @Column(name="maneuver_time")
+    private double maneuverTime;
+
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumber() {
         return racerCarClassCompetitionNumber;
     }
@@ -81,6 +85,14 @@ public class CarClassCompetitionResult {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public double getManeuverTime() {
+        return maneuverTime;
+    }
+
+    public void setManeuverTime(double maneuverTime) {
+        this.maneuverTime = maneuverTime;
     }
 
     @Override

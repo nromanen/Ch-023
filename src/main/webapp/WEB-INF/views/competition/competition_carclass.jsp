@@ -18,7 +18,7 @@ pageEncoding="utf-8"%>
        </div>
         </td>
         <td style="padding: 15px 0px 0px 20px;">
-            <c:if test="${authority.equals('ROLE_ADMIN')}">
+            <c:if test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
                 <div class="btn-group">
                     <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                         <spring:message code="label.protocols" /> <span class="caret"></span>
@@ -30,8 +30,20 @@ pageEncoding="utf-8"%>
                         <li><a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />'><spring:message code="label.maneuvering" /></a></li>
                     </ul>
                 </div>
-                <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
-                        <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
+                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <spring:message code="label.add" /> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <c:if test="${empty qualifyingList && raceListSize==0 &&!empty racerCarClassCompetitionNumberList}">
+                                <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />'><spring:message code="label.add_qualifying" /></a></li>
+                            </c:if>
+                            <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
+                                <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />'><spring:message code="label.add_results" /></a></li>
+                            </c:if>
+                        </ul>
+                    </div>
                 </c:if>
             </c:if>
         </td>
@@ -217,6 +229,7 @@ pageEncoding="utf-8"%>
                                 <th style="text-align: center;"><spring:message code="label.car_number" /></th>
                                 <th style="text-align: center;"><spring:message code="label.racer" /></th>
                                 <th style="text-align: center;"><spring:message code="label.summary_results_editing_summarypoints" /></th>
+                                <th style="text-align: center;"><spring:message code="label.maneuver_time" /></th>
                                 <th style="text-align: center;"><spring:message code="label.summary_results_editing_comment" /></th>
                             </thead>
                             <tbody>
@@ -231,8 +244,8 @@ pageEncoding="utf-8"%>
                                                 </a>
                                             </td>
                                             <td>${absoluteResult.absolutePoints}</td>
+                                            <td>${absoluteResult.maneuverTime}</td>
                                             <td>${absoluteResult.comment}</td>
-
                                         </tr>
                                     </c:forEach>
                                 </c:if>
