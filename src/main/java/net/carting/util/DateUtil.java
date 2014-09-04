@@ -54,7 +54,7 @@ public class DateUtil {
         System.out.println("ms: "+S);
         timeResult = String.format("%02d:%02d:%02d,%02d",h,m,s,S);
         System.out.println(timeResult);
-        return timeResult;
+        return timeResult; 
     }
     
     public static Integer getIntFromTimeString(String timeString) {
