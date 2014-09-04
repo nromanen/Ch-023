@@ -60,7 +60,7 @@ pageEncoding="utf-8"%>
 				</c:otherwise>
 			</c:choose>
 		<div class="form-group">
-		<input type="hidden" class="times" name="timeResult" id="time">
+		<input type="text" class="times" name="timeResult" id="time">
 		<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 		<div class="col-lg-9 col-lg-offset-3">
 			<c:choose>
@@ -90,6 +90,11 @@ pageEncoding="utf-8"%>
 			function() {
 				if(this.value!='') {
 					this.value = this.value.replace(",",".")
+					if(this.value.indexOf(',')>0) {
+						alert(this.value)
+						this.value=this.value.replace(",",".")
+						alert(this.value)
+					}
 					if(mas.indexOf(this.value)<0) {
 					mas.push(this.value.trim());
 					} else {
