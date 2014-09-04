@@ -2,6 +2,10 @@ package net.carting.web;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +13,7 @@ import net.carting.domain.*;
 import net.carting.service.*;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +38,6 @@ public class AdminController {
     private TeamService teamService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private LogsService logsService;
     @Autowired
     private ManeuverService maneuverService;
 
@@ -168,14 +171,6 @@ public class AdminController {
         userService.resetPassword(leader.getUser());
         LOG.trace("Admin has reseted leader({} {}) password to default",leader.getFirstName(), leader.getLastName());
         return "success";
-    }
-
-    @RequestMapping(value = "/logs", method = RequestMethod.GET)
-    public
-    String getLogs(Model model) {
-        List<Logs> list = logsService.getAllLogs();
-        model.addAttribute("logs", list);
-        return "logs";
     }
 
     @RequestMapping(value = "/addManeuver", method = RequestMethod.POST)

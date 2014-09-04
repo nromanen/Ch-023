@@ -1,7 +1,7 @@
 package net.carting.dao;
 
-import net.carting.domain.Logs;
-
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +10,10 @@ import java.util.List;
  */
 public interface LogsDAO {
 
-    List<Logs> getAllLogs();
+    List getAllLogs();
+
+    List getLogsByDate(Timestamp date);
+
+    List getLogsByPeriod(Timestamp start, Timestamp end);
 
 }

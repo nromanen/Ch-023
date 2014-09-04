@@ -21,7 +21,7 @@
 				</h2>
 			</td>
 			<td style="width: 20%; padding: 15px 10px 0px 20px;">
-				<a href="<c:url value="logs" />"
+				<a href="<c:url value="/logs/today" />"
 					class="btn btn-success" style="float: right;">
 					<spring:message code="label.admin_log" />
 				</a>

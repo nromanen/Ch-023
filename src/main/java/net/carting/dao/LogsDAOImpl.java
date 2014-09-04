@@ -1,10 +1,12 @@
 package net.carting.dao;
 
-import net.carting.domain.Logs;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,8 +20,22 @@ public class LogsDAOImpl implements LogsDAO {
     private EntityManager entityManager;
 
     @Override
-    public List<Logs> getAllLogs() {
-        List<Logs> logsList = entityManager.createQuery("from Logs").getResultList();
-        return logsList;
+    public List getAllLogs() {
+        return entityManager.createQuery("from Logs").getResultList();
+    }
+
+    @Override
+    public List getLogsByDate(Timestamp date) {
+        Query query = entityManager.createQuery("FROM Logs l WHERE l.date = :date");
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
+    @Override
+    public List getLogsByPeriod(Timestamp start, Timestamp end) {
+        Query query = entityManager.createQuery("FROM Logs l WHERE l.date  >= :startDate AND l.date <= :endDate");
+        query.setParameter("startDate", start);
+        query.setParameter("endDate", end);
+        return query.getResultList();
     }
 }

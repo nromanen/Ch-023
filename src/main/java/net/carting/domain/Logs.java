@@ -1,7 +1,7 @@
 package net.carting.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Carting
@@ -22,12 +22,12 @@ public class Logs {
     String message;
 
     @Column(name = "date")
-    Date date;
+    Timestamp date;
 
     public Logs() {
     }
 
-    public Logs(String logger, String level, String message, Date date) {
+    public Logs(String logger, String level, String message, Timestamp date) {
         this.logger = logger;
         this.level = level;
         this.message = message;
@@ -58,11 +58,11 @@ public class Logs {
         this.message = message;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 }

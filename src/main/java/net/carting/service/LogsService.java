@@ -1,7 +1,7 @@
 package net.carting.service;
 
-import net.carting.domain.Logs;
-
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,5 +10,10 @@ import java.util.List;
  */
 public interface LogsService {
 
-    List<Logs> getAllLogs();
+    List getAllLogs();
+
+    List getLogsByDate(Timestamp date);
+
+    List getLogsByPeriod(Timestamp start, Timestamp end);
+
 }

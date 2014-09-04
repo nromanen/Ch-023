@@ -177,7 +177,17 @@
         <put-attribute name="content" value="/WEB-INF/views/admin/admin_cabinet.jsp"/>
     </definition>
 
-    <definition name="logs" extends="base-template">
+    <definition name="all_logs" extends="base-template">
+        <put-attribute name="title" value="Logs"/>
+        <put-attribute name="content" value="/WEB-INF/views/admin/logs.jsp"/>
+    </definition>
+
+    <definition name="today_logs" extends="base-template">
+        <put-attribute name="title" value="Logs"/>
+        <put-attribute name="content" value="/WEB-INF/views/admin/logs.jsp"/>
+    </definition>
+
+    <definition name="search_logs" extends="base-template">
         <put-attribute name="title" value="Logs"/>
         <put-attribute name="content" value="/WEB-INF/views/admin/logs.jsp"/>
     </definition>
