@@ -251,8 +251,13 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
+        
         LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+        if (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()>1) {
+            System.out.println("There is enough races for this carclass.");
+            return "redirect:/carclass/" + id;
+        }
         race.setCarClassCompetition(carClassCompetition);
         race.setCarClass(carClassCompetition.getCarClass());
         raceService.setRaceNumber(carClassCompetition, race);

@@ -4,6 +4,7 @@ pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <script type='text/javascript' src='<c:url value="/resources/js/competition_carclass.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
@@ -196,7 +197,7 @@ pageEncoding="utf-8"%>
 
 
 <div>
-<c:if test="${raceListSize==2}">
+<c:if test="${raceListSize=>1}">
     <c:if test="${!empty absoluteResultsList}">
         <div class="panel panel-primary">
                 <div class="panel-heading" style="height: 50px;">
@@ -249,6 +250,14 @@ pageEncoding="utf-8"%>
                         <div class="text-info" style="color: #fff; font-size: 20px; float: left;">
                             <a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race_qualifying">
                                 <spring:message code="label.qualifying_results"/>:
+                                <c:if test="${!empty racersNumsWithSameTimeList}">
+                                <span style="color:#FFFF00;" >
+                                Problems with racers #
+                                <c:forEach items="${racersNumsWithSameTimeList}" var="number">
+                                &nbsp;${number}
+                                </c:forEach>!
+                                </span>
+                                </c:if>
                             </a>
                         </div>
                         <c:if test="${authority.equals('ROLE_ADMIN')}">
@@ -279,7 +288,20 @@ pageEncoding="utf-8"%>
                                                 </c:if>
                                              </c:forEach>
                                          </td>
-                                         <td>${qualifying.getTimeString()}</td>
+                                         <td>
+                                         <c:forEach items="${racersNumsWithSameTimeList}" var="sameNumber">
+                                         <c:choose>
+                                         <c:when test="${qualifying.racerNumber==sameNumber}">
+	                                         <span style="color: red; font-weight: bold;">
+                                         </c:when>
+                                          <c:otherwise>
+                                          <span>
+                                          </c:otherwise>
+                                          </c:choose>
+                                          </c:forEach>
+                                          ${qualifying.getTimeString()}
+                                           </span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </table>

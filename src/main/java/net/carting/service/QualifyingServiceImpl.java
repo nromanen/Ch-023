@@ -154,15 +154,19 @@ public class QualifyingServiceImpl implements QualifyingService {
 	}
 	List<Integer> qNums = new ArrayList<Integer>();
 	for (int i = 0; i < ques.size() - 1; i++) {
-	    if (!qNums.contains(ques.get(i))) {
 		for (int j = i + 1; j < ques.size(); j++) {
 		    System.out.println(ques.get(i).getRacerTime() + " = " + ques.get(j).getRacerTime());
 		    if (ques.get(i).getRacerTime().equals(ques.get(j)
 			    .getRacerTime())) {
-			qNums.add(ques.get(i).getRacerNumber());
-			System.out.print(ques.get(i).getRacerTime() + " added ");
+		        if (!qNums.contains(ques.get(i).getRacerNumber())) {
+        			qNums.add(ques.get(i).getRacerNumber());
+        			System.out.print(ques.get(i).getRacerTime() + " added ");
+		        }
+		        if (!qNums.contains(ques.get(j).getRacerNumber())) {
+                    qNums.add(ques.get(j).getRacerNumber());
+                }
+		        
 		    }
-		}
 	    }
 	}
 	System.out.println(qNums);

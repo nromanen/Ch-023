@@ -69,11 +69,6 @@ $(document).ready(function(){
             $('#incorrectPositions').delay(2000).fadeOut('slow');
         }
     });
-    var s = $("#qual_count").val()
-    if (s>0) {
-    	$("#save").click()
-    }
-    
 });
 </script>
 
@@ -90,11 +85,13 @@ $(document).ready(function(){
                             <th style="text-align: center;">№</th>
                             <th style="text-align: center;"><spring:message code="label.racer" /></th>
                             <th style="text-align: center;"><spring:message code="label.number" /></th>
+                             <c:if test="${empty qualifyingList}">
                             <th style="text-align: center;"><spring:message code="label.document_start_pos" /></th>
+                            </c:if>
                         </thead>
                         <tbody>
                             <% int number = 1; %>
-                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="counter">
                                 <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                     <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
                                     <td><%= number %></td>
@@ -110,22 +107,21 @@ $(document).ready(function(){
                                     <td>
                                         ${racerCarClassCompetitionNumber.numberInCompetition}
                                     </td>
+                                    <c:if test="${empty qualifyingList}">
                                     <td>
                                             <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}"
-                                            pattern="[0-9]{2}"
-                                            <c:if test="${!empty qualifyingList}">
-                                            	value="${qualifyingList.get(counter.index).racerPlace}"
-                                            </c:if>
-                                            >
-                                            <input type="hidden" value="${qualifyingList.size()}" id="qual_count">
+                                            pattern="[0-9]{2}">
                                     </td>
+                                    </c:if>
                                 </tr>
                                 <% number++; %>
                             </c:forEach>
                         </tbody>
                     </table>
                     <center>
+                     <c:if test="${empty qualifyingList}">
                         <a class="btn btn-sml btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
+                        </c:if>
                         <a class="btn btn-sml btn-success" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a>
                         <c:if test="${oldDoc > 0}">
                             <a id="prevVersion" class="btn btn-sml btn-warning" href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a>
@@ -203,10 +199,25 @@ $(document).ready(function(){
             <c:set var="j" value="${maxPositions-i+1}"/>
             <c:set var="k" value="${maxPositions-i}"/>
             <tr>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+                    </c:forEach></span></td>
             </tr>
         </c:forEach>
         <tr>
