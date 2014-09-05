@@ -17,10 +17,32 @@ $(document).ready(function(){
         } else {
             $(this).val(0);
         }
+        getTotalSum();
     });
 
+
+
+    /*function sortAndGetPlaces() {
+        var table = document.getElementById('maneuverTable');
+        sorttable.makeSortable(table);
+        sorttable.innerSortFunction.apply(document.getElementById('loc'), []);
+        sorttable.innerSortFunction.apply(document.getElementById('total'), []);
+        var tableBarr = $("#tableB").val().replace('[', '').replace(']', '').split(',');
+        var i = 0;
+        $(".place").each(function () {
+            $(this).text(++i);
+        });
+
+        var count = Number($("#racersCount").val());
+        for (i = 1; i <= count; i++) {
+            var racerId = $("#id" + i).val();
+            $("#tableB" + racerId).text(tableBarr[i-1]);
+        }
+        //$('#maneuverTable').removeClass('sortable');
+    }*/
+
     function updatePDF() {
-        sorttable.innerSortFunction.apply(document.getElementById('place'), [])
+        //sortAndGetPlaces();
         var idArray = [];
         var timeArray = [];
         $(".timetext").each(function () {
@@ -58,6 +80,22 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    function getTotalSum() {
+        for (var i = 1; i <= Number($("#racersCount").val()); i++) {
+            var sum = 0;
+            var racerId = $("#id" + i).val();
+            for (var j = 1; j <= Number($("#maneuverCount").val()); j++) {
+                var manId = "#maneuver" + j + racerId;
+                var tmpValue = Number($(manId).text()) * Number($("#penalty").val());
+                sum = sum + (isNaN(tmpValue) ? 0 : tmpValue);
+            }
+            var time = Number($("#time" + racerId).text());
+            sum = sum + (isNaN(time) ? 0 : time)
+            $("#sum" + racerId).text(sum);
+        }
+        getPlaces();
     }
 
     $("#pdf").click(function() {

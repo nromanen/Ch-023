@@ -160,7 +160,7 @@
         <%--<table width="100%" id="maneuverTable" class="display table table-hover table-bordered" border='1' cellspacing='0' cellpadding='2'>--%>
         <thead style="font-weight: 100;">
                     <tr>
-                        <th align='center'>№ п/п</th>
+                        <th id="loc" align='center'>№ п/п</th>
                         <th align='center'><spring:message code="label.lastname_firstname" /></th>
                         <th align='center'><spring:message code="label.team_name" /></th>
                         <th align='center'><spring:message code="sportcategory.sport_category" /></th>
@@ -169,10 +169,10 @@
                             <th align='center' class="maneuver${index.count}">${maneuver.getName()}</th>
                         </c:forEach>
                         <th align='center' class="stopLine"><spring:message code="label.stopLine" /></th>
-                        <th align='center'><spring:message code="label.time" /></th>
-                        <th align='center'><spring:message code="label.points_sum" /></th>
-                        <th align='center'><spring:message code="label.points_by_table_b" /></th>
-                        <th id="place" align='center'><spring:message code="label.place" /></th>
+                        <th class="sorttable_numeric" align='center'><spring:message code="label.time" /></th>
+                        <th class="sorttable_numeric" id="total" align='center'><spring:message code="label.points_sum" /></th>
+                        <th class="sorttable_numeric" align='center'><spring:message code="label.points_by_table_b" /></th>
+                        <th class="sorttable_numeric" id="place" align='center'><spring:message code="label.place" /></th>
                     </tr>
         </thead>
             <c:forEach items="${racers}" var="racer" varStatus="index">
@@ -188,7 +188,7 @@
                     <td align="center" class="stopLine maneuvers"><span id="stopLine${racer.getNumberInCompetition()}">0</span></td>
                     <td align="center" class="time"><span class="timetext" id="time${racer.getNumberInCompetition()}">0</span></td>
                     <td align="center" class="maneuvers"><span id="sum${racer.getNumberInCompetition()}">0</span></td>
-                    <td align="center" class="maneuvers"><span id="tableB${racer.getNumberInCompetition()}"></span></td>
+                    <td align="center" class="maneuvers tableB"><span id="tableB${racer.getNumberInCompetition()}"></span></td>
                     <td align="center" class="place"><span id="place${racer.getNumberInCompetition()}"></span></td>
                 </tr>
             </c:forEach> 
