@@ -75,7 +75,8 @@ $(document).ready( function () {
 	</div>
 </form>
 <br/>
-<table id="logsTable" style="width:100%" class="table table-hover table-bordered well" border='1' cellspacing='0' cellpadding='2'>
+<table id="logsTable" class="display" cellspacing="0" width="100%">
+<%--<table id="logsTable" style="width:100%" class="display table table-hover table-bordered" border='1' cellspacing='0' cellpadding='2'>--%>
 	<thead class="well" style="font-weight: 100;">
 		<tr>
 			<th>Logger</th>
@@ -84,12 +85,14 @@ $(document).ready( function () {
 			<th>Date</th>
 		</tr>
 	</thead>
-	<c:forEach items="${logs}" var="log">
-		<tr>
-			<td><c:out value="${log.level}"/></td>
-			<td><c:out value="${log.logger}"/></td>
-			<td><c:out value="${log.message}"/></td>
-			<td><c:out value="${log.date}"/></td>
-		</tr>
-	</c:forEach>
+	<tbody>
+		<c:forEach items="${logs}" var="log">
+			<tr>
+				<td><c:out value="${log.level}"/></td>
+				<td><c:out value="${log.logger}"/></td>
+				<td><c:out value="${log.message}"/></td>
+				<td><c:out value="${log.date}"/></td>
+			</tr>
+		</c:forEach>
+	</tbody>
 </table>

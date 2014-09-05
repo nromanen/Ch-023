@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+ //   $('#maneuverTable').DataTable();
+
     $('body').on('change', 'input.test', function() {
         $(this).val($(this).val().replace(',', '.'));
         var num = Number($(this).val());
@@ -18,6 +20,7 @@ $(document).ready(function(){
     });
 
     function updatePDF() {
+        sorttable.innerSortFunction.apply(document.getElementById('place'), [])
         var idArray = [];
         var timeArray = [];
         $(".timetext").each(function () {
@@ -88,6 +91,7 @@ $(document).ready(function(){
     });
 
     $('#save').click(function() {
+        $("#pdf").attr("disabled", true);
         for (var i = 1; i <= Number($("#racersCount").val()); i++) {
             var sum = 0;
             var racerId = $("#id" + i).val();

@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<script type='text/javascript' src="<c:url value="/resources/js/lib/sorttable.js" />"></script>
 <script type='text/javascript' src='<c:url value="/resources/js/maneuver.js" />'></script>
   <style type="text/css">
     td{
@@ -118,7 +119,8 @@
     <div class="alert alert-success" id="correctPositions"
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
         <spring:message code="label.data_save_success" />
-    </div>     
+    </div>
+<%--This div is used to create PDF. Must be valid XHTML--%>
 <div align="center" id="maneuver">
 <meta charset="utf-8">
 <style>
@@ -154,24 +156,27 @@
         </tr>
         </thead>
     </table>
-        <table border="1" id="maneuverTable">
-                <tr class="well" id="head">
-                        <td align='center'>№ п/п</td>
-                        <td align='center'><spring:message code="label.lastname_firstname" /></td>
-                        <td align='center'><spring:message code="label.team_name" /></td>
-                        <td align='center'><spring:message code="sportcategory.sport_category" /></td>
-                        <td align='center'><spring:message code="label.start_number" /></td>
+	<table id="maneuverTable" class="sortable table-bordered" width="100%" border='1' cellspacing='0' cellpadding='2'>
+        <%--<table width="100%" id="maneuverTable" class="display table table-hover table-bordered" border='1' cellspacing='0' cellpadding='2'>--%>
+        <thead style="font-weight: 100;">
+                    <tr>
+                        <th align='center'>№ п/п</th>
+                        <th align='center'><spring:message code="label.lastname_firstname" /></th>
+                        <th align='center'><spring:message code="label.team_name" /></th>
+                        <th align='center'><spring:message code="sportcategory.sport_category" /></th>
+                        <th align='center'><spring:message code="label.start_number" /></th>
                         <c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
-                            <td align='center' class="maneuver${index.count}">${maneuver.getName()}</td>
+                            <th align='center' class="maneuver${index.count}">${maneuver.getName()}</th>
                         </c:forEach>
-                        <td align='center' class="stopLine"><spring:message code="label.stopLine" /></td>
-                        <td align='center'><spring:message code="label.time" /></td>
-                        <td align='center'><spring:message code="label.points_sum" /></td>
-                        <td align='center'><spring:message code="label.points_by_table_b" /></td>
-                        <td align='center'><spring:message code="label.place" /></td>
-                </tr>
+                        <th align='center' class="stopLine"><spring:message code="label.stopLine" /></th>
+                        <th align='center'><spring:message code="label.time" /></th>
+                        <th align='center'><spring:message code="label.points_sum" /></th>
+                        <th align='center'><spring:message code="label.points_by_table_b" /></th>
+                        <th id="place" align='center'><spring:message code="label.place" /></th>
+                    </tr>
+        </thead>
             <c:forEach items="${racers}" var="racer" varStatus="index">
-                <tr class="cols">
+                <tr>
                     <td align="center" class="pos"><c:out value="${index.count}"/></td>
                     <td align="center" class="racername"><c:out value="${racer.getRacer().getLastName()}"/> <c:out value="${racer.getRacer().getFirstName()}"/></td>
                     <td align="center" class="teamname"><c:out value="${racer.getRacer().getTeam().getName()}"/></td>
