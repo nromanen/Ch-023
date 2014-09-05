@@ -106,8 +106,10 @@ public class CarClassCompetitionController {
             model.addAttribute("maxRaces", MAX_RACES);
             model.addAttribute("qualifyingList", qualifyingService.
                     getQualifyingsByCarClassCompetition(carClassCompetition));
+            model.addAttribute("racersNumsWithSameTimeList", qualifyingService.getRacersNumbersWithSameQTime(carClassCompetition));
             model.addAttribute("membersCount", racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -288,7 +290,7 @@ public class CarClassCompetitionController {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         try{
             List<Qualifying> ques = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
-            if (ques.isEmpty())
+            if ((ques == null)||(ques.isEmpty()))
             return "redirect:/carclass/" + id;
         } catch(Exception e) {
             LOG.error("Errors in editQualifyings", e);

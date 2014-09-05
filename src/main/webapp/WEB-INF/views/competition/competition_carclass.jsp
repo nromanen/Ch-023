@@ -27,7 +27,7 @@ pageEncoding="utf-8"%>
                    <c:if test="${empty qualifyingList && raceListSize==0}">
                          <a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />' class="btn btn-primary"><spring:message code="label.add_qualifying" /></a>
                     </c:if>
-                    <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
+                    <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList && empty racersNumsWithSameTimeList}">
                             <a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />' class="btn btn-primary"><spring:message code="label.add_results" /></a>
                     </c:if>
                 </div>

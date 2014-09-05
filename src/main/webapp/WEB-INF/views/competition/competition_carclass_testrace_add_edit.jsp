@@ -91,16 +91,9 @@ pageEncoding="utf-8"%>
 				if(this.value!='') {
 					this.value = this.value.replace(",",".")
 					if(this.value.indexOf(',')>0) {
-						alert(this.value)
 						this.value=this.value.replace(",",".")
-						alert(this.value)
 					}
-					if(mas.indexOf(this.value)<0) {
 					mas.push(this.value.trim());
-					} else {
-						this.value='';
-						document.getElementById('addTestRacesubmit').disabled=true;
-					}
 				} else {
 					document.getElementById('addTestRacesubmit').disabled=true;
 				}

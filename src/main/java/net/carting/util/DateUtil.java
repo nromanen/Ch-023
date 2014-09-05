@@ -49,11 +49,16 @@ public class DateUtil {
         String timeResult = new String();
         long h = TimeUnit.MILLISECONDS.toHours(intTime);
         long m = TimeUnit.MILLISECONDS.toMinutes(intTime) - TimeUnit.HOURS.toMinutes(h);
-        long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m);
+        long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h);
         long S = intTime - TimeUnit.SECONDS.toMillis(s) - TimeUnit.MINUTES.toMillis(m) - TimeUnit.HOURS.toMillis(h);
-        System.out.println("ms: "+S);
-        timeResult = String.format("%02d:%02d:%02d,%02d",h,m,s,S);
-        System.out.println(timeResult);
+        if (S>0) {
+        	while (S%10==0) {
+        		S = S/10;
+        	}
+        	timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
+        } else {
+        	timeResult = String.format("%02d:%02d:%02d",h,m,s);
+        }
         return timeResult; 
     }
     
@@ -78,13 +83,16 @@ public class DateUtil {
     }
     public static int getMsFromS(String s) {
         int t= 0;
+        s = s.replace(',', '.');
         String[] milisecs=s.split("\\.");
-        if (milisecs[1].length()==3){
-            t=t+Integer.parseInt(milisecs[1]);
-        } else if (milisecs[1].length()==2) {
-            t=t+(Integer.parseInt(milisecs[1])*10);
-        } else if (milisecs[1].length()==1) {
-            t=t+(Integer.parseInt(milisecs[1])*100);
+        if (milisecs.length>1) {
+	        if (milisecs[1].length()==3){
+	            t=t+Integer.parseInt(milisecs[1]);
+	        } else if (milisecs[1].length()==2) {
+	            t=t+(Integer.parseInt(milisecs[1])*10);
+	        } else if (milisecs[1].length()==1) {
+	            t=t+(Integer.parseInt(milisecs[1])*100);
+	        }
         }
         t=t+(Integer.parseInt(milisecs[0])*1000);
         return t;
