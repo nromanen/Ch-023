@@ -93,12 +93,7 @@
                             </c:if>
                         </thead>
                         <tbody>
-<<<<<<< HEAD
                             <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="index">
-=======
-                            <% int number = 1; %>
-                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="counter">
->>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
                                 <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
                                     <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
                                     <td>${index.count}</td>
@@ -121,25 +116,10 @@
                                     </td>
                                     </c:if>
                                 </tr>
-                                <% number++; %>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <center>
-                                    </td>
-                                    </c:if>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-<<<<<<< HEAD
                     <div style="text-align: center;">
-=======
-                    <center>
-                     <c:if test="${empty qualifyingList}">
->>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
-                        <a class="btn btn-sml btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
-                        </c:if>
                         <a class="btn btn-sml btn-success" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a>
                         <c:if test="${oldDoc > 0}">
                             <a id="prevVersion" class="btn btn-sml btn-warning" href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a>
@@ -273,40 +253,34 @@
             <c:set var="j" value="${maxPositions-i+1}"/>
             <c:set var="k" value="${maxPositions-i}"/>
             <tr>
-<<<<<<< HEAD
                 <c:forEach var="i" begin="1" end="${tableRows}">
                     <c:choose>
                         <c:when test="${i == 1}">
-                        <td width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                        <td width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                       <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+		                    <c:forEach items="${qualifyingList}" var="qualifying">
+		                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+		                    </c:forEach>
+		                </span></td>
+                        <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+		                    <c:forEach items="${qualifyingList}" var="qualifying">
+		                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+		                    </c:forEach>
+		                </span></td>
                         </c:when>
                         <c:otherwise>
-                            <td style="display: none;" width='25%'><c:out value="${j}"/>)<span class="place p${j}"></span></td>
-                            <td style="display: none;" width='25%'><c:out value="${k}"/>)<span class="place p${k}"></span></td>
+                            <td style="display: none;" width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+	                            <c:forEach items="${qualifyingList}" var="qualifying">
+			                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+			                    </c:forEach>
+                            </span></td>
+                            <td style="display: none;" width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+                            	<c:forEach items="${qualifyingList}" var="qualifying">
+			                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+			                    </c:forEach>
+                            </span></td>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
-=======
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
-                    <c:forEach items="${qualifyingList}" var="qualifying">
-                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
-                    </c:forEach>
-                </span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
-                    <c:forEach items="${qualifyingList}" var="qualifying">
-                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
-                    </c:forEach>
-                </span></td>
-                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
-                    <c:forEach items="${qualifyingList}" var="qualifying">
-                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
-                    </c:forEach>
-                </span></td>
-                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
-                    <c:forEach items="${qualifyingList}" var="qualifying">
-                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
-                    </c:forEach></span></td>
->>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
             </tr>
         </c:forEach>
       <tr>

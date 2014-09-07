@@ -34,6 +34,7 @@ pageEncoding="utf-8"%>
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 </div>
+                </c:if>
                 <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -214,7 +215,7 @@ pageEncoding="utf-8"%>
 
 
 <div>
-<c:if test="${raceListSize=>1}">
+<c:if test="${raceListSize>0}">
     <c:if test="${!empty absoluteResultsList}">
         <div class="panel panel-primary">
                 <div class="panel-heading" style="height: 50px;">
