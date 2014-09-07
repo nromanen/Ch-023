@@ -75,6 +75,95 @@
     </div>
     <div class="alert alert-success" id="correctPositions"
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+<c:if test="${authority.equals('ROLE_ADMIN')}">
+    <div class="panel panel-primary">
+         <div class="panel-heading" style="height: 50px;">
+            <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.registered_racers" /></div>
+         </div>
+         <div class="panel-body" style="padding: 0px;">
+            <c:choose>
+                <c:when test="${!empty racerCarClassCompetitionNumberList}">
+                    <table class="table table-hover table-bordered" id="racers_table" style="text-align: center;">
+                        <thead class="well">
+                            <th style="text-align: center;">№</th>
+                            <th style="text-align: center;"><spring:message code="label.racer" /></th>
+                            <th style="text-align: center;"><spring:message code="label.number" /></th>
+                             <c:if test="${empty qualifyingList}">
+                            <th style="text-align: center;"><spring:message code="label.document_start_pos" /></th>
+                            </c:if>
+                        </thead>
+                        <tbody>
+<<<<<<< HEAD
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="index">
+=======
+                            <% int number = 1; %>
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="counter">
+>>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
+                                <tr class="team${racerCarClassCompetitionNumber.racer.team.id}
+                                    <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
+                                    <td>${index.count}</td>
+                                    <td style="text-align: left; padding-left: 20px;">
+                                        <a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
+                                            id="racer${racerCarClassCompetitionNumber.racer.id}">
+                                            ${racerCarClassCompetitionNumber.racer.firstName} ${racerCarClassCompetitionNumber.racer.lastName}
+                                        </a>
+                                        <c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
+                                            <span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        ${racerCarClassCompetitionNumber.numberInCompetition}
+                                    </td>
+                                    <c:if test="${empty qualifyingList}">
+                                    <td>
+                                            <input type="text" class="carPos" racer="${racerCarClassCompetitionNumber.numberInCompetition}"
+                                            pattern="[0-9]{2}">
+                                    </td>
+                                    </c:if>
+                                </tr>
+                                <% number++; %>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                    <center>
+                                    </td>
+                                    </c:if>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+<<<<<<< HEAD
+                    <div style="text-align: center;">
+=======
+                    <center>
+                     <c:if test="${empty qualifyingList}">
+>>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
+                        <a class="btn btn-sml btn-primary" id="save" ><spring:message code="label.accept_changes" /></a>
+                        </c:if>
+                        <a class="btn btn-sml btn-success" id="pdf" disabled><spring:message code="label.document_download_pdf" /></a>
+                        <c:if test="${oldDoc > 0}">
+                            <a id="prevVersion" class="btn btn-sml btn-warning" href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message code="label.previous_version_pdf" /></a>
+                        </c:if><p>
+                    </div>
+                    <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
+                        <spring:message code="label.there_are_no_racers_from_your_team" />
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger" style="margin-top: 10px; margin-left: 5px;">
+                        <spring:message code="label.racers_list_for_this_class_is_empty" />
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+</c:if>
+    <div class="alert alert-danger" id="incorrectPositions"
+        style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
+        <spring:message code="dataerror.document_start_incorrect_postions" />
+    </div>
+    <div class="alert alert-success" id="correctPositions"
+        style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
         <spring:message code="label.data_save_success" />
     </div>
 <input type="hidden" id="fileId" value="0">
@@ -184,6 +273,7 @@
             <c:set var="j" value="${maxPositions-i+1}"/>
             <c:set var="k" value="${maxPositions-i}"/>
             <tr>
+<<<<<<< HEAD
                 <c:forEach var="i" begin="1" end="${tableRows}">
                     <c:choose>
                         <c:when test="${i == 1}">
@@ -196,6 +286,27 @@
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
+=======
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${j}"/>)<span class="place p${j}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+                    </c:forEach>
+                </span></td>
+                <td width='25%'><c:out value="${k}"/>)<span class="place p${k}">
+                    <c:forEach items="${qualifyingList}" var="qualifying">
+                        <c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+                    </c:forEach></span></td>
+>>>>>>> 8702c2615349c211f08c9378cb93fc91043d13b6
             </tr>
         </c:forEach>
       <tr>

@@ -107,8 +107,10 @@ public class CarClassCompetitionController {
             model.addAttribute("maxRaces", MAX_RACES);
             model.addAttribute("qualifyingList", qualifyingService.
                     getQualifyingsByCarClassCompetition(carClassCompetition));
+            model.addAttribute("racersNumsWithSameTimeList", qualifyingService.getRacersNumbersWithSameQTime(carClassCompetition));
             model.addAttribute("membersCount", racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,8 +252,13 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
     public String addRace(Race race,
                           Map<String, Object> map, @PathVariable("id") int id) {
+        
         LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+        if (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()>1) {
+            System.out.println("There is enough races for this carclass.");
+            return "redirect:/carclass/" + id;
+        }
         race.setCarClassCompetition(carClassCompetition);
         race.setCarClass(carClassCompetition.getCarClass());
         raceService.setRaceNumber(carClassCompetition, race);
@@ -288,8 +295,8 @@ public class CarClassCompetitionController {
     public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         try{
-            if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition).size()==0)
-
+            List<Qualifying> ques = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+            if ((ques == null)||(ques.isEmpty()))
             return "redirect:/carclass/" + id;
         } catch(Exception e) {
             LOG.error("Errors in editQualifyings", e);
@@ -312,7 +319,7 @@ public class CarClassCompetitionController {
 
         String[] timesArray= times.trim().split(",");
         if (timesArray.length!=count) {
-             return "redirect:/"+id+"/editTestRace";
+             return "redirect:/carclass/"+id+"/editTestRace";
         }
         if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null) {
             for (int i=0;i<count;i++) {

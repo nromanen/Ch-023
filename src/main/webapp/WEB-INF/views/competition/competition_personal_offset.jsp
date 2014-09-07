@@ -32,15 +32,19 @@
 				<th rowspan="2"><spring:message code="label.command_city" /></th>
 				<th rowspan="2"><spring:message code="sportcategory.sport_category" /></th>
 				<th rowspan="2"><spring:message code="label.start_number" /></th>
+				<c:if test="${!empty carClassCompetition.qualifyings}">
 				<th colspan="2"><spring:message code="label.control_race" /></th>
+				</c:if>
 				<th colspan="3"><spring:message code="label.first_final_race" /></th>
 				<th colspan="3"><spring:message code="label.second_final_race" /></th>
 				<th rowspan="2"><spring:message code="label.points_sum" /></th>
 				<th rowspan="2"><spring:message code="label.competition.place_in_race" /></th>
 			</tr>
 			<tr>
+				<c:if test="${!empty carClassCompetition.qualifyings}">
 				<th ><spring:message code="label.time" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
+				</c:if>
 				<th ><spring:message code="label.laps" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
 				<th ><spring:message code="label.points" /></th>
@@ -58,21 +62,14 @@
 					<td>${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
-					<c:set  var="qualifyingList" value="${qualifyingLists[loop.index]}" />
-							<c:choose>
-								<c:when test="${!empty qualifyingList }">
-									<c:forEach items="${qualifyingList}" var="qualifying">
+								<c:if test="${!empty carClassCompetition.qualifyings}">
+									<c:forEach items="${carClassCompetition.qualifyings}" var="qualifying">
 										<c:if test="${qualifying.racerNumber==racerCarClassCompetitionNumber.numberInCompetition }">
-											<td>${qualifying.racerTime}</td>
+											<td>${qualifying.getTimeString()}</td>
 											<td>${qualifying.racerPlace}</td>
 										</c:if>
 									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<td></td>
-									<td></td>
-								</c:otherwise>
-							</c:choose>
+								</c:if>
 					<c:set var="countOfResults"	 value="2" />
 					<c:forEach items="${raceResultsLists}" var="raceResultsList">
 						<c:forEach items="${raceResultsList}" var="raceResults">

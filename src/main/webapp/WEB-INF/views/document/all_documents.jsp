@@ -5,7 +5,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-   <script type='text/javascript' src='<c:url value="/resources/js/document.js" />'></script> 
+<script type='text/javascript' src="<c:url value="/resources/js//lib/jquery.dataTables.js" />"></script>
+<link href="<c:url value="/resources/style/jquery.dataTables.css" />" rel="stylesheet" type="text/css">
+<script type='text/javascript' src='<c:url value="/resources/js/document.js" />'></script> 
    
    <table id="show-buttons" class="width-100">
     <tr>
@@ -24,7 +26,6 @@
     	</td>
      <td>
         <div class="btn-group" style="float: right; margin-bottom: 10px;">	
-        	<a href="#" class="btn btn-default" disabled="disabled"><spring:message code="label.show"/></a>
 			<a href="#" id="show_unchecked" class="btn btn-danger"><spring:message code="label.documents_unchecked"/></a>
 			<a href="#" id="show_checked" class="btn btn-success"><spring:message code="label.documents_checked"/></a>
 			<a href="#" id="show_all" class="btn btn-primary"><spring:message code="label.all_documents"/></a>
@@ -40,10 +41,10 @@
 			
 			<div class="panel-group" id="accordition"> 
 				<div class="panel panel-primary">
-					<div class="panel-heading" style="height: 50px;"> 	
-						<div class="text-info" style="color: #fff; font-size: 20px; float: left;">
+					<div class="panel-heading" style="height: 35px;"> 	
+						<div class="text-info" style="color: #fff; font-size: 15px; float: left;">
 							<a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#team${status.index+1}">
-								<spring:message code="label.team" /> #${status.index+1}: ${team.name}
+								${team.name}
 							</a>
 							<c:if test="${!empty team_doc_status}">
 									<c:if test="${team_doc_status[status.index]=='unchecked'}">
@@ -69,10 +70,8 @@
 													<td class="active" align="left">
 												</c:otherwise>
 											</c:choose>
-											<h4>
 												${racer.firstName}&nbsp;
 												${racer.lastName} &nbsp;
-											</h4>
 											</td>
 										</tr>
 										<c:if test="${!empty racer.getDocuments()}">
@@ -239,3 +238,10 @@
 	</tbody>
 </table>
 </c:if>
+<script>
+$(document).ready(function() {
+    $('#doc_table').DataTable( {
+    	 "order": [[ 3, "desc" ]]
+    });
+})
+</script>

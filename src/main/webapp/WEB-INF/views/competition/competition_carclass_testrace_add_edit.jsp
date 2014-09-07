@@ -34,8 +34,8 @@ pageEncoding="utf-8"%>
 							<label class="col-lg-3 control-label">${qualifying.racerNumber}</label>
 							<div class="col-lg-3">
 								<input  type="text" class="form-control" onchange='Go()' placeholder="[hh:]mm:ss" id='id_${counter.index}' name="time_${counter.index}"
-									value="${qualifying.racerTime.toString()}"
-									pattern="^(\d\d:)?[0-5]\d:[0-5]\d$" 
+									value="${qualifying.getTimeString()}"
+									pattern="^((\d?\d:)?[0-5]?\d:)?[0-5]?\d((,|\.)\d{1,3})?$" 
 									data-bv-regexp-message="<spring:message code="qualifying.time_format"/>"
 									data-bv-notempty="true"
 									data-bv-notempty-message="<spring:message code="label.all_fields_are_required"/>">
@@ -50,7 +50,7 @@ pageEncoding="utf-8"%>
 							<label class="col-lg-3 control-label">${number}</label>
 							<div class="col-lg-3">
 								<input  type="text" class="form-control" onchange='Go()' placeholder="[hh:]mm:ss" id='id_${counter.index}' name="time_${counter.index}"
-									pattern="^(\d\d:)?[0-5]\d:[0-5]\d$" 
+									pattern="^((\d?\d:)?[0-5]?\d:)?[0-5]?\d((,|\.)\d{1,3})?$" 
 									data-bv-regexp-message="<spring:message code="qualifying.time_format"/>"
 									data-bv-notempty="true"
 									data-bv-notempty-message="<spring:message code="label.all_fields_are_required"/>">
@@ -60,7 +60,7 @@ pageEncoding="utf-8"%>
 				</c:otherwise>
 			</c:choose>
 		<div class="form-group">
-		<input type="hidden" class="times" name="timeResult" id="time">
+		<input type="text" class="times" name="timeResult" id="time">
 		<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 		<div class="col-lg-9 col-lg-offset-3">
 			<c:choose>
@@ -89,17 +89,11 @@ pageEncoding="utf-8"%>
 		$('#testRace [id^=id]').each(
 			function() {
 				if(this.value!='') {
-					if(this.value.length==8) {
-						if(this.value.indexOf('00')==0) {
-							this.value=this.value.substring(3,8)
-						}
+					this.value = this.value.replace(",",".")
+					if(this.value.indexOf(',')>0) {
+						this.value=this.value.replace(",",".")
 					}
-					if(mas.indexOf(this.value)<0) {
 					mas.push(this.value.trim());
-					} else {
-						this.value='';
-						document.getElementById('addTestRacesubmit').disabled=true;
-					}
 				} else {
 					document.getElementById('addTestRacesubmit').disabled=true;
 				}

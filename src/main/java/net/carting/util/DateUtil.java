@@ -3,6 +3,7 @@ package net.carting.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,58 @@ public class DateUtil {
             LOG.error("Errors in getDateFromString method", e);
         }
         return date;
+    }
+    public static String getTimeStringFromInt(Integer intTime) {
+        String timeResult = new String();
+        long h = TimeUnit.MILLISECONDS.toHours(intTime);
+        long m = TimeUnit.MILLISECONDS.toMinutes(intTime) - TimeUnit.HOURS.toMinutes(h);
+        long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h);
+        long S = intTime - TimeUnit.SECONDS.toMillis(s) - TimeUnit.MINUTES.toMillis(m) - TimeUnit.HOURS.toMillis(h);
+        if (S>0) {
+        	while (S%10==0) {
+        		S = S/10;
+        	}
+        	timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
+        } else {
+        	timeResult = String.format("%02d:%02d:%02d",h,m,s);
+        }
+        return timeResult; 
+    }
+    
+    public static Integer getIntFromTimeString(String timeString) {
+        String[]str = timeString.split(":");
+        int t = 0;
+        switch(str.length) {
+        case 1:
+           t=getMsFromS(str[0]);
+           break;
+        case 2:
+            t=Integer.parseInt(str[0])*1000*60;
+            t=t+getMsFromS(str[1]);
+            break;
+        case 3:
+            t=Integer.parseInt(str[0])*1000*3600;
+            t=t+Integer.parseInt(str[1])*1000*60;
+            t=t+getMsFromS(str[2]);
+            break;
+        }
+        return t;
+    }
+    public static int getMsFromS(String s) {
+        int t= 0;
+        s = s.replace(',', '.');
+        String[] milisecs=s.split("\\.");
+        if (milisecs.length>1) {
+	        if (milisecs[1].length()==3){
+	            t=t+Integer.parseInt(milisecs[1]);
+	        } else if (milisecs[1].length()==2) {
+	            t=t+(Integer.parseInt(milisecs[1])*10);
+	        } else if (milisecs[1].length()==1) {
+	            t=t+(Integer.parseInt(milisecs[1])*100);
+	        }
+        }
+        t=t+(Integer.parseInt(milisecs[0])*1000);
+        return t;
     }
 
 }

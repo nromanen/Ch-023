@@ -33,6 +33,10 @@ pageEncoding="utf-8"%>
                 <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                </div>
+                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <spring:message code="label.add" /> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
@@ -210,7 +214,7 @@ pageEncoding="utf-8"%>
 
 
 <div>
-<c:if test="${raceListSize==2}">
+<c:if test="${raceListSize=>1}">
     <c:if test="${!empty absoluteResultsList}">
         <div class="panel panel-primary">
                 <div class="panel-heading" style="height: 50px;">
@@ -264,6 +268,14 @@ pageEncoding="utf-8"%>
                         <div class="text-info" style="color: #fff; font-size: 20px; float: left;">
                             <a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race_qualifying">
                                 <spring:message code="label.qualifying_results"/>:
+                                <c:if test="${!empty racersNumsWithSameTimeList}">
+                                <span style="color:#FFFF00;" >
+                                Problems with racers #
+                                <c:forEach items="${racersNumsWithSameTimeList}" var="number">
+                                &nbsp;${number}
+                                </c:forEach>!
+                                </span>
+                                </c:if>
                             </a>
                         </div>
                         <c:if test="${authority.equals('ROLE_ADMIN')}">
@@ -294,7 +306,20 @@ pageEncoding="utf-8"%>
                                                 </c:if>
                                              </c:forEach>
                                          </td>
-                                         <td>${qualifying.racerTime}</td>
+                                         <td>
+                                         <c:forEach items="${racersNumsWithSameTimeList}" var="sameNumber">
+                                         <c:choose>
+                                         <c:when test="${qualifying.racerNumber==sameNumber}">
+	                                         <span style="color: red; font-weight: bold;">
+                                         </c:when>
+                                          <c:otherwise>
+                                          <span>
+                                          </c:otherwise>
+                                          </c:choose>
+                                          </c:forEach>
+                                          ${qualifying.getTimeString()}
+                                           </span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </table>
