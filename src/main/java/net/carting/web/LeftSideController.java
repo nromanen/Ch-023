@@ -1,6 +1,8 @@
 package net.carting.web;
 
 import net.carting.service.CompetitionService;
+import net.carting.util.GlobalData;
+
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
 import org.apache.tiles.preparer.ViewPreparerSupport;
@@ -25,6 +27,7 @@ public class LeftSideController extends ViewPreparerSupport implements Serializa
     public void execute(TilesRequestContext tilesContext, AttributeContext attributeContext) {
         Map<String, Object> response = tilesContext.getRequestScope();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        currentYear = GlobalData.globalYear;
         response.put("currentYear", currentYear);
         response.put("competitionListByCurrentYear", competitionService.getCompetitionsByYear(currentYear));
     }
