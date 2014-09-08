@@ -4,6 +4,11 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="custom" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<script type='text/javascript'
+    src="<c:url value="/resources/js//lib/jquery.tablesorter.min.js" />"></script>
 
 <style>
 	.vertical {
@@ -18,24 +23,95 @@
 		vertical-align: middle !important;
 	}
 </style>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.table').tablesorter(); 
+    $(".pdf").click(function() {
+    	var id = this.id.replace("pdf", "");
+    	var url = $('#personal_url').val();
+    	var table = $('#table_personal_offset' + id).html();
+    	table = "<style>table{ font-size: 14;} .column-wide {width: 130px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none}</style>" + table;
+    	$.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                table: table,
+                carClassCompetitionId: id
+            },
+            success: function(response) {
+                if (response !== '0') {
+                	$('#table_personal_offset' + id).css("font-size","14 !important");
+                	window.open("../../document/showFile/" + response ,'_blank');
+                }
+            }
+        });
+    });
+});
+</script>
 <div>
-
+    <input type="hidden" id="personal_url" value="<c:url value="/SHKP/personal" />">
 	<label class="text-info" style="font-size: 20px; width: 100%; text-align: center; margin-bottom: 20px;">${carClassCompetitions.get(0).competition.name}</label>			
 	<c:forEach items="${carClassCompetitions }" var="carClassCompetition" varStatus="loop">
 	<c:if test="${!empty carClassCompetition.racerCarClassCompetitionNumbers }">
-	<table class="table table-hover table-bordered" style="text-align: center;">
-		<caption class="text-left">${carClassCompetition.carClass.name }</caption>
+	<c:if test="${!authority.equals('ROLE_ANONYMOUS') }">
+	   <button id="pdf${ carClassCompetition.id}" class="btn btn-sml btn-success pdf"><spring:message code="label.document_download_pdf" /></button>
+	</c:if>
+	<div id="table_personal_offset${ carClassCompetition.id}">
+	<meta charset="utf-8">
+	<style>
+       table {
+           font-family: "Arial", Times, monospace;
+       }
+       .hidden {
+            display: none;
+            padding: 3px;
+       }
+       .table thead tr th {
+         padding-right: 20px;
+         background-repeat: no-repeat;
+         background-position: 100% 50%;
+       }
+       .table thead tr th.headerSortUp {
+          background-image: url(<c:url value="/resources/img/sort_asc.png" />);
+        }
+        .table thead tr th.headerSortDown {
+            background-image: url(<c:url value="/resources/img/sort_desc.png" />);
+        }
+        
+    </style>
+	<table class="table table-hover table-bordered" style="text-align: center;" border="1">
 		<thead class="well" style="font-weight: 100;">
+		    <tr class="hidden">
+		        <th colspan="15"><spring:message code="label.header_1" /></th>
+		    </tr>
+		    <tr class="hidden">
+                <th colspan="15"><spring:message code="label.header_2" /></th>
+            </tr>
+            <tr class="hidden">
+                <th colspan="15">${carClassCompetition.competition.name }</th>
+            </tr>
+            <tr>
+                <th colspan="2">${carClassCompetition.competition.place } </th>
+                <th colspan="7" ><spring:message code="label.car_class" />: ${carClassCompetition.carClass.name }</th>
+                <th colspan="6"><fmt:formatDate value="${carClassCompetition.competition.dateStart }" pattern="yyyy-MM-dd" /> - <fmt:formatDate value="${carClassCompetition.competition.dateEnd }" pattern="yyyy-MM-dd" /></th>
+            </tr>
+            <tr class="hidden">
+                <td colspan="15">
+                    <spring:message code="label.competition.lap_count" />: ${carClassCompetition.circleCount};  
+                    <spring:message code="label.competition.percentage_offset" />: ${carClassCompetition.percentageOffset};
+                    <spring:message code="label.count_of_racers" /> ${fn:length(carClassCompetition.racerCarClassCompetitionNumbers) }.  
+                </td>
+            </tr>
 			<tr>
-				<th rowspan="2">№</th>
+				<th rowspan="2" class="column-sm">№</th>
 				<th rowspan="2"><spring:message code="label.lastname_firstname" /></th>
 				<th rowspan="2"><spring:message code="label.command_city" /></th>
-				<th rowspan="2"><spring:message code="sportcategory.sport_category" /></th>
+				<th rowspan="2" class="column-wide"><spring:message code="sportcategory.sport_category" /></th>
 				<th rowspan="2"><spring:message code="label.start_number" /></th>
 				<th colspan="2"><spring:message code="label.control_race" /></th>
-				<th colspan="3"><spring:message code="label.first_final_race" /></th>
-				<th colspan="3"><spring:message code="label.second_final_race" /></th>
-				<th rowspan="2"><spring:message code="label.points_sum" /></th>
+				<th colspan="3" class="column-wide"><spring:message code="label.first_final_race" /></th>
+				<th colspan="3" class="column-wide"><spring:message code="label.second_final_race" /></th>
+				<th rowspan="2" ><spring:message code="label.points_sum" /></th>
 				<th rowspan="2"><spring:message code="label.competition.place_in_race" /></th>
 			</tr>
 			<tr>
@@ -55,7 +131,7 @@
 				<tr>
 					<td><%=number %></td>
 					<td><a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />">${racerCarClassCompetitionNumber.racer.firstName } ${racerCarClassCompetitionNumber.racer.lastName }</a></td>
-					<td>${racerCarClassCompetitionNumber.racer.team.name }</td>
+					<td class="column-wide">${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
 					<c:set  var="qualifyingList" value="${qualifyingLists[loop.index]}" />
@@ -106,10 +182,19 @@
 				</tr>
 				<% number++; %>
 			</c:forEach>
-			
-			
 		</tbody>
+		<tr class="hidden">
+                <td colspan="2"><spring:message code="label.main_secretary" /></td>
+                <td colspan="9" style="text-align: right">${carClassCompetition.competition.secretaryName }</td>
+                <td colspan="4"></td>
+        </tr>
+        <tr class="hidden">
+                <td colspan="2"><spring:message code="label.competition.director_name" /></td>
+                <td colspan="9" style="text-align: right">${carClassCompetition.competition.directorName }</td>
+                <td colspan="4"></td>
+        </tr>
 	</table>
+	</div>
 	</c:if>
 	</c:forEach>
 			
