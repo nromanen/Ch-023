@@ -60,7 +60,7 @@ pageEncoding="utf-8"%>
 				</c:otherwise>
 			</c:choose>
 		<div class="form-group">
-		<input type="text" class="times" name="timeResult" id="time">
+		<input type="hidden" class="times" name="timeResult" id="time">
 		<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 		<div class="col-lg-9 col-lg-offset-3">
 			<c:choose>

@@ -37,7 +37,7 @@ pageEncoding="utf-8"%>
                         </button>
                         <ul class="dropdown-menu" role="menu">
                             <c:if test="${empty qualifyingList && raceListSize==0 &&!empty racerCarClassCompetitionNumberList}">
-                                <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addTestRace" />'><spring:message code="label.add_qualifying" /></a></li>
+                                <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addQualifying" />'><spring:message code="label.add_qualifying" /></a></li>
                             </c:if>
                             <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
                                 <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addResults" />'><spring:message code="label.add_results" /></a></li>
@@ -277,7 +277,7 @@ pageEncoding="utf-8"%>
                         </div>
                         <c:if test="${authority.equals('ROLE_ADMIN')&&raceListSize==0}">
                             <div class="btn-group" style="float: right;">
-                               <a href='<c:url value="/carclass/${carClassCompetition.id}/editTestRace" />' class="btn btn-info " id="edit_qualifying_button"><spring:message code="label.edit" /></a>
+                               <a href='<c:url value="/carclass/${carClassCompetition.id}/editQualifying" />' class="btn btn-info " id="edit_qualifying_button"><spring:message code="label.edit" /></a>
                             </div>
                         </c:if>
                     </div>

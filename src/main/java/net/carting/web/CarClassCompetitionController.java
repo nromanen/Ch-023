@@ -272,8 +272,8 @@ public class CarClassCompetitionController {
         return "redirect:/carclass/" + id;
     }
 
-    @RequestMapping(value = "/{id}/addTestRace")
-    public String addTestRacePage(Map<String, Object> map, @PathVariable("id") int id) {
+    @RequestMapping(value = "/{id}/addQualifying")
+    public String addQualifyingPage(Map<String, Object> map, @PathVariable("id") int id) {
         try {
 
             CarClassCompetition carClassCompetition = carClassCompetitionService.
@@ -286,12 +286,12 @@ public class CarClassCompetitionController {
                     getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
            } catch (Exception e) {
-               LOG.error("Errors in addTestRacePage method", e);
+               LOG.error("Errors in addQualifyingPage method", e);
         }
-        return "competition_carclass_testrace_add_edit";
+        return "competition_carclass_qualifying_add_edit";
     }
 
-    @RequestMapping(value = "/{id}/editTestRace")
+    @RequestMapping(value = "/{id}/editQualifying")
     public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         try{
@@ -306,7 +306,7 @@ public class CarClassCompetitionController {
          map.put("qualifyingList", qualifyingService.
                 getQualifyingsByCarClassCompetition(carClassCompetition));
          map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
-        return "competition_carclass_testrace_add_edit";
+        return "competition_carclass_qualifying_add_edit";
     }
 
     @RequestMapping(value = "/{id}/proccesQualifying", method = RequestMethod.POST)
@@ -319,7 +319,7 @@ public class CarClassCompetitionController {
 
         String[] timesArray= times.trim().split(",");
         if (timesArray.length!=count) {
-             return "redirect:/carclass/"+id+"/editTestRace";
+             return "redirect:/carclass/"+id+"/editQualifying";
         }
         if ((qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null)&&
                 (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
