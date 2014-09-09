@@ -1,7 +1,5 @@
 package net.carting.domain;
 
-import java.sql.Time;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import net.carting.util.DateUtil;
 
 @Entity
 @Table(name = "qualifying")
@@ -31,7 +31,7 @@ public class Qualifying {
     private Integer racerPlace;
     
     @Column(name = "racer_time")
-    private Time  racerTime;
+    private Integer  racerTime;
 
 	public int getId() {
 		return id;
@@ -65,19 +65,23 @@ public class Qualifying {
 		this.racerPlace = racerPlace;
 	}
 
-	public Time getRacerTime() {
+	public Integer getRacerTime() {
 		return racerTime;
 	}
 
-	public void setRacerTime(Time racer_time) {
+	public void setRacerTime(Integer racer_time) {
 		this.racerTime = racer_time;
+	}
+	
+	public String getTimeString() {
+	    return DateUtil.getTimeStringFromInt(this.racerTime);
 	}
 	
 	public Qualifying(){
 	}
 
 	public Qualifying(int id, CarClassCompetition carClassCompetition,
-			Integer racerNumber, Integer racerPlace, Time racer_time) {
+			Integer racerNumber, Integer racerPlace, Integer racer_time) {
 		this.id = id;
 		this.carClassCompetition = carClassCompetition;
 		this.racerNumber = racerNumber;

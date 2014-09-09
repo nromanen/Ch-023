@@ -38,6 +38,8 @@
         <intercept-url pattern="/carclass/*/addResults" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/editSummaryResults" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/race/*/edit" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/editQualifying" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/addQualifying" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/setCalculateByTableB" access="ROLE_ADMIN"/>
 
         <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
