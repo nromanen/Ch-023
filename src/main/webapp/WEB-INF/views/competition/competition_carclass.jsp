@@ -30,7 +30,7 @@ pageEncoding="utf-8"%>
                         <li><a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />'><spring:message code="label.maneuvering" /></a></li>
                     </ul>
                 </div>
-                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) || (empty qualifyingList && raceListSize==0)}">
+                <c:if test="${((raceListSize<2 &&!empty racerCarClassCompetitionNumberList) || (empty qualifyingList && raceListSize==0))&&(empty racersNumsWithSameTimeList)}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <spring:message code="label.add" /> <span class="caret"></span>
@@ -264,9 +264,10 @@ pageEncoding="utf-8"%>
                         <div class="text-info" style="color: #fff; font-size: 20px; float: left;">
                             <a data-toogle="collapse" style="color: #fff;" data-parent="#accordition" href="#race_qualifying">
                                 <spring:message code="label.qualifying_results"/>:
-                                <c:if test="${!empty racersNumsWithSameTimeList}">
+                                <c:if test="${!empty racersNumsWithSameTimeList&&authority.equals('ROLE_ADMIN')}">
                                 <span style="color:#FFFF00;" >
-                                Problems with racers #
+                                <spring:message code="label.conflict_racers_qualifying"/>
+                               
                                 <c:forEach items="${racersNumsWithSameTimeList}" var="number">
                                 &nbsp;${number}
                                 </c:forEach>!
@@ -305,7 +306,7 @@ pageEncoding="utf-8"%>
                                          <td>
                                          <c:forEach items="${racersNumsWithSameTimeList}" var="sameNumber">
                                          <c:choose>
-                                         <c:when test="${qualifying.racerNumber==sameNumber}">
+                                         <c:when test="${authority.equals('ROLE_ADMIN')&&qualifying.racerNumber==sameNumber}">
 	                                         <span style="color: red; font-weight: bold;">
                                          </c:when>
                                           <c:otherwise>

@@ -50,7 +50,7 @@
 									<td>
 										<c:choose>
 											<c:when test="${!empty qualifyingList}">
-												${qualifyingList.get(counter.index).racerPlace}
+												${qualifyingList.get(index.index).racerPlace}
 											</c:when>
 											<c:otherwise>
 												<input type="text" class="carPos"
