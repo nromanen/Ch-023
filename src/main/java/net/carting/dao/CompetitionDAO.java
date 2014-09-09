@@ -22,9 +22,9 @@ public interface CompetitionDAO {
 
     public List<Competition> getCompetitionsByYear(int year);
 
-   /* unused method
-    public List<Competition> getAllCompetitionsByPage(int page);
-   */
+    public List<Competition> getAllCompetitionsByPage(int page, int competitionsPerPage);
+    
+    public long getCountOfCompetitions();
 
     public List<Integer> getCompetitionsYearsList();
 

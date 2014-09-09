@@ -16,7 +16,9 @@ public interface CompetitionService {
 
     public List<Competition> getCompetitionsByYear(int year);
 
-   // public List<Competition> getAllCompetitionsByPage(int page);
+    public List<Competition> getAllCompetitionsByPage(int page, int competitionsPerPage);
+    
+    public long getCountOfCompetitions();
 
     public Competition getCompetitionById(int id);
 
