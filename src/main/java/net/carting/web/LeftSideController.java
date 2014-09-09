@@ -1,6 +1,8 @@
 package net.carting.web;
 
+import net.carting.domain.Racer;
 import net.carting.service.CompetitionService;
+import net.carting.service.RacerService;
 import net.carting.util.GlobalData;
 
 import org.apache.tiles.AttributeContext;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Controller;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Controller("leftSideController")
@@ -22,13 +26,17 @@ public class LeftSideController extends ViewPreparerSupport implements Serializa
 
     @Autowired
     private CompetitionService competitionService;
-
+    @Autowired
+    private RacerService racerService;
     @Override
     public void execute(TilesRequestContext tilesContext, AttributeContext attributeContext) {
         Map<String, Object> response = tilesContext.getRequestScope();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        Date today = new Date();
+        List<Racer> racers = racerService.getBirthdayRacers(today);
         currentYear = GlobalData.globalYear;
         response.put("currentYear", currentYear);
         response.put("competitionListByCurrentYear", competitionService.getCompetitionsByYear(currentYear));
+        response.put("racers", racers);
     }
 }

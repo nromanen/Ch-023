@@ -45,4 +45,18 @@ public class DateUtil {
         return date;
     }
 
+	public int getDaysCount(int year) {
+		int daysInYear;
+			if (year%4 == 0) {
+		        if (year%100 == 0) {
+		              daysInYear = (year%400 == 0) ? 366 : 365;
+		            } else {
+		                daysInYear = 366;
+		            }
+		        } else {
+		            daysInYear = 365;
+		        }
+		    	return daysInYear;
+		   }
+	
 }

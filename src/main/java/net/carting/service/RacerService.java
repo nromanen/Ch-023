@@ -36,6 +36,8 @@ public interface RacerService {
             int documentType, Team team);
 
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team);
+    
+    public List<Racer> getBirthdayRacers(Date checkdate);
 
     /**
      * <p/>
