@@ -238,10 +238,3 @@
 	</tbody>
 </table>
 </c:if>
-<script>
-$(document).ready(function() {
-    $('#doc_table').DataTable( {
-    	 "order": [[ 3, "desc" ]]
-    });
-})
-</script>

@@ -30,12 +30,7 @@ pageEncoding="utf-8"%>
                         <li><a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />'><spring:message code="label.maneuvering" /></a></li>
                     </ul>
                 </div>
-                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                </div>
-                </c:if>
-                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) && (empty qualifyingList && raceListSize==0)}">
+                <c:if test="${(raceListSize<2 &&!empty racerCarClassCompetitionNumberList) || (empty qualifyingList && raceListSize==0)}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <spring:message code="label.add" /> <span class="caret"></span>
@@ -279,7 +274,7 @@ pageEncoding="utf-8"%>
                                 </c:if>
                             </a>
                         </div>
-                        <c:if test="${authority.equals('ROLE_ADMIN')}">
+                        <c:if test="${authority.equals('ROLE_ADMIN')&&raceListSize==0}">
                             <div class="btn-group" style="float: right;">
                                <a href='<c:url value="/carclass/${carClassCompetition.id}/editTestRace" />' class="btn btn-info " id="edit_qualifying_button"><spring:message code="label.edit" /></a>
                             </div>

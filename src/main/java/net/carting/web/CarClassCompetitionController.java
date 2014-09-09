@@ -321,7 +321,8 @@ public class CarClassCompetitionController {
         if (timesArray.length!=count) {
              return "redirect:/carclass/"+id+"/editTestRace";
         }
-        if (qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null) {
+        if ((qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null)&&
+                (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
             for (int i=0;i<count;i++) {
                 Qualifying q = new Qualifying();
                 q.setCarClassCompetition(carClassCompetition);
@@ -329,8 +330,8 @@ public class CarClassCompetitionController {
                 qualifyingService.setQualifyingTimeFromString(q, timesArray[i]);
             }
             qualifyingService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
-            return "redirect:/carclass/" + id;
-        } else if (qList.size()==count) {
+        } else if ((qList.size()==count)&&
+                (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
             for (int i=0;i<count;i++) {
                 Qualifying q = qList.get(i);
                 if (qualifyingService.setQualifyingTimeFromString(q, timesArray[i])) {
@@ -338,10 +339,8 @@ public class CarClassCompetitionController {
                 }
             }
             qualifyingService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
-            return "redirect:/carclass/" + id;
-        } else {
-            return "redirect:/"+id+"/editTestRace";
         }
+        return "redirect:/carclass/" + id;
     }
 
 
