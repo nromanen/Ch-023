@@ -12,18 +12,48 @@ $(document).ready(function(){
 		var countOfCompetitions = $('#countOfCompetitions').val();
 		var page = $('#page').val();
 		var element = "";
-		for (var i = 1; i <= Math.ceil(countOfCompetitions/competitionsPerPage); i++) {
-			var classes = "pagination-link btn ";
+		var url = $("#competition_list_url").val() + "/all/";
+		var competitionPerPageUrl = "?competitionsPerPage="+competitionsPerPage;
+		var countOfPages = Math.ceil(countOfCompetitions/competitionsPerPage);
+		if (countOfPages > 1) {
+		if (page == 1 ) {
+			element += "<a href='" + url + page + competitionPerPageUrl + "' class='" + page + "'>" + page + "</a>";
+			element += "<a href='" + url + (+page+1) + competitionPerPageUrl + "' class='" + (+page+1) + "'>" + (+page+1) + "</a>";
+		} else if (page > 1 && page < countOfPages) {
+			element += "<a href='" + url + (page-1) + competitionPerPageUrl + "' class='" + (page-1) + "'>" + (page-1) + "</a>";
+			element += "<a href='" + url + page + competitionPerPageUrl + "' class='" + page + "'>" + page + "</a>";
+			element += "<a href='" + url + (+page+1) + competitionPerPageUrl + "' class='" + (+page+1) + "'>" + (+page+1) + "</a>";
+		} else if (page == countOfPages) {
+			element += "<a href='" + url + (page-1) + competitionPerPageUrl + "' class='" + (page-1) + "'>" + (page-1) + "</a>";
+			element += "<a href='" + url + page + competitionPerPageUrl + "' class='" + page + "'>" + page + "</a>";
+		}
+		} else {
+			element += "<a href='" + url + page + competitionPerPageUrl + "' class='" + page + "'>" + page + "</a>";
+		}
+		if (page > 3) {
+			element = "..." + element;
+		}
+		if (countOfPages - page > 3) {
+			element += "...";
+		}
+		if (page > 2) {
+			element = "<a href='" + url + "1" + competitionPerPageUrl + "' class='1'>1</a>" + element;
+		}
+		if (countOfPages - page > 1) {
+			element += "<a href='" + url + countOfPages + competitionPerPageUrl + "' class='" + countOfPages + "'>" + countOfPages + "</a>";
+		}
+		
+		$('#pagination_links').after(element);
+		for (var i = 1; i <= countOfPages; i++) {
+			
 			if (i == +page) {
-				classes += "btn-primary";
+				$('.' + i).addClass("pagination-link btn btn-primary");
 			}
 			else {
-				classes += "btn-default";
+				$('.' + i).addClass("pagination-link btn btn-default");
 			}
-			element+="<a href='" + $("#competition_list_url").val() + "/" + $("#years").val() + "/" + i + "?competitionsPerPage="+competitionsPerPage + "'class='" + classes + "'>" + i + "</a>";
 		}
-		console.log(competitionsPerPage);
-		$('#pagination_links').after(element);
+		
 	}
 	else {
 		$('#results_per_page').css("display", "none");

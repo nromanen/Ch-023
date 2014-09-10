@@ -29,13 +29,13 @@
     </h2>
 	<br><input type="hidden" id="competition_list_url" value="<c:url value="/competition/list" />">	
 	<div class="row">
-        <div class="col-md-3 fl-left" id="pagination_settings">
+        <div class="col-md-2 fl-left" id="pagination_settings" style="width: 100px;">
             <input type="text" 
-                       placeholder="<spring:message code="placeholder.results_per_page"/>"
+                       title="<spring:message code="placeholder.results_per_page"/>"
                        id="results_per_page" class="form-control" value="${competitionsPerPage }" >
         </div>
         <div class="col-md-2 fl-left" >
-            <button class="btn btn-success " id="results_per_page_btn"><spring:message code="label.show" /></button>
+            <button class="btn btn-success " id="results_per_page_btn" style="margin-left: -30px"><spring:message code="label.show" /></button>
         </div>
 	  	<div class="col-md-2 fl-right" >
 	    	<div class="input-group">
