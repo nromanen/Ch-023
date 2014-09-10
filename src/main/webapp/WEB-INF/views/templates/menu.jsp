@@ -24,7 +24,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href='<c:url value="/team/list"/>'><spring:message code="label.list_of_teams" /></a></li>
-                <li><a href='<c:url value="/competition/list/${currentYear}"/>'> <spring:message code="label.competitions" /> </a></li>
+                <li><a href='<c:url value="/competition/list/${currentYear}/1"/>'> <spring:message code="label.competitions" /> </a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
                         <span class="glyphicon glyphicon-user" style="margin-right: 5px;"></span> 
