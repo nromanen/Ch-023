@@ -5,7 +5,7 @@
 
 
 <table class="table">
-	<c:if test="${!empty racerCarClassCompetitionNumbers}">
+	<c:if test="${!empty teamList}">
 		<tr>
 			<td style="text-align: center;">
 				<div>${competition.name}</div>
