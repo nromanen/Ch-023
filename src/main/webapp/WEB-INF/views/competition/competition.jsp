@@ -477,5 +477,47 @@
 	</div>
 </div>
 
+<br>
+<c:if test="${authority.equals('ROLE_ADMIN')}">
+	<c:choose>
+			<c:when test="${!empty racersBirthday}">
+<label class="text-info" style="font-size: 20px; width: 100%; text-align: center;">
+			<spring:message code="label.birthdays" />
+		</label>
+<table class="table table-hover table-bordered"
+					style="text-align: center;">
+					<tr class="well">
+						<td><spring:message code="label.racer" /></td>
+						<td><spring:message code="label.enable" /></td>
+						<td><spring:message code="label.car_classes" /></td>
+						<td><spring:message code="label.date_of_birth" /></td>
+						<td><spring:message code="label.age" /></td>
+					</tr>
+					<c:forEach items="${racersBirthday}" var="racer">
+					<fmt:formatDate value="${racer.birthday}" var="dateString" pattern="dd/MM/yyyy" />
+						<tr>
+							<td style="text-align: left;"><a
+								href='<c:url value="/racer/${racer.id}"/>'>
+									${racer.firstName} ${racer.lastName} </a></td>
+							<td style="width: 10%;">
+								<c:choose>
+								<c:when test="${racer.enabled == true}"><span class="glyphicon glyphicon-ok" style="color: green;"></span></c:when>
+								<c:otherwise><span class="glyphicon glyphicon-remove" style="color: red;"></span></c:otherwise>
+								</c:choose>
+								<c:if test="${(authority != 'ROLE_TEAM_LEADER') || (needTeam.id != team.id)}"></c:if>
+							</td>
+							<td><c:forEach items="${racer.carClassNumbers}"
+									var="carClassNumber">
+									<b>${carClassNumber.carClass.name}</b>(№${carClassNumber.number})
+								</c:forEach></td>
+							<td>${dateString}</td>
+							<td>${racer.getAge()}</td>
+						</tr>
+						</c:forEach>
+				</table>
+			</c:when>
+		</c:choose>
+</c:if>
+
 <div id="exc">
 </div>

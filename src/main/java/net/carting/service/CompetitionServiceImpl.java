@@ -42,13 +42,13 @@ public class CompetitionServiceImpl implements CompetitionService {
     public List<Competition> getCompetitionsByYear(int year) {
         return competitionDAO.getCompetitionsByYear(year);
     }
-/* unused method
+
     @Override
     @Transactional
-    public List<Competition> getAllCompetitionsByPage(int page) {
-        return competitionDAO.getAllCompetitionsByPage(page);
+    public List<Competition> getAllCompetitionsByPage(int page, int competitionsPerPage) {
+        return competitionDAO.getAllCompetitionsByPage(page, competitionsPerPage);
     }
-*/
+
     @Override
     @Transactional
     public Competition getCompetitionById(int id) {
@@ -83,6 +83,12 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Transactional
     public List<Integer> getCompetitionsYearsList() {
         return competitionDAO.getCompetitionsYearsList();
+    }
+    
+    @Override
+    @Transactional
+    public long getCountOfCompetitions() {
+        return competitionDAO.getCountOfCompetitions();
     }
 
     @Override

@@ -247,12 +247,6 @@
 	</div>
 </div>
 
-<script>
-$(document).ready( function () {
-    $('#team_table').DataTable();
-} );
-</script>
-
 <p><span class="glyphicon glyphicon-minus"></span>  - <spring:message code="label.document_missing_or_unapproved" />
 <p><span class="glyphicon glyphicon-plus"></span>  - <spring:message code="label.document_is_approved" />
 <p><span class="glyphicon glyphicon-paperclip"></span>  - <spring:message code="label.document_is_present" />

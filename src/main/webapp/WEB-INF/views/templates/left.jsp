@@ -23,3 +23,31 @@
 <c:if test="${authority.equals('ROLE_ADMIN')}">
     <a href="<c:url value="/competition/add" />" class="btn btn-primary" style="width: 100%; margin-bottom: 5px;"><spring:message code="label.add_competition" /></a>
 </c:if>
+	<br>	
+	<c:if test="${authority.equals('ROLE_ADMIN')}">
+	<c:choose>
+			<c:when test="${!empty racers}"><br>
+<label class="text-info" style="font-size: 20px; width: 100%; text-align: center;">
+			<spring:message code="label.birthdays" />
+		</label>
+<table class="table table-hover table-bordered"
+					style="text-align: center;">
+					<tr class="well">
+						<td><spring:message code="label.racer" /></td>
+						<td><spring:message code="label.date_of_birth" /></td>
+						<td><spring:message code="label.age" /></td>
+					</tr>
+					<c:forEach items="${racers}" var="racer">
+					<fmt:formatDate value="${racer.birthday}" var="dateString" pattern="dd/MM/yyyy" />
+						<tr>
+							<td style="text-align: left;"><a
+								href='<c:url value="/racer/${racer.id}"/>'>
+									${racer.firstName} ${racer.lastName} </a></td>
+							<td>${dateString}</td>
+							<td>${racer.getAge()}</td>
+						</tr>
+						</c:forEach>
+				</table>
+			</c:when>
+		</c:choose>
+</c:if>

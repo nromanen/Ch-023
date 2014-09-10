@@ -15,6 +15,7 @@ import net.carting.domain.Leader;
 import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
@@ -33,6 +34,7 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
+import net.carting.util.GlobalData;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,31 +87,47 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
+        Date checkdate = competition.getDateStart();
+        List<Racer> racersBirthday = racerService.getBirthdayRacers(checkdate);
         model.addAttribute("competition", competition);
         List<CarClass> carClasses = carClassService.getAllCarClasses();
         List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(id);
         model.addAttribute("carClassList", competitionService
                 .getDifferenceBetweenCarClassesAndCarClassCompetitions(carClasses, carClassCompetitions));
+        model.addAttribute("racersBirthday", racersBirthday);
         model.addAttribute("carClassCompetitionList", carClassCompetitions);
         model.addAttribute("pointsByPlacesList", competitionService.getPointsByPlacesList(competition));
         return new ModelAndView("competition");
     }
 
-    @RequestMapping(value = "/list/{year}", method = RequestMethod.GET)
-    public ModelAndView competitionsPage(Model model, @PathVariable("year") String yearString) {
-    	int year;
-    	try {
-    		year = Integer.parseInt(yearString);
-    	} catch (NumberFormatException e) {
-    		year=0;
+    @RequestMapping(value = "/list/{year}/{page}", method = RequestMethod.GET)
+    public ModelAndView competitionsPage(Model model, @PathVariable("year") String yearString, @PathVariable("page") int page, 
+            @RequestParam(value = "competitionsPerPage", required=false, defaultValue = "10") int competitionsPerPage) {
+    	if (yearString.equals("all")) {
+    	    List<Competition> competitionList = competitionService.getAllCompetitionsByPage(page, competitionsPerPage);
+    	    long countOfCompetitions = competitionService.getCountOfCompetitions();
+    	    model.addAttribute("competitionList", competitionList);
+            model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
+            model.addAttribute("all", yearString);
+            model.addAttribute("countOfCompetitions", countOfCompetitions);
+            model.addAttribute("competitionsPerPage", competitionsPerPage);
+    	} else {
+    	    int year;
+            try {
+                year = Integer.parseInt(yearString);
+            } catch (NumberFormatException e) {
+                year=0;
+            }
+            if(!competitionService.getCompetitionsYearsList().contains(year)) {
+                year = competitionService.getCompetitionsYearsList().get(0);
+            }
+			GlobalData.globalYear = year;
+            List<Competition> competitionList = competitionService.getCompetitionsByYear(year);
+            model.addAttribute("competitionList", competitionList);
+            model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
+            model.addAttribute("year", year);
     	}
-    	if(!competitionService.getCompetitionsYearsList().contains(year)) {
-    		year = competitionService.getCompetitionsYearsList().get(0);
-    	}
-        List<Competition> competitionList = competitionService.getCompetitionsByYear(year);
-        model.addAttribute("competitionListByYear", competitionList);
-        model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
-        model.addAttribute("year", year);
+
         return new ModelAndView("competitions");
     }
 

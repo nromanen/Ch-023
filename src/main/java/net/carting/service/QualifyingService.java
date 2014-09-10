@@ -21,7 +21,7 @@ public interface QualifyingService {
 	public List<Qualifying> getQualifyingsByCarClassCompetition(
 	            CarClassCompetition carClassCompetition);
 	
-	public List<Time> getQualifyingTimesByCarClassCompetition(
+	public List<Integer> getQualifyingTimesByCarClassCompetition(
 			CarClassCompetition carClassCompetition);
 	
 	public List<Integer> getQualifyingNumbersByCarClassCompetition(
@@ -29,6 +29,10 @@ public interface QualifyingService {
 	
 	public List<Integer> getQualifyingPlacesByCarClassCompetition(
 			CarClassCompetition carClassCompetition);
+	
 	public boolean setQualifyingTimeFromString(Qualifying q, String time);
+	
 	public void setQualifyingPlacesInCarClassCompetition(CarClassCompetition ccc);
+	
+	public List<Integer> getRacersNumbersWithSameQTime(CarClassCompetition ccc);
 }

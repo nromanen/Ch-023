@@ -172,4 +172,9 @@ public class RacerServiceImpl implements RacerService {
             }
         }
     }
+
+	@Override
+	public List<Racer> getBirthdayRacers(Date checkdate) {
+		return racerDAO.getBirthdayRacers(checkdate);
+	}
 }

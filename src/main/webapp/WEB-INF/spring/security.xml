@@ -38,13 +38,18 @@
         <intercept-url pattern="/carclass/*/addResults" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/editSummaryResults" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/race/*/edit" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/editQualifying" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/carclass/*/addQualifying" access="ROLE_ADMIN"/>
         <intercept-url pattern="/carclass/*/setCalculateByTableB" access="ROLE_ADMIN"/>
 
         <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
         <intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
         <intercept-url pattern="/feedback" access="ROLE_TEAM_LEADER"/>
 
-        <intercept-url pattern="/SHKP/**" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/SHKP/maneuver/*" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/SHKP/maneuver" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/SHKP/start/**" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/SHKP/personal" access="ROLE_TEAM_LEADER, ROLE_ADMIN"/>
 
         <form-login login-page="/loginPage" default-target-url="/index"
                     authentication-failure-handler-ref="exceptionFilter"/>

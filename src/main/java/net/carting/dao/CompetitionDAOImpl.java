@@ -20,7 +20,6 @@ public class CompetitionDAOImpl implements CompetitionDAO {
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
 
-    //public static final int COMPETITION_PER_PAGE = 1;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -49,16 +48,16 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         return query.getResultList();
     }
 
-   /* unused method
+
     @SuppressWarnings("unchecked")
     @Override
-    public List<Competition> getAllCompetitionsByPage(int page) {
+    public List<Competition> getAllCompetitionsByPage(int page, int competitionsPerPage) {
         Query query = entityManager
                 .createQuery("from Competition ORDER BY dateStart DESC");
-        query.setFirstResult((page - 1) * COMPETITION_PER_PAGE);
-        query.setMaxResults(COMPETITION_PER_PAGE);
+        query.setFirstResult((page - 1) * competitionsPerPage);
+        query.setMaxResults(competitionsPerPage);
         return query.getResultList();
-    }*/
+    }
 
     @Override
     public Competition getCompetitionById(int id) {
@@ -110,9 +109,14 @@ public class CompetitionDAOImpl implements CompetitionDAO {
         Query query = entityManager
                 .createQuery("SELECT YEAR(dateStart) FROM Competition "
                         + "GROUP BY YEAR(dateStart) "
-                        + "ORDER BY YEAR(dateStart) DESC");
+                        + "ORDER BY YEAR(dateStart) ASC");
         LOG.debug("Get all competitions years ordered by desc");
         return query.getResultList();
+    }
+    
+    @Override
+    public long getCountOfCompetitions() {
+        return  (long) entityManager.createQuery("SELECT COUNT(*) FROM Competition").getSingleResult();
     }
 
 }
