@@ -3,7 +3,9 @@ package net.carting.web;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -373,23 +375,57 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/teamsRanking", method = RequestMethod.GET)
     public String teamRankingPage(@PathVariable("id") int id, Map<String, Object> map) {
         Competition competition = competitionService.getCompetitionById(id);
-        List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
-                .getRacerCarClassCompetitionNumbersByCompetitionId(id);
-        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
-                .getCarClassCompetitionsByCompetitionId(id);
-        map.put("teamList", competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers));
-        map.put("racerCarClassCompetitionNumbers", racerCarClassCompetitionNumbers);
-        map.put("carClassCompetitions", carClassCompetitions);
-
-        if (racerCarClassCompetitionNumbers.size() > 0) {
-            map.put("competition", racerCarClassCompetitionNumbers.get(0)
-                    .getCarClassCompetition().getCompetition());
-        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
-        List<Team> teamsList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
-        for(int i=0;i<carClassCompetitions.size();i++)
-        System.out.println(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetitions.get(i)));
+        map.put("competition", competition);
+        List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
+                .getRacerCarClassCompetitionNumbersByCompetitionId(id);
+        List<Team> teamList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
+        map.put("teamList", teamList);
+        List<Integer> teamRes;
+        List<Integer> cccRes;
+        List<List<Integer>>teamsRes = new ArrayList<List<Integer>>();
+        for (Team team:teamList) {
+            System.out.println("======================");
+            System.out.println(team);
+            Iterator iter = team.getRacers().iterator();
+            while(iter.hasNext())
+            System.out.print(iter.next()+", ");
+            teamRes = new ArrayList<Integer>();
+            for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
+                System.out.println("cccId"+ccc.getId());
+                cccRes = new ArrayList<Integer>();
+                for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                    if(cccr.getAbsolutePoints()>0){
+                        System.out.println("cccr:"+cccr.getRacerCarClassCompetitionNumber().getRacer());
+                        for(Racer racer:team.getRacers()) {
+                            System.out.println(racer.getId()+"=(?)="+cccr.getRacerCarClassCompetitionNumber().getRacer().getId());
+                            if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                                cccRes.add(cccr.getAbsolutePoints());
+                                System.out.println(cccr.getAbsolutePoints()+ " we have...");
+                            }
+                        }
+                    }
+                }
+                if (!cccRes.isEmpty()) {
+                    Integer max = cccRes.get(0);
+                    if (cccRes.size()>1) {
+                        for (Integer i:cccRes) {
+                           if (i>max) {
+                               max = i;
+                           }
+                        }
+                    }
+                    System.out.println(team.getName()+" added "+max);
+                    teamRes.add(max);
+                }
+            }
+            //Collections.sort(teamRes);
+            teamsRes.add(teamRes);
+        }
+        
+        System.out.println(teamsRes);
+        
         return "teams_ranking";
     }
 
