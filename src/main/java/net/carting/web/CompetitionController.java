@@ -369,5 +369,28 @@ public class CompetitionController {
     	LOG.debug("End changePointsByPlaces method");
         return "success";
     }
+    
+    @RequestMapping(value = "/{id}/teamsRanking", method = RequestMethod.GET)
+    public String teamRankingPage(@PathVariable("id") int id, Map<String, Object> map) {
+        Competition competition = competitionService.getCompetitionById(id);
+        List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
+                .getRacerCarClassCompetitionNumbersByCompetitionId(id);
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(id);
+        map.put("teamList", competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers));
+        map.put("racerCarClassCompetitionNumbers", racerCarClassCompetitionNumbers);
+        map.put("carClassCompetitions", carClassCompetitions);
+
+        if (racerCarClassCompetitionNumbers.size() > 0) {
+            map.put("competition", racerCarClassCompetitionNumbers.get(0)
+                    .getCarClassCompetition().getCompetition());
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+        List<Team> teamsList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
+        for(int i=0;i<carClassCompetitions.size();i++)
+        System.out.println(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetitions.get(i)));
+        return "teams_ranking";
+    }
 
 }
