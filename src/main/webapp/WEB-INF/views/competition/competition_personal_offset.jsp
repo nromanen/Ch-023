@@ -129,11 +129,10 @@ $(document).ready(function(){
 				<th ><spring:message code="label.points" /></th>
 			</tr>
 		</thead>
-		<% int number=1; %>
 		<tbody>
-			<c:forEach items="${carClassCompetition.racerCarClassCompetitionNumbers }" var="racerCarClassCompetitionNumber">
+			<c:forEach items="${carClassCompetition.racerCarClassCompetitionNumbers }" var="racerCarClassCompetitionNumber" varStatus="number">
 				<tr>
-					<td><%=number %></td>
+					<td>${number.count }</td>
 					<td><a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />">${racerCarClassCompetitionNumber.racer.firstName } ${racerCarClassCompetitionNumber.racer.lastName }</a></td>
 					<td class="column-wide">${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
@@ -177,7 +176,6 @@ $(document).ready(function(){
 						<td></td>
 					</c:if>
 				</tr>
-				<% number++; %>
 			</c:forEach>
 		</tbody>
 		<tr class="hidden">

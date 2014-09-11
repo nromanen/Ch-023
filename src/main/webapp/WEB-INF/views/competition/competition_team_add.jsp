@@ -45,12 +45,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%
-						int number = 1;
-					%>
-					<c:forEach items="${team.racers}" var="racer">
+					<c:forEach items="${team.racers}" var="racer" varStatus="number">
 						<tr>
-							<td class="text-center"><%=number%></td>
+							<td class="text-center">${number.count }</td>
 							<td class="text-left"><a
 								href='<c:url value="/racer/${racer.id}" />'>
 									${racer.firstName} ${racer.lastName} </a></td>
@@ -89,9 +86,6 @@
 								</c:forEach>
 							</c:if>
 						</tr>
-						<%
-							number++;
-						%>
 					</c:forEach>
 				</tbody>
 			</table>
