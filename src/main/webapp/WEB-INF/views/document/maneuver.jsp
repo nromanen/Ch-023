@@ -102,9 +102,6 @@
                         <spring:message code="label.skittle_fine" />: <input type="text" id="penalty" value="5" size="1">&emsp;
                         <spring:message code="label.max_allowed_broken_skittles" />: <input type="text" id="max_skittles" value="6" size="1">
                     </div><p>
-                    <div style="text-align: right;color: red">
-                        <spring:message code="label.sort" />&emsp;
-                    </div><p>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
