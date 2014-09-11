@@ -159,6 +159,11 @@
         <put-attribute name="content" value="/WEB-INF/views/document/document.jsp"/>
     </definition>
 
+    <definition name="document_view" extends="wide-template">
+        <put-attribute name="title" value="Document "/>
+        <put-attribute name="content" value="/WEB-INF/views/document/document_view.jsp"/>
+    </definition>
+
     <!-- Checking documents -->
     <definition name="checking_documents" extends="base-template">
         <put-attribute name="title" value="Checking documents "/>

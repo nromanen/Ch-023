@@ -19,7 +19,6 @@ $(document).ready(function(){
     });
 
     function updatePDF() {
-        //sortAndGetPlaces();
         var idArray = [];
         var timeArray = [];
         $(".timetext").each(function () {
