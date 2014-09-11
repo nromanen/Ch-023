@@ -303,8 +303,8 @@ public class CarClassCompetitionController {
         }
          map.put("membersCount", racerCarClassCompetitionNumberService.
                 getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-         map.put("qualifyingList", qualifyingService.
-                getQualifyingsByCarClassCompetition(carClassCompetition));
+         map.put("qualifyingTimesList", carClassCompetitionResultService.getQualifyingTimesByCarClassCompetition(carClassCompetition));
+         map.put("qualifyingPlaceList", carClassCompetitionResultService.getQualifyingPlacesByCarClassCompetition(carClassCompetition));
          map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
         return "competition_carclass_qualifying_add_edit";
     }
@@ -313,6 +313,7 @@ public class CarClassCompetitionController {
     public String addQualifyings(@PathVariable("id") int id,
             @RequestParam("timeResult") String times, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
+        List<CarClassCompetitionResult>cccResList = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<Qualifying> qList = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
         List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
         int count = racers.size();
@@ -321,7 +322,8 @@ public class CarClassCompetitionController {
         if (timesArray.length!=count) {
              return "redirect:/carclass/"+id+"/editQualifying";
         }
-        if ((qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null)&&
+        
+        if ((carClassCompetitionResultService.getQualifyingPlacesByCarClassCompetition(carClassCompetition)==null)&&
                 (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
             for (int i=0;i<count;i++) {
                 Qualifying q = new Qualifying();
