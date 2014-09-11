@@ -6,6 +6,7 @@
     <artifactId>Carting</artifactId>
     <name>Carting</name>
     <packaging>war</packaging>
+    <version>s</version>
     <properties>
         <java-version>1.7</java-version>
         <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
@@ -370,7 +371,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <warName>Carting</warName>
+                    <warName>Carting-s</warName>
                 </configuration>
             </plugin>
             <plugin>
