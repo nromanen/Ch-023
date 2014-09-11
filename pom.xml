@@ -371,7 +371,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <warName>Carting</warName>
+                    <warName>Carting-1.0.0-BUILD-SNAPSHOT</warName>
                 </configuration>
             </plugin>
             <plugin>
