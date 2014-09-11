@@ -378,31 +378,20 @@ public class CompetitionController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
         map.put("competition", competition);
-        List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
-                .getRacerCarClassCompetitionNumbersByCompetitionId(id);
-        List<Team> teamList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
+        List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
         List<Integer> teamRes;
         List<Integer> cccRes;
-        List<List<Integer>>teamsRes = new ArrayList<List<Integer>>();
+        List<Integer>absoluteRes = new ArrayList<Integer>();
         for (Team team:teamList) {
-            System.out.println("======================");
-            System.out.println(team);
-            Iterator iter = team.getRacers().iterator();
-            while(iter.hasNext())
-            System.out.print(iter.next()+", ");
             teamRes = new ArrayList<Integer>();
             for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
-                System.out.println("cccId"+ccc.getId());
                 cccRes = new ArrayList<Integer>();
                 for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
                     if(cccr.getAbsolutePoints()>0){
-                        System.out.println("cccr:"+cccr.getRacerCarClassCompetitionNumber().getRacer());
                         for(Racer racer:team.getRacers()) {
-                            System.out.println(racer.getId()+"=(?)="+cccr.getRacerCarClassCompetitionNumber().getRacer().getId());
                             if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
                                 cccRes.add(cccr.getAbsolutePoints());
-                                System.out.println(cccr.getAbsolutePoints()+ " we have...");
                             }
                         }
                     }
@@ -416,15 +405,25 @@ public class CompetitionController {
                            }
                         }
                     }
-                    System.out.println(team.getName()+" added "+max);
                     teamRes.add(max);
                 }
             }
-            //Collections.sort(teamRes);
-            teamsRes.add(teamRes);
+            Collections.sort(teamRes);
+            int absoluteSum = 0;
+            if(teamRes.size()>5) {
+                for (int i=teamRes.size()-1;i>teamRes.size()-6;i--) {
+                    System.out.println(teamRes.get(i));
+                    absoluteSum=absoluteSum+teamRes.get(i);
+                }
+                
+            } else {
+                for (int i=0;i<teamRes.size();i++) {
+                    absoluteSum=absoluteSum+teamRes.get(i);
+                }
+            }
+            absoluteRes.add(absoluteSum);
         }
-        
-        System.out.println(teamsRes);
+        map.put("absolutResults", absoluteRes);
         
         return "teams_ranking";
     }
