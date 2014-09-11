@@ -1,5 +1,6 @@
 package net.carting.service;
 
+import net.carting.domain.Team;
 import net.carting.domain.TeamInCompetition;
 
 import java.util.List;
@@ -25,5 +26,7 @@ public interface TeamInCompetitionService {
     public Map<TeamInCompetition, Boolean> isValidTeamInCompetitionMap(List<TeamInCompetition> teamInCompetitionList);
 
     public void deleteTeamInCompetitionByTeamIdAndCompetitionId(int teamId, int competitionId);
+
+    List<Team> getTeamsByCompetitionId(int id);
 
 }
