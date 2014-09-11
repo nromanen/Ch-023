@@ -1,11 +1,7 @@
 package net.carting.service;
 
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.itextpdf.text.log.SysoCounter;
 
 @Service
 public class QualifyingServiceImpl implements QualifyingService {

@@ -32,6 +32,28 @@ public class CarClassCompetitionResult {
     //TODO: label
     @Column(name="maneuver_time")
     private double maneuverTime;
+    
+    @Column(name = "qualifying_racer_place")
+    private Integer qualifyingRacerPlace;
+    
+    public Integer getQualifyingRacerPlace() {
+        return qualifyingRacerPlace;
+    }
+
+    public void setQualifyingRacerPlace(Integer qualifyingRacerPlace) {
+        this.qualifyingRacerPlace = qualifyingRacerPlace;
+    }
+
+    public Integer getQualifyingRacerTime() {
+        return qualifyingRacerTime;
+    }
+
+    public void setQualifyingRacerTime(Integer qualifyingRacerTime) {
+        this.qualifyingRacerTime = qualifyingRacerTime;
+    }
+
+    @Column(name = "qualifying_racer_time")
+    private Integer  qualifyingRacerTime;
 
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumber() {
         return racerCarClassCompetitionNumber;
