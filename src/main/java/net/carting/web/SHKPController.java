@@ -252,10 +252,10 @@ public class SHKPController {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             Competition competition = carClassCompetition.getCompetition();
 
-            List<RacerCarClassCompetitionNumber> racers =
+            List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
 
-            model.addAttribute("racers", racers);
+            model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
             model.addAttribute("raceId", id);
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionPlace", competition.getPlace());
@@ -273,7 +273,7 @@ public class SHKPController {
             model.addAttribute("directorName", competition.getDirectorName());
             model.addAttribute("judgeSecretary", competition.getSecretaryCategoryJudicialLicense());
             model.addAttribute("judgeDirector", competition.getDirectorCategoryJudicialLicense());
-            model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racers.size()).split(",")));
+            model.addAttribute("tableB", Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(racerCarClassCompetitionNumberList.size()).split(",")));
 
             model.addAttribute("maneuvers", maneuverService.getAllManeuvers());
         }

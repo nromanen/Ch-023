@@ -22,19 +22,22 @@
         text-align: center;
     }
   </style>
-<input type="hidden" id="fileId" value="0">
-<input type="hidden" id="raceId" value="<c:out value="${raceId}"/>">
-<input type="hidden" id="racersCount" value="<c:out value="${racers.size()}"/>">
-<input type="hidden" id="tableB" value="${tableB}">
-<input type="hidden" id="maneuverCount" value="${maneuvers.size()}">
-<c:if test="${authority.equals('ROLE_ADMIN')}">
+<c:choose>
+<c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
+    <input type="hidden" id="fileId" value="0">
+    <input type="hidden" id="raceId" value="<c:out value="${raceId}"/>">
+    <input type="hidden" id="racersCount" value="<c:out value="${racerCarClassCompetitionNumberList.size()}"/>">
+    <input type="hidden" id="tableB" value="${tableB}">
+    <input type="hidden" id="maneuverCount" value="${maneuvers.size()}">
+    <div style="text-align: center;"><h3>${competitionName}</h3></div>
+    <div style="text-align: center;"><h4>${competitionPlace}</h4></div>
     <div class="panel panel-primary">
          <div class="panel-heading" style="height: 50px;">
             <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.penalty_points" /></div>
          </div>
          <div class="panel-body" style="padding: 0px;">
             <c:choose>
-                <c:when test="${!empty racers}">
+                <c:when test="${!empty racerCarClassCompetitionNumberList}">
                     <table class="table table-hover table-bordered" id="racers_table" style="text-align: center;">
                         <thead class="well">
                             <th style="text-align: center;">№</th>
@@ -47,7 +50,7 @@
                             <th><spring:message code="label.time" /></th>
                         </thead>
                         <tbody>
-                            <c:forEach items="${racers}" var="racer" varStatus="index">
+                            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racer" varStatus="index">
                                 <input type="hidden" id='<c:out value="id${index.count}"/>' value="<c:out value='${racer.getNumberInCompetition()}'/>">
                                 <tr class="team${racer.racer.team.id}
                                     <c:if test='${!racer.racer.enabled}'>bg-danger</c:if>">
@@ -99,6 +102,9 @@
                         <spring:message code="label.skittle_fine" />: <input type="text" id="penalty" value="5" size="1">&emsp;
                         <spring:message code="label.max_allowed_broken_skittles" />: <input type="text" id="max_skittles" value="6" size="1">
                     </div><p>
+                    <div style="text-align: right;color: red">
+                        <spring:message code="label.sort" />&emsp;
+                    </div><p>
                     <div class="alert alert-danger" style="display: none; margin-top: 5px;" id="no_racers">
                         <spring:message code="label.there_are_no_racers_from_your_team" />
                     </div>
@@ -111,7 +117,6 @@
             </c:choose>
         </div>
     </div>
-</c:if>
      <div class="alert alert-danger" id="incorrectPositions"
         style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
         <spring:message code="dataerror.document_start_incorrect_postions" />
@@ -156,10 +161,8 @@
         </tr>
         </thead>
     </table>
-	<table id="maneuverTable" class="sortable table-bordered" width="100%" border='1' cellspacing='0' cellpadding='2'>
-        <%--<table width="100%" id="maneuverTable" class="display table table-hover table-bordered" border='1' cellspacing='0' cellpadding='2'>--%>
-        <thead style="font-weight: 100;">
-                    <tr>
+    <table id="maneuverTable" class="sortable table-bordered" width="100%" border='1' cellspacing='0' cellpadding='2'>
+                    <tr class="well">
                         <th id="loc" align='center'>№ п/п</th>
                         <th align='center'><spring:message code="label.lastname_firstname" /></th>
                         <th align='center'><spring:message code="label.team_name" /></th>
@@ -174,8 +177,7 @@
                         <th class="sorttable_numeric" align='center'><spring:message code="label.points_by_table_b" /></th>
                         <th class="sorttable_numeric" id="place" align='center'><spring:message code="label.place" /></th>
                     </tr>
-        </thead>
-            <c:forEach items="${racers}" var="racer" varStatus="index">
+            <c:forEach items="${racerCarClassCompetitionNumberList}" var="racer" varStatus="index">
                 <tr>
                     <td align="center" class="pos"><c:out value="${index.count}"/></td>
                     <td align="center" class="racername"><c:out value="${racer.getRacer().getLastName()}"/> <c:out value="${racer.getRacer().getFirstName()}"/></td>
@@ -205,3 +207,10 @@
             </tr>
     </table>
 </div>
+</c:when>
+<c:otherwise>
+<div class="alert alert-danger" style="margin-top: 10px; margin-left: 5px;">
+    <spring:message code="label.racers_list_for_this_class_is_empty" />
+</div>
+</c:otherwise>
+</c:choose>

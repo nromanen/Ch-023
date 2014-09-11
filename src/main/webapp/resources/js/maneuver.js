@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
- //   $('#maneuverTable').DataTable();
-
     $('body').on('change', 'input.test', function() {
         $(this).val($(this).val().replace(',', '.'));
         var num = Number($(this).val());
@@ -19,27 +17,6 @@ $(document).ready(function(){
         }
         getTotalSum();
     });
-
-
-
-    /*function sortAndGetPlaces() {
-        var table = document.getElementById('maneuverTable');
-        sorttable.makeSortable(table);
-        sorttable.innerSortFunction.apply(document.getElementById('loc'), []);
-        sorttable.innerSortFunction.apply(document.getElementById('total'), []);
-        var tableBarr = $("#tableB").val().replace('[', '').replace(']', '').split(',');
-        var i = 0;
-        $(".place").each(function () {
-            $(this).text(++i);
-        });
-
-        var count = Number($("#racersCount").val());
-        for (i = 1; i <= count; i++) {
-            var racerId = $("#id" + i).val();
-            $("#tableB" + racerId).text(tableBarr[i-1]);
-        }
-        //$('#maneuverTable').removeClass('sortable');
-    }*/
 
     function updatePDF() {
         //sortAndGetPlaces();
@@ -92,7 +69,7 @@ $(document).ready(function(){
                 sum = sum + (isNaN(tmpValue) ? 0 : tmpValue);
             }
             var time = Number($("#time" + racerId).text());
-            sum = sum + (isNaN(time) ? 0 : time)
+            sum = sum + (isNaN(time) ? 0 : time);
             $("#sum" + racerId).text(sum);
         }
         getPlaces();
@@ -130,18 +107,7 @@ $(document).ready(function(){
 
     $('#save').click(function() {
         $("#pdf").attr("disabled", true);
-        for (var i = 1; i <= Number($("#racersCount").val()); i++) {
-            var sum = 0;
-            var racerId = $("#id" + i).val();
-            for (var j = 1; j <= Number($("#maneuverCount").val()); j++) {
-                var manId = "#maneuver" + j + racerId;
-                var tmpValue = Number($(manId).text()) * Number($("#penalty").val());
-                sum = sum + (isNaN(tmpValue) ? 0 : tmpValue);
-            }
-            var time = Number($("#time" + racerId).text());
-            sum = sum + (isNaN(time) ? 0 : time)
-            $("#sum" + racerId).text(sum);
-        }
+        getTotalSum();
         getPlaces();
         updatePDF();
     });
@@ -151,31 +117,28 @@ $(document).ready(function(){
         var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
         return !!(intRegex.test(number) || floatRegex.test(number));
     }
-
-    function sortNumber(a,b) {
-        return a - b;
+    function sortByKey(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
     }
 
     function getPlaces() {
-        var arr = [];
+        var sumArr = [];
         var racerId;
         var i;
         var count = Number($("#racersCount").val());
         for (i = 1; i <= count; i++) {
             racerId = $("#id" + i).val();
-            arr.push(Number($("#sum" + racerId).text()));
+            sumArr.push({sum : Number($("#sum" + racerId).text()), id : racerId});
         }
-        arr.sort(sortNumber);
+        sumArr = sortByKey(sumArr, 'sum');
         var tableBarr = $("#tableB").val().replace('[', '').replace(']', '').split(',');
-        for (var j = count; j >= 1; j--) {
-            racerId = $("#id" + j).val();
-            for (i = count; i >= 1; i--) {
-                var sum = Number($("#sum" + racerId).text());
-                if (sum == Number(arr[i-1])) {
-                    $("#place" + racerId).text(i);
-                    $("#tableB" + racerId).text(tableBarr[i-1]);
-                }
-            }
+        for (i = 0; i < count; i++) {
+            racerId = sumArr[i]['id']
+            $("#place" + racerId).text(i+1);
+            $("#tableB" + racerId).text(tableBarr[i]);
         }
     }
 });
