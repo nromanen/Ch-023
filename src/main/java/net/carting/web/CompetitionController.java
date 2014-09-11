@@ -380,51 +380,82 @@ public class CompetitionController {
         map.put("competition", competition);
         List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
-        List<Integer> teamRes;
-        List<Integer> cccRes;
+        List<Integer> teamAbsRes;
+        List<Double> teamManRes;
+        List<Integer> allAbsRes;
         List<Integer>absoluteRes = new ArrayList<Integer>();
         for (Team team:teamList) {
-            teamRes = new ArrayList<Integer>();
+            teamAbsRes = new ArrayList<Integer>();
             for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
-                cccRes = new ArrayList<Integer>();
+                allAbsRes = new ArrayList<Integer>();
                 for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
                     if(cccr.getAbsolutePoints()>0){
                         for(Racer racer:team.getRacers()) {
                             if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
-                                cccRes.add(cccr.getAbsolutePoints());
+                                allAbsRes.add(cccr.getAbsolutePoints());
                             }
                         }
                     }
                 }
-                if (!cccRes.isEmpty()) {
-                    Integer max = cccRes.get(0);
-                    if (cccRes.size()>1) {
-                        for (Integer i:cccRes) {
+                if (!allAbsRes.isEmpty()) {
+                    Integer max = allAbsRes.get(0);
+                    if (allAbsRes.size()>1) {
+                        for (Integer i:allAbsRes) {
                            if (i>max) {
                                max = i;
                            }
                         }
                     }
-                    teamRes.add(max);
+                    teamAbsRes.add(max);
                 }
             }
-            Collections.sort(teamRes);
+            Collections.sort(teamAbsRes);
             int absoluteSum = 0;
-            if(teamRes.size()>5) {
-                for (int i=teamRes.size()-1;i>teamRes.size()-6;i--) {
-                    System.out.println(teamRes.get(i));
-                    absoluteSum=absoluteSum+teamRes.get(i);
+            if(teamAbsRes.size()>5) {
+                for (int i=teamAbsRes.size()-1;i>teamAbsRes.size()-6;i--) {
+                    System.out.println(teamAbsRes.get(i));
+                    absoluteSum=absoluteSum+teamAbsRes.get(i);
                 }
                 
             } else {
-                for (int i=0;i<teamRes.size();i++) {
-                    absoluteSum=absoluteSum+teamRes.get(i);
+                for (int i=0;i<teamAbsRes.size();i++) {
+                    absoluteSum=absoluteSum+teamAbsRes.get(i);
                 }
             }
             absoluteRes.add(absoluteSum);
         }
         map.put("absolutResults", absoluteRes);
-        
+        List<Integer> test = new ArrayList<Integer>(absoluteRes);
+        List<Integer>absPlaces = new ArrayList<Integer>(absoluteRes);
+        while (!test.isEmpty()) {
+            int min = test.get(0);
+            for (int i = 1; i<test.size();i++) {
+                if (min>test.get(i)) {
+                    min=test.get(i);
+                }
+            }
+            int i=test.indexOf(Integer.valueOf(min));
+            absPlaces.set(i, test.size());
+            test.remove(i);
+        }
+        System.out.println(absoluteRes);
+        System.out.println("Places: ");
+        for (int i:absPlaces) {
+            System.out.println(i+", ");
+        }
+        map.put("absPlaces", absPlaces);
+        return "teams_ranking";
+    }
+
+        if (racerCarClassCompetitionNumbers.size() > 0) {
+            map.put("competition", racerCarClassCompetitionNumbers.get(0)
+                    .getCarClassCompetition().getCompetition());
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+        List<Team> teamsList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
+        for(int i=0;i<carClassCompetitions.size();i++)
+        System.out.println(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetitions.get(i)));
         return "teams_ranking";
     }
 
