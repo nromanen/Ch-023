@@ -3,7 +3,9 @@ package net.carting.web;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -373,13 +375,58 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/teamsRanking", method = RequestMethod.GET)
     public String teamRankingPage(@PathVariable("id") int id, Map<String, Object> map) {
         Competition competition = competitionService.getCompetitionById(id);
-        List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
-                .getRacerCarClassCompetitionNumbersByCompetitionId(id);
-        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
-                .getCarClassCompetitionsByCompetitionId(id);
-        map.put("teamList", competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers));
-        map.put("racerCarClassCompetitionNumbers", racerCarClassCompetitionNumbers);
-        map.put("carClassCompetitions", carClassCompetitions);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+        map.put("competition", competition);
+        List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
+        map.put("teamList", teamList);
+        List<Integer> teamRes;
+        List<Integer> cccRes;
+        List<Integer>absoluteRes = new ArrayList<Integer>();
+        for (Team team:teamList) {
+            teamRes = new ArrayList<Integer>();
+            for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
+                cccRes = new ArrayList<Integer>();
+                for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                    if(cccr.getAbsolutePoints()>0){
+                        for(Racer racer:team.getRacers()) {
+                            if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                                cccRes.add(cccr.getAbsolutePoints());
+                            }
+                        }
+                    }
+                }
+                if (!cccRes.isEmpty()) {
+                    Integer max = cccRes.get(0);
+                    if (cccRes.size()>1) {
+                        for (Integer i:cccRes) {
+                           if (i>max) {
+                               max = i;
+                           }
+                        }
+                    }
+                    teamRes.add(max);
+                }
+            }
+            Collections.sort(teamRes);
+            int absoluteSum = 0;
+            if(teamRes.size()>5) {
+                for (int i=teamRes.size()-1;i>teamRes.size()-6;i--) {
+                    System.out.println(teamRes.get(i));
+                    absoluteSum=absoluteSum+teamRes.get(i);
+                }
+                
+            } else {
+                for (int i=0;i<teamRes.size();i++) {
+                    absoluteSum=absoluteSum+teamRes.get(i);
+                }
+            }
+            absoluteRes.add(absoluteSum);
+        }
+        map.put("absolutResults", absoluteRes);
+        
+        return "teams_ranking";
+    }
 
         if (racerCarClassCompetitionNumbers.size() > 0) {
             map.put("competition", racerCarClassCompetitionNumbers.get(0)
