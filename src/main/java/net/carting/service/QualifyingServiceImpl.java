@@ -135,9 +135,9 @@ public class QualifyingServiceImpl implements QualifyingService {
 	while (!qList.isEmpty()) {
 	    Qualifying q = qList.get(0);
 	    for (int j = 1; j < qList.size(); j++) {
-		if (q.getRacerTime() < qList.get(j).getRacerTime()) {
-		    q = qList.get(j);
-		}
+    		if (q.getRacerTime() < qList.get(j).getRacerTime()) {
+    		    q = qList.get(j);
+    		}
 	    }
 	    q.setRacerPlace(qList.size());
 	    updateQualifying(q);

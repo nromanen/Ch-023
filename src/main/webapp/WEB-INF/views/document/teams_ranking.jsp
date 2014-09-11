@@ -50,7 +50,7 @@
 									<a href="<c:url value="/team/${team.id}" />">${team.name}</a> 
 								</td>
 								<td>${absolutResults[index.index]}</td>
-								<td></td>
+								<td>${absPlaces[index.index]}</td>
 								<td></td>
 								<td></td>
 								<td></td>

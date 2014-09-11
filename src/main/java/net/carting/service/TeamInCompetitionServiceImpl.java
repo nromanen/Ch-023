@@ -154,9 +154,9 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
     public List<Team> getTeamsByCompetitionId(int id) {
         List<Team>teams = teamDAO.getAllTeams();
         List<Team>resultList = new ArrayList<Team>();
-        for (int i=0;i<teams.size();i++) {
-            if(teamInCompetitionDAO.isTeamInCompetition(teams.get(i).getId(), id)) {
-                resultList.add(teams.get(i));
+        for (Team team:teams) {
+            if(teamInCompetitionDAO.isTeamInCompetition(team.getId(), id)) {
+                resultList.add(team);
             }
         }
         if (!resultList.isEmpty()) {
