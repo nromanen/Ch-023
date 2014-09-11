@@ -166,9 +166,6 @@
 	<div class="clearfix"></div>
 	<c:if test="${document == null }">
 		<!-- Racers Table Begin  -->
-		<%
-			int number = 0;
-		%>
 		<div class="form-group">
 			<table id="team-table" class="table table-bordered">
 				<thead style="font-weight: 100;">
@@ -178,12 +175,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${racers}" var="racer">
+					<c:forEach items="${racersList}" var="racer" varStatus="number">
 						<tr>
-							<%
-								number++;
-							%>
-							<td class="text-center"><%=number%></td>
+							<td class="text-center">${number.count }</td>
 							<td class="text-left"><a href='<c:url value="/racer/${racer.id}" />'>${racer.firstName} ${racer.lastName} </a></td>
 							<c:choose>
 								<c:when test="${documentType==2 }">

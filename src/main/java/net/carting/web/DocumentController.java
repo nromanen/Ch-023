@@ -135,10 +135,10 @@ public class DocumentController {
             Team team = teamService.getTeamByLeader(leader);
             map.put("documentType", documentType);
             if (documentType == Document.TYPE_RACER_PARENTAL_PERMISSIONS) {
-                map.put("racers", racerService
+                map.put("racersList", racerService
                         .getSetOfRacersNeedingPerentalPermisionByTeam(team));
             } else {
-                map.put("racers", racerService
+                map.put("racersList", racerService
                         .getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                                 documentType, team));
             }
