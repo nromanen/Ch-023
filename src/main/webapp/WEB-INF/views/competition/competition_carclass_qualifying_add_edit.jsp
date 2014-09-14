@@ -8,7 +8,7 @@ pageEncoding="utf-8"%>
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.js" />'></script>
 <div class="page-header">
 	<c:choose>
-		<c:when test="${!empty qualifyingList}">
+		<c:when test="${isSetQualifying}">
 			<h2 class="user-info-name"><spring:message code="label.edit_qualifying" /></h2>
 		</c:when>
 		<c:otherwise>
@@ -28,13 +28,24 @@ pageEncoding="utf-8"%>
 			</div>
 		</div>
 		<c:choose>
-				<c:when test="${!empty qualifyingList}">
-					<c:forEach items="${qualifyingList}" var="qualifying">
+				<c:when test="${isSetQualifying}">
+					<c:forEach items="${cccResList}" var="cccRes">
 						<div class="form-group">
-							<label class="col-lg-3 control-label">${qualifying.racerNumber}</label>
+						<c:forEach items="${racersNumsWithSameTimeList}" var="sameNumber">
+                             <c:choose>
+                             <c:when test="${cccRes.racerCarClassCompetitionNumber.numberInCompetition==sameNumber}">
+                              <span style="color: red;">
+                             </c:when>
+                              <c:otherwise>
+                              <span>
+                              </c:otherwise>
+                              </c:choose>
+                              </c:forEach>
+							<label class="col-lg-3 control-label">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</label>
+							</span>
 							<div class="col-lg-3">
 								<input  type="text" class="form-control" onchange='Go()' placeholder="[hh:]mm:ss" id='id_${counter.index}' name="time_${counter.index}"
-									value="${qualifying.getTimeString()}"
+									value="${cccRes.getQualifyingTimeString()}"
 									pattern="^((\d?\d:)?[0-5]?\d:)?[0-5]?\d((,|\.)\d{1,3})?$" 
 									data-bv-regexp-message="<spring:message code="qualifying.time_format"/>"
 									data-bv-notempty="true"
@@ -64,7 +75,7 @@ pageEncoding="utf-8"%>
 		<input type="hidden" name="numbersResult" id="numbers" value="${validNumbers}">
 		<div class="col-lg-9 col-lg-offset-3">
 			<c:choose>
-				<c:when test="${!empty qualifyingList}">
+				<c:when test="${isSetQualifying}">
 					<input type="submit" class="btn btn-success" onClick="Go()" id="addTestRacesubmit" 
 						value="<spring:message code="label.edit"/>">
 				</c:when>

@@ -249,16 +249,16 @@ public class CompetitionController {
                 .getCarClassCompetitionsByCompetitionId(id);
     	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
     	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
-    	List<List<Qualifying>> qualifyingResults = new ArrayList<List<Qualifying>>();
+    	List<Boolean>isSetQualifyingList = new ArrayList<Boolean>();
     	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
     		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
     		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
-    		qualifyingResults.add(qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition));
+    		isSetQualifyingList.add(carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
     	}
-    	map.put("qualifyingLists", qualifyingResults);
     	map.put("carClassCompetitions", carClassCompetitions);
     	map.put("raceResultsLists", raceResults);
     	map.put("absoluteResultsList", carClassCompetitionResults);
+    	map.put("isSetQualifyingList",isSetQualifyingList);
     	
 
         return "competition_personal_offset";
@@ -380,53 +380,90 @@ public class CompetitionController {
         map.put("competition", competition);
         List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
-        List<Integer> teamAbsRes;
+        List<Integer> teamShKPRes;
         List<Double> teamManRes;
-        List<Integer> allAbsRes;
-        List<Integer>absoluteRes = new ArrayList<Integer>();
+        List<Integer> tempShKPRes;
+        List<Double> tempManRes;
+        List<Integer>totalShKPRes = new ArrayList<Integer>();
+        List<Double> totalManRes = new ArrayList<Double>();
         for (Team team:teamList) {
-            teamAbsRes = new ArrayList<Integer>();
+            teamShKPRes = new ArrayList<Integer>();
+            teamManRes = new ArrayList<Double>();
             for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
-                allAbsRes = new ArrayList<Integer>();
+                tempShKPRes = new ArrayList<Integer>();
+                tempManRes = new ArrayList<Double>();
                 for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
                     if(cccr.getAbsolutePoints()>0){
                         for(Racer racer:team.getRacers()) {
                             if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
-                                allAbsRes.add(cccr.getAbsolutePoints());
+                                tempShKPRes.add(cccr.getAbsolutePoints());
+                            }
+                        }
+                    }
+                    if (cccr.getManeuverTime()>0) {
+                        for(Racer racer:team.getRacers()) {
+                            if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                                tempManRes.add(cccr.getManeuverTime());
                             }
                         }
                     }
                 }
-                if (!allAbsRes.isEmpty()) {
-                    Integer max = allAbsRes.get(0);
-                    if (allAbsRes.size()>1) {
-                        for (Integer i:allAbsRes) {
+                if (!tempShKPRes.isEmpty()) {
+                    Integer max = tempShKPRes.get(0);
+                    if (tempShKPRes.size()>1) {
+                        for (Integer i:tempShKPRes) {
                            if (i>max) {
                                max = i;
                            }
                         }
                     }
-                    teamAbsRes.add(max);
+                    teamShKPRes.add(max);
+                }
+                if (!tempManRes.isEmpty()) {
+                    Double max = tempManRes.get(0);
+                    if (tempManRes.size()>1) {
+                        for (Double i:tempManRes) {
+                           if (i>max) {
+                               max = i;
+                           }
+                        }
+                    }
+                    teamManRes.add(max);
                 }
             }
-            Collections.sort(teamAbsRes);
-            int absoluteSum = 0;
-            if(teamAbsRes.size()>5) {
-                for (int i=teamAbsRes.size()-1;i>teamAbsRes.size()-6;i--) {
-                    System.out.println(teamAbsRes.get(i));
-                    absoluteSum=absoluteSum+teamAbsRes.get(i);
+            Collections.sort(teamShKPRes);
+            int ShKPSum = 0;
+            if(teamShKPRes.size()>5) {
+                for (int i=teamShKPRes.size()-1;i>teamShKPRes.size()-6;i--) {
+                    System.out.println(teamShKPRes.get(i));
+                    ShKPSum=ShKPSum+teamShKPRes.get(i);
                 }
                 
             } else {
-                for (int i=0;i<teamAbsRes.size();i++) {
-                    absoluteSum=absoluteSum+teamAbsRes.get(i);
+                for (int i=0;i<teamShKPRes.size();i++) {
+                    ShKPSum=ShKPSum+teamShKPRes.get(i);
                 }
             }
-            absoluteRes.add(absoluteSum);
+            totalShKPRes.add(ShKPSum);
+            Collections.sort(teamManRes);
+            double manSum = 0;
+            if(teamManRes.size()>5) {
+                for (int i=teamManRes.size()-1;i>teamManRes.size()-6;i--) {
+                    System.out.println(teamManRes.get(i));
+                    manSum=manSum+teamManRes.get(i);
+                }
+                
+            } else {
+                for (int i=0;i<teamManRes.size();i++) {
+                    manSum=manSum+teamManRes.get(i);
+                }
+            }
+            totalManRes.add(manSum);
         }
-        map.put("absolutResults", absoluteRes);
-        List<Integer> test = new ArrayList<Integer>(absoluteRes);
-        List<Integer>absPlaces = new ArrayList<Integer>(absoluteRes);
+        map.put("absolutResults", totalShKPRes);
+        map.put("ShKPResList", totalManRes);
+        List<Integer> test = new ArrayList<Integer>(totalShKPRes);
+        List<Integer>ShKPPlaces = new ArrayList<Integer>(totalShKPRes);
         while (!test.isEmpty()) {
             int min = test.get(0);
             for (int i = 1; i<test.size();i++) {
@@ -435,15 +472,36 @@ public class CompetitionController {
                 }
             }
             int i=test.indexOf(Integer.valueOf(min));
-            absPlaces.set(i, test.size());
+            ShKPPlaces.set(i, test.size());
             test.remove(i);
         }
-        System.out.println(absoluteRes);
+        System.out.println("ShKP: "+totalShKPRes);
         System.out.println("Places: ");
-        for (int i:absPlaces) {
+        for (int i:ShKPPlaces) {
             System.out.println(i+", ");
         }
-        map.put("absPlaces", absPlaces);
+        map.put("absPlaces", ShKPPlaces);
+        List<Double> testMan = new ArrayList<Double>(totalManRes);
+        List<Double>manPlaces = new ArrayList<Double>(totalManRes);
+        while (!testMan.isEmpty()) {
+            double min = testMan.get(0);
+            for (int i = 1; i<testMan.size();i++) {
+                if (min>testMan.get(i)) {
+                    min=testMan.get(i);
+                }
+            }
+            int i=testMan.indexOf(Double.valueOf(min));
+            System.out.println(i);
+            System.out.println("Size: "+testMan.size());
+            manPlaces.set(i, Double.valueOf(testMan.size()));
+            testMan.remove(i);
+        }
+        System.out.println("Man:"+totalManRes);
+        System.out.println("Places: ");
+        for (double i:manPlaces) {
+            System.out.println(i+", ");
+        }
+        map.put("manPlaces", manPlaces);
         return "teams_ranking";
     }
 

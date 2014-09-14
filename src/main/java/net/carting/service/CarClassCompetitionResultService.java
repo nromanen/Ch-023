@@ -48,4 +48,9 @@ public interface CarClassCompetitionResultService {
     List<Integer> getRacersNumbersWithSameQualifyingTime(CarClassCompetition ccc);
 
     void setQualifyingPlacesInCarClassCompetition(CarClassCompetition ccc);
+
+    boolean isSetQualifyingByCarClassCompetition(CarClassCompetition ccc);
+
+    List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByQualifyingTimes(
+            CarClassCompetition carClassCompetition);
 }

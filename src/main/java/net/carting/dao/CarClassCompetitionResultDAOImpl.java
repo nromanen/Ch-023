@@ -90,6 +90,19 @@ public class CarClassCompetitionResultDAOImpl implements CarClassCompetitionResu
         LOG.debug("Get car class competition results by car class competition with id = {} ordered by points", carClassCompetition.getId());
         return query.getResultList();
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByQualifyingTimes(
+            CarClassCompetition carClassCompetition) {
+        Query query = entityManager.
+                createQuery("from CarClassCompetitionResult cccr " +
+                        "where cccr.racerCarClassCompetitionNumber.carClassCompetition = :carClassCompetition " +
+                        "order by qualifyingRacerTime asc");
+        query.setParameter("carClassCompetition", carClassCompetition);
+        LOG.debug("Get car class competition results by car class competition with id = {} ordered by qualifying places", carClassCompetition.getId());
+        return query.getResultList();
+    }
 
 }
 
