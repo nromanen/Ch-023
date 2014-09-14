@@ -172,32 +172,30 @@ public class CarClassCompetitionResultServiceImpl implements
     public void setAbsoluteResults(CarClassCompetition carClassCompetition,
             Race race) {
         LOG.debug("Start of setAbsoluteResults method");
+        List<CarClassCompetitionResult> cccResList = getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList = racerCarClassCompetitionNumberService
                 .getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition
                         .getId());
+        System.out.println(getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
         if (race.getRaceNumber() == 1) {
             Competition competition = carClassCompetition.getCompetition();
             competition.setEnabled(false);
             competitionService.updateCompetition(competition);
-            for (RacerCarClassCompetitionNumber racerCarClassCompetitionNumber : racerCarClassCompetitionNumberList) {
-                CarClassCompetitionResult carClassCompetitionResult = new CarClassCompetitionResult();
-                carClassCompetitionResult.setAbsolutePlace(0);
-                carClassCompetitionResult.setAbsolutePoints(0);
-                carClassCompetitionResult.setRace2points(0);
-                carClassCompetitionResult
-                        .setRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
+            for (int i=0;i<cccResList.size();i++) {
+                CarClassCompetitionResult cccRes = cccResList.get(i);
+                cccRes.setRacerCarClassCompetitionNumber(racerCarClassCompetitionNumberList.get(i));
                 List<RaceResult> raceResults = (ArrayList<RaceResult>) raceResultService
                         .getRaceResultsByRace(race);
                 for (RaceResult raceResult : raceResults) {
-                    if (raceResult.getCarNumber() == racerCarClassCompetitionNumber
+                    if (raceResult.getCarNumber() == cccRes.getRacerCarClassCompetitionNumber()
                             .getNumberInCompetition()) {
-                        carClassCompetitionResult.setAbsolutePlace(raceResult
+                        cccRes.setAbsolutePlace(raceResult
                                 .getPlace());
-                        carClassCompetitionResult.setAbsolutePoints(raceResult
+                        cccRes.setAbsolutePoints(raceResult
                                 .getPoints());
                     }
                 }
-                addCarClassCompetitionResult(carClassCompetitionResult);
+                updateCarClassCompetitionResult(cccRes);
             }
             LOG.debug("There is one race in this competition");
         }
@@ -418,7 +416,9 @@ public class CarClassCompetitionResultServiceImpl implements
         List<Integer> allQualifyings = new ArrayList<Integer>();
 
         for (CarClassCompetitionResult res : getCarClassCompetitionResultsByCarClassCompetition(ccc)) {
-            allQualifyings.add(res.getQualifyingRacerPlace());
+            if(res.getQualifyingRacerPlace()!=null) {
+                allQualifyings.add(res.getQualifyingRacerPlace());
+            }
         }
         if (!allQualifyings.isEmpty()) {
             return allQualifyings;
@@ -434,7 +434,9 @@ public class CarClassCompetitionResultServiceImpl implements
         List<Integer> allQualifyings = new ArrayList<Integer>();
 
         for (CarClassCompetitionResult res : getCarClassCompetitionResultsByCarClassCompetition(ccc)) {
-            allQualifyings.add(res.getQualifyingRacerTime());
+            if(res.getQualifyingRacerTime()!=null) {
+                allQualifyings.add(res.getQualifyingRacerTime());
+            }
         }
         if (!allQualifyings.isEmpty()) {
             return allQualifyings;
@@ -485,34 +487,36 @@ public class CarClassCompetitionResultServiceImpl implements
     @Transactional
     public List<Integer> getRacersNumbersWithSameQualifyingTime(
             CarClassCompetition ccc) {
-        List<CarClassCompetitionResult> ques = getCarClassCompetitionResultsByCarClassCompetition(ccc);
-        if ((ques == null) || (ques.isEmpty())) {
-            return null;
-        }
-        List<Integer> qNums = new ArrayList<Integer>();
-        for (int i = 0; i < ques.size() - 1; i++) {
-            for (int j = i + 1; j < ques.size(); j++) {
-                if (ques.get(i).getQualifyingRacerTime()
-                        .equals(ques.get(j).getQualifyingRacerTime())) {
-                    if (!qNums.contains(ques.get(i)
-                            .getRacerCarClassCompetitionNumber()
-                            .getNumberInCompetition())) {
-                        qNums.add(ques.get(i)
+        if(getQualifyingTimesByCarClassCompetition(ccc)!=null&&getQualifyingTimesByCarClassCompetition(ccc).size()>1) {
+            List<CarClassCompetitionResult> ques = getCarClassCompetitionResultsByCarClassCompetition(ccc);
+            List<Integer> qNums = new ArrayList<Integer>();
+            for (int i = 0; i < ques.size() - 1; i++) {
+                for (int j = i + 1; j < ques.size(); j++) {
+                    System.out.println(i+" - "+j);
+                    if (ques.get(i).getQualifyingRacerTime()
+                            .equals(ques.get(j).getQualifyingRacerTime())) {
+                        if (!qNums.contains(ques.get(i)
                                 .getRacerCarClassCompetitionNumber()
-                                .getNumberInCompetition());
-                    }
-                    if (!qNums.contains(ques.get(j)
-                            .getRacerCarClassCompetitionNumber()
-                            .getNumberInCompetition())) {
-                        qNums.add(ques.get(j)
+                                .getNumberInCompetition())) {
+                            qNums.add(ques.get(i)
+                                    .getRacerCarClassCompetitionNumber()
+                                    .getNumberInCompetition());
+                        }
+                        if (!qNums.contains(ques.get(j)
                                 .getRacerCarClassCompetitionNumber()
-                                .getNumberInCompetition());
+                                .getNumberInCompetition())) {
+                            qNums.add(ques.get(j)
+                                    .getRacerCarClassCompetitionNumber()
+                                    .getNumberInCompetition());
+                        }
+    
                     }
-
                 }
             }
+            return qNums;
+        } else {
+            return null;
         }
-        return qNums;
     }
 
     @Override
@@ -531,5 +535,24 @@ public class CarClassCompetitionResultServiceImpl implements
             updateCarClassCompetitionResult(cccRes);
             qList.remove(cccRes);
         }
+    }
+    
+    @Override
+    @Transactional
+    public boolean isSetQualifyingByCarClassCompetition(CarClassCompetition ccc) {
+        if(getQualifyingPlacesByCarClassCompetition(ccc)==null||
+                getQualifyingTimesByCarClassCompetition(ccc).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    @Override
+    @Transactional
+    public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByQualifyingTimes(
+            CarClassCompetition carClassCompetition) {
+        return carClassCompetitionResultDAO
+                .getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition);
     }
 }

@@ -2,6 +2,8 @@ package net.carting.domain;
 
 import javax.persistence.*;
 
+import net.carting.util.DateUtil;
+
 
 @Entity
 @Table(name = "car_class_competition_results")
@@ -36,6 +38,9 @@ public class CarClassCompetitionResult {
     @Column(name = "qualifying_racer_place")
     private Integer qualifyingRacerPlace;
     
+    @Column(name = "qualifying_racer_time")
+    private Integer  qualifyingRacerTime;
+    
     public Integer getQualifyingRacerPlace() {
         return qualifyingRacerPlace;
     }
@@ -51,9 +56,10 @@ public class CarClassCompetitionResult {
     public void setQualifyingRacerTime(Integer qualifyingRacerTime) {
         this.qualifyingRacerTime = qualifyingRacerTime;
     }
-
-    @Column(name = "qualifying_racer_time")
-    private Integer  qualifyingRacerTime;
+    
+    public String getQualifyingTimeString() {
+        return DateUtil.getTimeStringFromInt(this.qualifyingRacerTime);
+    }
 
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumber() {
         return racerCarClassCompetitionNumber;
@@ -120,7 +126,7 @@ public class CarClassCompetitionResult {
     @Override
     public String toString() {
         return "CarClassCompetitionResult [id=" + id + ",  absolutePoints=" + absolutePoints + ", absolutePlace="
-                + absolutePlace + "]";
+                + absolutePlace + ", qualifyingTime= "+getQualifyingTimeString()+", qualifyingPlace= "+qualifyingRacerPlace+"]";
     }
 
     public CarClassCompetitionResult() {

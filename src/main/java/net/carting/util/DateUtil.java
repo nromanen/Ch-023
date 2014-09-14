@@ -46,20 +46,30 @@ public class DateUtil {
         return date;
     }
     public static String getTimeStringFromInt(Integer intTime) {
+        if(intTime!=null){
         String timeResult = new String();
         long h = TimeUnit.MILLISECONDS.toHours(intTime);
         long m = TimeUnit.MILLISECONDS.toMinutes(intTime) - TimeUnit.HOURS.toMinutes(h);
         long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h);
         long S = intTime - TimeUnit.SECONDS.toMillis(s) - TimeUnit.MINUTES.toMillis(m) - TimeUnit.HOURS.toMillis(h);
         if (S>0) {
+            int i=3;
         	while (S%10==0) {
         		S = S/10;
+        		i--;
         	}
-        	timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
+        	if(i>1){
+        	    timeResult = String.format("%02d:%02d:%02d,%0"+i+"d",h,m,s,S);
+        	} else {
+        	    timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
+        	}
         } else {
         	timeResult = String.format("%02d:%02d:%02d",h,m,s);
         }
         return timeResult; 
+        } else {
+            return null;
+        }
     }
     
     public static Integer getIntFromTimeString(String timeString) {

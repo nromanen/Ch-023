@@ -185,22 +185,12 @@ public class SHKPController {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             Competition competition = carClassCompetition.getCompetition();
 
-            List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
-                    racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
-
-
+            List<CarClassCompetitionResult> carClassCompetitionResultList = carClassCompetitionResultService.
+                    getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition);
             try {
-                List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
-                List<Qualifying> resultQ = new ArrayList<Qualifying>();
-                if (beforeQ != null) {
-                    for (int i = 0; i < beforeQ.size(); i++) {
-                        for (Qualifying aBeforeQ : beforeQ) {
-                            if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition() == aBeforeQ.getRacerNumber()) {
-                                resultQ.add(aBeforeQ);
-                            }
-                        }
-                    }
-                    model.addAttribute("qualifyingList", resultQ);
+                if (carClassCompetitionResultList != null) {
+                    model.addAttribute("cccResList", carClassCompetitionResultList);
+                    model.addAttribute("isSetQualifying", carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
                 }
             } catch (Exception e) {
                 LOG.error("Errors in start method", e);
@@ -210,7 +200,7 @@ public class SHKPController {
             model.addAttribute("raceId", id);
             model.addAttribute("tableRows", TABLE_ROWS);
 
-            model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
+            model.addAttribute("startedNumber", carClassCompetitionResultList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -218,7 +208,7 @@ public class SHKPController {
 
             model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
 
-            model.addAttribute("allowedNumber", racerCarClassCompetitionNumberList.size());
+            model.addAttribute("allowedNumber", carClassCompetitionResultList.size());
             model.addAttribute("secretaryName", competition.getSecretaryName());
             Date time;
             Date date;
@@ -242,7 +232,6 @@ public class SHKPController {
             model.addAttribute("carClassDate", dateFormat.format(date));
             model.addAttribute("carClassRace", raceId);
             model.addAttribute("maxPositions", MAX_CAR_POSITIONS);
-            model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
             return new ModelAndView("start");
         }
 
