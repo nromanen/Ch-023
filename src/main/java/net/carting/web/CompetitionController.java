@@ -84,7 +84,8 @@ public class CompetitionController {
     @Autowired
     private QualifyingService qualifyingService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CompetitionController.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(CompetitionController.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
@@ -93,42 +94,53 @@ public class CompetitionController {
         List<Racer> racersBirthday = racerService.getBirthdayRacers(checkdate);
         model.addAttribute("competition", competition);
         List<CarClass> carClasses = carClassService.getAllCarClasses();
-        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(id);
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(id);
         model.addAttribute("carClassList", competitionService
-                .getDifferenceBetweenCarClassesAndCarClassCompetitions(carClasses, carClassCompetitions));
+                .getDifferenceBetweenCarClassesAndCarClassCompetitions(
+                        carClasses, carClassCompetitions));
         model.addAttribute("racersBirthday", racersBirthday);
         model.addAttribute("carClassCompetitionList", carClassCompetitions);
-        model.addAttribute("pointsByPlacesList", competitionService.getPointsByPlacesList(competition));
+        model.addAttribute("pointsByPlacesList",
+                competitionService.getPointsByPlacesList(competition));
         return new ModelAndView("competition");
     }
 
     @RequestMapping(value = "/list/{year}/{page}", method = RequestMethod.GET)
-    public ModelAndView competitionsPage(Model model, @PathVariable("year") String yearString, @PathVariable("page") int page, 
-            @RequestParam(value = "competitionsPerPage", required=false, defaultValue = "10") int competitionsPerPage) {
-    	if (yearString.equals("all")) {
-    	    List<Competition> competitionList = competitionService.getAllCompetitionsByPage(page, competitionsPerPage);
-    	    long countOfCompetitions = competitionService.getCountOfCompetitions();
-    	    model.addAttribute("competitionList", competitionList);
-            model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
+    public ModelAndView competitionsPage(
+            Model model,
+            @PathVariable("year") String yearString,
+            @PathVariable("page") int page,
+            @RequestParam(value = "competitionsPerPage", required = false, defaultValue = "10") int competitionsPerPage) {
+        if (yearString.equals("all")) {
+            List<Competition> competitionList = competitionService
+                    .getAllCompetitionsByPage(page, competitionsPerPage);
+            long countOfCompetitions = competitionService
+                    .getCountOfCompetitions();
+            model.addAttribute("competitionList", competitionList);
+            model.addAttribute("yearsList",
+                    competitionService.getCompetitionsYearsList());
             model.addAttribute("all", yearString);
             model.addAttribute("countOfCompetitions", countOfCompetitions);
             model.addAttribute("competitionsPerPage", competitionsPerPage);
-    	} else {
-    	    int year;
+        } else {
+            int year;
             try {
                 year = Integer.parseInt(yearString);
             } catch (NumberFormatException e) {
-                year=0;
+                year = 0;
             }
-            if(!competitionService.getCompetitionsYearsList().contains(year)) {
+            if (!competitionService.getCompetitionsYearsList().contains(year)) {
                 year = competitionService.getCompetitionsYearsList().get(0);
             }
-			GlobalData.globalYear = year;
-            List<Competition> competitionList = competitionService.getCompetitionsByYear(year);
+            GlobalData.globalYear = year;
+            List<Competition> competitionList = competitionService
+                    .getCompetitionsByYear(year);
             model.addAttribute("competitionList", competitionList);
-            model.addAttribute("yearsList", competitionService.getCompetitionsYearsList());
+            model.addAttribute("yearsList",
+                    competitionService.getCompetitionsYearsList());
             model.addAttribute("year", year);
-    	}
+        }
 
         return new ModelAndView("competitions");
     }
@@ -139,32 +151,36 @@ public class CompetitionController {
     }
 
     @RequestMapping(value = "/addCompetition", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String addCompetitionAction(
-            @ModelAttribute("newCompetition") Competition competition, BindingResult result) {
+    public @ResponseBody String addCompetitionAction(
+            @ModelAttribute("newCompetition") Competition competition,
+            BindingResult result) {
         CompetitionValidator validator = new CompetitionValidator();
         validator.validate(competition, result);
         if (result.hasErrors()) {
-            LOG.trace("Admin failed adding new competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin failed adding new competition {} (id = {})",
+                    competition.getName(), competition.getId());
             return "fail";
         }
-        competition.setPointsByPlaces(adminSettingsService.getAdminSettings().getPointsByPlaces());
+        competition.setPointsByPlaces(adminSettingsService.getAdminSettings()
+                .getPointsByPlaces());
         competitionService.addCompetition(competition);
-        LOG.trace("Admin has added new competition {} (id = {}))", competition.getName(), competition.getId());
+        LOG.trace("Admin has added new competition {} (id = {}))",
+                competition.getName(), competition.getId());
         return String.valueOf(competition.getId());
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String deleteCompetitionAction(@RequestBody Map<String, Object> map) {
-        Competition competition = competitionService.getCompetitionById(Integer.parseInt(map.get("id").toString()));
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String deleteCompetitionAction(
+            @RequestBody Map<String, Object> map) {
+        Competition competition = competitionService.getCompetitionById(Integer
+                .parseInt(map.get("id").toString()));
         try {
             competitionService.deleteCompetition(competition);
-            LOG.trace("Admin has deleted competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin has deleted competition {} (id = {})",
+                    competition.getName(), competition.getId());
         } catch (Exception e) {
-            LOG.trace("Admin trying to delete competition {} (id = {})", competition.getName(), competition.getId());
+            LOG.trace("Admin trying to delete competition {} (id = {})",
+                    competition.getName(), competition.getId());
             return "error";
         }
         return "success";
@@ -172,62 +188,77 @@ public class CompetitionController {
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView editCompetitionPage(Model model,
-                                            @PathVariable("id") int id) {
+            @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
 
         if (competition.isEnabled()) {
             model.addAttribute("competition", competition);
             return new ModelAndView("competition_add_edit");
         } else {
-            return new ModelAndView("redirect:/competition/" + competition.getId());
+            return new ModelAndView("redirect:/competition/"
+                    + competition.getId());
         }
     }
 
     @RequestMapping(value = "/editAction", method = RequestMethod.POST)
     public String editCompetitionAction(
             @ModelAttribute("editedCompetition") Competition competition) {
-    	
-    	competitionService.updateCompetition(competition);
-    	List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(competition.getId());
-    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
-        	for (Race race : carClassCompetition.getRaces()) {
-            	raceService.setResultTable(raceService.getChessRoll(race), race);
-            	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+
+        competitionService.updateCompetition(competition);
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(competition.getId());
+        for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+            for (Race race : carClassCompetition.getRaces()) {
+                raceService
+                        .setResultTable(raceService.getChessRoll(race), race);
+                carClassCompetitionResultService
+                        .recalculateAbsoluteResultsByEditedRace(
+                                carClassCompetition, race);
             }
         }
-        LOG.trace("Admin has edited competition {} (id = {})", competition.getName(), competition.getId());
+        LOG.trace("Admin has edited competition {} (id = {})",
+                competition.getName(), competition.getId());
         return "redirect:/competition/" + competition.getId();
     }
 
-    @RequestMapping(value = "/{id}/addCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String addCarClassCompetition(@PathVariable("id") int id,
-                                  @RequestBody Map<String, Object> map) {
+    @RequestMapping(value = "/{id}/addCarClass", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String addCarClassCompetition(
+            @PathVariable("id") int id, @RequestBody Map<String, Object> map) {
         Competition competition = competitionService.getCompetitionById(id);
         CarClassCompetition carClassCompetition = new CarClassCompetition();
         carClassCompetition.setCompetition(competition);
-        carClassCompetition.setCarClass(carClassService.getCarClassById(Integer.parseInt(map.get("carClassId").toString())));
-        carClassCompetition.setFirstRaceTime(DateUtil.getTimeFromString(map.get("firstRaceTime").toString()));
-        carClassCompetition.setSecondRaceTime(DateUtil.getTimeFromString(map.get("secondRaceTime").toString()));
-        carClassCompetition.setCircleCount(Integer.parseInt(map.get("lapCount").toString()));
-        carClassCompetition.setPercentageOffset(Integer.parseInt(map.get("percentageOffset").toString()));
+        carClassCompetition.setCarClass(carClassService.getCarClassById(Integer
+                .parseInt(map.get("carClassId").toString())));
+        carClassCompetition.setFirstRaceTime(DateUtil.getTimeFromString(map
+                .get("firstRaceTime").toString()));
+        carClassCompetition.setSecondRaceTime(DateUtil.getTimeFromString(map
+                .get("secondRaceTime").toString()));
+        carClassCompetition.setCircleCount(Integer.parseInt(map.get("lapCount")
+                .toString()));
+        carClassCompetition.setPercentageOffset(Integer.parseInt(map.get(
+                "percentageOffset").toString()));
         carClassCompetitionService.addCarClassCompetition(carClassCompetition);
-        LOG.trace("Admin has added car class {} to competition with name {} (id = {})", carClassCompetition.getCarClass().getName(), competition.getName(), competition.getId());
+        LOG.trace(
+                "Admin has added car class {} to competition with name {} (id = {})",
+                carClassCompetition.getCarClass().getName(),
+                competition.getName(), competition.getId());
         return Integer.toString(carClassCompetition.getId());
     }
 
     @RequestMapping(value = "/{id}/mandat", method = RequestMethod.GET)
     public String competitionMandatStatementPage(@PathVariable("id") int id,
-                                                 Map<String, Object> map) {
+            Map<String, Object> map) {
 
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
                 .getRacerCarClassCompetitionNumbersByCompetitionId(id);
         List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
                 .getCarClassCompetitionsByCompetitionId(id);
 
-        map.put("teamList", competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers));
-        map.put("racerCarClassCompetitionNumbers", racerCarClassCompetitionNumbers);
+        map.put("teamList",
+                competitionService
+                        .getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers));
+        map.put("racerCarClassCompetitionNumbers",
+                racerCarClassCompetitionNumbers);
         map.put("carClassCompetitions", carClassCompetitions);
 
         if (racerCarClassCompetitionNumbers.size() > 0) {
@@ -237,53 +268,59 @@ public class CompetitionController {
 
         map.put("formater", new SimpleDateFormat("yyyy-MM-dd"));
         map.put("today", new Timestamp(new Date().getTime()));
-        map.put("perentalPermissionYears", adminSettingsService.getAdminSettings().getParentalPermissionYears());
+        map.put("perentalPermissionYears", adminSettingsService
+                .getAdminSettings().getParentalPermissionYears());
 
         return "competition_mandat";
     }
-    
+
     @RequestMapping(value = "/{id}/personal", method = RequestMethod.GET)
     public String personalOffsetPage(@PathVariable("id") int id,
-                                                 Map<String, Object> map) {
-    	List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+            Map<String, Object> map) {
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
                 .getCarClassCompetitionsByCompetitionId(id);
-    	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
-    	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
-    	List<Boolean>isSetQualifyingList = new ArrayList<Boolean>();
-    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
-    		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
-    		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
-    		isSetQualifyingList.add(carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
-    	}
-    	map.put("carClassCompetitions", carClassCompetitions);
-    	map.put("raceResultsLists", raceResults);
-    	map.put("absoluteResultsList", carClassCompetitionResults);
-    	map.put("isSetQualifyingList",isSetQualifyingList);
-    	
+        List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
+        List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+        List<Boolean> isSetQualifyingList = new ArrayList<Boolean>();
+        for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+            raceResults.add(raceService
+                    .getRaceResultsByCarClassCompetition(carClassCompetition));
+            carClassCompetitionResults
+                    .add(carClassCompetitionResultService
+                            .getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+            isSetQualifyingList.add(carClassCompetitionResultService
+                    .isSetQualifyingByCarClassCompetition(carClassCompetition));
+        }
+        map.put("carClassCompetitions", carClassCompetitions);
+        map.put("raceResultsLists", raceResults);
+        map.put("absoluteResultsList", carClassCompetitionResults);
+        map.put("isSetQualifyingList", isSetQualifyingList);
 
         return "competition_personal_offset";
     }
 
-    @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String setCompetitionEnabled(@RequestBody Map<String, Object> map) {
-        int competitionId = Integer.parseInt(map.get("competitionId").toString());
+    @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String setCompetitionEnabled(
+            @RequestBody Map<String, Object> map) {
+        int competitionId = Integer.parseInt(map.get("competitionId")
+                .toString());
         boolean enabled = Boolean.parseBoolean(map.get("enabled").toString());
         competitionService.setEnabled(competitionId, enabled);
-        LOG.trace("Admin has {} competition (id = {})", (enabled ? "enabled" : "disabled"),  competitionId);
+        LOG.trace("Admin has {} competition (id = {})", (enabled ? "enabled"
+                : "disabled"), competitionId);
         return "success";
     }
 
-    @RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String unregisterRacerFromCompetitionAction(
+    @RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String unregisterRacerFromCompetitionAction(
             @RequestBody Map<String, Object> map, @PathVariable("id") int id) {
         int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
-        racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(competitonId, racerId);
-        LOG.trace("Admin has unregistered racer(id = {}) from competition (id = {})", racerId, competitonId);
+        racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
+                competitonId, racerId);
+        LOG.trace(
+                "Admin has unregistered racer(id = {}) from competition (id = {})",
+                racerId, competitonId);
         return "success";
     }
 
@@ -294,7 +331,8 @@ public class CompetitionController {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         if (teamService.isTeamByLeaderId(leader.getId())) {
-            map.put("competitionsList", competitionService.getAllEnabledCompetitions());
+            map.put("competitionsList",
+                    competitionService.getAllEnabledCompetitions());
             return "choose_competition";
         } else {
             return "redirect:/index";
@@ -302,9 +340,11 @@ public class CompetitionController {
     }
 
     // team registration view
-    /*TODO  Remove HttpServletRequest*/
+    /* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
-    public String registrationTeamOnCompetitionView(Map<String, Object> map, @RequestParam(value="competition", required=false) Integer competitionId) {
+    public String registrationTeamOnCompetitionView(
+            Map<String, Object> map,
+            @RequestParam(value = "competition", required = false) Integer competitionId) {
         if (competitionId != null) {
             String username = userService.getCurrentUserName();
             Leader leader = leaderService.getLeaderByUserName(username);
@@ -330,7 +370,8 @@ public class CompetitionController {
                         carClassesInCompetitionlist);
                 map.put("carClassesByCompetition", carClassesByCompetition);
             }
-            map.put("carClassesCompetition", carClassCompetitionService.getAllCarClassCompetitions()); // ?
+            map.put("carClassesCompetition",
+                    carClassCompetitionService.getAllCarClassCompetitions()); // ?
             map.put("racerCarClassNumber", new RacerCarClassNumber());
             map.put("competitionId", competitionId);
             return "competition_team_add";
@@ -341,68 +382,80 @@ public class CompetitionController {
     }
 
     // team registration action
-    @RequestMapping(value = "/addTeam", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    int registrationTeamOnCompetitionAction(@RequestBody Map<String, Object> formMap) {
+    @RequestMapping(value = "/addTeam", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody int registrationTeamOnCompetitionAction(
+            @RequestBody Map<String, Object> formMap) {
         racerCarClassCompetitionNumberService
                 .registrationTeamRacersOnCompetition(formMap);
         int competitionId = Integer.parseInt(formMap.get("competitionId")
                 .toString());
         return competitionId;
     }
-    
-    @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = {"content-type=application/json"})
-    public
-    @ResponseBody
-    String changePointsByPlaces(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-    	LOG.debug("Start changePointsByPlaces method");
+
+    @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String changePointsByPlaces(
+            @RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+        LOG.debug("Start changePointsByPlaces method");
         Competition competition = competitionService.getCompetitionById(id);
         String pointsByPlaces = map.get("pointsByPlaces").toString();
         competition.setPointsByPlaces(pointsByPlaces);
         competitionService.updateCompetition(competition);
-        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService.getCarClassCompetitionsByCompetitionId(competition.getId());
-    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
-        	for (Race race : carClassCompetition.getRaces()) {
-            	raceService.setResultTable(raceService.getChessRoll(race), race);
-            	carClassCompetitionResultService.recalculateAbsoluteResultsByEditedRace(carClassCompetition, race);
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(competition.getId());
+        for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+            for (Race race : carClassCompetition.getRaces()) {
+                raceService
+                        .setResultTable(raceService.getChessRoll(race), race);
+                carClassCompetitionResultService
+                        .recalculateAbsoluteResultsByEditedRace(
+                                carClassCompetition, race);
             }
         }
-    	LOG.debug("End changePointsByPlaces method");
+        LOG.debug("End changePointsByPlaces method");
         return "success";
     }
-    
+
     @RequestMapping(value = "/{id}/teamsRanking", method = RequestMethod.GET)
-    public String teamRankingPage(@PathVariable("id") int id, Map<String, Object> map) {
+    public String teamRankingPage(@PathVariable("id") int id,
+            Map<String, Object> map) {
         Competition competition = competitionService.getCompetitionById(id);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
+        map.put("competitionDate",
+                dateFormat.format(competition.getDateStart()) + " - "
+                        + dateFormat.format(competition.getDateEnd()));
         map.put("competition", competition);
-        List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
+        List<Team> teamList = teamInCompetitionService
+                .getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
         List<Integer> teamShKPRes;
         List<Double> teamManRes;
         List<Integer> tempShKPRes;
         List<Double> tempManRes;
-        List<Integer>totalShKPRes = new ArrayList<Integer>();
+        List<Integer> totalShKPRes = new ArrayList<Integer>();
         List<Double> totalManRes = new ArrayList<Double>();
-        for (Team team:teamList) {
+        for (Team team : teamList) {
             teamShKPRes = new ArrayList<Integer>();
             teamManRes = new ArrayList<Double>();
-            for (CarClassCompetition ccc: competition.getCarClassCompetitions()) {
+            for (CarClassCompetition ccc : competition
+                    .getCarClassCompetitions()) {
                 tempShKPRes = new ArrayList<Integer>();
                 tempManRes = new ArrayList<Double>();
-                for (CarClassCompetitionResult cccr:carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
-                    if(cccr.getAbsolutePoints()>0){
-                        for(Racer racer:team.getRacers()) {
-                            if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                for (CarClassCompetitionResult cccr : carClassCompetitionResultService
+                        .getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                    if (cccr.getAbsolutePoints() > 0) {
+                        for (Racer racer : team.getRacers()) {
+                            if (racer.equals(cccr
+                                    .getRacerCarClassCompetitionNumber()
+                                    .getRacer())) {
                                 tempShKPRes.add(cccr.getAbsolutePoints());
                             }
                         }
                     }
-                    if (cccr.getManeuverTime()>0) {
-                        for(Racer racer:team.getRacers()) {
-                            if(racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                    if (cccr.getManeuverTime() > 0) {
+                        for (Racer racer : team.getRacers()) {
+                            if (racer.equals(cccr
+                                    .getRacerCarClassCompetitionNumber()
+                                    .getRacer())) {
                                 tempManRes.add(cccr.getManeuverTime());
                             }
                         }
@@ -410,22 +463,22 @@ public class CompetitionController {
                 }
                 if (!tempShKPRes.isEmpty()) {
                     Integer max = tempShKPRes.get(0);
-                    if (tempShKPRes.size()>1) {
-                        for (Integer i:tempShKPRes) {
-                           if (i>max) {
-                               max = i;
-                           }
+                    if (tempShKPRes.size() > 1) {
+                        for (Integer i : tempShKPRes) {
+                            if (i > max) {
+                                max = i;
+                            }
                         }
                     }
                     teamShKPRes.add(max);
                 }
                 if (!tempManRes.isEmpty()) {
                     Double max = tempManRes.get(0);
-                    if (tempManRes.size()>1) {
-                        for (Double i:tempManRes) {
-                           if (i>max) {
-                               max = i;
-                           }
+                    if (tempManRes.size() > 1) {
+                        for (Double i : tempManRes) {
+                            if (i > max) {
+                                max = i;
+                            }
                         }
                     }
                     teamManRes.add(max);
@@ -433,29 +486,29 @@ public class CompetitionController {
             }
             Collections.sort(teamShKPRes);
             int ShKPSum = 0;
-            if(teamShKPRes.size()>5) {
-                for (int i=teamShKPRes.size()-1;i>teamShKPRes.size()-6;i--) {
+            if (teamShKPRes.size() > 5) {
+                for (int i = teamShKPRes.size() - 1; i > teamShKPRes.size() - 6; i--) {
                     System.out.println(teamShKPRes.get(i));
-                    ShKPSum=ShKPSum+teamShKPRes.get(i);
+                    ShKPSum = ShKPSum + teamShKPRes.get(i);
                 }
-                
+
             } else {
-                for (int i=0;i<teamShKPRes.size();i++) {
-                    ShKPSum=ShKPSum+teamShKPRes.get(i);
+                for (int i = 0; i < teamShKPRes.size(); i++) {
+                    ShKPSum = ShKPSum + teamShKPRes.get(i);
                 }
             }
             totalShKPRes.add(ShKPSum);
             Collections.sort(teamManRes);
             double manSum = 0;
-            if(teamManRes.size()>5) {
-                for (int i=teamManRes.size()-1;i>teamManRes.size()-6;i--) {
+            if (teamManRes.size() > 5) {
+                for (int i = teamManRes.size() - 1; i > teamManRes.size() - 6; i--) {
                     System.out.println(teamManRes.get(i));
-                    manSum=manSum+teamManRes.get(i);
+                    manSum = manSum + teamManRes.get(i);
                 }
-                
+
             } else {
-                for (int i=0;i<teamManRes.size();i++) {
-                    manSum=manSum+teamManRes.get(i);
+                for (int i = 0; i < teamManRes.size(); i++) {
+                    manSum = manSum + teamManRes.get(i);
                 }
             }
             totalManRes.add(manSum);
@@ -463,58 +516,49 @@ public class CompetitionController {
         map.put("absolutResults", totalShKPRes);
         map.put("ShKPResList", totalManRes);
         List<Integer> test = new ArrayList<Integer>(totalShKPRes);
-        List<Integer>ShKPPlaces = new ArrayList<Integer>(totalShKPRes);
+        List<Integer> ShKPPlaces = new ArrayList<Integer>(totalShKPRes);
         while (!test.isEmpty()) {
-            int min = test.get(0);
-            for (int i = 1; i<test.size();i++) {
-                if (min>test.get(i)) {
-                    min=test.get(i);
+            int max = test.get(0);
+            for (int i = 1; i < test.size(); i++) {
+                if (max > test.get(i)) {
+                    max = test.get(i);
                 }
             }
-            int i=test.indexOf(Integer.valueOf(min));
+            int i = test.indexOf(Integer.valueOf(max));
             ShKPPlaces.set(i, test.size());
             test.remove(i);
         }
-        System.out.println("ShKP: "+totalShKPRes);
+        System.out.println("ShKP: " + totalShKPRes);
         System.out.println("Places: ");
-        for (int i:ShKPPlaces) {
-            System.out.println(i+", ");
+        for (int i : ShKPPlaces) {
+            System.out.println(i + ", ");
         }
         map.put("absPlaces", ShKPPlaces);
         List<Double> testMan = new ArrayList<Double>(totalManRes);
-        List<Double>manPlaces = new ArrayList<Double>(totalManRes);
+        List<Double> manPlaces = new ArrayList<Double>(totalManRes);
         while (!testMan.isEmpty()) {
             double min = testMan.get(0);
-            for (int i = 1; i<testMan.size();i++) {
-                if (min>testMan.get(i)) {
-                    min=testMan.get(i);
+            for (int i = 1; i < testMan.size(); i++) {
+                if (min > testMan.get(i)) {
+                    min = testMan.get(i);
                 }
             }
-            int i=testMan.indexOf(Double.valueOf(min));
+            int i = testMan.indexOf(Double.valueOf(min));
             System.out.println(i);
-            System.out.println("Size: "+testMan.size());
+            System.out.println("Size: " + testMan.size());
             manPlaces.set(i, Double.valueOf(testMan.size()));
             testMan.remove(i);
         }
-        System.out.println("Man:"+totalManRes);
+        System.out.println("Man:" + totalManRes);
         System.out.println("Places: ");
-        for (double i:manPlaces) {
-            System.out.println(i+", ");
+        for (double i : manPlaces) {
+            System.out.println(i + ", ");
         }
         map.put("manPlaces", manPlaces);
+        List<Double>absolutResults = new ArrayList<Double>();
+        for(int i = 0;i<((totalManRes.size()>totalShKPRes.size())?totalManRes.size():totalShKPRes.size());i++)
         return "teams_ranking";
-    }
 
-        if (racerCarClassCompetitionNumbers.size() > 0) {
-            map.put("competition", racerCarClassCompetitionNumbers.get(0)
-                    .getCarClassCompetition().getCompetition());
-        }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
-        List<Team> teamsList = competitionService.getTeamsFromRacerCarClassCompetitionNumbers(racerCarClassCompetitionNumbers);
-        for(int i=0;i<carClassCompetitions.size();i++)
-        System.out.println(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetitions.get(i)));
-        return "teams_ranking";
     }
 
 }
