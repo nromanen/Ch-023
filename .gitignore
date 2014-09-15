@@ -3,3 +3,4 @@
 *.log
 target/*
 src/main/webapp/WEB-INF/jdbc.properties
+/target/
