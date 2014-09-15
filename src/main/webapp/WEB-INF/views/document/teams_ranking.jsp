@@ -43,18 +43,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${teamList}" var="team" varStatus="index">
+						<c:forEach items="${resultList}" var="absTeamRes" varStatus="index">
 							<tr>
 								<td>${index.count}</td>
 								<td style="text-align: left; padding-left: 20px;">
-									<a href="<c:url value="/team/${team.id}" />">${team.name}</a> 
+									<a href="<c:url value="/team/${absTeamRes.teamId}" />">${teamList[index.index]}</a> 
 								</td>
-								<td>${ShKPResults[index.index]}</td>
-								<td>${absPlaces[index.index]}</td>
-								<td>${manResults[index.index]}</td>
-								<td>${manPlaces[index.index]}</td>
-								<td></td>
-								<td></td>
+								<td>${absTeamRes.shkpPointPlace.points}</td>
+								<td>${absTeamRes.shkpPointPlace.place}</td>
+								<td>${absTeamRes.maneuverPointPlace.points}</td>
+								<td>${absTeamRes.maneuverPointPlace.place}</td>
+								<td>${absTeamRes.absolutePointPlace.points}</td>
+								<td>${absTeamRes.absolutePointPlace.place}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.carting.domain.AbsoluteTeamResults;
+import net.carting.domain.AbsoluteTeamResults.PointPlaces;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
@@ -424,7 +426,7 @@ public class CompetitionController {
         List<Team> teamList = teamInCompetitionService
                 .getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
-        List<Integer> teamShKPRes;
+       /* List<Integer> teamShKPRes;
         List<Double> teamManRes;
         List<Integer> tempShKPRes;
         List<Double> tempManRes;
@@ -485,7 +487,6 @@ public class CompetitionController {
             int ShKPSum = 0;
             if (teamShKPRes.size() > 5) {
                 for (int i = teamShKPRes.size() - 1; i > teamShKPRes.size() - 6; i--) {
-                    System.out.println(teamShKPRes.get(i));
                     ShKPSum = ShKPSum + teamShKPRes.get(i);
                 }
 
@@ -499,7 +500,6 @@ public class CompetitionController {
             double manSum = 0;
             if (teamManRes.size() > 5) {
                 for (int i = teamManRes.size() - 1; i > teamManRes.size() - 6; i--) {
-                    System.out.println(teamManRes.get(i));
                     manSum = manSum + teamManRes.get(i);
                 }
 
@@ -515,18 +515,16 @@ public class CompetitionController {
         List<Integer> test = new ArrayList<Integer>(totalShKPRes);
         List<Integer> ShKPPlaces = new ArrayList<Integer>(totalShKPRes);
         while (!test.isEmpty()) {
-            int max = test.get(0);
+            int min = test.get(0);
             for (int i = 1; i < test.size(); i++) {
-                if (max > test.get(i)) {
-                    max = test.get(i);
+                if (min > test.get(i)) {
+                    min = test.get(i);
                 }
             }
-            int i = test.indexOf(Integer.valueOf(max));
+            int i = test.indexOf(Integer.valueOf(min));
             ShKPPlaces.set(i, test.size());
             test.remove(i);
         }
-        System.out.println("ShKP: " + totalShKPRes);
-        System.out.println("Places: ");
         for (int i : ShKPPlaces) {
             System.out.println(i + ", ");
         }
@@ -534,47 +532,173 @@ public class CompetitionController {
         List<Double> testMan = new ArrayList<Double>(totalManRes);
         List<Integer> manPlaces = new ArrayList<Integer>(Collections.nCopies(testMan.size(),0));
         while (!testMan.isEmpty()) {
-            double min = testMan.get(0);
+            double min2 = testMan.get(0);
             for (int i = 1; i < testMan.size(); i++) {
-                if (min > testMan.get(i)) {
-                    min = testMan.get(i);
+                if (min2 > testMan.get(i)) {
+                    min2 = testMan.get(i);
                 }
             }
-            int i = testMan.indexOf(Double.valueOf(min));
-            System.out.println(i);
+            int y = testMan.indexOf(Double.valueOf(min2));
+            System.out.println(y);
             System.out.println("Size: " + testMan.size());
-            manPlaces.set(i, testMan.size());
-            testMan.remove(i);
-        }
-        System.out.println("Man:" + totalManRes);
-        System.out.println("Places: ");
-        for (int i : manPlaces) {
-            System.out.println(i + ", ");
+            manPlaces.set(y, testMan.size());
+            testMan.remove(y);
         }
         map.put("manPlaces", manPlaces);
         List<Double>absolutResults = new ArrayList<Double>();
         for(int i = 0;i<((totalManRes.size()>totalShKPRes.size())?totalManRes.size():totalShKPRes.size());i++) {
             absolutResults.add(totalShKPRes.get(i)+totalManRes.get(i));
         }
-       
+        */
+        
+       List<AbsoluteTeamResults>absoluteTeamResultsList = new ArrayList<AbsoluteTeamResults>();
+       for (int i=0; i<teamList.size();i++) {
+           AbsoluteTeamResults absTeamRes = new AbsoluteTeamResults();
+           absTeamRes.seTeamtId(teamList.get(i).getId());
+           PointPlaces pp = absTeamRes.new PointPlaces();
+           pp.setPoints(getShKPResultForTeamByCompetitionId(competition.getId(), teamList.get(i)));
+           absTeamRes.setShkpPointPlace(pp);
+           pp.setPoints(getManResultForTeamByCompetitionId(competition.getId(), teamList.get(i)));
+           absTeamRes.setManeuverPointPlace(pp);
+           pp.setPoints(absTeamRes.getShkpPointPlace().getPoints()+absTeamRes.getManeuverPointPlace().getPoints());
+           absTeamRes.setAbsolutePointPlace(pp);
+           absoluteTeamResultsList.add(absTeamRes);
+       }
+       map.put("resultList", absoluteTeamResultsList);
+       System.out.println(absoluteTeamResultsList);
             return "teams_ranking";
     }
     
-    public Double getSumFromList(List<Double>list){
+    public List<AbsoluteTeamResults> setPoints(List<AbsoluteTeamResults>absoluteTeamResultsList) {
+        List<Integer>absPoints = new ArrayList<Integer>();
+        List<Integer>shkpPoints = new ArrayList<Integer>();
+        List<Integer>manPoints = new ArrayList<Integer>();
+        for (AbsoluteTeamResults absTeamRes:absoluteTeamResultsList) {
+            manPoints.add(absTeamRes.getManeuverPointPlace().getPoints());
+            shkpPoints.add(absTeamRes.getShkpPointPlace().getPoints());
+            absPoints.add(absTeamRes.getAbsolutePointPlace().getPoints());
+        }
+        Collections.sort(manPoints);
+        Collections.sort(shkpPoints);
+        Collections.sort(absPoints);
+        for (int i=0; i<manPoints.size()-1;i++) {
+            for (int j=i;i<manPoints.size();j++) {
+                if (manPoints.get(i)==absoluteTeamResultsList.get(j).getManeuverPointPlace().getPoints()) {
+                    PointPlaces pp = absoluteTeamResultsList.get(j).getManeuverPointPlace();
+                    pp.setPlace(i);
+                    absoluteTeamResultsList.get(j).setManeuverPointPlace(pp);
+                }
+            }
+        }
+        for (int i=0; i<shkpPoints.size()-1;i++) {
+            for (int j=i;i<shkpPoints.size();j++) {
+                if (shkpPoints.get(i)==absoluteTeamResultsList.get(j).getShkpPointPlace().getPoints()) {
+                    PointPlaces pp = absoluteTeamResultsList.get(j).getShkpPointPlace();
+                    pp.setPlace(i);
+                    absoluteTeamResultsList.get(j).setShkpPointPlace(pp);
+                }
+            }
+        }
+        for (int i=0; i<absPoints.size()-1;i++) {
+            for (int j=i;i<absPoints.size();j++) {
+                if (absPoints.get(i)==absoluteTeamResultsList.get(j).getAbsolutePointPlace().getPoints()) {
+                    PointPlaces pp = absoluteTeamResultsList.get(j).getAbsolutePointPlace();
+                    pp.setPlace(i);
+                    absoluteTeamResultsList.get(j).setAbsolutePointPlace(pp);
+                }
+            }
+        }
+        return absoluteTeamResultsList;
+        
+    }
+    
+    public Integer getShKPResultForTeamByCompetitionId(int competitionId, Team team){
+       List<Integer> teamShKPRes = new ArrayList<Integer>();
+       
+       Competition competition = competitionService.getCompetitionById(competitionId);
+        for (CarClassCompetition ccc : competition.getCarClassCompetitions()) {
+            List<Integer> tempShKPRes = new ArrayList<Integer>();
+            System.out.println("CCC.ID:"+ccc.getId());
+            for (CarClassCompetitionResult cccr : carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                System.out.println("cccr.AbsPoints:"+cccr.getAbsolutePoints());
+                if (cccr.getAbsolutePoints() > 0) {
+                    for (Racer racer : team.getRacers()) {
+                        if (racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                            tempShKPRes.add(cccr.getAbsolutePoints());
+                        }
+                    }
+                }
+            }
+            System.out.println("PointsTeamList: "+tempShKPRes);
+            System.out.println("temp:"+tempShKPRes);
+            if (!tempShKPRes.isEmpty()) {
+                Integer max = tempShKPRes.get(0);
+                if (tempShKPRes.size() > 1) {
+                    for (Integer j : tempShKPRes) {
+                        if (j > max) {
+                            max = j;
+                        }
+                    }
+                }
+                teamShKPRes.add(max);
+                System.out.println("Max of team in a carclass:"+max);
+            }
+        }
+        return getSumFromList(teamShKPRes);
+    }
+    
+    public Integer getManResultForTeamByCompetitionId(int competitionId, Team team){
+        List<Integer> teamManRes = new ArrayList<Integer>();
+        
+         for (CarClassCompetition ccc : competitionService.getCompetitionById(competitionId).getCarClassCompetitions()) {
+             List<Integer> tempManRes = new ArrayList<Integer>();
+             int i=0;
+             for (CarClassCompetitionResult cccr : carClassCompetitionResultService
+                     .getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                 if (cccr.getAbsolutePoints() > 0) {
+                     for (Racer racer : team.getRacers()) {
+                         if (racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                             tempManRes.add(i++);//After need to change to Maneuver Points
+                         }
+                     }
+                 }
+             }
+             System.out.println("ManPointsTeamList: "+tempManRes);
+             if (!tempManRes.isEmpty()) {
+                 Integer max = tempManRes.get(0);
+                 if (tempManRes.size() > 1) {
+                     for (Integer j : tempManRes) {
+                         if (j > max) {
+                             max = j;
+                         }
+                     }
+                 }
+                 teamManRes.add(max);
+                 System.out.println("Max of team in a carclass:"+max);
+             }
+         }
+         return getSumFromList(teamManRes);
+         
+     }
+    
+    public Integer getSumFromList(List<Integer>list){
+        System.out.println("List before summaring:"+list);
         Collections.sort(list);
-        double sum = 0;
+        int sum = 0;
         if (list.size() > 5) {
             for (int i = list.size() - 1; i > list.size() - 6; i--) {
                 System.out.println(list.get(i));
-                sum =+list.get(i);
+                sum =sum +list.get(i);
             }
 
         } else {
             for (int i = 0; i < list.size(); i++) {
-                sum = sum + list.get(i);
+                sum =sum + list.get(i);
             }
         }
+        System.out.println("Sum:"+sum);
         return sum;
     }
-
+    
+    
 }
