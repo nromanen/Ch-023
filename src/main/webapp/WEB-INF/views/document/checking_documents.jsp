@@ -138,15 +138,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%
-								int number = 0;
-							%>
-							<c:forEach items="${documents.get(index).racers}" var="racer">
+							<c:forEach items="${documents.get(index).racers}" var="racer" varStatus="number">
 								<tr>
-									<%
-										number++;
-									%>
-									<td class="text-center"><%=number%></td>
+									<td class="text-center">${number.count }</td>
 									<td class="text-left"><a
 										href='<c:url value="/racer/${racer.id}" />'>
 											${racer.firstName} ${racer.lastName} </a></td>

@@ -74,7 +74,7 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Override
     @Transactional
-    public boolean registerLeader(Leader leader)
+    public boolean registerLeader(final Leader leader)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         User user = leader.getUser();
@@ -87,7 +87,7 @@ public class LeaderServiceImpl implements LeaderService {
 
         // register leader only with unique username and email
         String username = leader.getUser().getUsername();
-        String email = leader.getUser().getEmail();
+        final String email = leader.getUser().getEmail();
         User currUserUsername = userService.getUserByUserName(username);
         User currUserEmail = userService.getUserByEmail(email);
         
@@ -98,20 +98,24 @@ public class LeaderServiceImpl implements LeaderService {
             return false;
         } 
         
-        String to = email;
-        String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
-        String subject = "Welcome to Carting";
-        String message = String.format("Dear %s %s, welcome to Carting, please wait the confirmation of your account ",
-                leader.getFirstName(), leader.getLastName());
-        mailService.sendMail(to, from, subject, message);
-        LOG.debug("Sent message to leader about his registration");
-        
-        to = adminSettingsService.getAdminSettings().getFeedbackEmail();
-        subject = "Leader registration";
-        message = String.format("Registered a new team leader - %s %s ",
-                leader.getFirstName(), leader.getLastName());
-        mailService.sendMail(to, from, subject, message);
-        LOG.debug("Sent message to leader about his registration");
+        new Thread(new Runnable(){
+            public void run() {
+                String to = email;
+                String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
+                String subject = "Welcome to Carting";
+                String message = String.format("Dear %s %s, welcome to Carting, please wait the confirmation of your account ",
+                        leader.getFirstName(), leader.getLastName());
+                mailService.sendMail(to, from, subject, message);
+                LOG.debug("Sent message to leader about his registration");
+                
+                to = adminSettingsService.getAdminSettings().getFeedbackEmail();
+                subject = "Leader registration";
+                message = String.format("Registered a new team leader - %s %s ",
+                        leader.getFirstName(), leader.getLastName());
+                mailService.sendMail(to, from, subject, message);
+                LOG.debug("Sent message to leader about his registration");
+            }
+        }).start();
 
         LOG.trace("Registrated new leader with login {}", username);
         

@@ -130,9 +130,9 @@ $(document).ready(function(){
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${carClassCompetition.racerCarClassCompetitionNumbers }" var="racerCarClassCompetitionNumber" varStatus="count">
+			<c:forEach items="${carClassCompetition.racerCarClassCompetitionNumbers }" var="racerCarClassCompetitionNumber" varStatus="number">
 				<tr>
-					<td>${count.count}</td>
+					<td>${number.count }</td>
 					<td><a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />">${racerCarClassCompetitionNumber.racer.firstName } ${racerCarClassCompetitionNumber.racer.lastName }</a></td>
 					<td class="column-wide">${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />

@@ -6,7 +6,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <script type='text/javascript'
 	src='<c:url value="/resources/js/start.js" />'></script>
-<c:if test="${authority.equals('ROLE_ADMIN')}">
+<c:choose>
+<c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
 	<div class="panel panel-primary">
 		<div class="panel-heading" style="height: 50px;">
 			<div class="text-info"
@@ -68,7 +69,7 @@
 							<a class="btn btn-sml btn-primary" id="save">
 								<spring:message code="label.accept_changes" /></a>
 						</c:if>
-						<a class="btn btn-sml btn-success" id="pdf" disabled>
+						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${empty qualifyingList}">disabled</c:if>>
 						<spring:message code="label.document_download_pdf" /></a>
 						<c:if test="${oldDoc > 0}">
 							<a id="prevVersion" class="btn btn-sml btn-warning"
@@ -91,7 +92,6 @@
 			</c:choose>
 		</div>
 	</div>
-</c:if>
 <div class="alert alert-danger" id="incorrectPositions"
 	style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
 	<spring:message code="dataerror.document_start_incorrect_postions" />
@@ -292,3 +292,10 @@ table {
 		</tr>
 	</table>
 </div>
+</c:when>
+<c:otherwise>
+	<div class="alert alert-danger" style="margin-top: 10px; margin-left: 5px;">
+		<spring:message code="label.racers_list_for_this_class_is_empty" />
+	</div>
+</c:otherwise>
+</c:choose>

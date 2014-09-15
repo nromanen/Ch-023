@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/document")
@@ -133,10 +135,10 @@ public class DocumentController {
             Team team = teamService.getTeamByLeader(leader);
             map.put("documentType", documentType);
             if (documentType == Document.TYPE_RACER_PARENTAL_PERMISSIONS) {
-                map.put("racers", racerService
+                map.put("racersList", racerService
                         .getSetOfRacersNeedingPerentalPermisionByTeam(team));
             } else {
-                map.put("racers", racerService
+                map.put("racersList", racerService
                         .getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
                                 documentType, team));
             }
@@ -367,25 +369,27 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/showDocument/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public String showDocument(@PathVariable("id") int id) {
-        String base64 = "data:image/jpg;base64,";
-        base64 += fileService.getFileById(id).getFile();
-        return "<img src=\"" + base64 + "\" />";
+    public ModelAndView showDocument(Model model, @PathVariable("id") int id) {
+        model.addAttribute("pdf", false);
+        try {
+        File f = fileService.getFileById(id);
+        model.addAttribute("file", f);
+        } catch (Exception e) {
+            model.addAttribute("exception", true);
+        }
+        return new ModelAndView("document_view");
     }
 
     @RequestMapping(value = "/showFile/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public String showFile(@PathVariable("id") int id) {
-        String base64 = "data:application/pdf;base64,";
-        File f = fileService.getFileById(id);
-        base64 += f.getFile();
-//"<iframe src='http://docs.google.com/gview?url=' + base64 +'&embedded=true'frameborder='0'></iframe>";
-        //return "<object  data='" + base64 + "' type='application/pdf' ></object>";
-        //return "<iframe src='http://docs.google.com/gview?url=" + base64 +"&embedded=true' frameborder='0'></iframe>";
-//"<embed width='100%' height='100%' name='plugin' src=' + base64 +' type='application/pdf'>";
-        //TODO: doesn't work in IE.
-        return "<center><a href='" + base64 + "'>" + f.getName() + "</a></center><embed width='100%' height='100%' name='plugin' src='" + base64 + "' type='application/pdf'>";
+    public ModelAndView showFile(Model model, @PathVariable("id") int id) {
+        model.addAttribute("pdf", true);
+        try {
+            File f = fileService.getFileById(id);
+            model.addAttribute("file", f);
+        } catch (Exception e) {
+            model.addAttribute("exception", true);
+        }
+        return new ModelAndView("document_view");
     }
 
 

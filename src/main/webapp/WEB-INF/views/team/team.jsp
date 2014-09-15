@@ -89,12 +89,9 @@
 						<td><spring:message code="label.car_classes" /></td>
 						<td><spring:message code="label.age" /></td>
 					</tr>
-					<%
-						int racerNumber = 1;
-					%>
-					<c:forEach items="${needTeam.racers}" var="racer">
+					<c:forEach items="${needTeam.racers}" var="racer" varStatus="racerNumber">
 						<tr>
-							<td style="width: 4%;"><%=racerNumber%></td>
+							<td style="width: 4%;">${racerNumber.count }</td>
 							<td style="text-align: left;"><a
 								href='<c:url value="/racer/${racer.id}"/>'>
 									${racer.firstName} ${racer.lastName} </a></td>
@@ -111,9 +108,6 @@
 								</c:forEach></td>
 							<td>${racer.getAge()}</td>
 						</tr>
-						<%
-							racerNumber++;
-						%>
 					</c:forEach>
 				</table>
 				<c:if
@@ -144,13 +138,10 @@
 						<td><spring:message code="label.end_date" /></td>
 					</tr>
 					<c:if test="${!empty isValidTeamInCompetitionMap}">
-						<%
-							int competitionNumber = 1;
-						%>
 						<c:forEach items="${isValidTeamInCompetitionMap}"
-							var="isValidTeamInCompetition">
+							var="isValidTeamInCompetition" varStatus="competitionNumber">
 							<tr>
-								<td><%=competitionNumber%></td>
+								<td>${competitionNumber.count }</td>
 								<td style="text-align: left;"><a
 									href='<c:url value="/competition/${isValidTeamInCompetition.key.competition.id}"/>'>
 										${isValidTeamInCompetition.key.competition.name} </a></td>
@@ -174,9 +165,6 @@
 										value="${isValidTeamInCompetition.key.competition.dateEnd}"
 										pattern="dd-MM-yyyy" /></td>
 							</tr>
-							<%
-								competitionNumber++;
-							%>
 						</c:forEach>
 					</c:if>
 				</table>

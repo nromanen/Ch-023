@@ -44,6 +44,7 @@
 
         <intercept-url pattern="/admin/cabinet" access="ROLE_ADMIN"/>
         <intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/logs/**" access="ROLE_ADMIN"/>
         <intercept-url pattern="/feedback" access="ROLE_TEAM_LEADER"/>
 
         <intercept-url pattern="/SHKP/maneuver/*" access="ROLE_ADMIN"/>

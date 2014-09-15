@@ -6,47 +6,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 <script type='text/javascript' src="<c:url value="/resources/js/lib/jquery.dataTables.js" />"></script>
+<script type='text/javascript' src="<c:url value="/resources/js/logs.js" />"></script>
 <link href="<c:url value="/resources/style/jquery.dataTables.css" />" rel="stylesheet" type="text/css">
-<script>
-$(document).ready( function () {
-	$('#logsTable').DataTable();
-
-		$('form').bootstrapValidator({
-			message: 'This value is not valid',
-			feedbackIcons: {
-				valid: 'glyphicon glyphicon-ok',
-				invalid: 'glyphicon glyphicon-remove',
-				validating: 'glyphicon glyphicon-refresh'
-			},
-			fields: {
-				start: {
-					message: 'The username is not valid',
-					validators: {
-						notEmpty: {
-							message: 'The date is required and cannot be empty'
-						},
-						regexp: {
-							regexp: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{1,}$/,
-							message: 'Date must match pattern yyyy-MM-dd hh:mm:ss.000'
-						}
-					}
-				},
-				end: {
-					message: 'Date must match pattern yyyy-MM-dd hh:mm:ss.000',
-					validators: {
-						notEmpty: {
-							message: 'The date is required and cannot be empty'
-						},
-						regexp: {
-							regexp: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{1,}$/,
-							message: 'Date must match pattern yyyy-MM-dd hh:mm:ss.000'
-						}
-					}
-				}
-			}
-		});
-	});
-</script>
 <form action="search" data-toggle="validator" role="form" id="form">
 	<div class="panel panel-primary well">
 		<div align="center" class="panel-heading">
@@ -55,20 +16,34 @@ $(document).ready( function () {
 		<div align="center" class="panel-body">
 			<table>
 				<td align="center"><label class="text-info"><spring:message code="label.competition.start_date" /></label><br/>
-					<input name="start" type="text" value='<fmt:formatDate value="${dateStart}"
-						pattern="yyyy-MM-dd hh:mm:ss.0" />'/>
+					<label class="text-info"><spring:message code="label.year" /></label>
+					<input name="year" id="starty" type="text" value='<fmt:formatDate value="${dateStart}"
+						pattern="yyyy" />' size="1"/>
+					<label class="text-info"><spring:message code="label.month" /></label>
+					<input name="date" id="startm" type="text" value='<fmt:formatDate value="${dateStart}"
+						pattern="MM" />' size="1"/>
+					<label class="text-info"><spring:message code="label.day" /></label>
+					<input name="date" id="startd" type="text" value='<fmt:formatDate value="${dateStart}"
+						pattern="dd" />' size="1"/>
 				</td>
-				<td>&nbsp;</td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				<td align="center"><label class="text-info"><spring:message code="label.competition.end_date" /></label><br/>
-					<input name="end" type="text" value='<fmt:formatDate value="${dateEnd}"
-						pattern="yyyy-MM-dd hh:mm:ss.0" />'/>
+					<label class="text-info"><spring:message code="label.year" /></label>
+					<input name="year" id="endy" type="text" value='<fmt:formatDate value="${dateEnd}"
+						pattern="yyyy" />' size="1"/>
+					<label class="text-info"><spring:message code="label.month" /></label>
+					<input name="date" id="endm" type="text" value='<fmt:formatDate value="${dateEnd}"
+						pattern="MM" />' size="1"/>
+					<label class="text-info"><spring:message code="label.day" /></label>
+					<input name="date" id="endd" type="text" value='<fmt:formatDate value="${dateEnd}"
+						pattern="dd" />' size="1"/>
 				</td>
 			</table>
 			<br/>
 			<div class="input-group">
 				<div class="btn-group">
 					<a href="all" class="btn btn-sm btn-success"><spring:message code="label.show_all_logs" /></a>
-					<input type="submit" class="btn btn-sm btn-primary" value='<spring:message code="label.search" />'>
+					<input type="submit" id="submit" class="btn btn-sm btn-primary" value='<spring:message code="label.search" />'>
 				</div>
 			</div>
 		</div>

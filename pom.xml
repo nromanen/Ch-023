@@ -6,7 +6,7 @@
     <artifactId>Carting</artifactId>
     <name>Carting</name>
     <packaging>war</packaging>
-    <version>1.0.0-BUILD-SNAPSHOT</version>
+    <version>s</version>
     <properties>
         <java-version>1.7</java-version>
         <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
@@ -371,7 +371,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <warName>Carting</warName>
+                    <warName>Carting-s</warName>
                 </configuration>
             </plugin>
             <plugin>
@@ -435,6 +435,15 @@
                     <excludes>
                         <exclude>**/*_Roo_*</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.1.Final</version>
+                <configuration>
+                    <username>manson</username>
+                    <password>wildfly</password>
                 </configuration>
             </plugin>
         </plugins>

@@ -556,9 +556,11 @@ public class CompetitionController {
         }
         map.put("manPlaces", manPlaces);
         List<Double>absolutResults = new ArrayList<Double>();
-        for(int i = 0;i<((totalManRes.size()>totalShKPRes.size())?totalManRes.size():totalShKPRes.size());i++)
-        return "teams_ranking";
-
+        for(int i = 0;i<((totalManRes.size()>totalShKPRes.size())?totalManRes.size():totalShKPRes.size());i++) {
+            
+        }
+       
+            return "teams_ranking";
     }
 
 }
