@@ -513,8 +513,8 @@ public class CompetitionController {
             }
             totalManRes.add(manSum);
         }
-        map.put("absolutResults", totalShKPRes);
-        map.put("ShKPResList", totalManRes);
+        map.put("ShKPResults", totalShKPRes);
+        map.put("manResults", totalManRes);
         List<Integer> test = new ArrayList<Integer>(totalShKPRes);
         List<Integer> ShKPPlaces = new ArrayList<Integer>(totalShKPRes);
         while (!test.isEmpty()) {
@@ -535,7 +535,7 @@ public class CompetitionController {
         }
         map.put("absPlaces", ShKPPlaces);
         List<Double> testMan = new ArrayList<Double>(totalManRes);
-        List<Double> manPlaces = new ArrayList<Double>(totalManRes);
+        List<Integer> manPlaces = new ArrayList<Integer>(Collections.nCopies(testMan.size(),0));
         while (!testMan.isEmpty()) {
             double min = testMan.get(0);
             for (int i = 1; i < testMan.size(); i++) {
@@ -546,21 +546,38 @@ public class CompetitionController {
             int i = testMan.indexOf(Double.valueOf(min));
             System.out.println(i);
             System.out.println("Size: " + testMan.size());
-            manPlaces.set(i, Double.valueOf(testMan.size()));
+            manPlaces.set(i, testMan.size());
             testMan.remove(i);
         }
         System.out.println("Man:" + totalManRes);
         System.out.println("Places: ");
-        for (double i : manPlaces) {
+        for (int i : manPlaces) {
             System.out.println(i + ", ");
         }
         map.put("manPlaces", manPlaces);
         List<Double>absolutResults = new ArrayList<Double>();
         for(int i = 0;i<((totalManRes.size()>totalShKPRes.size())?totalManRes.size():totalShKPRes.size());i++) {
-            
+            absolutResults.add(totalShKPRes.get(i)+totalManRes.get(i));
         }
        
             return "teams_ranking";
+    }
+    
+    public Double getSumFromList(List<Double>list){
+        Collections.sort(list);
+        double sum = 0;
+        if (list.size() > 5) {
+            for (int i = list.size() - 1; i > list.size() - 6; i--) {
+                System.out.println(list.get(i));
+                sum =+list.get(i);
+            }
+
+        } else {
+            for (int i = 0; i < list.size(); i++) {
+                sum = sum + list.get(i);
+            }
+        }
+        return sum;
     }
 
 }

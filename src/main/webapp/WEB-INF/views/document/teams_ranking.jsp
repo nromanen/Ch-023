@@ -49,10 +49,10 @@
 								<td style="text-align: left; padding-left: 20px;">
 									<a href="<c:url value="/team/${team.id}" />">${team.name}</a> 
 								</td>
-								<td>${absolutResults[index.index]}</td>
+								<td>${ShKPResults[index.index]}</td>
 								<td>${absPlaces[index.index]}</td>
-								<td></td>
-								<td></td>
+								<td>${manResults[index.index]}</td>
+								<td>${manPlaces[index.index]}</td>
 								<td></td>
 								<td></td>
 							</tr>
