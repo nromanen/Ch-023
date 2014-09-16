@@ -1,0 +1,26 @@
+.vertical {
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        writing-mode: tb-rl;
+    }
+    th {
+        height: 50px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+    .hidden {
+            display: none;
+            padding: 3px;
+       }
+       .table thead tr th {
+         padding-right: 20px;
+         background-repeat: no-repeat;
+         background-position: 100% 50%;
+       }
+       .table thead tr th.headerSortUp {
+          background-image: url(../img/sort_asc.png);
+        }
+        .table thead tr th.headerSortDown {
+            background-image: url(../img/sort_desc.png);
+        }
