@@ -18,6 +18,9 @@ public class CarClassCompetitionResult {
 
     @Column(name = "absolute_place")
     private int absolutePlace;
+    
+    @Column(name = "absolute_points_by_tableB")
+    private int absolutePointsByTableB;
 
     @Column(name = "race2_points")
     private int race2points;
@@ -63,7 +66,16 @@ public class CarClassCompetitionResult {
         }
     }
 
-    public int getAbsolutePlace() {
+    public int getAbsolutePointsByTableB() {
+		return absolutePointsByTableB;
+	}
+
+	public void setAbsolutePointsByTableB(int absolutePointsByTableB) {
+        this.absolutePointsByTableB = absolutePointsByTableB;
+
+	}
+
+	public int getAbsolutePlace() {
         return absolutePlace;
     }
 

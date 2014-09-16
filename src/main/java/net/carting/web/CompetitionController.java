@@ -3,10 +3,13 @@ package net.carting.web;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.carting.domain.AdminSettings;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
@@ -260,6 +263,54 @@ public class CompetitionController {
     	
 
         return "competition_personal_offset";
+    }
+    
+    @RequestMapping(value = "/{id}/absolute_personal", method = RequestMethod.GET)
+    public String absolutePersonalOffsetPage(@PathVariable("id") int id,
+                                                 Map<String, Object> map) {
+    	List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(id);
+    	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
+    	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+    	List<List<Qualifying>> qualifyingResults = new ArrayList<List<Qualifying>>();
+    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+    		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
+    		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+    		List<Integer> places = new ArrayList<Integer>();
+        	for (List<CarClassCompetitionResult> carClassCompetitionList : carClassCompetitionResults) {
+        		for (CarClassCompetitionResult carClassCompetitionResult : carClassCompetitionList) {
+        		places.add(carClassCompetitionResult.getAbsolutePlace());
+        		}
+        		int max = places.get(0);
+            	for (int i = 0; i< places.size(); i++)
+            	{
+            		if (places.get(i)>= max) max = places.get(i);
+            	}
+            	int size = max;
+            	List<String> pointsList = Arrays.asList(AdminSettings.POINTS_BY_TABLE_B.get(size).split(","));
+                Map<Integer, Integer> placesAndPoints = new LinkedHashMap<Integer, Integer>();        
+                List<Integer>intPointsList = new ArrayList<Integer>();
+                for (int i = 0; i< pointsList.size(); i++){
+                	intPointsList.add(Integer.parseInt(pointsList.get(i)));
+                	placesAndPoints.put(i+1, intPointsList.get(i));
+                }
+                for (List<CarClassCompetitionResult> carClassCompetitionList1 : carClassCompetitionResults) {
+            		for (CarClassCompetitionResult carClassCompetitionResult1 : carClassCompetitionList) {
+            			carClassCompetitionResult1.setAbsolutePointsByTableB(placesAndPoints.get(carClassCompetitionResult1.getAbsolutePlace()));
+            		}    		
+            	}  
+        	}
+        	
+            
+    		qualifyingResults.add(qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition));
+    	}
+    	map.put("qualifyingLists", qualifyingResults);
+    	map.put("carClassCompetitions", carClassCompetitions);
+    	map.put("raceResultsLists", raceResults);
+    	map.put("absoluteResultsList", carClassCompetitionResults);
+    	
+
+        return "absolute_competition_personal_offset";
     }
 
     @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = {"content-type=application/json"})
