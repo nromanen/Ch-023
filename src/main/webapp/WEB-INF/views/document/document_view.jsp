@@ -13,19 +13,20 @@
 <script src="<c:url value="/resources/js/view_pdf.js" />"></script>
 <c:choose>
     <c:when test="${!exception}">
+        <input type="hidden" id="bytes" value="${file.file}">
         <c:choose>
             <c:when test="${pdf}">
-                <input type="hidden" id="pdf" value="${file.file}">
                 <div style="text-align: center;">
-                    <a href="" class="btn btn-primary" id="link"><spring:message code="label.document_download_pdf" /></a>
+                    <a class="btn btn-primary" id="link"><spring:message code="label.document_download_pdf" /></a>
                 </div>
                 <div style="text-align: center;" id="pdfContainer" class = "pdf-content"></div>
             </c:when>
             <c:otherwise>
                 <div style="text-align: center;">
-                    <a href="data:application/jpg;base64,${file.file}">${file.name}</a>
+                    <a href="" id="imgLink">${file.name}</a>
+                    <br/>
+                    <img id="img" width="768" src="" />
                 </div>
-                <img src="data:image/jpg;base64,${file.file}" />
             </c:otherwise>
         </c:choose>
     </c:when>
