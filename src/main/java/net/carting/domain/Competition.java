@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -73,6 +75,7 @@ public class Competition {
     
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "absoluteResultsStatement_id", nullable = true)
+    @NotFound(action=NotFoundAction.IGNORE)
     private File absoluteResultsStatement;
 
     public File getAbsoluteResultsStatement() {

@@ -579,10 +579,11 @@ public class CompetitionController {
     
     @RequestMapping(value = "absRanking", method = RequestMethod.POST)
     @ResponseBody
-    public int createManeuverStatement(@RequestParam(value = "table") String table,
+    public int createAbsoluteRankingStatement(@RequestParam(value = "table") String table,
                                           @RequestParam(value = "competitionId") int competitionId){
         int result;
         try {
+            System.out.println("Start:");
            Competition competition = competitionService.getCompetitionById(competitionId);
             File absoluteCompetitionResults;
             if (competition.getAbsoluteResultsStatement() == null) {
@@ -590,14 +591,22 @@ public class CompetitionController {
             } else {
                 absoluteCompetitionResults = competition.getAbsoluteResultsStatement();
             }
+            System.out.println("Got file.");
+           
             absoluteCompetitionResults.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
-            String fileName = "ManeuverStatement_" + competitionId + "_"
+            System.out.println("Set file body.");
+            String fileName = "AbsoluteTeamsRankingStatement_" + competitionId + "_"
                     + Calendar.getInstance().getTimeInMillis();
             absoluteCompetitionResults.setName(fileName);
+            System.out.println("Set file.");
             fileServie.updateFile(absoluteCompetitionResults);
+            System.out.println("File ID:"+absoluteCompetitionResults.getId());
             competition.setAbsoluteResultsStatement(absoluteCompetitionResults);
+            System.out.println("Set file reference in competition.");
             competitionService.updateCompetition(competition);
-            result = competitionService.getCompetitionById(competitionId).getAbsoluteResultsStatement().getId();
+            System.out.println("Updated competition.");
+            result = competition.getAbsoluteResultsStatement().getId();
+            System.out.println("Result:"+result);
         } catch (Exception e) {
             result = 0;
             e.printStackTrace();
