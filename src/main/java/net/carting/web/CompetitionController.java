@@ -3,6 +3,7 @@ package net.carting.web;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
+import net.carting.domain.File;
 import net.carting.domain.Leader;
 import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
@@ -28,6 +30,7 @@ import net.carting.service.CarClassCompetitionResultService;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
+import net.carting.service.FileService;
 import net.carting.service.LeaderService;
 import net.carting.service.QualifyingService;
 import net.carting.service.RaceService;
@@ -39,6 +42,7 @@ import net.carting.service.UserService;
 import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
 import net.carting.util.GlobalData;
+import net.carting.util.PdfWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +58,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.itextpdf.text.PageSize;
 
 @Controller
 @RequestMapping(value = "/competition")
@@ -85,6 +91,8 @@ public class CompetitionController {
     private AdminSettingsService adminSettingsService;
     @Autowired
     private QualifyingService qualifyingService;
+    @Autowired
+    private FileService fileServie;
 
     private static final Logger LOG = LoggerFactory
             .getLogger(CompetitionController.class);
@@ -567,4 +575,34 @@ public class CompetitionController {
         }
         return sum;
     }
-}
+    
+    
+    @RequestMapping(value = "absRanking", method = RequestMethod.POST)
+    @ResponseBody
+    public int createManeuverStatement(@RequestParam(value = "table") String table,
+                                          @RequestParam(value = "competitionId") int competitionId){
+        int result;
+        try {
+           Competition competition = competitionService.getCompetitionById(competitionId);
+            File absoluteCompetitionResults;
+            if (competition.getAbsoluteResultsStatement() == null) {
+                absoluteCompetitionResults = new File();
+            } else {
+                absoluteCompetitionResults = competition.getAbsoluteResultsStatement();
+            }
+            absoluteCompetitionResults.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
+            String fileName = "ManeuverStatement_" + competitionId + "_"
+                    + Calendar.getInstance().getTimeInMillis();
+            absoluteCompetitionResults.setName(fileName);
+            fileServie.updateFile(absoluteCompetitionResults);
+            competition.setAbsoluteResultsStatement(absoluteCompetitionResults);
+            competitionService.updateCompetition(competition);
+            result = competitionService.getCompetitionById(competitionId).getAbsoluteResultsStatement().getId();
+        } catch (Exception e) {
+            result = 0;
+            e.printStackTrace();
+        }
+        return result;
+    }
+        
+    }

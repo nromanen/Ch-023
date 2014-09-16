@@ -2,8 +2,11 @@
 	pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script type='text/javascript' src='<c:url value="/resources/js/teams_ranking.js" />'></script>
 
 <span align="right"><a class="btn btn-success btn-sm" id="pdf" ><spring:message code="label.document_download_pdf" /></a></span>
+<input type="hidden" id="fileId" value="0">
+<input type="hidden" id="competitionId" value="${competition.id}">
 <div align="center" id="absRanking">
 <meta charset="utf-8">
 <style>
@@ -64,7 +67,7 @@
 					<tbody>
 						<c:forEach items="${resultList}" var="absTeamRes" varStatus="index">
 							<tr>
-								<td>${index.count}</td>
+								<td class="pos">${index.count}</td>
 								<td style="text-align: left; padding-left: 20px;">
 									<a href="<c:url value="/team/${absTeamRes.teamId}" />">
 										<c:forEach items="${teamList}" var="team">
@@ -74,32 +77,32 @@
 										</c:forEach>
 									</a> 
 								</td>
-								<td>
+								<td class = "points">
 									<c:if test="${absTeamRes.shkpPointPlace.points!=0}">
 										${absTeamRes.shkpPointPlace.points}
 									</c:if>
 								</td>
-								<td>
+								<td class="place">
 									<c:if test="${absTeamRes.shkpPointPlace.place!=0}">
 										${absTeamRes.shkpPointPlace.place}
 									</c:if>
 								</td>
-								<td>
+								<td class = "points">
 									<c:if test="${absTeamRes.maneuverPointPlace.points!=0}">
 										${absTeamRes.maneuverPointPlace.points}
 									</c:if>
 								</td>
-								<td>
+								<td class="place">
 									<c:if test="${absTeamRes.maneuverPointPlace.place!=0}">
 										${absTeamRes.maneuverPointPlace.place}
 									</c:if>
 								</td>
-								<td>
+								<td class = "points">
 									<c:if test="${absTeamRes.absolutePointPlace.points!=0}">
 										${absTeamRes.absolutePointPlace.points}
 									</c:if>
 								</td>
-								<td>
+								<td class="place">
 									<c:if test="${absTeamRes.absolutePointPlace.place!=0}">
 										${absTeamRes.absolutePointPlace.place}
 									</c:if>
@@ -125,10 +128,4 @@
 	</c:if>
 </table>
 </div>
-<script>
-$(document).ready(function(){
-	$("#pdf").click(function() {
-        window.open("../../document/showFile/" + $("#fileId").val() ,'_blank');
-    });
-})
-</script>
+

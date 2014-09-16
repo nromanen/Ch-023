@@ -7,7 +7,7 @@
 <script type='text/javascript'
 	src='<c:url value="/resources/js/start.js" />'></script>
 <c:choose>
-<c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
+<c:when test="${authority.equals('ROLE_ADMIN') && !empty cccResList}">
 	<div class="panel panel-primary">
 		<div class="panel-heading" style="height: 50px;">
 			<div class="text-info"
@@ -30,22 +30,20 @@
 									code="label.document_start_pos" /></th>
 						</thead>
 						<tbody>
-							<c:forEach items="${cccResList}"
-								var="cccRes" varStatus="index">
+							<c:forEach items="${cccResList}" var="cccRes" varStatus="index">
 								<tr
 									class="team${cccRes.racerCarClassCompetitionNumber.racer.team.id}
 									<c:if test="${!cccRes.racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
 									<td>${index.count}</td>
-									<td style="text-align: left; padding-left: 20px;"><a
-										href="<c:url value="/racer/${cccRes.racerCarClassCompetitionNumber.racer.id}" />"
+									<td style="text-align: left; padding-left: 20px;">
+										<a href="<c:url value="/racer/${cccRes.racerCarClassCompetitionNumber.racer.id}" />"
 										id="racer${cccRes.racerCarClassCompetitionNumber.racer.id}">
 											${cccRes.racerCarClassCompetitionNumber.racer.firstName}
-											${cccRes.racerCarClassCompetitionNumber.racer.lastName} </a> <c:if
-											test="${!cccRes.racerCarClassCompetitionNumber.racer.enabled}">
-											<span class="glyphicon glyphicon-remove"
-												style="color: red; cursor: pointer; float: right;"
-												title="Disabled"></span>
-										</c:if></td>
+											${cccRes.racerCarClassCompetitionNumber.racer.lastName} </a> 
+											<c:if test="${!cccRes.racerCarClassCompetitionNumber.racer.enabled}">
+												<span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
+											</c:if>
+									</td>
 									<td>${cccRes.racerCarClassCompetitionNumber.numberInCompetition}
 									</td>
 									<td>
