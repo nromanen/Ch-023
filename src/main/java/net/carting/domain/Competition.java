@@ -74,7 +74,7 @@ public class Competition {
     private String pointsByPlaces;
     
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "absoluteResultsStatement_id", nullable = true)
+    @JoinColumn(name = "absoluteResultsStatement_id")
     @NotFound(action=NotFoundAction.IGNORE)
     private File absoluteResultsStatement;
 

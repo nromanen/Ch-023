@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.carting.dao.CompetitionDAO;
+import net.carting.dao.FileDAO;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Competition;
@@ -24,6 +25,9 @@ public class CompetitionServiceImpl implements CompetitionService {
 	
     @Autowired
     private CompetitionDAO competitionDAO;
+    
+    @Autowired
+    FileDAO fileDAO;
 
     @Override
     @Transactional
