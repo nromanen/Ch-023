@@ -184,7 +184,8 @@ public class SHKPController {
         public ModelAndView start(Model model, @PathVariable("id") int id, @PathVariable("raceId") int raceId) {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             Competition competition = carClassCompetition.getCompetition();
-
+            List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
+                    racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
             List<CarClassCompetitionResult> carClassCompetitionResultList = carClassCompetitionResultService.
                     getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition);
             try {
@@ -195,7 +196,7 @@ public class SHKPController {
             } catch (Exception e) {
                 LOG.error("Errors in start method", e);
             }
-
+            model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
             model.addAttribute("startId", raceId);
             model.addAttribute("raceId", id);
             model.addAttribute("tableRows", TABLE_ROWS);

@@ -61,9 +61,9 @@ public class CompetitionDAOImpl implements CompetitionDAO {
 
     @Override
     public Competition getCompetitionById(int id) {
+        Competition comp = entityManager.find(Competition.class, id);
         LOG.debug("Get competition with id = {}", id);
-        return (Competition) entityManager.createQuery("from Competition where id = :id")
-                .setParameter("id", id).getSingleResult();
+        return comp;
     }
 
     @Override

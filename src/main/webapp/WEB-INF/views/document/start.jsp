@@ -7,7 +7,7 @@
 <script type='text/javascript'
 	src='<c:url value="/resources/js/start.js" />'></script>
 <c:choose>
-<c:when test="${authority.equals('ROLE_ADMIN') && !empty cccResList}">
+<c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
 	<div class="panel panel-primary">
 		<div class="panel-heading" style="height: 50px;">
 			<div class="text-info"
@@ -17,7 +17,7 @@
 		</div>
 		<div class="panel-body" style="padding: 0px;">
 			<c:choose>
-				<c:when test="${!empty cccResList}">
+				<c:when test="${!empty racerCarClassCompetitionNumberList}">
 					<table class="table table-hover table-bordered" id="racers_table"
 						style="text-align: center;">
 						<thead class="well">
@@ -30,30 +30,30 @@
 									code="label.document_start_pos" /></th>
 						</thead>
 						<tbody>
-							<c:forEach items="${cccResList}" var="cccRes" varStatus="index">
+							<c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber" varStatus="index">
 								<tr
-									class="team${cccRes.racerCarClassCompetitionNumber.racer.team.id}
-									<c:if test="${!cccRes.racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
+									class="team${racerCarClassCompetitionNumber.racer.team.id}
+									<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
 									<td>${index.count}</td>
 									<td style="text-align: left; padding-left: 20px;">
-										<a href="<c:url value="/racer/${cccRes.racerCarClassCompetitionNumber.racer.id}" />"
-										id="racer${cccRes.racerCarClassCompetitionNumber.racer.id}">
-											${cccRes.racerCarClassCompetitionNumber.racer.firstName}
-											${cccRes.racerCarClassCompetitionNumber.racer.lastName} </a> 
-											<c:if test="${!cccRes.racerCarClassCompetitionNumber.racer.enabled}">
+										<a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
+										id="racer${racerCarClassCompetitionNumber.racer.id}">
+											${racerCarClassCompetitionNumber.racer.firstName}
+											${racerCarClassCompetitionNumber.racer.lastName} </a> 
+											<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
 												<span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
 											</c:if>
 									</td>
-									<td>${cccRes.racerCarClassCompetitionNumber.numberInCompetition}
+									<td>${racerCarClassCompetitionNumber.numberInCompetition}
 									</td>
 									<td>
 										<c:choose>
 											<c:when test="${isSetQualifying}">
-												${cccRes.qualifyingRacerPlace}
+												${cccResList[index.index].qualifyingRacerPlace}
 											</c:when>
 											<c:otherwise>
 												<input type="text" class="carPos"
-												racer="${cccRes.racerCarClassCompetitionNumber.numberInCompetition}"
+												racer="${racerCarClassCompetitionNumber.numberInCompetition}"
 												pattern="[0-9]{2}">
 											</c:otherwise>
 										</c:choose>	
@@ -67,7 +67,7 @@
 							<a class="btn btn-sml btn-primary" id="save">
 								<spring:message code="label.accept_changes" /></a>
 						</c:if>
-						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${empty qualifyingList}">disabled</c:if>>
+						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${!isSetQualifying }">disabled</c:if>>
 						<spring:message code="label.document_download_pdf" /></a>
 						<c:if test="${oldDoc > 0}">
 							<a id="prevVersion" class="btn btn-sml btn-warning"
@@ -238,9 +238,15 @@ table {
 						</c:when>
 						<c:otherwise>
 							<td style="display: none;" width='25%'><c:out value="${j}" />)<span
-								class="place p${j}"></span></td>
+								class="place p${j}">
+								<c:forEach items="${cccResList}" var="cccRes">
+                                    <c:if test="${cccRes.qualifyingRacerPlace==j}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
+                                </c:forEach></span></td>
 							<td style="display: none;" width='25%'><c:out value="${k}" />)<span
-								class="place p${k}"></span></td>
+								class="place p${k}">
+								<c:forEach items="${cccResList}" var="cccRes">
+                                    <c:if test="${cccRes.qualifyingRacerPlace==k}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
+                                </c:forEach></span></td>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>

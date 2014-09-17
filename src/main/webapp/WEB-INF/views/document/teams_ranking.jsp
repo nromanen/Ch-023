@@ -3,21 +3,35 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script type='text/javascript' src='<c:url value="/resources/js/teams_ranking.js" />'></script>
+<script type='text/javascript' src="<c:url value="/resources/js//lib/jquery.tablesorter.min.js" />"></script>
 
-<span align="right"><a class="btn btn-success btn-sm" id="pdf" ><spring:message code="label.document_download_pdf" /></a></span>
+<c:if test="${authority=='ROLE_ADMIN'}">
+    <span align="right"><a class="btn btn-success btn-sm" id="pdf" ><spring:message code="label.document_download_pdf" /></a></span>
+</c:if>
 <input type="hidden" id="fileId" value="0">
 <input type="hidden" id="competitionId" value="${competition.id}">
 <div align="center" id="absRanking">
 <meta charset="utf-8">
 <style>
     table {
+        border-collapse:collapse;
         font-family: 'Arial', Arial, monospace;
     }
+       .table thead tr th {
+         background-repeat: no-repeat;
+         background-position: 100% 50%;
+       }
+       .table thead tr th.headerSortUp {
+          background-image: url(<c:url value="/resources/img/sort_asc.png" />);
+        }
+        .table thead tr th.headerSortDown {
+            background-image: url(<c:url value="/resources/img/sort_desc.png" />);
+        }
     span {
         font-family: 'Arial', Arial, monospace;
     }
 </style>
-    <table width="100%" align="center" cellspacing='0' cellpadding='2'>
+    <table width="100%" align="center">
             <tr>
                 <td align='center'>
                    <span style="font-weight:bold;font-size:18pt"><spring:message code="label.ministry_of_education" /></span><p>
@@ -43,25 +57,25 @@
     </table>
 <table width="100%" align="center" >
 	<c:if test="${!empty teamList}">
-		<tr>
-			<td>
-				<table class="table table-hover table-bordered" id="racers_table" border="1"
+		<tr align="center">
+			<td align="center">
+				<table class="table table-hover table-bordered" id="racers_table" border="1" 
 					style="text-align: center;">
 					<thead class="well">
 						<tr>
-							<th style="text-align: center;" rowspan="2">№</th>
-							<th style="text-align: center;" rowspan="2">Team name</th>
-							<th style="text-align: center;" colspan="2">ShKP</th>
-							<th style="text-align: center;" colspan="2">Maneuver</th>
-							<th style="text-align: center;" colspan="2">Total</th>
+							<th  class="column-sm" style="text-align: center;" rowspan="2">№</th>
+							<th style="text-align: center;" rowspan="2"><spring:message code="label.team_name"/></th>
+							<th style="text-align: center;" colspan="2"><spring:message code="label.race_results"/></th>
+							<th style="text-align: center;" colspan="2"><spring:message code="label.maneuver_results"/></th>
+							<th style="text-align: center;" colspan="2"><spring:message code="label.total_results"/></th>
 						</tr>
 						<tr>
-							<th style="text-align: center;">Points</th>
-							<th style="text-align: center;">Place</th>
-							<th style="text-align: center;">Points</th>
-							<th style="text-align: center;">Place</th>
-							<th style="text-align: center;">Points</th>
-							<th style="text-align: center;">Place</th>
+							<th style="text-align: center;"><spring:message code="label.points"/></th>
+							<th style="text-align: center;"><spring:message code="label.competition.place_in_race"/></th>
+							<th style="text-align: center;"><spring:message code="label.points"/></th>
+							<th style="text-align: center;"><spring:message code="label.competition.place_in_race"/></th>
+							<th style="text-align: center;"><spring:message code="label.points"/></th>
+							<th style="text-align: center;"><spring:message code="label.competition.place_in_race"/></th>
 						</tr>
 					</thead>
 					<tbody>

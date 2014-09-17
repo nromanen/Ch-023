@@ -137,7 +137,7 @@
 		</a>
 	</c:if>
 		<a href="<c:url value="/competition/${competition.id}/teamsRanking" />" class="btn btn-primary">
-			Ranking
+			<spring:message code="ranking.teams_ranking" />
 		</a>
 		</div>
 	<input type="hidden" id="getRacersCountUrl" value="<c:url value="/carclass/getRacersCountById" />">

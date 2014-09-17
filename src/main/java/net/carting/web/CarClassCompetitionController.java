@@ -106,8 +106,6 @@ public class CarClassCompetitionController {
             model.addAttribute("maxRaces", MAX_RACES);
             model.addAttribute("cccResList", carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition));
             model.addAttribute("isSetQualifying",carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
-            System.out.println(carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
-            System.out.println(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
             model.addAttribute("racersNumsWithSameTimeList", carClassCompetitionResultService.getRacersNumbersWithSameQualifyingTime(carClassCompetition));
             model.addAttribute("membersCount", racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
@@ -258,7 +256,6 @@ public class CarClassCompetitionController {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         if (!raceService.getRaceResultsByCarClassCompetition(carClassCompetition).isEmpty()
                 &&raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()>1) {
-            System.out.println("There is enough races for this carclass.");
             return "redirect:/carclass/" + id;
         }
         race.setCarClassCompetition(carClassCompetition);

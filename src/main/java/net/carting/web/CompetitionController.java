@@ -100,6 +100,7 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
+        competition.getAbsoluteResultsStatement().getId();
         Date checkdate = competition.getDateStart();
         List<Racer> racersBirthday = racerService.getBirthdayRacers(checkdate);
         model.addAttribute("competition", competition);
@@ -441,7 +442,6 @@ public class CompetitionController {
            absoluteTeamResultsList.add(absTeamRes);
        }
        map.put("resultList", setPoints(absoluteTeamResultsList));
-       System.out.println(absoluteTeamResultsList);
             return "teams_ranking";
     }
     
@@ -576,37 +576,26 @@ public class CompetitionController {
         return sum;
     }
     
-    
     @RequestMapping(value = "absRanking", method = RequestMethod.POST)
     @ResponseBody
     public int createAbsoluteRankingStatement(@RequestParam(value = "table") String table,
                                           @RequestParam(value = "competitionId") int competitionId){
         int result;
         try {
-            System.out.println("Start:");
-           Competition competition = competitionService.getCompetitionById(competitionId);
+            Competition competition = competitionService.getCompetitionById(competitionId);
             File absoluteCompetitionResults;
             if (competition.getAbsoluteResultsStatement() == null) {
                 absoluteCompetitionResults = new File();
             } else {
                 absoluteCompetitionResults = competition.getAbsoluteResultsStatement();
             }
-            System.out.println("Got file.");
-           
             absoluteCompetitionResults.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
-            System.out.println("Set file body.");
             String fileName = "AbsoluteTeamsRankingStatement_" + competitionId + "_"
                     + Calendar.getInstance().getTimeInMillis();
             absoluteCompetitionResults.setName(fileName);
-            System.out.println("Set file.");
-            if (competition.getAbsoluteResultsStatement() == null) {
-            fileService.addFile(absoluteCompetitionResults);
-            } else {fileService.updateFile(absoluteCompetitionResults);}
-            System.out.println("File ID:"+absoluteCompetitionResults.getId());
             competition.setAbsoluteResultsStatement(absoluteCompetitionResults);
             competitionService.updateCompetition(competition);
             result = competition.getAbsoluteResultsStatement().getId();
-            System.out.println("Result:"+result);
         } catch (Exception e) {
             result = 0;
             e.printStackTrace();
@@ -614,4 +603,4 @@ public class CompetitionController {
         return result;
     }
         
-    }
+}

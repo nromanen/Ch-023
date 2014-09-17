@@ -211,7 +211,7 @@ public class Competition {
 
     @Override
     public String toString() {
-        return String.format("Competition [id=%d, name=%s]", id, name);
+        return String.format("Competition [id=%d, name=%s, absRankingFileId=%d]", id, name,absoluteResultsStatement.getId());
     }
 
     @Override

@@ -13,6 +13,7 @@ $(document).ready(function(){
                     $("#fileId").val(response);
                     $("#pdf").removeAttr("disabled");
                     $("#prevVersion").remove();
+                    window.open("../../../document/showFile/" + $("#fileId").val() ,'_blank');
                 }
             }
         });
@@ -25,7 +26,7 @@ $(document).ready(function(){
     }
 
     $("#pdf").click(function() {
-        window.open("../../../document/showFile/" + $("#fileId").val() ,'_blank');
+    	updatePDF();
     });
 
     $("#save").click(function() {

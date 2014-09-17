@@ -176,7 +176,6 @@ public class CarClassCompetitionResultServiceImpl implements
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList = racerCarClassCompetitionNumberService
                 .getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition
                         .getId());
-        System.out.println(getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
         if (race.getRaceNumber() == 1) {
             Competition competition = carClassCompetition.getCompetition();
             competition.setEnabled(false);
@@ -469,7 +468,6 @@ public class CarClassCompetitionResultServiceImpl implements
         int timeInt = 0;
         if (!timeString
                 .matches("((\\d?\\d:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
-            System.out.println(false);
             return false;
         }
         try {
@@ -492,7 +490,6 @@ public class CarClassCompetitionResultServiceImpl implements
             List<Integer> qNums = new ArrayList<Integer>();
             for (int i = 0; i < ques.size() - 1; i++) {
                 for (int j = i + 1; j < ques.size(); j++) {
-                    System.out.println(i+" - "+j);
                     if (ques.get(i).getQualifyingRacerTime()
                             .equals(ques.get(j).getQualifyingRacerTime())) {
                         if (!qNums.contains(ques.get(i)
