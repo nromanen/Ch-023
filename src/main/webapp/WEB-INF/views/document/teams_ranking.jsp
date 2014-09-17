@@ -41,11 +41,11 @@
         </tr>
         </thead>
     </table>
-<table width="100%" align="center">
+<table width="100%" align="center" >
 	<c:if test="${!empty teamList}">
 		<tr>
 			<td>
-				<table class="table table-hover table-bordered" id="racers_table"
+				<table class="table table-hover table-bordered" id="racers_table" border="1"
 					style="text-align: center;">
 					<thead class="well">
 						<tr>
