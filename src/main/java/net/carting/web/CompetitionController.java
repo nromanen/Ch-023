@@ -92,7 +92,7 @@ public class CompetitionController {
     @Autowired
     private QualifyingService qualifyingService;
     @Autowired
-    private FileService fileServie;
+    private FileService fileService;
 
     private static final Logger LOG = LoggerFactory
             .getLogger(CompetitionController.class);
@@ -599,12 +599,12 @@ public class CompetitionController {
                     + Calendar.getInstance().getTimeInMillis();
             absoluteCompetitionResults.setName(fileName);
             System.out.println("Set file.");
-            fileServie.updateFile(absoluteCompetitionResults);
+            if (competition.getAbsoluteResultsStatement() == null) {
+            fileService.addFile(absoluteCompetitionResults);
+            } else {fileService.updateFile(absoluteCompetitionResults);}
             System.out.println("File ID:"+absoluteCompetitionResults.getId());
             competition.setAbsoluteResultsStatement(absoluteCompetitionResults);
-            System.out.println("Set file reference in competition.");
             competitionService.updateCompetition(competition);
-            System.out.println("Updated competition.");
             result = competition.getAbsoluteResultsStatement().getId();
             System.out.println("Result:"+result);
         } catch (Exception e) {
