@@ -29,7 +29,7 @@
            font-family: "Arial", Times, monospace;
        }
 	</style>
-	<table class="table table-hover table-bordered" style="text-align: center;" border="1">
+	<table class="table table-hover table-bordered" style="text-align: center;" border="1" cellspacing='0' cellpadding='2'>
 		<thead class="well" style="font-weight: 100;">
 		    <tr class="hidden">
 		        <th colspan="15"><spring:message code="label.header_1" /></th>

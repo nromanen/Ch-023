@@ -12,8 +12,8 @@ public interface LogsService {
 
     List getAllLogs();
 
-    List getLogsByDate(Timestamp date);
+    List getLogsByDate(Date date);
 
-    List getLogsByPeriod(Timestamp start, Timestamp end);
+    List getLogsByPeriod(Date start, Date end);
 
 }

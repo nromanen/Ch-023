@@ -8,6 +8,7 @@
 	src='<c:url value="/resources/js/start.js" />'></script>
 <c:choose>
 <c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
+<% int number = 0; %>
 	<div class="panel panel-primary">
 		<div class="panel-heading" style="height: 50px;">
 			<div class="text-info"
@@ -32,20 +33,16 @@
 						<tbody>
 							<c:forEach items="${racerCarClassCompetitionNumberList}"
 								var="racerCarClassCompetitionNumber" varStatus="index">
+								<c:if test="${racerCarClassCompetitionNumber.racer.enabled}">
 								<tr
 									class="team${racerCarClassCompetitionNumber.racer.team.id}
 									<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-									<td>${index.count}</td>
+									<td><%= ++number %></td>
 									<td style="text-align: left; padding-left: 20px;"><a
 										href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
 										id="racer${racerCarClassCompetitionNumber.racer.id}">
 											${racerCarClassCompetitionNumber.racer.firstName}
-											${racerCarClassCompetitionNumber.racer.lastName} </a> <c:if
-											test="${!racerCarClassCompetitionNumber.racer.enabled}">
-											<span class="glyphicon glyphicon-remove"
-												style="color: red; cursor: pointer; float: right;"
-												title="Disabled"></span>
-										</c:if></td>
+											${racerCarClassCompetitionNumber.racer.lastName} </a></td>
 									<td>${racerCarClassCompetitionNumber.numberInCompetition}
 									</td>
 									<td>
@@ -56,11 +53,12 @@
 											<c:otherwise>
 												<input type="text" class="carPos"
 												racer="${racerCarClassCompetitionNumber.numberInCompetition}"
-												pattern="[0-9]{2}">
+												pattern="[0-9]{2}" value="<%= number %>">
 											</c:otherwise>
 										</c:choose>	
 									</td>
 								</tr>
+								</c:if>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -252,12 +250,11 @@ table {
 			<c:forEach var="i" begin="1" end="${tableRows}">
 				<c:choose>
 					<c:when test="${i == 1}">
-						<td colspan='2'><spring:message code="label.allowed" /> <c:out
-								value="${allowedNumber}" /></td>
+						<td colspan='2'><spring:message code="label.allowed" /> <%= number %></td>
 					</c:when>
 					<c:otherwise>
 						<td style="display: none;" colspan='2'><spring:message
-								code="label.allowed" /> <c:out value="${allowedNumber}" /></td>
+								code="label.allowed" /> <%= number %></td>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -266,12 +263,11 @@ table {
 			<c:forEach var="i" begin="1" end="${tableRows}">
 				<c:choose>
 					<c:when test="${i == 1}">
-						<td colspan='2'><spring:message code="label.started" /> <c:out
-								value="${startedNumber}" /></td>
+						<td colspan='2'><spring:message code="label.started" /></td>
 					</c:when>
 					<c:otherwise>
 						<td style="display: none;" colspan='2'><spring:message
-								code="label.started" /> <c:out value="${startedNumber}" /></td>
+								code="label.started" /></td>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
