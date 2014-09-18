@@ -387,7 +387,9 @@ $(document).ready(function(){
 	});
 	
 	$("#add_place_btn").click(function(){
-		$('#points_table').append('<tr><td>'+ (+$('#points_table tr:last td:first').text() + 1) +'</td><td><input type="text" class="points" style="width: 100px;"' 
+		var number = +$('#points_table tr:last td:first').text();
+		if (!number) {number = 0;} 
+		$('#points_table').append('<tr><td>'+ (number + 1) +'</td><td><input type="text" class="points" style="width: 100px;"' 
 				+ ' value="'+ $("#points_count").val() + '"' 
 				+ ' required pattern="^[0-9]+$" required'
 				+ '	data-bv-notempty="true"'
