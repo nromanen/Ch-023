@@ -142,14 +142,16 @@ $(document).ready(function(){
 					<td class="column-wide">${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
-								<c:if test="${!empty carClassCompetition.qualifyings}">
-									<c:forEach items="${carClassCompetition.qualifyings}" var="qualifying">
-										<c:if test="${qualifying.racerNumber==racerCarClassCompetitionNumber.numberInCompetition }">
-											<td>${qualifying.getTimeString()}</td>
-											<td>${qualifying.racerPlace}</td>
-										</c:if>
-									</c:forEach>
-								</c:if>
+						<c:if test="${isSetQualifyingList[loop.index]}">
+							<c:forEach items="${absoluteResultsList }" var="absoluteResults" >
+								<c:forEach items="${absoluteResults }" var="absoluteResult" >
+									<c:if test="${(racerCarClassCompetitionNumber.racer.id == absoluteResult.racerCarClassCompetitionNumber.racer.id) && (carClassCompetition == absoluteResult.racerCarClassCompetitionNumber.carClassCompetition) }">
+										<td>${absoluteResult.qualifyingRacerPlace}</td>
+										<td>${absoluteResult.getQualifyingTimeString()}</td>
+									</c:if>
+								</c:forEach>
+							</c:forEach>
+						</c:if>
 					<c:set var="countOfResults"	 value="2" />
 					<c:forEach items="${raceResultsLists}" var="raceResultsList">
 						<c:forEach items="${raceResultsList}" var="raceResults">

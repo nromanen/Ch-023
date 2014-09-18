@@ -21,5 +21,8 @@ public interface CarClassCompetitionResultDAO {
 
     public List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByPoints(CarClassCompetition carClassCompetition);
 
+    List<CarClassCompetitionResult> getCarClassCompetitionResultsOrderedByQualifyingTimes(
+            CarClassCompetition carClassCompetition);
+
 
 }

@@ -9,7 +9,6 @@ pageEncoding="utf-8"%>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
 
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 60px 30px;">
-
 <table class="width-100">
     <tr>
         <td>
@@ -30,13 +29,13 @@ pageEncoding="utf-8"%>
                         <li><a href='<c:url value="/SHKP/maneuver/${carClassCompetition.id}" />'><spring:message code="label.maneuvering" /></a></li>
                     </ul>
                 </div>
-                <c:if test="${((raceListSize<2 &&!empty racerCarClassCompetitionNumberList) || (empty qualifyingList && raceListSize==0))&&(empty racersNumsWithSameTimeList)}">
+                <c:if test="${((raceListSize<2 &&!empty racerCarClassCompetitionNumberList) || (empty cccResList && raceListSize==0))&&(empty racersNumsWithSameTimeList)}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <spring:message code="label.add" /> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <c:if test="${empty qualifyingList && raceListSize==0 &&!empty racerCarClassCompetitionNumberList}">
+                            <c:if test="${empty cccResList && raceListSize==0 &&!empty racerCarClassCompetitionNumberList}">
                                 <li><a href='<c:url value="/carclass/${carClassCompetition.id}/addQualifying" />'><spring:message code="label.add_qualifying" /></a></li>
                             </c:if>
                             <c:if test="${raceListSize<2 &&!empty racerCarClassCompetitionNumberList}">
@@ -211,7 +210,7 @@ pageEncoding="utf-8"%>
 
 <div>
 <c:if test="${raceListSize>0}">
-    <c:if test="${!empty absoluteResultsList}">
+    <c:if test="${!empty cccResList}">
         <div class="panel panel-primary">
                 <div class="panel-heading" style="height: 50px;">
         <div class="text-info" style="color: #fff; font-size: 20px; float: left;"><spring:message code="label.summary_results" /></div>
@@ -233,19 +232,19 @@ pageEncoding="utf-8"%>
                                 <th style="text-align: center;"><spring:message code="label.summary_results_editing_comment" /></th>
                             </thead>
                             <tbody>
-                                <c:if test="${!empty absoluteResultsList}">
-                                    <c:forEach items="${absoluteResultsList}" var="absoluteResult">
+                                <c:if test="${!empty cccResList}">
+                                    <c:forEach items="${cccResList}" var="cccRes">
                                         <tr>
-                                            <td>${absoluteResult.absolutePlace}</td>
-                                            <td>${absoluteResult.racerCarClassCompetitionNumber.numberInCompetition}</td>
+                                            <td>${cccRes.absolutePlace}</td>
+                                            <td>${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</td>
                                             <td style="text-align: left;">
-                                                <a href='<c:url value="/racer/${absoluteResult.racerCarClassCompetitionNumber.racer.id}" />'>
-                                                    ${absoluteResult.racerCarClassCompetitionNumber.racer.firstName} ${absoluteResult.racerCarClassCompetitionNumber.racer.lastName}
+                                                <a href='<c:url value="/racer/${cccRes.racerCarClassCompetitionNumber.racer.id}" />'>
+                                                    ${cccRes.racerCarClassCompetitionNumber.racer.firstName} ${cccRes.racerCarClassCompetitionNumber.racer.lastName}
                                                 </a>
                                             </td>
-                                            <td>${absoluteResult.absolutePoints}</td>
-                                            <td>${absoluteResult.maneuverTime}</td>
-                                            <td>${absoluteResult.comment}</td>
+                                            <td>${cccRes.absolutePoints}</td>
+                                            <td>${cccRes.maneuverTime}</td>
+                                            <td>${cccRes.comment}</td>
                                         </tr>
                                     </c:forEach>
                                 </c:if>
@@ -257,7 +256,7 @@ pageEncoding="utf-8"%>
 </c:if>
 </div>
     <div>
-        <c:if test="${!empty qualifyingList}">
+        <c:if test="${isSetQualifying}">
             <div class="panel-group" id="accordition">
                 <div class="panel panel-primary">
                     <div class="panel-heading" style="height: 50px;">
@@ -290,23 +289,19 @@ pageEncoding="utf-8"%>
                                     <th style="text-align: center;"><spring:message code="label.racer" /></th>
                                     <th style="text-align: center;"><spring:message code="label.time" /></th>
                                 </thead>
-                                <c:forEach items="${qualifyingList}" var="qualifying" varStatus="counter">
+                                <c:forEach items="${cccResList}" var="cccRes" varStatus="counter">
                                     <tr>
-                                         <td>${qualifying.racerPlace}</td>
-                                         <td>${qualifying.racerNumber}</td>
+                                         <td>${cccRes.qualifyingRacerPlace}</td>
+                                         <td>${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</td>
                                          <td>
-                                             <c:forEach items="${racerCarClassCompetitionNumberList}" var="racerCarClassCompetitionNumber">
-                                                <c:if test="${racerCarClassCompetitionNumber.numberInCompetition==qualifying.racerNumber}">
-                                                    <a href='<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />'>
-                                                        ${racerCarClassCompetitionNumber.racer.firstName}&nbsp;${racerCarClassCompetitionNumber.racer.lastName}
+                                             <a href='<c:url value="/racer/${cccRes.racerCarClassCompetitionNumber.racer.id}" />'>
+                                                        ${cccRes.racerCarClassCompetitionNumber.racer.firstName}&nbsp;${cccRes.racerCarClassCompetitionNumber.racer.lastName}
                                                      </a>
-                                                </c:if>
-                                             </c:forEach>
                                          </td>
                                          <td>
                                          <c:forEach items="${racersNumsWithSameTimeList}" var="sameNumber">
                                          <c:choose>
-                                         <c:when test="${authority.equals('ROLE_ADMIN')&&qualifying.racerNumber==sameNumber}">
+                                         <c:when test="${authority.equals('ROLE_ADMIN')&&cccRes.racerCarClassCompetitionNumber.numberInCompetition==sameNumber}">
 	                                         <span style="color: red; font-weight: bold;">
                                          </c:when>
                                           <c:otherwise>
@@ -314,7 +309,7 @@ pageEncoding="utf-8"%>
                                           </c:otherwise>
                                           </c:choose>
                                           </c:forEach>
-                                          ${qualifying.getTimeString()}
+                                          ${cccRes.getQualifyingTimeString()}
                                            </span>
                                         </td>
                                     </tr>

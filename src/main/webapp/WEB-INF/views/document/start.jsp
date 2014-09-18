@@ -8,6 +8,7 @@
 	src='<c:url value="/resources/js/start.js" />'></script>
 <c:choose>
 <c:when test="${authority.equals('ROLE_ADMIN') && !empty racerCarClassCompetitionNumberList}">
+<% int number = 0; %>
 	<div class="panel panel-primary">
 		<div class="panel-heading" style="height: 50px;">
 			<div class="text-info"
@@ -32,44 +33,45 @@
 						<tbody>
 							<c:forEach items="${racerCarClassCompetitionNumberList}"
 								var="racerCarClassCompetitionNumber" varStatus="index">
+								<c:if test="${racerCarClassCompetitionNumber.racer.enabled}">
 								<tr
 									class="team${racerCarClassCompetitionNumber.racer.team.id}
 									<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">bg-danger</c:if>">
-									<td>${index.count}</td>
-									<td style="text-align: left; padding-left: 20px;"><a
-										href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
+									<td><%= ++number %></td>
+									<td style="text-align: left; padding-left: 20px;">
+										<a href="<c:url value="/racer/${racerCarClassCompetitionNumber.racer.id}" />"
 										id="racer${racerCarClassCompetitionNumber.racer.id}">
 											${racerCarClassCompetitionNumber.racer.firstName}
-											${racerCarClassCompetitionNumber.racer.lastName} </a> <c:if
-											test="${!racerCarClassCompetitionNumber.racer.enabled}">
-											<span class="glyphicon glyphicon-remove"
-												style="color: red; cursor: pointer; float: right;"
-												title="Disabled"></span>
-										</c:if></td>
+											${racerCarClassCompetitionNumber.racer.lastName} </a> 
+											<c:if test="${!racerCarClassCompetitionNumber.racer.enabled}">
+												<span class="glyphicon glyphicon-remove" style="color: red; cursor: pointer; float: right;" title="Disabled"></span>
+											</c:if>
+									</td>
 									<td>${racerCarClassCompetitionNumber.numberInCompetition}
 									</td>
 									<td>
 										<c:choose>
-											<c:when test="${!empty qualifyingList}">
-												${qualifyingList.get(index.index).racerPlace}
+											<c:when test="${isSetQualifying}">
+												${cccResList[index.index].qualifyingRacerPlace}
 											</c:when>
 											<c:otherwise>
 												<input type="text" class="carPos"
 												racer="${racerCarClassCompetitionNumber.numberInCompetition}"
-												pattern="[0-9]{2}">
+												pattern="[0-9]{2}" value="<%= number %>">
 											</c:otherwise>
 										</c:choose>	
 									</td>
 								</tr>
+								</c:if>
 							</c:forEach>
 						</tbody>
 					</table>
 					<div style="text-align: center;">
-						<c:if test="${empty qualifyingList}">
+						<c:if test="${!isSetQualifying}">
 							<a class="btn btn-sml btn-primary" id="save">
 								<spring:message code="label.accept_changes" /></a>
 						</c:if>
-						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${empty qualifyingList}">disabled</c:if>>
+						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${!isSetQualifying }">disabled</c:if>>
 						<spring:message code="label.document_download_pdf" /></a>
 						<c:if test="${oldDoc > 0}">
 							<a id="prevVersion" class="btn btn-sml btn-warning"
@@ -228,21 +230,27 @@ table {
 						<c:when test="${i == 1}">
 							<td width='25%'>
 							<c:out value="${j}" />)<span class="place p${j}">
-								<c:forEach items="${qualifyingList}" var="qualifying">
-									<c:if test="${qualifying.racerPlace==j}">${qualifying.racerNumber}</c:if>
+								<c:forEach items="${cccResList}" var="cccRes">
+									<c:if test="${cccRes.qualifyingRacerPlace==j}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
 								</c:forEach>
 							</span></td>
 							<td width='25%'><c:out value="${k}" />)<span class="place p${k}">
-								<c:forEach items="${qualifyingList}" var="qualifying">
-									<c:if test="${qualifying.racerPlace==k}">${qualifying.racerNumber}</c:if>
+								<c:forEach items="${cccResList}" var="cccRes">
+									<c:if test="${cccRes.qualifyingRacerPlace==k}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
 								</c:forEach>
 							</span></td>
 						</c:when>
 						<c:otherwise>
 							<td style="display: none;" width='25%'><c:out value="${j}" />)<span
-								class="place p${j}"></span></td>
+								class="place p${j}">
+								<c:forEach items="${cccResList}" var="cccRes">
+                                    <c:if test="${cccRes.qualifyingRacerPlace==j}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
+                                </c:forEach></span></td>
 							<td style="display: none;" width='25%'><c:out value="${k}" />)<span
-								class="place p${k}"></span></td>
+								class="place p${k}">
+								<c:forEach items="${cccResList}" var="cccRes">
+                                    <c:if test="${cccRes.qualifyingRacerPlace==k}">${cccRes.racerCarClassCompetitionNumber.numberInCompetition}</c:if>
+                                </c:forEach></span></td>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
@@ -252,12 +260,11 @@ table {
 			<c:forEach var="i" begin="1" end="${tableRows}">
 				<c:choose>
 					<c:when test="${i == 1}">
-						<td colspan='2'><spring:message code="label.allowed" /> <c:out
-								value="${allowedNumber}" /></td>
+						<td colspan='2'><spring:message code="label.allowed" /> <%= number %></td>
 					</c:when>
 					<c:otherwise>
 						<td style="display: none;" colspan='2'><spring:message
-								code="label.allowed" /> <c:out value="${allowedNumber}" /></td>
+								code="label.allowed" /> <%= number %></td>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -266,12 +273,11 @@ table {
 			<c:forEach var="i" begin="1" end="${tableRows}">
 				<c:choose>
 					<c:when test="${i == 1}">
-						<td colspan='2'><spring:message code="label.started" /> <c:out
-								value="${startedNumber}" /></td>
+						<td colspan='2'><spring:message code="label.started" /></td>
 					</c:when>
 					<c:otherwise>
 						<td style="display: none;" colspan='2'><spring:message
-								code="label.started" /> <c:out value="${startedNumber}" /></td>
+								code="label.started" /></td>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>

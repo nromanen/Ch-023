@@ -2,8 +2,10 @@
  * Created by manson on 11.09.14.
  */
 $(document).ready(function(){
-    $('#link').attr('href', 'data:application/pdf;base64,' + $('#pdf').val());
-    var pdfBase64 = $('#pdf').val();
+    var pdfBase64 = $('#bytes').val();
+    $('#link').attr('href', 'data:application/pdf;base64,' + pdfBase64);
+    $('#imgLink').attr('href', 'data:application/jpg;base64,' + pdfBase64);
+    $('#img').attr('src', 'data:application/jpg;base64,' + pdfBase64);
 
     var scale = 1.2; //Set this to whatever you want. This is basically the "zoom" factor for the PDF.
 

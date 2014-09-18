@@ -22,11 +22,9 @@
         <class>net.carting.domain.User</class>
         <class>net.carting.domain.Logs</class>
         <class>net.carting.domain.Maneuver</class>
-        <class>net.carting.domain.Qualifying</class>
-        
-        
         <properties>
-            <!-- <property name="hibernate.archive.autodetection" value="class, hbm"/> -->
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <!-- For create/update db from entities -->
             <!-- <property name="hibernate.hbm2ddl.auto" value="create" />  -->
         </properties>

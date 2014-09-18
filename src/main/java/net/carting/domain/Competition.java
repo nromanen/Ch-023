@@ -9,9 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -68,6 +72,19 @@ public class Competition {
     
     @Column(name = "points_by_places", nullable = false)
     private String pointsByPlaces;
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "absoluteResultsStatement_id")
+    @NotFound(action=NotFoundAction.IGNORE)
+    private File absoluteResultsStatement;
+
+    public File getAbsoluteResultsStatement() {
+        return absoluteResultsStatement;
+    }
+
+    public void setAbsoluteResultsStatement(File absoluteResultsStatement) {
+        this.absoluteResultsStatement = absoluteResultsStatement;
+    }
 
     public int getId() {
         return id;
@@ -194,7 +211,7 @@ public class Competition {
 
     @Override
     public String toString() {
-        return String.format("Competition [id=%d, name=%s]", id, name);
+        return String.format("Competition [id=%d, name=%s, absRankingFileId=%d]", id, name,absoluteResultsStatement.getId());
     }
 
     @Override

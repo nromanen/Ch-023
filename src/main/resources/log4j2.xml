@@ -23,7 +23,6 @@
             <ConnectionFactory class="net.carting.util.ConnectionFactory" method="getDatabaseConnection" />
             <Column name="message" pattern="%message" />
             <Column name="date" isEventTimestamp="true" />
-            <Column name="level" pattern="%level" />
             <Column name="logger" pattern="%logger" />
             <Filters>
                 <ThresholdFilter level="TRACE"/>

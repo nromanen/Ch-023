@@ -206,6 +206,11 @@
         <put-attribute name="title" value="Start statement"/>
         <put-attribute name="content" value="/WEB-INF/views/document/start.jsp"/>
     </definition>
+    
+    <definition name="teams_ranking" extends="base-template">
+        <put-attribute name="title" value="Teams ranking"/>
+        <put-attribute name="content" value="/WEB-INF/views/document/teams_ranking.jsp"/>
+    </definition>
 
     <definition name="maneuver" extends="base-template">
         <put-attribute name="title" value="Maneuver statement"/>

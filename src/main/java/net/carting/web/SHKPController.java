@@ -12,13 +12,11 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.File;
-import net.carting.domain.Qualifying;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.service.CarClassCompetitionResultService;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.ManeuverService;
-import net.carting.service.QualifyingService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.util.PdfWriter;
 
@@ -58,9 +56,6 @@ public class SHKPController {
 
         @Autowired
         RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
-
-        @Autowired
-        QualifyingService qualifyingService;
 
         @Autowired
         ManeuverService maneuverService;
@@ -184,28 +179,19 @@ public class SHKPController {
         public ModelAndView start(Model model, @PathVariable("id") int id, @PathVariable("raceId") int raceId) {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
             Competition competition = carClassCompetition.getCompetition();
-
             List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumberList =
                     racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(id);
-
-
+            List<CarClassCompetitionResult> carClassCompetitionResultList = carClassCompetitionResultService.
+                    getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition);
             try {
-                List<Qualifying> beforeQ = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
-                List<Qualifying> resultQ = new ArrayList<Qualifying>();
-                if (beforeQ != null) {
-                    for (int i = 0; i < beforeQ.size(); i++) {
-                        for (Qualifying aBeforeQ : beforeQ) {
-                            if (racerCarClassCompetitionNumberList.get(i).getNumberInCompetition() == aBeforeQ.getRacerNumber()) {
-                                resultQ.add(aBeforeQ);
-                            }
-                        }
-                    }
-                    model.addAttribute("qualifyingList", resultQ);
+                if (carClassCompetitionResultList != null) {
+                    model.addAttribute("cccResList", carClassCompetitionResultList);
+                    model.addAttribute("isSetQualifying", carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
                 }
             } catch (Exception e) {
                 LOG.error("Errors in start method", e);
             }
-
+            model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
             model.addAttribute("startId", raceId);
             model.addAttribute("raceId", id);
             model.addAttribute("tableRows", TABLE_ROWS);
@@ -242,7 +228,6 @@ public class SHKPController {
             model.addAttribute("carClassDate", dateFormat.format(date));
             model.addAttribute("carClassRace", raceId);
             model.addAttribute("maxPositions", MAX_CAR_POSITIONS);
-            model.addAttribute("racerCarClassCompetitionNumberList", racerCarClassCompetitionNumberList);
             return new ModelAndView("start");
         }
 
