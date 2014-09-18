@@ -27,13 +27,13 @@ public class LogsServiceImpl implements LogsService {
 
     @Override
     @Transactional
-    public List getLogsByDate(Timestamp date) {
+    public List getLogsByDate(Date date) {
         return logsDAO.getLogsByDate(date);
     }
 
     @Override
     @Transactional
-    public List getLogsByPeriod(Timestamp start, Timestamp end) {
+    public List getLogsByPeriod(Date start, Date end) {
         return logsDAO.getLogsByPeriod(start, end);
     }
 }

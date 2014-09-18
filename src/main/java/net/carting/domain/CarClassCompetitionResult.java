@@ -1,6 +1,15 @@
 package net.carting.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import net.carting.util.DateUtil;
 
 
 @Entity
@@ -12,6 +21,54 @@ public class CarClassCompetitionResult {
     @GeneratedValue
     private int id;
 
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + absolutePlace;
+        result = prime * result + absolutePoints;
+        result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+        result = prime * result + id;
+        long temp;
+        temp = Double.doubleToLongBits(maneuverTime);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + race2points;
+        result = prime * result + ((racerCarClassCompetitionNumber == null) ? 0 : racerCarClassCompetitionNumber.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CarClassCompetitionResult other = (CarClassCompetitionResult) obj;
+        if (absolutePlace != other.absolutePlace)
+            return false;
+        if (absolutePoints != other.absolutePoints)
+            return false;
+        if (comment == null) {
+            if (other.comment != null)
+                return false;
+        } else if (!comment.equals(other.comment))
+            return false;
+        if (id != other.id)
+            return false;
+        if (Double.doubleToLongBits(maneuverTime) != Double.doubleToLongBits(other.maneuverTime))
+            return false;
+        if (race2points != other.race2points)
+            return false;
+        if (racerCarClassCompetitionNumber == null) {
+            if (other.racerCarClassCompetitionNumber != null)
+                return false;
+        } else if (!racerCarClassCompetitionNumber.equals(other.racerCarClassCompetitionNumber))
+            return false;
+        return true;
+    }
 
     @Column(name = "absolute_points")
     private int absolutePoints;
@@ -32,6 +89,32 @@ public class CarClassCompetitionResult {
     //TODO: label
     @Column(name="maneuver_time")
     private double maneuverTime;
+    
+    @Column(name = "qualifying_racer_place")
+    private Integer qualifyingRacerPlace;
+    
+    @Column(name = "qualifying_racer_time")
+    private Integer  qualifyingRacerTime;
+    
+    public Integer getQualifyingRacerPlace() {
+        return qualifyingRacerPlace;
+    }
+
+    public void setQualifyingRacerPlace(Integer qualifyingRacerPlace) {
+        this.qualifyingRacerPlace = qualifyingRacerPlace;
+    }
+
+    public Integer getQualifyingRacerTime() {
+        return qualifyingRacerTime;
+    }
+
+    public void setQualifyingRacerTime(Integer qualifyingRacerTime) {
+        this.qualifyingRacerTime = qualifyingRacerTime;
+    }
+    
+    public String getQualifyingTimeString() {
+        return DateUtil.getTimeStringFromInt(this.qualifyingRacerTime);
+    }
 
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumber() {
         return racerCarClassCompetitionNumber;
@@ -98,7 +181,7 @@ public class CarClassCompetitionResult {
     @Override
     public String toString() {
         return "CarClassCompetitionResult [id=" + id + ",  absolutePoints=" + absolutePoints + ", absolutePlace="
-                + absolutePlace + "]";
+                + absolutePlace + ", qualifyingTime= "+getQualifyingTimeString()+", qualifyingPlace= "+qualifyingRacerPlace+"]";
     }
 
     public CarClassCompetitionResult() {

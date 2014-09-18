@@ -30,7 +30,7 @@ public class TeamController {
     private DocumentService documentService;
 
     // racer list == team list
-    @RequestMapping("/")
+    @RequestMapping("/") 
     public String root() {
         return "racer_list";
     }

@@ -28,26 +28,24 @@ $(document).ready( function () {
     });
 
     function getValidString(year, month, day) {
-        var result = year;
-        var time = '00:00:00.0'
+        var result;
+        if (Number(day) >= 1 && Number(day) <= 31) {
+            result = day;
+        } else {
+            return false;
+        }
         if (Number(month) >= 1 && Number(month) <= 12) {
-            result += '-' + month;
+            result += '.' + month;
         } else {
             return false;
         }
-        if (Number(day) >= 1 && Number(day) <= 12) {
-            result += '-' + day;
-        } else {
-            return false;
-        }
-        result += ' ' + time;
+        result += '.' + year;
         return result;
     }
 
     $('#submit').click(function() {
         var valid = true;
         var start;
-        var end;
         var tmp = getValidString($('#starty').val(), $('#startm').val(), $('#startd').val());
         if (tmp != false) {
             start = tmp;

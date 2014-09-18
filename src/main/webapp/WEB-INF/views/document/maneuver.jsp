@@ -187,7 +187,7 @@
                     <td align="center" class="stopLine maneuvers"><span id="stopLine${racer.getNumberInCompetition()}">0</span></td>
                     <td align="center" class="time"><span class="timetext" id="time${racer.getNumberInCompetition()}">0</span></td>
                     <td align="center" class="maneuvers"><span id="sum${racer.getNumberInCompetition()}">0</span></td>
-                    <td align="center" class="maneuvers tableB"><span id="tableB${racer.getNumberInCompetition()}"></span></td>
+                    <td align="center" class="maneuvers"><span class="tableB" id="tableB${racer.getNumberInCompetition()}"></span></td>
                     <td align="center" class="place"><span id="place${racer.getNumberInCompetition()}"></span></td>
                 </tr>
             </c:forEach> 
