@@ -247,7 +247,7 @@
 						<c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
 							<tr>
 								<td>${index.count }</td>
-								<td><input maneuverId="${maneuver.id)}" class="man"  type="text" style="width: 100px;"
+								<td><input maneuverId="${maneuver.id}" class="man"  type="text" style="width: 100px;"
 										   value="${maneuver.name}" required
 										   data-bv-notempty="true"
 										   data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
