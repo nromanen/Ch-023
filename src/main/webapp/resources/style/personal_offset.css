@@ -11,7 +11,7 @@
     }
     .hidden {
             display: none;
-            padding: 3px;
+            line-height: 2em;
        }
        .table thead tr th {
          padding-right: 20px;
