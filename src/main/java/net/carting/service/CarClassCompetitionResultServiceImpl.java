@@ -10,7 +10,6 @@ import net.carting.dao.CarClassCompetitionResultDAO;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
-import net.carting.domain.Qualifying;
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;

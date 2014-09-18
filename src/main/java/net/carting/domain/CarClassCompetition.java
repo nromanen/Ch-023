@@ -53,9 +53,6 @@ public class CarClassCompetition {
     private Set<Race> races;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
-    private Set<Qualifying> qualifyings;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "carClassCompetition", cascade = CascadeType.ALL)
     private Set<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = new HashSet<RacerCarClassCompetitionNumber>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -170,14 +167,6 @@ public class CarClassCompetition {
         this.races = races;
     }
 
-    public Set<Qualifying> getQualifyings() {
-        return qualifyings;
-    }
-
-    public void setQualifyings(Set<Qualifying> qualifyings) {
-        this.qualifyings = qualifyings;
-    }
-    
     public File getPersonalOffset() {
         return personalOffset;
     }

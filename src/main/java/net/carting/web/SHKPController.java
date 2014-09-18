@@ -12,13 +12,11 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.File;
-import net.carting.domain.Qualifying;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.service.CarClassCompetitionResultService;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.ManeuverService;
-import net.carting.service.QualifyingService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.util.PdfWriter;
 
@@ -58,9 +56,6 @@ public class SHKPController {
 
         @Autowired
         RacerCarClassCompetitionNumberService racerCarClassCompetitionNumberService;
-
-        @Autowired
-        QualifyingService qualifyingService;
 
         @Autowired
         ManeuverService maneuverService;

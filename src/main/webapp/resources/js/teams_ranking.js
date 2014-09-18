@@ -4,7 +4,10 @@ $(document).ready(function(){
         var table = $('#absRanking').html();
         table = '<style>' +
             'table {font-size: 14} ' +
-            'td {padding: 5px}' +
+            ' a{color: #000000; cursor: text; text-decoration: none}' +
+            'td,th {padding: 5px}' +
+            '.pos {width: 20px}' +
+            '.team_name {width: 500px}' +
             '.points {width: 60px}' +
             '.place {width: 60px}' +
             '</style>' +
@@ -29,5 +32,5 @@ $(document).ready(function(){
 		 updatePDF();
 	    });
 	 
-	 $('.table').tablesorter(); 
+	 $('.main_table').tablesorter(); 
 })

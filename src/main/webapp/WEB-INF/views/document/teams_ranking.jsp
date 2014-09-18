@@ -5,6 +5,8 @@
 <script type='text/javascript' src='<c:url value="/resources/js/teams_ranking.js" />'></script>
 <script type='text/javascript' src="<c:url value="/resources/js//lib/jquery.tablesorter.min.js" />"></script>
 
+<label class="text-info" style="font-size: 20px; width: 100%; text-align: center; margin-bottom: 20px;">${competition.name}</label>
+<label class="text-info" style="font-size: 20px; width: 100%; text-align: center; margin-bottom: 20px;"><spring:message code="label.teams_ranking_protocol" /></label>
 <c:if test="${authority=='ROLE_ADMIN'}">
     <span align="right"><a class="btn btn-success btn-sm" id="pdf" ><spring:message code="label.document_download_pdf" /></a></span>
 </c:if>
@@ -31,37 +33,34 @@
         font-family: 'Arial', Arial, monospace;
     }
 </style>
-    <table width="100%" align="center">
-            <tr>
-                <td align='center'>
-                   <span style="font-weight:bold;font-size:18pt"><spring:message code="label.ministry_of_education" /></span><p>
-                   <span style="font-weight:bold;font-size:18pt"><spring:message code="label.state_center" /></span><p>
-                   <span style="font-weight:bold;font-size:18pt;"><c:out value="${competition.name}"/></span>
-                </td>
+   <table class="table table-hover table-bordered main_table" id="racers_table" border="1" style="text-align: center;">
+                    <thead class="well" style="font-weight: 100;">
+            <tr style="display: none;">
+                <th align='center' colspan="8">
+                   <span style="font-weight:bold;font-size:16pt"><spring:message code="label.ministry_of_education" /></span>
+                   </th>
             </tr>
-    </table>
-    <table width="100%">
-            <tr>
-                <td align='left'><span><c:out value="${competition.place}"/></span></td>
-                <td align='right'><span><c:out value="${competitionDate}"/></span></td>
+            <tr style="display: none;">
+             <th align='center' colspan="8">
+                   <span style="font-weight:bold;font-size:16pt"><spring:message code="label.state_center" /></span>
+                </th>
+                </tr>
+            <tr style="display: none;">
+                <th align='left' colspan="2"><span><c:out value="${competition.place}"/></span></td>
+                <th align='right' colspan="6"><span><c:out value="${competitionDate}"/></span></td>
             </tr>
-    </table>
-    <table width="100%" align="center">
-        <thead>
-        <tr>
-            <td align='center'>
-                <span style="font-weight:bold;font-size:18pt"><spring:message code="label.maneuver_protocol" /></span><p>
-            </td>
+        <tr style="display: none;">
+            <th align='center' colspan="8">
+                <span style="font-weight:bold;font-size:18pt"><spring:message code="label.teams_ranking_protocol" /></span><p>
+            </th>
         </tr>
-        </thead>
-    </table>
-<table width="100%" align="center" >
-	<c:if test="${!empty teamList}">
-		<tr align="center">
-			<td align="center">
-				<table class="table table-hover table-bordered" id="racers_table" border="1" 
-					style="text-align: center;">
-					<thead class="well">
+        <tr style="display: none;" >
+            <th colspan = "8">
+                <span style="font-weight:bold;font-size:18pt;"><c:out value="${competition.name}"/></span>
+            </th>
+        </tr>
+            
+	   <c:if test="${!empty teamList}">
 						<tr>
 							<th  class="column-sm" style="text-align: center;" rowspan="2">№</th>
 							<th style="text-align: center;" rowspan="2"><spring:message code="label.team_name"/></th>
@@ -77,12 +76,12 @@
 							<th style="text-align: center;"><spring:message code="label.points"/></th>
 							<th style="text-align: center;"><spring:message code="label.competition.place_in_race"/></th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+					   <tbody>
 						<c:forEach items="${resultList}" var="absTeamRes" varStatus="index">
 							<tr>
 								<td class="pos">${index.count}</td>
-								<td style="text-align: left; padding-left: 20px;">
+								<td class="team_name" style="text-align: left; padding-left: 20px;">
 									<a href="<c:url value="/team/${absTeamRes.teamId}" />">
 										<c:forEach items="${teamList}" var="team">
 											<c:if test="${team.id==absTeamRes.teamId}">
@@ -123,22 +122,24 @@
 								</td>
 							</tr>
 						</c:forEach>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<td>
+					
+		<tr style="display: none;">
+			<td colspan="2">
 				<label class="text-info"><spring:message code="label.competition.secretary_name" />:&nbsp;</label>
-				${competition.secretaryName}
+			</td>
+			<td colspan="6">
+			     ${competition.secretaryName}
 			</td>
 		</tr>
-		<tr>
-			<td>
+		<tr style="display: none;">
+			<td colspan="2">
 				<label class="text-info"><spring:message code="label.competition.director_name" />:&nbsp;</label>
+			</td>
+            <td colspan="6">
 				${competition.directorName}
 			</td>
 		</tr>
+		</tbody>
 	</c:if>
 </table>
 </div>
