@@ -82,21 +82,21 @@ $(document).ready(function(){
 	<table class="table table-hover table-bordered" style="text-align: center;" border="1">
 		<thead class="well" style="font-weight: 100;">
 		    <tr class="hidden">
-		        <th colspan="16"><spring:message code="label.header_1" /></th>
+		        <th colspan="17"><spring:message code="label.header_1" /></th>
 		    </tr>
 		    <tr class="hidden">
-                <th colspan="16"><spring:message code="label.header_2" /></th>
+                <th colspan="17"><spring:message code="label.header_2" /></th>
             </tr>
             <tr class="hidden">
-                <th colspan="16">${carClassCompetition.competition.name }</th>
+                <th colspan="17">${carClassCompetition.competition.name }</th>
             </tr>
             <tr>
                 <th colspan="2">${carClassCompetition.competition.place } </th>
-                <th colspan="7" ><spring:message code="label.car_class" />: ${carClassCompetition.carClass.name }</th>
+                <th colspan="8" ><spring:message code="label.car_class" />: ${carClassCompetition.carClass.name }</th>
                 <th colspan="7"><fmt:formatDate value="${carClassCompetition.competition.dateStart }" pattern="yyyy-MM-dd" /> - <fmt:formatDate value="${carClassCompetition.competition.dateEnd }" pattern="yyyy-MM-dd" /></th>
             </tr>
             <tr class="hidden">
-                <td colspan="16">
+                <td colspan="17">
                     <spring:message code="label.competition.lap_count" />: ${carClassCompetition.circleCount};  
                     <spring:message code="label.competition.percentage_offset" />: ${carClassCompetition.percentageOffset};
                     <spring:message code="label.count_of_racers" /> ${fn:length(carClassCompetition.racerCarClassCompetitionNumbers) }.  
@@ -118,6 +118,7 @@ $(document).ready(function(){
 				<th rowspan="2" class="column-md"><spring:message code="label.points_by_table_b" /></th>
 				<th rowspan="2" class="column-md"><spring:message code="label.maneuvering" /></th>
 				<th rowspan="2" class="column-md"><spring:message code="label.points_sum" /></th>
+				<th rowspan="2"><spring:message code="label.competition.place_in_race" /></th>
 				
 			</tr>
 			<tr>
@@ -173,7 +174,8 @@ $(document).ready(function(){
 							<td>${absoluteResult.absolutePlace}</td>
 							<td>${absoluteResult.absolutePointsByTableB}</td>
 							<td>${absoluteResult.maneuverTime}</td>
-							<td>${absoluteResult.maneuverTime + absoluteResult.absolutePointsByTableB}</td>
+							<td>${absoluteResult.absoluteSumm}</td>
+							<td>${absoluteResult.finalPlace}</td>
 							<c:set var="existAbsolute" value="true" />
 						</c:if>
 						</c:forEach>

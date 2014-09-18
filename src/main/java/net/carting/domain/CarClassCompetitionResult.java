@@ -19,8 +19,14 @@ public class CarClassCompetitionResult {
     @Column(name = "absolute_place")
     private int absolutePlace;
     
-    @Column(name = "absolute_points_by_tableB")
+    @Transient
     private int absolutePointsByTableB;
+    
+    @Transient
+    private double absoluteSumm;
+    
+    @Transient
+    private int finalPlace;
 
     @Column(name = "race2_points")
     private int race2points;
@@ -73,6 +79,22 @@ public class CarClassCompetitionResult {
 	public void setAbsolutePointsByTableB(int absolutePointsByTableB) {
         this.absolutePointsByTableB = absolutePointsByTableB;
 
+	}
+
+	public double getAbsoluteSumm() {
+		return absoluteSumm;
+	}
+
+	public void setAbsoluteSumm(double absoluteSumm) {
+		this.absoluteSumm = absoluteSumm;
+	}
+
+	public int getFinalPlace() {
+		return finalPlace;
+	}
+
+	public void setFinalPlace(int finalPlace) {
+		this.finalPlace = finalPlace;
 	}
 
 	public int getAbsolutePlace() {
