@@ -168,7 +168,7 @@
 		 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
 		 <spring:message code="dataerror.carclass_delete" />
 	</div>
-	<br>
+	<br> 
 	<table width="100%">
 		<th>
 			<div align="left">
@@ -247,7 +247,7 @@
 						<c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
 							<tr>
 								<td>${index.count }</td>
-								<td><input maneuverId="${maneuver.id)}" class="man"  type="text" style="width: 100px;"
+								<td><input maneuverId="${maneuver.id}" class="man"  type="text" style="width: 100px;"
 										   value="${maneuver.name}" required
 										   data-bv-notempty="true"
 										   data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
