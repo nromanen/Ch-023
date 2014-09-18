@@ -25,10 +25,6 @@ $(document).ready(function(){
         });
     }
 
-    $("#pdf").click(function() {
-    	updatePDF();
-    });
-
     $("#save").click(function() {
         clearTable();
         var arr = [];
@@ -53,7 +49,6 @@ $(document).ready(function(){
                 valid = false;
             }
         }
-
         if (valid == true) {
             $('#correctPositions').css("display", "inline-block").hide().fadeIn();
             $('#correctPositions').delay(2000).fadeOut('slow');

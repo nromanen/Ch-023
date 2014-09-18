@@ -40,7 +40,7 @@ public class ManeuverServiceTest {
         List<Maneuver> maneuverList = new ArrayList<>();
         maneuverList.add(new Maneuver());
         maneuverList.add(new Maneuver());
-        when(maneuverDAO.getAllManeuvers()).thenReturn(maneuverList);
+        when(maneuverService.getAllManeuvers()).thenReturn(maneuverList);
         assertEquals("Expected 2 maneuvers", 2, maneuverService.getAllManeuvers().size());
         verify(maneuverDAO, times(1)).getAllManeuvers();
         verifyNoMoreInteractions(maneuverDAO);
@@ -54,8 +54,8 @@ public class ManeuverServiceTest {
         m2.setName("Test");
         when(maneuverDAO.getManeuverById(0)).thenReturn(m1);
         when(maneuverDAO.getManeuverById(4)).thenReturn(m2);
-        assertFalse(maneuverDAO.getManeuverById(0).equals(new Maneuver()));
-        assertTrue(maneuverDAO.getManeuverById(4).equals(m2));
+        assertFalse(maneuverService.getManeuverById(0).equals(new Maneuver()));
+        assertTrue(maneuverService.getManeuverById(4).equals(m2));
         verify(maneuverDAO, times(1)).getManeuverById(4);
         //verifyNoMoreInteractions(maneuverDAO);
     }
@@ -65,7 +65,7 @@ public class ManeuverServiceTest {
         Maneuver m2 = new Maneuver();
         m2.setId(4);
         m2.setName("Test");
-        maneuverDAO.deleteManeuver(4);
+        maneuverService.deleteManeuver(4);
         verify(maneuverDAO, times(1)).deleteManeuver(4);
         verifyNoMoreInteractions(maneuverDAO);
     }
@@ -75,7 +75,7 @@ public class ManeuverServiceTest {
         Maneuver maneuver = new Maneuver();
         maneuver.setId(4);
         maneuver.setName("Test");
-        maneuverDAO.deleteManeuver(maneuver);
+        maneuverService.deleteManeuver(maneuver);
         verify(maneuverDAO, times(1)).deleteManeuver(maneuver);
         verifyNoMoreInteractions(maneuverDAO);
     }
@@ -85,9 +85,9 @@ public class ManeuverServiceTest {
         Maneuver maneuver = new Maneuver();
         maneuver.setId(4);
         maneuver.setName("Test");
-        maneuverDAO.addManeuver(maneuver);
+        maneuverService.addManeuver(maneuver);
         when(maneuverDAO.getManeuverById(4)).thenReturn(maneuver);
-        assertEquals(maneuverDAO.getManeuverById(4), maneuver);
+        assertEquals(maneuverService.getManeuverById(4), maneuver);
     }
 
     @Test
@@ -98,9 +98,8 @@ public class ManeuverServiceTest {
         maneuver.setId(4);
         maneuver.setName(oldName);
         when(maneuverDAO.getManeuverById(4)).thenReturn(maneuver);
-        assertEquals(maneuverDAO.getManeuverById(4).getName(), oldName);
+        assertEquals(maneuverService.getManeuverById(4).getName(), oldName);
         maneuver.setName(newName);
-        assertEquals(maneuverDAO.getManeuverById(4).getName(), newName);
-        verifyNoMoreInteractions(maneuverDAO.getManeuverById(4));
+        assertEquals(maneuverService.getManeuverById(4).getName(), newName);
     }
 }

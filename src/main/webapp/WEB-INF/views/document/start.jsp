@@ -71,8 +71,6 @@
 							<a class="btn btn-sml btn-primary" id="save">
 								<spring:message code="label.accept_changes" /></a>
 						</c:if>
-						<a class="btn btn-sml btn-success" id="pdf" <c:if test="${!isSetQualifying }">disabled</c:if>>
-						<spring:message code="label.document_download_pdf" /></a>
 						<c:if test="${oldDoc > 0}">
 							<a id="prevVersion" class="btn btn-sml btn-warning"
 								href="../../../document/showFile/${oldDoc}" target="_blank"><spring:message
