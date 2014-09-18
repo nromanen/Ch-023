@@ -247,14 +247,14 @@
 						<c:forEach items="${maneuvers}" var="maneuver" varStatus="index">
 							<tr>
 								<td>${index.count }</td>
-								<td><input maneuverId="${maneuver.getId()}" class="man"  type="text" style="width: 100px;"
-										   value="${maneuver.getName()}" required
+								<td><input maneuverId="${maneuver.id)}" class="man"  type="text" style="width: 100px;"
+										   value="${maneuver.name}" required
 										   data-bv-notempty="true"
 										   data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
 										/>
 								</td>
 								<td>
-									<button maneuver="${maneuver.getId()}" class="btn btn-default btn-sm glyphicon glyphicon-remove delete_maneuver" style="color: red; cursor: pointer; float: right;" title="<spring:message code="label.delete" />"/>
+									<button maneuver="${maneuver.id}" class="btn btn-default btn-sm glyphicon glyphicon-remove delete_maneuver" style="color: red; cursor: pointer; float: right;" title="<spring:message code="label.delete" />"/>
 								</td>
 							</tr>
 						</c:forEach>
