@@ -4,6 +4,7 @@ $(document).ready(function(){
         var table = $('#absRanking').html();
         table = '<style>' +
             'table {font-size: 14} ' +
+            'td {padding: 5px}' +
             '.points {width: 60px}' +
             '.place {width: 60px}' +
             '</style>' +

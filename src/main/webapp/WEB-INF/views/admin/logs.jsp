@@ -54,19 +54,17 @@
 <%--<table id="logsTable" style="width:100%" class="display table table-hover table-bordered" border='1' cellspacing='0' cellpadding='2'>--%>
 	<thead class="well" style="font-weight: 100;">
 		<tr>
+			<th width="50%">Date</th>
 			<th>Logger</th>
-			<th>Level</th>
-			<th>Message</th>
-			<th>Date</th>
+			<th width="50%">Message</th>
 		</tr>
 	</thead>
 	<tbody>
 		<c:forEach items="${logs}" var="log">
 			<tr>
-				<td><c:out value="${log.level}"/></td>
+				<td><c:out value="${log.getStringDate()}"/></td>
 				<td><c:out value="${log.logger}"/></td>
 				<td><c:out value="${log.message}"/></td>
-				<td><c:out value="${log.date}"/></td>
 			</tr>
 		</c:forEach>
 	</tbody>

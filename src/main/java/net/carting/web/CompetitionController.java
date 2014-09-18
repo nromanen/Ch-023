@@ -100,7 +100,6 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView competitionPage(Model model, @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
-        competition.getAbsoluteResultsStatement().getId();
         Date checkdate = competition.getDateStart();
         List<Racer> racersBirthday = racerService.getBirthdayRacers(checkdate);
         model.addAttribute("competition", competition);

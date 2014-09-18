@@ -201,7 +201,7 @@ public class SHKPController {
             model.addAttribute("raceId", id);
             model.addAttribute("tableRows", TABLE_ROWS);
 
-            model.addAttribute("startedNumber", carClassCompetitionResultList.size());
+            model.addAttribute("startedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("competitionName", competition.getName());
             model.addAttribute("competitionLoc", competition.getPlace());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -209,7 +209,7 @@ public class SHKPController {
 
             model.addAttribute("competitionDate", dateFormat.format(competition.getDateStart()) + " - " + dateFormat.format(competition.getDateEnd()));
 
-            model.addAttribute("allowedNumber", carClassCompetitionResultList.size());
+            model.addAttribute("allowedNumber", racerCarClassCompetitionNumberList.size());
             model.addAttribute("secretaryName", competition.getSecretaryName());
             Date time;
             Date date;

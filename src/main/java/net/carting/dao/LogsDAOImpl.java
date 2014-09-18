@@ -25,14 +25,14 @@ public class LogsDAOImpl implements LogsDAO {
     }
 
     @Override
-    public List getLogsByDate(Timestamp date) {
+    public List getLogsByDate(Date date) {
         Query query = entityManager.createQuery("FROM Logs l WHERE l.date = :date");
         query.setParameter("date", date);
         return query.getResultList();
     }
 
     @Override
-    public List getLogsByPeriod(Timestamp start, Timestamp end) {
+    public List getLogsByPeriod(Date start, Date end) {
         Query query = entityManager.createQuery("FROM Logs l WHERE l.date  >= :startDate AND l.date <= :endDate");
         query.setParameter("startDate", start);
         query.setParameter("endDate", end);

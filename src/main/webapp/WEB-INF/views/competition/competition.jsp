@@ -136,10 +136,13 @@
 			<spring:message code="label.personal_offset" />
 		</a>
 	</c:if>
+	<c:if test="${!empty carClassCompetitionList}">
 		<a href="<c:url value="/competition/${competition.id}/teamsRanking" />" class="btn btn-primary">
 			<spring:message code="ranking.teams_ranking" />
 		</a>
+		</c:if>
 		</div>
+		<br/>
 	<input type="hidden" id="getRacersCountUrl" value="<c:url value="/carclass/getRacersCountById" />">
 	<c:if test="${!empty carClassCompetitionList}">
 	

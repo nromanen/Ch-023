@@ -21,6 +21,11 @@ public class Maneuver {
     public Maneuver() {
     }
 
+    public Maneuver(int id, String name) {
+        setId(id);
+        setName(name);
+    }
+
     public Integer getId() {
         return id;
     }
