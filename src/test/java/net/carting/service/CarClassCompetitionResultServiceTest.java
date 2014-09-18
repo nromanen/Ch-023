@@ -198,8 +198,20 @@ public class CarClassCompetitionResultServiceTest {
         carClassCompetitionResultServiceImpl.setAbsoluteResults(carClassCompetition, race);
         verify(raceResultService, times(1)).getRaceResultsByRace(race);
         verifyNoMoreInteractions(raceResultService);
-        
-        
+    }
+
+    @Test
+    public void testSetQualifyingTime() {
+        RacerCarClassCompetitionNumber racerCarClassCompetitionNumber = new RacerCarClassCompetitionNumber();
+        racerCarClassCompetitionNumber.setNumberInCompetition(12);
+        CarClassCompetitionResult cccRes = new CarClassCompetitionResult();
+        cccRes.setAbsolutePlace(1);
+        cccRes.setAbsolutePoints(10);
+        cccRes.setId(carClassCompetitionResultServiceImpl.getAllCarClassCompetitionResults().get(0).getId());
+        cccRes.setRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
+        carClassCompetitionResultServiceImpl.setQualifyingTime(cccRes,1000);
+        verify(carClassCompetitionResultServiceImpl, times(1)).getCarClassCompetitionResultById(15);
+        verifyNoMoreInteractions(carClassCompetitionResultServiceImpl);
     }
 
 }
