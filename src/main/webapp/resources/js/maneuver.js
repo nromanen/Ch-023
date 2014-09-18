@@ -21,8 +21,8 @@ $(document).ready(function(){
     function updatePDF() {
         var idArray = [];
         var timeArray = [];
-        $(".timetext").each(function () {
-            var id = Number($(this).attr('id').replace('time', ''));
+        $(".tableB").each(function () {
+            var id = Number($(this).attr('id').replace('tableB', ''));
             var time = Number($(this).text());
             idArray.push(id);
             timeArray.push(time);

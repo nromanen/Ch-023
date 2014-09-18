@@ -1,11 +1,7 @@
 package net.carting.service;
 
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.itextpdf.text.log.SysoCounter;
 
 @Service
 public class QualifyingServiceImpl implements QualifyingService {
@@ -113,7 +108,6 @@ public class QualifyingServiceImpl implements QualifyingService {
 	int timeInt = 0;
 	if (!timeString
 		.matches("((\\d?\\d:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
-	    System.out.println(false);
 	    return false;
 	}
 	try {
@@ -124,7 +118,6 @@ public class QualifyingServiceImpl implements QualifyingService {
 	    LOG.error("Errors in setQualifyingTimeFromString method.", e);
 	    return false;
 	}
-	System.out.println(q.getRacerTime() + " = " + timeString);
 	return true;
     }
 
@@ -135,9 +128,9 @@ public class QualifyingServiceImpl implements QualifyingService {
 	while (!qList.isEmpty()) {
 	    Qualifying q = qList.get(0);
 	    for (int j = 1; j < qList.size(); j++) {
-		if (q.getRacerTime() < qList.get(j).getRacerTime()) {
-		    q = qList.get(j);
-		}
+    		if (q.getRacerTime() < qList.get(j).getRacerTime()) {
+    		    q = qList.get(j);
+    		}
 	    }
 	    q.setRacerPlace(qList.size());
 	    updateQualifying(q);
@@ -155,12 +148,10 @@ public class QualifyingServiceImpl implements QualifyingService {
 	List<Integer> qNums = new ArrayList<Integer>();
 	for (int i = 0; i < ques.size() - 1; i++) {
 		for (int j = i + 1; j < ques.size(); j++) {
-		    System.out.println(ques.get(i).getRacerTime() + " = " + ques.get(j).getRacerTime());
 		    if (ques.get(i).getRacerTime().equals(ques.get(j)
 			    .getRacerTime())) {
 		        if (!qNums.contains(ques.get(i).getRacerNumber())) {
         			qNums.add(ques.get(i).getRacerNumber());
-        			System.out.print(ques.get(i).getRacerTime() + " added ");
 		        }
 		        if (!qNums.contains(ques.get(j).getRacerNumber())) {
                     qNums.add(ques.get(j).getRacerNumber());
@@ -169,7 +160,6 @@ public class QualifyingServiceImpl implements QualifyingService {
 		    }
 	    }
 	}
-	System.out.println(qNums);
 	return qNums;
     }
 }

@@ -103,11 +103,10 @@ public class CarClassCompetitionController {
             model.addAttribute("chessRollsList", raceService.getChessRollsByCarClassCompetition(carClassCompetition));
             model.addAttribute("raceListSize", raceService.getRacesByCarClassCompetition(carClassCompetition).size());
             //TODO: label
-            model.addAttribute("absoluteResultsList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
             model.addAttribute("maxRaces", MAX_RACES);
-            model.addAttribute("qualifyingList", qualifyingService.
-                    getQualifyingsByCarClassCompetition(carClassCompetition));
-            model.addAttribute("racersNumsWithSameTimeList", qualifyingService.getRacersNumbersWithSameQTime(carClassCompetition));
+            model.addAttribute("cccResList", carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByQualifyingTimes(carClassCompetition));
+            model.addAttribute("isSetQualifying",carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
+            model.addAttribute("racersNumsWithSameTimeList", carClassCompetitionResultService.getRacersNumbersWithSameQualifyingTime(carClassCompetition));
             model.addAttribute("membersCount", racerCarClassCompetitionNumberService.
                     getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
             
@@ -255,8 +254,8 @@ public class CarClassCompetitionController {
         
         LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        if (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()>1) {
-            System.out.println("There is enough races for this carclass.");
+        if (!raceService.getRaceResultsByCarClassCompetition(carClassCompetition).isEmpty()
+                &&raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()>1) {
             return "redirect:/carclass/" + id;
         }
         race.setCarClassCompetition(carClassCompetition);
@@ -294,18 +293,15 @@ public class CarClassCompetitionController {
     @RequestMapping(value = "/{id}/editQualifying")
     public String editQualifyings(@PathVariable("id") int id, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        try{
-            List<Qualifying> ques = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
-            if ((ques == null)||(ques.isEmpty()))
+        if (carClassCompetitionResultService.getQualifyingTimesByCarClassCompetition(carClassCompetition) == null) {
             return "redirect:/carclass/" + id;
-        } catch(Exception e) {
-            LOG.error("Errors in editQualifyings", e);
         }
          map.put("membersCount", racerCarClassCompetitionNumberService.
                 getRacerCarClassCompetitionNumbersCountByCarClassCompetitionId(id));
-         map.put("qualifyingList", qualifyingService.
-                getQualifyingsByCarClassCompetition(carClassCompetition));
+         map.put("cccResList", carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+         map.put("isSetQualifying", carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
          map.put("validNumbers", raceService.getNumbersArrayByCarClassCompetitionId(id));
+         map.put("racersNumsWithSameTimeList", carClassCompetitionResultService.getRacersNumbersWithSameQualifyingTime(carClassCompetition));
         return "competition_carclass_qualifying_add_edit";
     }
 
@@ -313,32 +309,36 @@ public class CarClassCompetitionController {
     public String addQualifyings(@PathVariable("id") int id,
             @RequestParam("timeResult") String times, Map<String,Object>map) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
-        List<Qualifying> qList = qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition);
+        List<CarClassCompetitionResult>cccResList = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
         int count = racers.size();
 
         String[] timesArray= times.trim().split(",");
         if (timesArray.length!=count) {
-             return "redirect:/carclass/"+id+"/editQualifying";
+             return "redirect:/carclass/"+id;
         }
-        if ((qualifyingService.getQualifyingsByCarClassCompetition(carClassCompetition)==null)&&
-                (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
-            for (int i=0;i<count;i++) {
-                Qualifying q = new Qualifying();
-                q.setCarClassCompetition(carClassCompetition);
-                q.setRacerNumber(racers.get(i));
-                qualifyingService.setQualifyingTimeFromString(q, timesArray[i]);
-            }
-            qualifyingService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
-        } else if ((qList.size()==count)&&
-                (raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0)) {
-            for (int i=0;i<count;i++) {
-                Qualifying q = qList.get(i);
-                if (qualifyingService.setQualifyingTimeFromString(q, timesArray[i])) {
-                    qualifyingService.updateQualifying(q);
+        List<RacerCarClassCompetitionNumber>rcccnList = racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition.getId());
+        if(raceService.getRaceResultsByCarClassCompetition(carClassCompetition).size()==0) {
+            if (carClassCompetitionResultService.getQualifyingTimesByCarClassCompetition(carClassCompetition)==null) {
+                for (int i=0;i<count;i++) {
+                    CarClassCompetitionResult cccr = new CarClassCompetitionResult();
+                    for(RacerCarClassCompetitionNumber rcccn:rcccnList) {
+                        if (rcccn.getNumberInCompetition()==racers.get(i)) {
+                            cccr.setRacerCarClassCompetitionNumber(rcccn);
+                        }
+                    }
+                    carClassCompetitionResultService.setQualifyingTimeFromString(cccr, timesArray[i]);
                 }
+                carClassCompetitionResultService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
+            } else if (carClassCompetitionResultService.getQualifyingTimesByCarClassCompetition(carClassCompetition).size()==count) {
+                for (int i=0;i<count;i++) {
+                    CarClassCompetitionResult cccr2 = cccResList.get(i);
+                    if (carClassCompetitionResultService.setQualifyingTimeFromString(cccr2, timesArray[i])) {
+                        carClassCompetitionResultService.updateCarClassCompetitionResult(cccr2);
+                    }
+                }
+                carClassCompetitionResultService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
             }
-            qualifyingService.setQualifyingPlacesInCarClassCompetition(carClassCompetition);
         }
         return "redirect:/carclass/" + id;
     }

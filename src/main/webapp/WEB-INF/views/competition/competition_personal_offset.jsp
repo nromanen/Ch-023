@@ -58,7 +58,7 @@
 				<th rowspan="2"><spring:message code="label.command_city" /></th>
 				<th rowspan="2" class="column-wide"><spring:message code="sportcategory.sport_category" /></th>
 				<th rowspan="2"><spring:message code="label.start_number" /></th>
-				<c:if test="${!empty carClassCompetition.qualifyings}">
+				<c:if test="${isSetQualifyingList[loop.index]}">
 				<th colspan="2"><spring:message code="label.control_race" /></th>
 				</c:if>
 				<th colspan="3" class="column-wide"><spring:message code="label.first_final_race" /></th>
@@ -67,7 +67,7 @@
 				<th rowspan="2"><spring:message code="label.competition.place_in_race" /></th>
 			</tr>
 			<tr>
-				<c:if test="${!empty carClassCompetition.qualifyings}">
+				<c:if test="${isSetQualifyingList[loop.index]}">
 				<th ><spring:message code="label.time" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
 				</c:if>
@@ -87,14 +87,16 @@
 					<td class="column-wide">${racerCarClassCompetitionNumber.racer.team.name }</td>
 					<custom:sportCategory value='${racerCarClassCompetitionNumber.racer.sportsCategory}' />
 					<td>${racerCarClassCompetitionNumber.numberInCompetition }</td>
-								<c:if test="${!empty carClassCompetition.qualifyings}">
-									<c:forEach items="${carClassCompetition.qualifyings}" var="qualifying">
-										<c:if test="${qualifying.racerNumber==racerCarClassCompetitionNumber.numberInCompetition }">
-											<td>${qualifying.getTimeString()}</td>
-											<td>${qualifying.racerPlace}</td>
-										</c:if>
-									</c:forEach>
-								</c:if>
+						<c:if test="${isSetQualifyingList[loop.index]}">
+							<c:forEach items="${absoluteResultsList }" var="absoluteResults" >
+								<c:forEach items="${absoluteResults }" var="absoluteResult" >
+									<c:if test="${(racerCarClassCompetitionNumber.racer.id == absoluteResult.racerCarClassCompetitionNumber.racer.id) && (carClassCompetition == absoluteResult.racerCarClassCompetitionNumber.carClassCompetition) }">
+										<td>${absoluteResult.qualifyingRacerPlace}</td>
+										<td>${absoluteResult.getQualifyingTimeString()}</td>
+									</c:if>
+								</c:forEach>
+							</c:forEach>
+						</c:if>
 					<c:set var="countOfResults"	 value="2" />
 					<c:forEach items="${raceResultsLists}" var="raceResultsList">
 						<c:forEach items="${raceResultsList}" var="raceResults">

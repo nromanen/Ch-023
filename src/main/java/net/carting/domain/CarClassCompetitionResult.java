@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import net.carting.util.DateUtil;
+
 
 @Entity
 @Table(name = "car_class_competition_results")
@@ -87,6 +89,32 @@ public class CarClassCompetitionResult {
     //TODO: label
     @Column(name="maneuver_time")
     private double maneuverTime;
+    
+    @Column(name = "qualifying_racer_place")
+    private Integer qualifyingRacerPlace;
+    
+    @Column(name = "qualifying_racer_time")
+    private Integer  qualifyingRacerTime;
+    
+    public Integer getQualifyingRacerPlace() {
+        return qualifyingRacerPlace;
+    }
+
+    public void setQualifyingRacerPlace(Integer qualifyingRacerPlace) {
+        this.qualifyingRacerPlace = qualifyingRacerPlace;
+    }
+
+    public Integer getQualifyingRacerTime() {
+        return qualifyingRacerTime;
+    }
+
+    public void setQualifyingRacerTime(Integer qualifyingRacerTime) {
+        this.qualifyingRacerTime = qualifyingRacerTime;
+    }
+    
+    public String getQualifyingTimeString() {
+        return DateUtil.getTimeStringFromInt(this.qualifyingRacerTime);
+    }
 
     public RacerCarClassCompetitionNumber getRacerCarClassCompetitionNumber() {
         return racerCarClassCompetitionNumber;
@@ -153,7 +181,7 @@ public class CarClassCompetitionResult {
     @Override
     public String toString() {
         return "CarClassCompetitionResult [id=" + id + ",  absolutePoints=" + absolutePoints + ", absolutePlace="
-                + absolutePlace + "]";
+                + absolutePlace + ", qualifyingTime= "+getQualifyingTimeString()+", qualifyingPlace= "+qualifyingRacerPlace+"]";
     }
 
     public CarClassCompetitionResult() {
