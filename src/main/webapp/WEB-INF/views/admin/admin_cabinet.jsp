@@ -13,7 +13,7 @@
 
 <div style="border: 1px solid #e3e3e3; padding: 0px 30px 20px 40px;">
 		
-	<!-- <table width=100%>
+	<table width=100%>
 		<tr>
 			<td style="width: 80%;">
 				<h2 class="user-info-name">
@@ -168,7 +168,7 @@
 		 style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-top: 10px;">
 		 <spring:message code="dataerror.carclass_delete" />
 	</div>
-	<br> -->
+	<br> 
 	<table width="100%">
 		<th>
 			<div align="left">
