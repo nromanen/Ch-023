@@ -65,7 +65,7 @@ public class TeamDAOImpl implements TeamDAO {
     public boolean isSetTeam(String teamName) {
         String hql = "FROM Team WHERE name = :name";
         Query query = entityManager.createQuery(hql).setParameter("name", teamName);
-        Team result = null;
+        Team result;
         try {
             result = (Team) query.getSingleResult();
             LOG.debug("Team {} {} exist", teamName, (result != null ? "" : "does not"));

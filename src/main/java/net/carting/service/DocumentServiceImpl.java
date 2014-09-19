@@ -1,6 +1,5 @@
 package net.carting.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +8,7 @@ import javax.servlet.ServletContext;
 
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
-import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
-import net.carting.util.PdfWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.itextpdf.text.DocumentException;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -85,7 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
-                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException {
+                                           String startDate, String finishDate, MultipartFile[] files) {
         LOG.debug("Start addDocumentAndUpdateRacers method");
 
         try {

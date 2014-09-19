@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

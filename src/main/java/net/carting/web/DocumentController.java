@@ -181,8 +181,8 @@ public class DocumentController {
                   * 'Document'
                   */
                 try {
-                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
-                } catch (IOException e) {
+                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files);
+                } catch (Exception e) {
                     map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
                     LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
                             leader.getFirstName(), leader.getLastName());

@@ -22,7 +22,7 @@ public class CompetitionScheduler {
     private static final Logger LOG = LoggerFactory.getLogger(CompetitionScheduler.class);
 
     @Autowired
-    CompetitionService competitionService;
+    private CompetitionService competitionService;
 
     private static boolean compareDate(Date first, Date second) {
         return first.compareTo(second) > 0;
@@ -37,7 +37,7 @@ public class CompetitionScheduler {
             Date competitionEndDate = c.getDateEnd();
             if (compareDate(today, competitionEndDate)) {
                 if (c.isEnabled()) {
-                    LOG.info("Disabling competition: " + c.getName() + " ( id = " + c.getId() + " )");
+                    LOG.info("Disabling competition: {} ( id = {} )", c.getName(), c.getId());
                     competitionService.setEnabled(c.getId(), false);
                 }
             }

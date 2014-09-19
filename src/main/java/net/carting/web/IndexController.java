@@ -19,17 +19,17 @@ public class IndexController {
     private AdminSettingsService adminSettingsService;
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index(Map<String, Object> map) {
+    public String index() {
         return "index";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String root(Map<String, Object> map) {
+    public String root() {
         return "redirect:/index";
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public String deniedOfAccess(Map<String, Object> map) {
+    public String deniedOfAccess() {
         return "error_403";
     }
 

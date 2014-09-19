@@ -1,6 +1,5 @@
 package net.carting.dao;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.carting.domain.AbsoluteTeamResults;
-import net.carting.domain.AbsoluteTeamResults.PointPlaces;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
@@ -152,7 +150,7 @@ public class CompetitionController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView addCompetitionPage(Model model) {
+    public ModelAndView addCompetitionPage() {
         return new ModelAndView("competition_add_edit");
     }
 
@@ -317,13 +315,12 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
     public @ResponseBody String unregisterRacerFromCompetitionAction(
             @RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
-                competitonId, racerId);
+                id, racerId);
         LOG.trace(
                 "Admin has unregistered racer(id = {}) from competition (id = {})",
-                racerId, competitonId);
+                racerId, id);
         return "success";
     }
 
@@ -390,9 +387,8 @@ public class CompetitionController {
             @RequestBody Map<String, Object> formMap) {
         racerCarClassCompetitionNumberService
                 .registrationTeamRacersOnCompetition(formMap);
-        int competitionId = Integer.parseInt(formMap.get("competitionId")
+        return Integer.parseInt(formMap.get("competitionId")
                 .toString());
-        return competitionId;
     }
 
     @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })

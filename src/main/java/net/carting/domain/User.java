@@ -139,7 +139,7 @@ public class User implements Serializable, UserDetails {
         for (String role : authorities) {
             listOfAuthorities.add(new SimpleGrantedAuthority(role));
         }
-        this.authorities = (Collection<GrantedAuthority>) listOfAuthorities;
+        this.authorities = listOfAuthorities;
     }
 
     // Constructors

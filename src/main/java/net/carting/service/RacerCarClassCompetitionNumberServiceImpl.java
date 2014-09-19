@@ -113,7 +113,7 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
         Iterator<RacerCarClassCompetitionNumber> it = racerCarClassesCompetitionNumbers.iterator();
         Racer racer;
         while (it.hasNext()) {
-            RacerCarClassCompetitionNumber racerCarClassCompetitionNumber = (RacerCarClassCompetitionNumber) it
+            RacerCarClassCompetitionNumber racerCarClassCompetitionNumber = it
                     .next();
             addRacerCarClassCompetitionNumber(racerCarClassCompetitionNumber);
             racer = racerCarClassCompetitionNumber.getRacer();
