@@ -29,7 +29,6 @@ import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.FileService;
 import net.carting.service.LeaderService;
-import net.carting.service.QualifyingService;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerService;
@@ -86,8 +85,6 @@ public class CompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private AdminSettingsService adminSettingsService;
-    @Autowired
-    private QualifyingService qualifyingService;
     @Autowired
     private FileService fileService;
 

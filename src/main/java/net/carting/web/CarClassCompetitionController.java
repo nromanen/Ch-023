@@ -19,7 +19,6 @@ import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.CompetitionService;
 import net.carting.service.LeaderService;
-import net.carting.service.QualifyingService;
 import net.carting.service.RaceService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
 import net.carting.service.RacerCarClassNumberService;
@@ -74,8 +73,6 @@ public class CarClassCompetitionController {
     private TeamInCompetitionService teamInCompetitionService;
     @Autowired
     private CompetitionService competitionService;
-    @Autowired
-    private QualifyingService qualifyingService;
 
     private static final Logger LOG = LoggerFactory.getLogger(CarClassCompetitionController.class);
 

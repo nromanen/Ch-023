@@ -3,8 +3,18 @@ $(document).ready(function(){
     $(".pdf").click(function() {
     	var id = this.id.replace("pdf", "");
     	var url = $('#personal_url').val();
+    	if (!$('.qualifying')[0]) {
+    		$('.th_hidden').attr('colspan', function(){
+    			return +$(this).attr('colspan') - 2;
+    		});
+    	} 
     	var table = $('#table_personal_offset' + id).html();
-    	table = "<style>table{ font-size: 14;} .column-wide {width: 130px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none}</style>" + table;
+    	table = "<style>table{ font-size: 14;} .column-wide {width: 150px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none} .hidden {height: 30px;}</style>" + table;
+    	if (!$('.qualifying')[0]) {
+    		$('.th_hidden').attr('colspan', function(){
+    			return +$(this).attr('colspan') + 2;
+    		});
+    	} 
     	$.ajax({
             url: url,
             type: "POST",
