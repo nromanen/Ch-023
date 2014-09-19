@@ -1,5 +1,9 @@
 package net.carting.service.Util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import net.carting.domain.Leader;
 import net.carting.domain.User;
 
@@ -12,11 +16,24 @@ public class TestDatabaseUtil {
     private JdbcTemplate jt;
     
     public TestDatabaseUtil() {
+        Properties prop = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties");
+        
+        try {
+            prop.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String username = prop.getProperty("jdbc.username");
+        String password = prop.getProperty("jdbc.password");
+        String url = prop.getProperty("jdbc.databaseurl");
+        String driver = prop.getProperty("jdbc.driverClassName");
+        
         SingleConnectionDataSource ds = new SingleConnectionDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/carting_test");
-        ds.setUsername("root");
-        ds.setPassword("root");
+        ds.setDriverClassName(driver);
+        ds.setUrl(url);
+        ds.setUsername(username);
+        ds.setPassword(password);
 
         jt = new JdbcTemplate(ds);
     }

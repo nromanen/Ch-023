@@ -11,7 +11,7 @@
             </Filters>
         </Console>
         <!-- FILE appender -->
-        <File name="developer" fileName="dev_log.log">
+        <File name="developer" fileName="../dev_logs/dev_log.log">
             <PatternLayout pattern="%d{ISO8601} %-5p [%l] - %m%n"/>
             <Filters>
                 <ThresholdFilter level="TRACE"/>

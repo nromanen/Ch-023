@@ -450,7 +450,7 @@
 					<spring:message code="label.cancel" />
 				</button>
 				<button class="btn btn-success" type="button" id="edit_points" data-dismiss="modal">
-					<spring:message code="label.edit" />
+					<spring:message code="label.save_changes" />
 				</button>
 			</div>
 		</div>
