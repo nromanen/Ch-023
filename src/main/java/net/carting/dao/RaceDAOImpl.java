@@ -82,7 +82,7 @@ public class RaceDAOImpl implements RaceDAO {
     @Override
     public List<Race> getRacesByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
-        List<Race> races = null;
+        List<Race> races;
         Query query = entityManager
                 .createQuery("from Race " +
                         "where carClassCompetition = :carClassCompetition " +

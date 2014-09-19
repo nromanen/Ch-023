@@ -68,7 +68,7 @@ public class SHKPController {
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
-        public int createStartStatement(Model model, @RequestParam(value = "table") String table,
+        public int createStartStatement(@RequestParam(value = "table") String table,
                                          @RequestParam(value = "raceId") int raceId,
                                          @RequestParam(value = "startId") int startId) {
             int result;
@@ -113,7 +113,7 @@ public class SHKPController {
         
         @RequestMapping(value = "/personal", method = RequestMethod.POST)
         @ResponseBody
-        public int createPersonalOffsetStatement(Model model, @RequestParam(value = "table") String table,
+        public int createPersonalOffsetStatement(@RequestParam(value = "table") String table,
                                          @RequestParam(value = "carClassCompetitionId") int carClassCompetitionId) {
             int result;
             try {

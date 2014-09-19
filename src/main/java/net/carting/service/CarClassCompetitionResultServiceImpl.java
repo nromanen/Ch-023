@@ -182,7 +182,7 @@ public class CarClassCompetitionResultServiceImpl implements
             for (int i=0;i<cccResList.size();i++) {
                 CarClassCompetitionResult cccRes = cccResList.get(i);
                 cccRes.setRacerCarClassCompetitionNumber(racerCarClassCompetitionNumberList.get(i));
-                List<RaceResult> raceResults = (ArrayList<RaceResult>) raceResultService
+                List<RaceResult> raceResults = raceResultService
                         .getRaceResultsByRace(race);
                 for (RaceResult raceResult : raceResults) {
                     if (raceResult.getCarNumber() == cccRes.getRacerCarClassCompetitionNumber()
@@ -199,8 +199,8 @@ public class CarClassCompetitionResultServiceImpl implements
         }
         // add results of race#2
         if (race.getRaceNumber() == 2) {
-            List<CarClassCompetitionResult> absoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
-            List<RaceResult> raceResults = (List<RaceResult>) raceResultService
+            List<CarClassCompetitionResult> absoluteResultsList = getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
+            List<RaceResult> raceResults = raceResultService
                     .getRaceResultsByRace(race);
 
             for (RaceResult raceResult : raceResults) {
@@ -245,7 +245,7 @@ public class CarClassCompetitionResultServiceImpl implements
     public void recalculateAbsoluteResultsByEditedRace(
             CarClassCompetition carClassCompetition, Race race) {
         LOG.debug("Start of recalculateAbsoluteResultsByEditedRace method, that recalculate absolute results after race results was edited");
-        List<CarClassCompetitionResult> absoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
+        List<CarClassCompetitionResult> absoluteResultsList = getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<List<RaceResult>> raceResultsList = raceService
                 .getRaceResultsByCarClassCompetition(carClassCompetition);
         for (CarClassCompetitionResult carClassCompetitionResult : absoluteResultsList) {
@@ -305,7 +305,7 @@ public class CarClassCompetitionResultServiceImpl implements
             CarClassCompetition carClassCompetition) {
 
         LOG.debug("Start of recalculateAbsoluteResults method that overrides comparator for absolute results.");
-        List<CarClassCompetitionResult> orderedAbsoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
+        List<CarClassCompetitionResult> orderedAbsoluteResultsList = getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
         Collections.sort(orderedAbsoluteResultsList,
                 new Comparator<CarClassCompetitionResult>() {
                     @Override
@@ -464,7 +464,7 @@ public class CarClassCompetitionResultServiceImpl implements
     @Transactional
     public boolean setQualifyingTimeFromString(
             CarClassCompetitionResult cccRes, String timeString) {
-        int timeInt = 0;
+        int timeInt;
         if (!timeString
                 .matches("((\\d?\\d:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
             return false;
@@ -536,12 +536,8 @@ public class CarClassCompetitionResultServiceImpl implements
     @Override
     @Transactional
     public boolean isSetQualifyingByCarClassCompetition(CarClassCompetition ccc) {
-        if(getQualifyingPlacesByCarClassCompetition(ccc)==null||
-                getQualifyingTimesByCarClassCompetition(ccc).isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(getQualifyingPlacesByCarClassCompetition(ccc) == null ||
+                getQualifyingTimesByCarClassCompetition(ccc).isEmpty());
     }
     
     @Override

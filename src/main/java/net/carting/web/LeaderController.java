@@ -73,7 +73,7 @@ public class LeaderController {
     };
     
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index(Map<String, Object> map) {
+    public String index() {
         String authority = userService.getCurrentAuthority();
         if (authority.equals(UserService.ROLE_ANONYMOUS)) {
             return "leader_registration";
@@ -122,11 +122,9 @@ public class LeaderController {
         }
         return "leader";
     }
-    
-    /* TODO Remove HttpServletRequest */
+
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editLeaderPage(Map<String, Object> map,
-                                 @PathVariable("id") int id) {
+    public String editLeaderPage(Map<String, Object> map) {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         map.put("leader", leader);
@@ -167,7 +165,7 @@ public class LeaderController {
         String userName = map.get("username").toString();
         return userService.isSetUser(userName);
     }
-    
+
     @RequestMapping(value = "/isSetEmail", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -187,7 +185,7 @@ public class LeaderController {
     }
     
     @RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
-    public String passwordRecovery(Map<String, Object> map) {
+    public String passwordRecovery() {
         return "password_recovery";
     }
     

@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         String authority = null;
         Iterator<GrantedAuthority> iterator = (Iterator<GrantedAuthority>) auth.getAuthorities().iterator();
         while (iterator.hasNext()) {
-            authority = (String) iterator.next().toString();
+            authority = iterator.next().toString();
         }
         LOG.debug("End getCurrentAuthority method");
         return authority;
@@ -176,8 +176,7 @@ public class UserServiceImpl implements UserService {
             String to = user.getEmail();
             String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
             String subject = "Password recovery on Carting";
-            String message = secureCode;
-            mailService.sendMail(to, from, subject, message);
+            mailService.sendMail(to, from, subject, secureCode);
             LOG.debug("Sent secure code to user(username = {})", user.getUsername());
 
         } catch (NoSuchAlgorithmException e) {

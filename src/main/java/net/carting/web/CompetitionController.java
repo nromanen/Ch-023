@@ -153,7 +153,7 @@ public class CompetitionController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView addCompetitionPage(Model model) {
+    public ModelAndView addCompetitionPage() {
         return new ModelAndView("competition_add_edit");
     }
 
@@ -318,13 +318,12 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
     public @ResponseBody String unregisterRacerFromCompetitionAction(
             @RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
-                competitonId, racerId);
+                id, racerId);
         LOG.trace(
                 "Admin has unregistered racer(id = {}) from competition (id = {})",
-                racerId, competitonId);
+                racerId, id);
         return "success";
     }
 
@@ -391,9 +390,8 @@ public class CompetitionController {
             @RequestBody Map<String, Object> formMap) {
         racerCarClassCompetitionNumberService
                 .registrationTeamRacersOnCompetition(formMap);
-        int competitionId = Integer.parseInt(formMap.get("competitionId")
+        return Integer.parseInt(formMap.get("competitionId")
                 .toString());
-        return competitionId;
     }
 
     @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })

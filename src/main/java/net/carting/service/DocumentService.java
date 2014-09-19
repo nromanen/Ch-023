@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import net.carting.domain.Document;
-import net.carting.domain.Leader;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +71,7 @@ public interface DocumentService {
      * @see net.carting.domain.File
      */
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
-                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException;
+                                           String startDate, String finishDate, MultipartFile[] files);
 
     /**
      * <p/>

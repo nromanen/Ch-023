@@ -3,7 +3,6 @@ package net.carting.web;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -237,9 +236,8 @@ public class RacerController {
         racerService.addRacer(racer);
 
         // add Racer CarClass Numbers
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
-            racerCarClassNumberService.addRacerCarClassNumber((RacerCarClassNumber) it.next());
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
+            racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
         }
         // --------------------------------------
 
@@ -268,7 +266,7 @@ public class RacerController {
         int carClassId = Integer.parseInt(map.get("carClassId").toString());
         try{
             List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
-            ArrayList<Integer> numbers = new ArrayList<Integer>();
+            List<Integer> numbers = new ArrayList<Integer>();
             for (RacerCarClassNumber racer : racers) {
                 numbers.add(racer.getNumber());
             }
@@ -318,10 +316,9 @@ public class RacerController {
                 "updatedRacerCarClassNumbers").toString();
         Set<RacerCarClassNumber> racerCarClassNumbers = racerService.parseUpdatedRacerCarClassNumbers(
                 updatedRacerCarClassNumbersStr, racer);
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
             racerCarClassNumberService
-                    .updateRacerCarClassNumber((RacerCarClassNumber) it.next());
+                    .updateRacerCarClassNumber(racerCarClassNumber);
         }
         return "success";
     }

@@ -105,7 +105,7 @@ public class QualifyingServiceImpl implements QualifyingService {
     @Transactional
     @Override
     public boolean setQualifyingTimeFromString(Qualifying q, String timeString) {
-	int timeInt = 0;
+	int timeInt;
 	if (!timeString
 		.matches("((\\d?\\d:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
 	    return false;

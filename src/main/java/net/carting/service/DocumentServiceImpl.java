@@ -8,7 +8,6 @@ import javax.servlet.ServletContext;
 
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
-import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
 
 import org.slf4j.Logger;
@@ -82,7 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
-                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException {
+                                           String startDate, String finishDate, MultipartFile[] files) {
         LOG.debug("Start addDocumentAndUpdateRacers method");
 
         try {

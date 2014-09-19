@@ -57,7 +57,7 @@ public class UserDAOImpl implements UserDAO {
     public List<String> getAuthoritiesByUserName(String userName) {
         User u = (User) entityManager
                 .createQuery("from User where username= :username")
-                .setParameter("username", userName).getSingleResult();;
+                .setParameter("username", userName).getSingleResult();
         Role r = u.getRole();
         String auth = r.getRole();
         List<String> l = new ArrayList<String>();

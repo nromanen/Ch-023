@@ -167,11 +167,8 @@ public class Racer extends Person {
     }
 
     public boolean isRacerSuitableToCarClass(CarClass carClass) {
-        if (getAge() >= carClass.getLowerYearsLimit()
-                && getAge() <= carClass.getUpperYearsLimit()) {
-            return true;
-        }
-        return false;
+        return getAge() >= carClass.getLowerYearsLimit()
+                && getAge() <= carClass.getUpperYearsLimit();
     }
 
     public Racer() {

@@ -82,7 +82,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getRaceResultsByRace(Race race) {
-        List<RaceResult> list = null;
+        List<RaceResult> list;
         list = entityManager
                 .createQuery("from RaceResult where race= :race order by place ")
                 .setParameter("race", race)

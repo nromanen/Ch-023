@@ -65,7 +65,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
     @SuppressWarnings("unchecked")
     @Override
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCarClassCompetitionId(int id) {
-        List<RacerCarClassCompetitionNumber> list = null;
+        List<RacerCarClassCompetitionNumber> list;
         Query query = entityManager.
                 createQuery("FROM RacerCarClassCompetitionNumber rcccn "
                         + "WHERE rcccn.carClassCompetition.id = :carClassCompetitionId "

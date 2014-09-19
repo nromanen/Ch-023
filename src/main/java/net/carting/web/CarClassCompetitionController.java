@@ -48,7 +48,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CarClassCompetitionController {
 
     // MAX_RACES - max races, const.
-    public static final int MAX_RACES = 2;
+    private static final int MAX_RACES = 2;
 
     @Autowired
     private CarClassCompetitionService carClassCompetitionService;
@@ -160,19 +160,18 @@ public class CarClassCompetitionController {
     public
     @ResponseBody
     String unregisterRacerFromCarClassCompetitionAction(@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-        int carClassCompetitionId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         String username = userService.getCurrentUserName();
-        Competition competition = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getCompetition();
+        Competition competition = carClassCompetitionService.getCarClassCompetitionById(id).getCompetition();
         Team team = racerService.getRacerById(racerId).getTeam();
-        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId);
+        CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
 
         try {
-            racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(carClassCompetitionId, racerId);
+            racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(id, racerId);
 
             LOG.trace("{} has unregistered racer(id = {}) from competition {} (id = {}) from car class {} (id = {})", username, racerId,
                     competition.getName(), competition.getId(),
-                    carClassCompetition.getCarClass().getName(), carClassCompetitionId);
+                    carClassCompetition.getCarClass().getName(), id);
 
             //if this racer was last from his team in this competition
             //then unregister his team from this competition
@@ -188,7 +187,7 @@ public class CarClassCompetitionController {
             LOG.error("Errors in unregisterRacerFromCarClassCompetitionAction method", e);
             LOG.trace("{} trying to unregister racer(id = {}) from competition {} (id = {}) from car class {} (id = {})", username, racerId,
                     competition.getName(), competition.getId(),
-                    carClassCompetition.getCarClass().getName(), carClassCompetitionId);
+                    carClassCompetition.getCarClass().getName(), id);
             return "error";
         }
         return "success";
@@ -248,8 +247,7 @@ public class CarClassCompetitionController {
 
 
     @RequestMapping(value = "/{id}/addRace", method = RequestMethod.POST)
-    public String addRace(Race race,
-                          Map<String, Object> map, @PathVariable("id") int id) {
+    public String addRace(Race race, @PathVariable("id") int id) {
         
         LOG.debug("Start addRace method");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
@@ -306,7 +304,7 @@ public class CarClassCompetitionController {
 
     @RequestMapping(value = "/{id}/proccesQualifying", method = RequestMethod.POST)
     public String addQualifyings(@PathVariable("id") int id,
-            @RequestParam("timeResult") String times, Map<String,Object>map) {
+            @RequestParam("timeResult") String times) {
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         List<CarClassCompetitionResult>cccResList = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<Integer> racers = raceService.getNumbersArrayByCarClassCompetitionId(id);
@@ -356,9 +354,8 @@ public class CarClassCompetitionController {
 
     @RequestMapping(value = "/{id}/race/{raceNumber}/editRace", method = RequestMethod.POST)
     public String editRace(@ModelAttribute("race") Race race,
-                           Map<String, Object> map, @PathVariable("id") int id,
-                           @PathVariable("raceNumber") int raceNumber,
-                           @RequestParam("numberOfLaps") String lapsNumber) {
+                           @PathVariable("id") int id,
+                           @PathVariable("raceNumber") int raceNumber) {
         LOG.debug("Start editRace method");
         try {
             CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
@@ -395,7 +392,7 @@ public class CarClassCompetitionController {
         List<HashMap<String, String>> mapsList = (ArrayList<HashMap<String, String>>) map.get("jsonObject");
         CarClassCompetition carClassCompetition = carClassCompetitionService.getCarClassCompetitionById(id);
         LOG.trace("Admin has edited  summary results in car class competition {}", carClassCompetition.getCarClass().getName());
-        for (HashMap<String, String> idAndPoint : mapsList) {
+        for (Map<String, String> idAndPoint : mapsList) {
             CarClassCompetitionResult result = carClassCompetitionResultService.getCarClassCompetitionResultById(Integer.parseInt(idAndPoint.get("id")));
             result.setAbsolutePoints(Integer.parseInt(idAndPoint.get("resultPoint")));
             carClassCompetitionResultService.updateCarClassCompetitionResult(result);

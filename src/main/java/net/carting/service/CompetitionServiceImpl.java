@@ -136,8 +136,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public List<String> getPointsByPlacesList(Competition competition) {
         String pointsByPlacesStr = competition.getPointsByPlaces();
         LOG.debug("Get pointsByPlaces string and transformed it to the list of points by places");
-        List<String> pointsByPlacesList = Arrays.asList(pointsByPlacesStr.split(","));
-        return pointsByPlacesList;
+        return Arrays.asList(pointsByPlacesStr.split(","));
     }
     
 

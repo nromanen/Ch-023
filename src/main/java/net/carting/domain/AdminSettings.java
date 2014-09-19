@@ -12,7 +12,7 @@ public class AdminSettings {
     public static final Map<Integer, String> POINTS_BY_TABLE_B;
 
     static {
-        POINTS_BY_TABLE_B = new HashMap<Integer, String>();
+        POINTS_BY_TABLE_B = new HashMap<>();
         POINTS_BY_TABLE_B.put(1, "10");
         POINTS_BY_TABLE_B.put(2, "20,1");
         POINTS_BY_TABLE_B.put(3, "30,14,1");

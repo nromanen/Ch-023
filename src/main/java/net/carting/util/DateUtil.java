@@ -47,7 +47,7 @@ public class DateUtil {
     }
     public static String getTimeStringFromInt(Integer intTime) {
         if(intTime!=null){
-        String timeResult = new String();
+        String timeResult;
         long h = TimeUnit.MILLISECONDS.toHours(intTime);
         long m = TimeUnit.MILLISECONDS.toMinutes(intTime) - TimeUnit.HOURS.toMinutes(h);
         long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h);
@@ -58,7 +58,7 @@ public class DateUtil {
         		S = S/10;
         		i--;
         	}
-        	if(i>1){
+        	if(i > 1){
         	    timeResult = String.format("%02d:%02d:%02d,%0"+i+"d",h,m,s,S);
         	} else {
         	    timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
