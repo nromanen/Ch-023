@@ -62,6 +62,16 @@ $(document).ready(function(){
 		return false;
 		
 	});
+	
+	$('#addDocs').change(function(){	
+		var docType = $('#addDocs :selected').attr('id');
+		$("#addForm").css("display", "block");
+		if(docType=="lic") {
+			$("#docNum").css("display", "block");
+			$("#docNumInp").css("display", "block");
+		}
+		return false;
+	});	
 
 	$('#edit_racer').submit(function(){
 

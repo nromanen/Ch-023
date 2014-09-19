@@ -210,7 +210,7 @@ public class RacerController {
     @RequestMapping(value = "/addRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    int addRacerAction(@RequestBody Map<String, Object> racerMap) {
+    boolean addRacerAction(@RequestBody Map<String, Object> racerMap) {
     	
     	LOG.debug("Start addRacerAction method");
         Racer racer = new Racer();
@@ -218,7 +218,6 @@ public class RacerController {
         racer.setLastName(racerMap.get("lastName").toString());
         racer.setBirthday(DateUtil.getDateFromString(racerMap.get("birthday").toString()));
         racer.setDocument(racerMap.get("document").toString());
-        racer.setAddress(racerMap.get("address").toString());
         racer.setAddress(racerMap.get("address").toString());
         racer.setSportsCategory(Integer.parseInt(racerMap.get("sportCategory").toString()));
         racer.setRegistrationDate(new Date());
@@ -248,7 +247,7 @@ public class RacerController {
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
         LOG.debug("End addRacerAction method");
-        return racer.getId();
+        return true;
     }
 
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})

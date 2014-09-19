@@ -10,6 +10,7 @@
 <script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />' charset="UTF-8"></script>
 <script type='text/javascript' src='<c:url value="/resources/js/racer.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
 
 <h2 class="user-info-name"><spring:message code="label.new_racer" /></h2>
 <form class="well" action="<c:url value="/racer/addRacer" />"
@@ -137,8 +138,25 @@
 				</div>
 		</div>
 	</div>
-
-	<br>
+    <div class="dropdown" id="addDocs">
+        <select id="dropdownMenu1" class="fl-left" onchange="" style="width: 200px; margin-right: 5px;">
+    <option>Add document</option>
+    <option role="presentation" id="lic"><a role="menuitem" tabindex="-1" href="#">License</a></option>
+    <option role="presentation" id="ins"><a role="menuitem" tabindex="-1" href="#">Insurance</a></option>
+    <option role="presentation" id="med"><a role="menuitem" tabindex="-1" href="#">Medical certificate</a></option>
+    <option role="presentation" id="par"><a role="menuitem" tabindex="-1" href="#">Parental permision</a></option>
+    </select>
+    <div id="addForm" class="well" style="display: none">
+    <br>
+    <label id="docNum" style="display: none" class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
+    <input id="docNumInp" style="display: none" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
+        id="number" name="number" maxlength="100" 
+        data-bv-notempty="true"
+        data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />" />
+    <div class="help-block with-errors"></div>
+    </div>
+</div>
+	<br><br>
 	<input type="submit" class="btn btn-success" value="<spring:message code="label.accept" />"
 		id="add_racer"> <img
 		src='<c:url value="/resources/img/ajax-loader.gif" />'
