@@ -1,5 +1,7 @@
 package net.carting.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -20,21 +22,28 @@ public class ConnectionFactory {
     private final DataSource dataSource;
 
     private ConnectionFactory() {
-
+        Properties prop = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("jdbc.properties");
+        
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            prop.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String username = prop.getProperty("jdbc.username");
+        String password = prop.getProperty("jdbc.password");
+        String url = prop.getProperty("jdbc.databaseurl");
+        String driver = prop.getProperty("jdbc.driverClassName");
+        try {
+            Class.forName(driver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.exit(0);
         }
 
-        Properties properties = new Properties();
-        properties.setProperty("user", "root");
-        properties.setProperty("password", "root");
-
         GenericObjectPool pool = new GenericObjectPool();
         DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-                "jdbc:mysql://localhost:3306/carting", properties
+                url, username, password
         );
         new PoolableConnectionFactory(connectionFactory, pool, null, "SELECT 1", 3, false, false, Connection.TRANSACTION_READ_COMMITTED);
         this.dataSource = new PoolingDataSource(pool);
