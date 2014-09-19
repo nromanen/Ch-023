@@ -1,6 +1,5 @@
 package net.carting.domain;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 
 /**

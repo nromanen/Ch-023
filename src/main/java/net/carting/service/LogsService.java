@@ -1,6 +1,5 @@
 package net.carting.service;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

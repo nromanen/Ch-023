@@ -1,6 +1,5 @@
 package net.carting.service;
 
-import java.sql.Time;
 import java.util.List;
 
 import net.carting.domain.CarClassCompetition;

@@ -1,7 +1,6 @@
 package net.carting.web;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +11,6 @@ import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
 import net.carting.domain.Competition;
 import net.carting.domain.File;
-import net.carting.domain.Qualifying;
 import net.carting.domain.RacerCarClassCompetitionNumber;
 import net.carting.service.CarClassCompetitionResultService;
 import net.carting.service.CarClassCompetitionService;
