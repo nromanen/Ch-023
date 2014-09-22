@@ -4,15 +4,13 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-
-
 <link href='<c:url value="/resources/style/datepicker.css" />' rel="stylesheet">
 <script type='text/javascript' src='<c:url value="/resources/js/lib/validator.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/bootstrap-datepicker.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/lib/datepicker/locales/bootstrap-datepicker.ua.js" />' charset="UTF-8"></script>
-<script type='text/javascript' src='<c:url value="/resources/js/racer.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/js/file-validation.js" />'></script>
 <script type='text/javascript' src='<c:url value="/resources/libs/bootstrapValidator/js/bootstrapValidator.min.js" />'></script>
+<script type='text/javascript' src='<c:url value="/resources/js/racer.js" />'></script>
 
 <h2 class="user-info-name"><spring:message code="label.new_racer" /></h2>
 <form class="well" action="<c:url value="/racer/addRacer" />"
@@ -154,59 +152,52 @@
 </form>
 
 <!-- Adding documents form -->
-
-
-<form class="well" style="display: block"  enctype="multipart/form-data"  <%-- action="<c:url value="/racer/addDocs" />" --%>
-	data-toggle="validator" role="form" name="add_docs" id="add_docs"> 
 	<input type="text" id="racerId">
 	<h3 style="color: silver">Step 2: Adding documents</h3>
 	
 <!-- Navigation tabs -->
 	
 	<ul class="nav nav-tabs" role="tablist">
-	  <li class="active"><a href="#licenseInfo" role="tab" data-toggle="tab">License</a></li>
-	  <li><a href="#insuranceInfo" role="tab" data-toggle="tab">Insurance</a></li>
-	  <li><a href="#medicalInfo" role="tab" data-toggle="tab">Medical</a></li>
-	  <li><a href="#permissionInfo" role="tab" data-toggle="tab">Permission</a></li>
+	  <li id="tab1" class="active"><a href="#licenseInfo" role="tab" data-toggle="tab">License</a></li>
+	  <li id="tab2"><a href="#insuranceInfo" role="tab" data-toggle="tab">Insurance</a></li>
+	  <li id="tab3"><a href="#medicalInfo" role="tab" data-toggle="tab">Medical</a></li>
+	  <li id="tab4"><a href="#permissionInfo" role="tab" data-toggle="tab">Permission</a></li>
 	</ul>
 	
 <!-- Tabs content -->
 <!-- Racer's license form -->
-	
+	<br>
 	<div class="tab-content">
 		<div class="tab-pane active" id="licenseInfo">
-		<form action="<c:url value="/racer/addDocs" />" enctype="multipart/form-data"
-		data-toggle="validator" role="form" name="add_lic" id="add_lic"> 
-			<div class="form-group">
-				<br>
-				<label id="docNum1"  class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
-				<input id="licenseNum" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
-					id="number" name="number" maxlength="100"
-					data-bv-notempty="true"
-					data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />" />
-				<div class="help-block with-errors"></div>
-			</div>
-			<label for="filePicker" class="text-info"><spring:message code="label.choose_file" />:</label>
-			<table id="fileTable1">
-				<tr>
-					<td>
-						<div class="form-group">
-							<input type="file" name="file" class="form-control file1" id="upload_file1" onchange="return ValidateFileUpload(this)" data-doc="1"
-								data-bv-notempty="true"
-								data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
-						</div>
-					</td>
-				</tr>
-			</table>
-		
-			<div class="form-group">
-				<input id="addFile1" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
-				<div class="alert alert-danger" id="max_count_achieved1" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
-					<spring:message code="dataerror.max_count_achieved" />
+			<form action="<c:url value="/racer/addDocs" />"  method="post" enctype="multipart/form-data" data-toggle="validator" role="form" name="add_lic" id="add_lic"> 
+				<div class="form-group">
+					<label id="docNum1"  class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
+					<input id="licenseNum" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
+						id="number" name="number" maxlength="100" data-bv-notempty="true"
+						data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />" />
+					<div class="help-block with-errors"></div>
 				</div>
-				<input type="hidden" value = "1">
-				<input id="addL" type="submit" class="btn btn-success btn-sm" value="Add document" />
-			</div>
+				<label for="filePicker" class="text-info"><spring:message code="label.choose_file" />:</label>
+				<table id="fileTable1">
+					<tr>
+						<td>
+							<div class="form-group">
+								<input id="upload_file1" type="file" name="file" class="form-control file1"  onchange="return ValidateFileUpload(this)" data-doc="1"
+									data-bv-notempty="true"
+									data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
+							</div>
+						</td>
+					</tr>
+				</table>
+			
+				<div class="form-group">
+					<input id="addFile1" type="button" class="btn btn-primary btn-sm addFile" typeDocument="1" value="<spring:message code="label.another_file" />" />
+					<div class="alert alert-danger" id="max_count_achieved1" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
+						<spring:message code="dataerror.max_count_achieved" />
+					</div>
+					<input id="addL" type="submit" class="btn btn-success btn-sm" value="Add document" />
+				</div>
+				<div id="result"></div>
 			</form>
 		</div>
 		
@@ -248,7 +239,7 @@
 			</table>
 		
 			<div class="form-group">
-				<input id="addFile2" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
+				<input id="addFile2" type="button" class="btn btn-primary btn-sm addFile" typeDocument="2" value="<spring:message code="label.another_file" />" />
 				<div class="alert alert-danger" id="max_count_achieved2" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
@@ -284,7 +275,7 @@
 			</table>
 		
 			<div class="form-group">
-				<input id="addFile3" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
+				<input id="addFile3" type="button" class="btn btn-primary btn-smaddFile" typeDocument="3" value="<spring:message code="label.another_file" />" />
 				<div class="alert alert-danger" id="max_count_achieved3" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
@@ -321,7 +312,7 @@
 				</tr>
 			</table>
 			<div class="form-group">
-				<input id="addFile4" type="button" class="btn btn-primary btn-sm" value="<spring:message code="label.another_file" />" />
+				<input id="addFile4" type="button" class="btn btn-primary btn-sm addFile" typeDocument="4" value="<spring:message code="label.another_file" />" />
 				<div class="alert alert-danger" id="max_count_achieved4" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
@@ -335,5 +326,14 @@
 	<input type="submit" class="btn btn-success" value="Done!" id="finish"> 
 	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_docs"> 
 	<br><br>
-	
+
+<h1>SpringMVC - File Upload with/without Ajax</h1>
+ 
+<i>Uploading File With Ajax</i><br/>
+<form id="form2" method="post" action="/Carting/racer/addDocs" enctype="multipart/form-data">
+  <!-- File input -->    
+  <input name="file" id="file2" type="file" /><br/>
 </form>
+ 
+<button value="Submit" onclick='uploadFormData()' >Upload</button><i>Using FormData Object</i>
+<div id="result"></div>
