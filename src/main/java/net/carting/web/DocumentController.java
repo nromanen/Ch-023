@@ -3,11 +3,13 @@ package net.carting.web;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import net.carting.domain.Document;
 import net.carting.domain.File;
@@ -34,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -391,7 +395,81 @@ public class DocumentController {
         }
         return new ModelAndView("document_view");
     }
+    
+    
+    @RequestMapping(value = "/addDocs", method = RequestMethod.POST)
+    public @ResponseBody String addDocumentsForNewRacerAction(
+            @RequestParam("files[]") MultipartFile[]  files,
+            @RequestParam("docType") Integer docType,
+            @RequestParam("racerId") String racerId,
+            @RequestParam(value = "doc_number", required = false) String number,
+            @RequestParam(value = "start_date", required = false) String startDate,
+            @RequestParam(value = "finish_date", required = false) String finishDate) { 
+        System.out.println("Start controller.");
+        System.out.println("Document type number: " + docType);
+        System.out.println("Racer ID:"+racerId);
+        /* Getting current leader */
+        String username = userService.getCurrentUserName();
+        Leader leader = leaderService.getLeaderByUserName(username);
+        String fileName = null;
+        String msg = "";
+        if (files != null && files.length >0) {
+            for(int i =0 ;i< files.length; i++){
+                try {
+                    fileName = files[i].getOriginalFilename();
+                    msg += "You have successfully uploaded " + fileName +"<br/>";
+                } catch (Exception e) {
+                    return "You failed to upload " + fileName + ": " + e.getMessage() +"<br/>";
+                }
+            }
+        } else {
+            return "Unable to upload. File is empty.";
+        }
+        
 
-
-
+       if (teamService.isTeamByLeaderId(leader.getId())) {
+           Team team = teamService.getTeamByLeader(leader);
+           if (Integer.parseInt(racerId)<1) {
+                /*
+                 * If team leader doesn't choose racers, he is redirected to
+                 * page of his team
+                 */
+               LOG.info("Team leader doesn't choose racers...");
+               return "redirect:/team/" + team.getId();
+           } else {
+                /*
+                 * Getting document data from form and creating object
+                 * 'Document'
+                 */
+               String[]racersId={racerId};
+               try {
+                   documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, leader);
+               } catch (IOException e) {
+                   msg= "Unable to upload. File is empty.";
+                   LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                           leader.getFirstName(), leader.getLastName());
+                   return msg;
+               }
+           }
+       } else {
+           LOG.error("Team leader doesn't exists...");
+           return "redirect:/team/add";
+       }            
+       return msg;
+    }
 }
+    
+        /*List<MultipartFile>mpfList = new ArrayList<MultipartFile>();
+        Iterator<String> itr =  request.getFileNames();
+        while (itr.hasNext()) {
+            MultipartFile mpf = request.getFile(itr.next());
+            mpfList.add(mpf);
+            System.out.println(mpf.getOriginalFilename() +" uploaded!");
+        }
+        System.out.println("List: "+mpfList);
+        System.out.println("End of controller.");
+        return "Done.";
+    }*/
+
+
+

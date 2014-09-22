@@ -152,7 +152,7 @@
 </form>
 
 <!-- Adding documents form -->
-	<input type="text" id="racerId">
+	<input type="text" id="racerId" value="14">
 	<h3 style="color: silver">Step 2: Adding documents</h3>
 	
 <!-- Navigation tabs -->
@@ -169,10 +169,10 @@
 	<br>
 	<div class="tab-content">
 		<div class="tab-pane active" id="licenseInfo">
-			<form action="<c:url value="/racer/addDocs" />"  method="post" enctype="multipart/form-data" data-toggle="validator" role="form" name="add_lic" id="add_lic"> 
+			<%-- <form action="<c:url value="/racer/addDocs" />"  method="post" enctype="multipart/form-data" data-toggle="validator" role="form" name="add_lic" id="add_lic"> --%> 
 				<div class="form-group">
-					<label id="docNum1"  class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
-					<input id="licenseNum" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
+					<label id="docNum1label"  class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
+					<input id="docNum1" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
 						id="number" name="number" maxlength="100" data-bv-notempty="true"
 						data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />" />
 					<div class="help-block with-errors"></div>
@@ -195,10 +195,10 @@
 					<div class="alert alert-danger" id="max_count_achieved1" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 						<spring:message code="dataerror.max_count_achieved" />
 					</div>
-					<input id="addL" type="submit" class="btn btn-success btn-sm" value="Add document" />
+					<input id="addL" type="submit" class="btn btn-success btn-sm adding" doc_type="1" value="Add document" />
 				</div>
-				<div id="result"></div>
-			</form>
+				
+			<%-- </form> --%>
 		</div>
 		
 <!-- Racer's insurance form -->
@@ -210,7 +210,7 @@
 				</label> 
 				<input type="text" class="form-control datepicker" name="finish_date"
 					placeholder="<spring:message code="placeholder.date" />" value="${finishDate}"
-					id="doc_date_picker"
+					id="doc_date_picker2"
 					data-bv-notempty="true"
 					data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 					data-bv-date-format = "YYYY-MM-DD"
@@ -220,7 +220,7 @@
 				<label class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
 				<input type="text" class="form-control"
 					placeholder="<spring:message code="placeholder.document_number" />"
-					id="number" name="number" maxlength="100" 
+					id="docNum2" name="number" maxlength="100" 
 					data-bv-notempty="true"
 					data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />"	/>
 				<div class="help-block with-errors"></div>
@@ -244,7 +244,7 @@
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
 				<input type="hidden" value = "2">
-				<input id="addRI" type="button" class="btn btn-success btn-sm" value="Add document" />
+				<input id="addRI" type="button" class="btn btn-success btn-sm adding" doc_type="2" value="Add document" />
 			</div>
 		</div>
 <!-- Racer's medical certificate form -->	
@@ -253,7 +253,7 @@
 				<label class="text-info"><spring:message code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;</label> 
 				<input type="text" class="form-control datepicker" name="finish_date" value="${finishDate}"
 					placeholder="<spring:message code="placeholder.date" />"
-					id="doc_date_picker"
+					id="doc_date_picker3"
 					data-bv-notempty="true"
 					data-bv-notempty-message="<spring:message code="dataerror.field_required" />"			
 					data-bv-date-format = "YYYY-MM-DD"
@@ -266,7 +266,7 @@
 				<tr>
 					<td>
 						<div class="form-group">
-							<input type="file" name="file" class="form-control file3" id="upload_file" onchange="return ValidateFileUpload(this)"
+							<input type="file" name="file" class="form-control file3" id="file3" onchange="return ValidateFileUpload(this)"
 								data-bv-notempty="true"
 								data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
 						</div>
@@ -275,12 +275,12 @@
 			</table>
 		
 			<div class="form-group">
-				<input id="addFile3" type="button" class="btn btn-primary btn-smaddFile" typeDocument="3" value="<spring:message code="label.another_file" />" />
+				<input id="addFile3" type="button" class="btn btn-primary btn-sm addFile" typeDocument="3" value="<spring:message code="label.another_file" />" />
 				<div class="alert alert-danger" id="max_count_achieved3" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
 				<input type="hidden" value = "3">
-				<input id="addMC" type="button" class="btn btn-success btn-sm" value="Add document" />
+				<input id="addMC" type="button" class="btn btn-success btn-sm adding" doc_type="3" value="Add document" />
 			</div>
 	  
 	  </div>
@@ -317,7 +317,7 @@
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
 				<input id="type_doc_4" type="hidden" value = "4">
-				<input id="addPP" type="button" class="btn btn-success btn-sm" value="Add document" />
+				<input id="addPP" type="button" class="btn btn-success btn-sm adding" doc_type="4" value="Add document" />
 			</div>
 			
 		</div>
@@ -326,14 +326,13 @@
 	<input type="submit" class="btn btn-success" value="Done!" id="finish"> 
 	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_docs"> 
 	<br><br>
-
+<div id="result"></div>
 <h1>SpringMVC - File Upload with/without Ajax</h1>
  
 <i>Uploading File With Ajax</i><br/>
-<form id="form2" method="post" action="/Carting/racer/addDocs" enctype="multipart/form-data">
+<form id="form2" method="post" action="/Carting/document/addDocs" enctype="multipart/form-data">
   <!-- File input -->    
-  <input name="file" id="file2" type="file" /><br/>
+  <input name="file" id="file9" type="file" /><br/>
 </form>
  
 <button value="Submit" onclick='uploadFormData()' >Upload</button><i>Using FormData Object</i>
-<div id="result"></div>

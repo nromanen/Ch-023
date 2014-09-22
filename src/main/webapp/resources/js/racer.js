@@ -550,26 +550,42 @@ $(document).ready(function(){
 		$('#doc_date_picker').datepicker('hide');
     });
 	
-});
 
-function uploadFormData(){
-    alert('!');
-    $('#result').html('');
- 
-  var oMyForm = new FormData();
-  oMyForm.append("file", file2.files[0]);
-  alert(file2);
-  oMyForm.append("racerId", $('#racerId').val());
- 
-  $.ajax({
-    url: "/Carting/racer/addDocs",
-    data: oMyForm,
-    dataType: 'text',
-    processData: false,
-    contentType: false,
-    type: 'POST',
-    success: function(data){
-      $('#result').html(data);
-    }
-  });
-}
+
+$('.adding').click(function() {
+	alert('start');
+	var index = $(this).attr("doc_type");
+	$('#result').html('');
+	var fd = new FormData();
+	$.each($('.file'+index),function (x,val) {
+		fd.append("files[]",val.files[0]);
+		alert(val.files[0]+'added')
+	});
+	
+	alert('files ready.');
+
+	fd.append("racerId", $('#racerId').val());
+	fd.append("docType",index)
+	if (index=='1'||index=='2') {
+		/*fb.append("doc_number", $('#docNum'+index).val());*/
+	}
+	if (index=='2'||index=='3') {
+		/*fb.append("finish_date", $('#doc_date_picker'+index).val())*/
+	} 
+	if (index=='4') {
+		fb.append("start_date",$('#doc_date_picker'+index).val())
+	}
+	alert('start transfer')
+	$.ajax({
+		url: "/Carting/document/addDocs",
+		data: fd,
+		dataType: 'text',
+		processData: false,
+		contentType: false,
+		type: 'POST',
+		success: function(data){
+			$('#result').html(data);
+		}
+	});
+});
+});

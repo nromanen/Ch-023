@@ -254,17 +254,6 @@ public class RacerController {
         return racer.getId();
     }
 
- // add doc action
-    @RequestMapping(value = "/addDocs", method = RequestMethod.POST)
-    public @ResponseBody String addDocAction(MultipartHttpServletRequest request, HttpServletResponse response) { 
-        System.out.println("1");
-        Iterator<String> itr =  request.getFileNames();
-        MultipartFile mpf = request.getFile(itr.next());
-        System.out.println(mpf.getOriginalFilename() +" uploaded!");
-        return "Done.";
-    }
-    
-    
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
