@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.Leader;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/racer")
@@ -210,7 +214,7 @@ public class RacerController {
     @RequestMapping(value = "/addRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    boolean addRacerAction(@RequestBody Map<String, Object> racerMap) {
+    Integer addRacerAction(@RequestBody Map<String, Object> racerMap) {
     	
     	LOG.debug("Start addRacerAction method");
         Racer racer = new Racer();
@@ -247,9 +251,19 @@ public class RacerController {
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
         LOG.debug("End addRacerAction method");
-        return true;
+        return racer.getId();
     }
 
+ // add doc action
+    @RequestMapping(value = "/addDocs", method = RequestMethod.POST, headers = {"content-type=application/json"})
+    public @ResponseBody String addDocAction(MultipartHttpServletRequest request, HttpServletResponse response) { 
+        Iterator<String> itr =  request.getFileNames();
+        MultipartFile mpf = request.getFile(itr.next());
+        System.out.println(mpf.getOriginalFilename() +" uploaded!");
+        return "";
+    }
+    
+    
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody

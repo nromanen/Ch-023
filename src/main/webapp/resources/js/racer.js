@@ -47,8 +47,12 @@ $(document).ready(function(){
 	        	        contentType: 'application/json',
 	        	        type: "POST",
 	        	        success: function(response) {  
+	        	        	disableInputRacerinfo()
 	        	        	$("#ajax_loader").css("display", "none");
-	        	        	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/racer/' + response);
+	        	        	$("#add_docs").css("display", "block").hide().fadeIn();
+	        	        	$("#racerId").val(response)
+	        	        	
+	        	        	//$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/racer/' + response);
 	        	        } 
 	        	    });
 	        	    
@@ -63,16 +67,100 @@ $(document).ready(function(){
 		
 	});
 	
-	$('#addDocs').change(function(){	
-		var docType = $('#addDocs :selected').attr('id');
-		$("#addForm").css("display", "block");
-		if(docType=="lic") {
-			$("#docNum").css("display", "block");
-			$("#docNumInp").css("display", "block");
+	$("#finish").click(function (e) {
+		var racerId = $("#racerId").val()
+		window.location = '/Carting/racer/' + racerId
+	})
+	
+	$('#add_lic').bind('submit',function(event) {
+		 event.preventDefault();
+		 var formData = new FormData();
+		 $(".file4").each(function(i, file)
+				    {
+				        formData.append('file-'+i, file);
+				    });
+		 formData.append('racerId',$("#racerId").val())
+		 formData.append('doc_type',$("#type_doc_1").val())
+		 formData.append('number',$("#licenseNum").val())
+		 $.ajax({
+			 url: $("#add_lic").attr( "action"),  
+			 type: "POST",
+			 contentType: false,
+	         processData: false,
+	         cache: false,
+	         headers: { 'cache-control': 'no-cache' }, // fix for IOS6 (not tested)
+	         dataType: 'json',
+	         data: formData,
+	         timeout: 7000,
+	         success: function( data )
+	            {alert('!');
+	            
+	            }
+		 })
+		 
+	})
+	
+	
+	$('#addFile1').click(function() {
+		var count = document.getElementsByClassName('file1').length
+		if(count<3){
+			$('#fileTable1').append(
+					'<tr><td><div class="form-group">'+
+					'<input type="file" name="file"  onchange="return ValidateFileUpload(this)" class="form-control file1"/>'+
+					'</div></td></tr>');
+		} else {
+			$('#max_count_achieved1').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved1').delay(2000).fadeOut('slow');
 		}
-		return false;
-	});	
-
+	});
+	$('#addFile2').click(function() {
+		var count = document.getElementsByClassName('file2').length
+		if(count<3){
+			$('#fileTable2').append(
+					'<tr><td><div class="form-group">'+
+					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file2"/>'+
+					'</div></td></tr>');
+		} else {
+			$('#max_count_achieved2').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved2').delay(2000).fadeOut('slow');
+		}
+	});
+	$('#addFile3').click(function() {
+		var count = document.getElementsByClassName('file3').length
+		if(count<3){
+			$('#fileTable3').append(
+					'<tr><td><div class="form-group">'+
+					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file3"/>'+
+					'</div></td></tr>');
+		} else {
+			$('#max_count_achieved3').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved3').delay(2000).fadeOut('slow');
+		}
+	});
+	$('#addFile4').click(function() {
+		var count = document.getElementsByClassName('file4').length
+		if(count<3){
+			$('#fileTable4').append(
+					'<tr><td><div class="form-group">'+
+					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file4"/>'+
+					'</div></td></tr>');
+		} else {
+			$('#max_count_achieved4').css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved4').delay(2000).fadeOut('slow');
+		}
+	});
+	
+	function disableInputRacerinfo() {
+    	$("#first_name").attr("disabled", "disabled");
+    	$("#last_name").attr("disabled", "disabled");
+    	$("#birthday").attr("disabled", "disabled");
+    	$("#document").attr("disabled", "disabled");
+    	$("#address").attr("disabled", "disabled");
+    	$("#sport_category").attr("disabled", "disabled");
+    	$("#add_class_modal").attr("disabled", "disabled");
+    	$("#delete_classes").attr("disabled", "disabled");
+    	$("#add_racer").attr("disabled", "disabled");
+	}
 	$('#edit_racer').submit(function(){
 
         		$("#ajax_loader").css("display", "inline-block");
@@ -507,4 +595,20 @@ $(document).ready(function(){
 		$(this).datepicker('hide');
 	});
 		
+	if ($('#add_docs').length != 0) {
+		$('#add_docs').bootstrapValidator();
+	}
+	
+	// Display ajax loader image if form pass validation
+	$('#add_docs').on('success.form.bv', function(e) {
+		$("#ajax_loader_docs").css("display", "inline-block");
+	});
+	
+	// reValidate the date when user change it  
+	$('#doc_date_picker').on('changeDate', function(e) {
+
+		var name = $('#doc_date_picker').attr('name')
+		$('#addDocument').bootstrapValidator('revalidateField', name); 
+		$('#doc_date_picker').datepicker('hide');
+    });
 });
