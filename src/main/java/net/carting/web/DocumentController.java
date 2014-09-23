@@ -405,56 +405,47 @@ public class DocumentController {
             @RequestParam(value = "doc_number", required = false) String number,
             @RequestParam(value = "start_date", required = false) String startDate,
             @RequestParam(value = "finish_date", required = false) String finishDate) { 
-        System.out.println("Start controller.");
-        System.out.println("Document type number: " + docType);
-        System.out.println("Racer ID:"+racerId);
-        /* Getting current leader */
-        String username = userService.getCurrentUserName();
-        Leader leader = leaderService.getLeaderByUserName(username);
-        String fileName = null;
-        String msg = "";
-        if (files != null && files.length >0) {
-            for(int i =0 ;i< files.length; i++){
-                try {
-                    fileName = files[i].getOriginalFilename();
-                    msg += "You have successfully uploaded " + fileName +"<br/>";
-                } catch (Exception e) {
-                    return "You failed to upload " + fileName + ": " + e.getMessage() +"<br/>";
-                }
-            }
-        } else {
-            return "Unable to upload. File is empty.";
-        }
-        
-
-       if (teamService.isTeamByLeaderId(leader.getId())) {
-           Team team = teamService.getTeamByLeader(leader);
-           if (Integer.parseInt(racerId)<1) {
+        try {
+            if(Integer.parseInt(racerId)<1) {
                 /*
                  * If team leader doesn't choose racers, he is redirected to
                  * page of his team
                  */
                LOG.info("Team leader doesn't choose racers...");
-               return "redirect:/team/" + team.getId();
-           } else {
-                /*
-                 * Getting document data from form and creating object
-                 * 'Document'
-                 */
-               String[]racersId={racerId};
-               try {
-                   documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, leader);
-               } catch (IOException e) {
-                   msg= "Unable to upload. File is empty.";
-                   LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
-                           leader.getFirstName(), leader.getLastName());
-                   return msg;
+               return "Team leader doesn't choose racers";
+            }
+        } catch (Exception e) {
+            return "RacerId don't exist";
+        }
+        if (files == null || files.length <1) {
+            return "problem";
+        }
+        String[]racersId={racerId};
+        /* Getting current leader */
+        Leader leader = leaderService.getLeaderByUserName(userService.getCurrentUserName());
+        String msg = "";
+           if (teamService.isTeamByLeaderId(leader.getId())) {
+               Team team = teamService.getTeamByLeader(leader);
+               for (Racer racer : team.getRacers()) {
+                   if (racer.getId()==Integer.parseInt(racerId)) {
+                       try {
+                           documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, leader);
+                           System.out.println("File added!");
+                           msg="added";
+                       } catch (Exception e) {
+                           msg= "problem";
+                           LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                                   leader.getFirstName(), leader.getLastName());
+                           System.out.println("Something wrong with properties.");
+                           return msg;
+                       }
+                   }
                }
+              
+           } else { 
+               LOG.error("Team leader doesn't exists...");
+               msg = "Relogin in, please!";
            }
-       } else {
-           LOG.error("Team leader doesn't exists...");
-           return "redirect:/team/add";
-       }            
        return msg;
     }
 }

@@ -50,10 +50,9 @@ $(document).ready(function(){
 	        	        success: function(response) {  
 	        	        	disableInputRacerinfo()
 	        	        	$("#ajax_loader").css("display", "none");
-	        	        	$("#add_docs").css("display", "block").hide().fadeIn();
+	        	        	$("#addDocumentsForm").css("display", "block").hide().fadeIn();
 	        	        	$("#racerId").val(response)
 	        	        	
-	        	        	//$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/racer/' + response);
 	        	        } 
 	        	    });
 	        	    
@@ -552,40 +551,74 @@ $(document).ready(function(){
 	
 
 
-$('.adding').click(function() {
-	alert('start');
-	var index = $(this).attr("doc_type");
-	$('#result').html('');
-	var fd = new FormData();
-	$.each($('.file'+index),function (x,val) {
-		fd.append("files[]",val.files[0]);
-		alert(val.files[0]+'added')
-	});
-	
-	alert('files ready.');
-
-	fd.append("racerId", $('#racerId').val());
-	fd.append("docType",index)
-	if (index=='1'||index=='2') {
-		/*fb.append("doc_number", $('#docNum'+index).val());*/
-	}
-	if (index=='2'||index=='3') {
-		/*fb.append("finish_date", $('#doc_date_picker'+index).val())*/
-	} 
-	if (index=='4') {
-		fb.append("start_date",$('#doc_date_picker'+index).val())
-	}
-	alert('start transfer')
-	$.ajax({
-		url: "/Carting/document/addDocs",
-		data: fd,
-		dataType: 'text',
-		processData: false,
-		contentType: false,
-		type: 'POST',
-		success: function(data){
-			$('#result').html(data);
+	$('.adding').click(function() {
+		var index = $(this).attr("doc_type");
+		$('#result').html('');
+		var fd = new FormData();
+		$.each($('.file'+index),function (x,val) {
+			fd.append("files[]",val.files[0]);
+		});
+		
+		fd.append("racerId", $('#racerId').val());
+		fd.append("docType",index)
+		if (index=='1'||index=='2') {
+			fd.append("doc_number", $('#docNum'+index).val());
 		}
+		if (index=='2'||index=='3') {
+			fd.append("finish_date", $('#doc_date_picker'+index).val())
+		} 
+		if (index=='4') {
+			var start_date = $('#doc_date_picker4').val();
+			fd.append("start_date",start_date)
+		}
+		$.ajax({
+			url: "/Carting/document/addDocs",
+			data: fd,
+			dataType: 'text',
+			processData: false,
+			contentType: false,
+			type: 'POST',
+			success: function(data){
+				if (data=="added") {
+					$('#success-result').css("display", "block").hide().fadeIn();
+					$('#success-result').delay(2000).fadeOut('slow');
+					var next=+index+1;
+					if (next<6) {
+						if($('#add'+next).css('visibility') == 'hidden'){
+							$('#myTab a:first').tab('show')
+						} else {
+							$('#myTab a[id="a'+next+'"]').tab('show')
+						}
+					}
+					$('#a'+index).removeAttr("data-toggle");
+					$('#a'+index).attr({
+						style:"color: silver"
+					})
+					$('#add'+index).css({'visibility':'hidden'})
+				} else if (data=="problem") {
+					$('#problem-result').css("display", "block").hide().fadeIn();
+					$('#problem-result').delay(2000).fadeOut('slow');
+				} else {
+					$('#result').html(data);
+					$('#result').css("display", "block").hide().fadeIn();
+					$('#result').delay(2000).fadeOut('slow');
+					$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/');
+				}
+				
+				
+			}
+		});
 	});
 });
-});
+function test() {
+	for (var index=1;index<5;index++) {
+		$.each($('.docInput'+index),function (x,v) {
+			if (v.value==''){
+				document.getElementById('add'+index).disabled=true;
+				return false;
+			} else {
+				document.getElementById('add'+index).disabled=false;
+			}
+		});
+	}
+}

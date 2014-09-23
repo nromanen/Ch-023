@@ -150,30 +150,30 @@
 	<div class="alert alert-danger" id="racer_exists"
 		style="display: none; padding: 0px 0px 0px 20px; height: 25px;"><spring:message code="message.racer_exists" /></div>
 </form>
-
+<div id="addDocumentsForm" class = "well" style="display: none">
 <!-- Adding documents form -->
-	<input type="text" id="racerId" value="14">
+	<input type="hidden" id="racerId">
 	<h3 style="color: silver">Step 2: Adding documents</h3>
-	
+
 <!-- Navigation tabs -->
 	
-	<ul class="nav nav-tabs" role="tablist">
-	  <li id="tab1" class="active"><a href="#licenseInfo" role="tab" data-toggle="tab">License</a></li>
-	  <li id="tab2"><a href="#insuranceInfo" role="tab" data-toggle="tab">Insurance</a></li>
-	  <li id="tab3"><a href="#medicalInfo" role="tab" data-toggle="tab">Medical</a></li>
-	  <li id="tab4"><a href="#permissionInfo" role="tab" data-toggle="tab">Permission</a></li>
+	<ul class="nav nav-tabs" role="tablist" id="myTab">
+	  <li id="tab1" class="active"><a id="a1" href="#licenseInfo" role="tab" data-toggle="tab">License</a></li>
+	  <li id="tab2" ><a id="a2" href="#insuranceInfo" role="tab" data-toggle="tab" >Insurance</a></li>
+	  <li id="tab3"><a id="a3" href="#medicalInfo" role="tab" data-toggle="tab">Medical</a></li>
+	  <li id="tab4"><a id="a4" href="#permissionInfo" role="tab" data-toggle="tab">Permission</a></li>
 	</ul>
 	
 <!-- Tabs content -->
 <!-- Racer's license form -->
-	<br>
+<br>
 	<div class="tab-content">
-		<div class="tab-pane active" id="licenseInfo">
+		<div class="tab-pane fade in active" id="licenseInfo">
 			<%-- <form action="<c:url value="/racer/addDocs" />"  method="post" enctype="multipart/form-data" data-toggle="validator" role="form" name="add_lic" id="add_lic"> --%> 
 				<div class="form-group">
 					<label id="docNum1label"  class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
-					<input id="docNum1" type="text" class="form-control" placeholder="<spring:message code="placeholder.document_number" />"
-						id="number" name="number" maxlength="100" data-bv-notempty="true"
+					<input id="docNum1" type="text" class="form-control docInput1" placeholder="<spring:message code="placeholder.document_number" />"
+						id="number" name="number" maxlength="100" data-bv-notempty="true" onchange='test()'
 						data-bv-notempty-message="<spring:message code="dataerror.field_required" /> <spring:message code="dataerror.enter_document_namber" />" />
 					<div class="help-block with-errors"></div>
 				</div>
@@ -195,7 +195,7 @@
 					<div class="alert alert-danger" id="max_count_achieved1" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 						<spring:message code="dataerror.max_count_achieved" />
 					</div>
-					<input id="addL" type="submit" class="btn btn-success btn-sm adding" doc_type="1" value="Add document" />
+					<input id="add1" type="submit" disabled class="btn btn-success btn-sm adding" doc_type="1" value="<spring:message code='label.add_document'/>" />
 				</div>
 				
 			<%-- </form> --%>
@@ -203,12 +203,11 @@
 		
 <!-- Racer's insurance form -->
 	
-	  <div class="tab-pane" id="insuranceInfo">
-		<br>
+	  <div class="tab-pane fade" id="insuranceInfo">
 		<div class="form-group">
 				<label class="text-info"><spring:message code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;
 				</label> 
-				<input type="text" class="form-control datepicker" name="finish_date"
+				<input type="text" class="form-control datepicker docInput2" name="finish_date" onchange='test()'
 					placeholder="<spring:message code="placeholder.date" />" value="${finishDate}"
 					id="doc_date_picker2"
 					data-bv-notempty="true"
@@ -218,7 +217,7 @@
 					
 				<div class="help-block with-errors"></div>
 				<label class="text-info"><spring:message code="label.document_number" /><span class="text-danger">*</span>:&nbsp;</label>
-				<input type="text" class="form-control"
+				<input type="text" class="form-control docInput2" onchange='test()'
 					placeholder="<spring:message code="placeholder.document_number" />"
 					id="docNum2" name="number" maxlength="100" 
 					data-bv-notempty="true"
@@ -244,14 +243,14 @@
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
 				<input type="hidden" value = "2">
-				<input id="addRI" type="button" class="btn btn-success btn-sm adding" doc_type="2" value="Add document" />
+				<input id="add2" type="button" disabled class="btn btn-success btn-sm adding" doc_type="2" value="<spring:message code='label.add_document'/>" />
 			</div>
 		</div>
 <!-- Racer's medical certificate form -->	
-	  <div class="tab-pane" id="medicalInfo">
+	  <div class="tab-pane fade" id="medicalInfo">
 	  <div class="form-group">
 				<label class="text-info"><spring:message code="label.document_valid_until" /><span class="text-danger">*</span>:&nbsp;</label> 
-				<input type="text" class="form-control datepicker" name="finish_date" value="${finishDate}"
+				<input type="text" class="form-control datepicker docInput3" name="finish_date" value="${finishDate}" onchange='test()'
 					placeholder="<spring:message code="placeholder.date" />"
 					id="doc_date_picker3"
 					data-bv-notempty="true"
@@ -280,17 +279,18 @@
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
 				<input type="hidden" value = "3">
-				<input id="addMC" type="button" class="btn btn-success btn-sm adding" doc_type="3" value="Add document" />
+				<input id="add3" type="button" disabled class="btn btn-success btn-sm adding" doc_type="3" value="<spring:message code='label.add_document'/>" />
 			</div>
 	  
 	  </div>
 <!-- Racer's parental permission form -->
-		  <div class="tab-pane" id="permissionInfo">
+		  <div class="tab-pane fade"  id="permissionInfo">
+		  <form action="#" role="form">
 			<div class="form-group">
 				<label class="text-info"><spring:message
 						code="label.document_date_start" /><span class="text-danger">*</span>:&nbsp;
 				</label> 
-				<input type="text" class="form-control datepicker" name="start_date" value="${startDate}"
+				<input type="text" class="form-control datepicker docInput4" name="start_date" onchange='test()'
 					placeholder="<spring:message code="placeholder.date" />"
 					id="doc_date_picker4"
 					data-bv-notempty="true"
@@ -316,23 +316,19 @@
 				<div class="alert alert-danger" id="max_count_achieved4" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 					<spring:message code="dataerror.max_count_achieved" />
 				</div>
-				<input id="type_doc_4" type="hidden" value = "4">
-				<input id="addPP" type="button" class="btn btn-success btn-sm adding" doc_type="4" value="Add document" />
+				<input id="add4" type="button" disabled class="btn btn-success btn-sm adding" doc_type="4" value="<spring:message code='label.add_document'/>" />
 			</div>
-			
+			</form>
 		</div>
 	</div>
 <!-- end of tabs -->
+    <div class="alert alert-danger" id="result" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;"></div>
+    <div class="alert alert-success" id="success-result" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
+       <spring:message code="label.documents_added"></spring:message></div>
+    <div class="alert alert-danger" id="problem-result" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
+       <spring:message code="label.document_adding_problems"></spring:message></div>
 	<input type="submit" class="btn btn-success" value="Done!" id="finish"> 
+	
 	<img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_docs"> 
 	<br><br>
-<div id="result"></div>
-<h1>SpringMVC - File Upload with/without Ajax</h1>
- 
-<i>Uploading File With Ajax</i><br/>
-<form id="form2" method="post" action="/Carting/document/addDocs" enctype="multipart/form-data">
-  <!-- File input -->    
-  <input name="file" id="file9" type="file" /><br/>
-</form>
- 
-<button value="Submit" onclick='uploadFormData()' >Upload</button><i>Using FormData Object</i>
+</div>
