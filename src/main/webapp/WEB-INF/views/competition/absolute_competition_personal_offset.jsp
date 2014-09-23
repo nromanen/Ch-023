@@ -10,7 +10,7 @@
 <script type='text/javascript'
     src="<c:url value="/resources/js/lib/jquery.tablesorter.min.js" />"></script>
     <script type='text/javascript'
-    src="<c:url value="/resources/js/personal_offset.js" />"></script>
+    src="<c:url value="/resources/js/absolute_personal_offset.js" />"></script>
     <link
     href="<c:url value="/resources/style/personal_offset.css" />" rel="stylesheet" />
 
@@ -31,8 +31,6 @@
 	</style>
 	<table class="table table-hover table-bordered" style="text-align: center;" border="1" cellspacing='0' cellpadding='2'>
 		<thead class="well" style="font-weight: 100;">
-		<c:choose>
-		    <c:when test="${isSetQualifyingList[loop.index]}">
 		    <tr class="hidden">
 		        <th colspan="19" class="th_hidden"><spring:message code="label.header_1" /></th>
 		    </tr>
@@ -54,31 +52,6 @@
                     <spring:message code="label.count_of_racers" /> ${fn:length(carClassCompetition.racerCarClassCompetitionNumbers) }.  
                 </td>
             </tr>
-            </c:when>
-            <c:otherwise>
-            <tr class="hidden">
-		        <th colspan="17" class="th_hidden"><spring:message code="label.header_1" /></th>
-		    </tr>
-		    <tr class="hidden">
-                <th colspan="17" class="th_hidden"><spring:message code="label.header_2" /></th>
-            </tr>
-            <tr class="hidden">
-                <th colspan="17" class="th_hidden">${carClassCompetition.competition.name }</th>
-            </tr>
-            <tr>
-                <th colspan="2">${carClassCompetition.competition.place } </th>
-                <th colspan="7" ><spring:message code="label.car_class" />: ${carClassCompetition.carClass.name }</th>
-                <th colspan="8" class="th_hidden"><fmt:formatDate value="${carClassCompetition.competition.dateStart }" pattern="yyyy-MM-dd" /> - <fmt:formatDate value="${carClassCompetition.competition.dateEnd }" pattern="yyyy-MM-dd" /></th>
-            </tr>
-            <tr class="hidden">
-                <td colspan="17" class="th_hidden">
-                    <spring:message code="label.competition.lap_count" />: ${carClassCompetition.circleCount};  
-                    <spring:message code="label.competition.percentage_offset" />: ${carClassCompetition.percentageOffset};
-                    <spring:message code="label.count_of_racers" /> ${fn:length(carClassCompetition.racerCarClassCompetitionNumbers) }.  
-                </td>
-            </tr>
-            </c:otherwise>
-            </c:choose>
 			<tr>
 				<th rowspan="2" class="column-sm">№</th>
 				<th rowspan="2"><spring:message code="label.lastname_firstname" /></th>
@@ -88,8 +61,8 @@
 				<c:if test="${isSetQualifyingList[loop.index]}">
 				<th colspan="2" class="qualifying"><spring:message code="label.control_race" /></th>
 				</c:if>
-				<th colspan="3" class="column-wide"><spring:message code="label.first_final_race" /></th>
-				<th colspan="3" class="column-wide"><spring:message code="label.second_final_race" /></th>
+				<th colspan="3" class="column-mid"><spring:message code="label.first_final_race" /></th>
+				<th colspan="3" class="column-mid"><spring:message code="label.second_final_race" /></th>
 				<th rowspan="2" class="column-md"><spring:message code="label.points_sum" /></th>
 				<th rowspan="2" class="column-md"><spring:message code="label.competition.place_in_race" /></th>
 				<th rowspan="2" class="column-md"><spring:message code="label.points_by_table_b" /></th>
@@ -165,30 +138,16 @@
 				</tr>
 			</c:forEach>
 		</tbody>
-		<c:choose>
-		<c:when test="${isSetQualifyingList[loop.index]}">
 		<tr class="hidden">
-                <td colspan="3"><spring:message code="label.main_secretary" /></td>
-                <td colspan="16" style="text-align: right">${carClassCompetition.competition.secretaryName }</td>
-                <td colspan="9"></td>
+                <td colspan="2"><spring:message code="label.main_secretary" /></td>
+                <td colspan="13" style="text-align: right">${carClassCompetition.competition.secretaryName }</td>
+                <td colspan="4" class="th_hidden"></td>
         </tr>
         <tr class="hidden">
-                <td colspan="3"><spring:message code="label.competition.director_name" /></td>
-                <td colspan="16" style="text-align: right">${carClassCompetition.competition.directorName }</td>
-                <td colspan="9"></td>
+                <td colspan="2"><spring:message code="label.competition.director_name" /></td>
+                <td colspan="13" style="text-align: right">${carClassCompetition.competition.directorName }</td>
+                <td colspan="4" class="th_hidden"></td>
         </tr>
-		</c:when>
-		<c:otherwise>
-		<tr class="hidden">
-                <td colspan="3"><spring:message code="label.main_secretary" /></td>
-                <td colspan="14" style="text-align: right">${carClassCompetition.competition.secretaryName }</td>
-        </tr>
-        <tr class="hidden">
-                <td colspan="3"><spring:message code="label.competition.director_name" /></td>
-                <td colspan="14" style="text-align: right">${carClassCompetition.competition.directorName }</td>
-        </tr>
-		</c:otherwise>
-		</c:choose>
 	</table>
 	</div>
 	</c:if>
