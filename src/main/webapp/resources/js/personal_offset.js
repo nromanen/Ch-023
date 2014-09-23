@@ -9,7 +9,7 @@ $(document).ready(function(){
     		});
     	} 
     	var table = $('#table_personal_offset' + id).html();
-    	table = "<style>table{ font-size: 14;} .column-wide {width: 150px;} .column-md {width: 35px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none} .hidden {height: 30px;}</style>" + table;
+    	table = "<style>table{ font-size: 14;} .column-wide {width: 120px;} .column-md {width: 40px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none} .hidden {height: 30px;}</style>" + table;
     	if (!$('.qualifying')[0]) {
     		$('.th_hidden').attr('colspan', function(){
     			return +$(this).attr('colspan') + 2;

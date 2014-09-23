@@ -72,13 +72,13 @@
 			</tr>
 			<tr>
 				<c:if test="${isSetQualifyingList[loop.index]}">
-				<th ><spring:message code="label.time" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
+				<th ><spring:message code="label.time" /></th>
 				</c:if>
-				<th ><spring:message code="label.laps" /></th>
+				<th class="column-md"><spring:message code="label.laps" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
 				<th ><spring:message code="label.points" /></th>
-				<th ><spring:message code="label.laps" /></th>
+				<th class="column-md"><spring:message code="label.laps" /></th>
 				<th ><spring:message code="label.competition.place_in_race" /></th>
 				<th ><spring:message code="label.points" /></th>
 			</tr>
@@ -152,5 +152,4 @@
 	</div>
 	</c:if>
 	</c:forEach>
-	${places}
 	</div>

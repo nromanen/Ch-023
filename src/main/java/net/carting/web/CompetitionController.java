@@ -325,61 +325,43 @@ public class CompetitionController {
 							.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
 			isSetQualifyingList.add(carClassCompetitionResultService
 					.isSetQualifyingByCarClassCompetition(carClassCompetition));
-			List<Integer> places = new ArrayList<Integer>();
-			for (List<CarClassCompetitionResult> carClassCompetitionList : carClassCompetitionResults) {
-				for (CarClassCompetitionResult carClassCompetitionResult : carClassCompetitionList) {
-					places.add(carClassCompetitionResult.getAbsolutePlace());
-				}
-				int max = places.get(0);
-				for (int i = 0; i < places.size(); i++) {
-					if (places.get(i) >= max)
-						max = places.get(i);
-				}
-				int size = max;
-				List<String> pointsList = Arrays
-						.asList(AdminSettings.POINTS_BY_TABLE_B.get(size)
-								.split(","));
-				Map<Integer, Integer> placesAndPoints = new LinkedHashMap<Integer, Integer>();
-				List<Integer> intPointsList = new ArrayList<Integer>();
-				for (int i = 0; i < pointsList.size(); i++) {
-					intPointsList.add(Integer.parseInt(pointsList.get(i)));
-					placesAndPoints.put(i + 1, intPointsList.get(i));
-				}
-				for (List<CarClassCompetitionResult> carClassCompetitionList1 : carClassCompetitionResults) {
-					List<Double> finalPoints = new ArrayList<Double>();
-					Map<Double, Integer> finalPointsAndPlaces = new LinkedHashMap<Double, Integer>();
-					for (CarClassCompetitionResult carClassCompetitionResult1 : carClassCompetitionList1) {
-						carClassCompetitionResult1
-								.setAbsolutePointsByTableB(placesAndPoints
-										.get(carClassCompetitionResult1
-												.getAbsolutePlace()));
-						carClassCompetitionResult1
-								.setAbsoluteSumm(carClassCompetitionResult1
-										.getAbsolutePointsByTableB()
-										+ carClassCompetitionResult1
-												.getManeuverTime());
-						finalPoints.add(carClassCompetitionResult1
-								.getAbsoluteSumm());
-
-					}
-					Collections.sort(finalPoints);
-					for (int i = 0; i < finalPoints.size(); i++) {
-						finalPointsAndPlaces.put(
-								finalPoints.get(finalPoints.size() - (i + 1)),
-								i + 1);
-					}
-					for (CarClassCompetitionResult carClassCompetitionResult1 : carClassCompetitionList1) {
-						carClassCompetitionResult1
-								.setFinalPlace(finalPointsAndPlaces
-										.get(carClassCompetitionResult1
-												.getAbsoluteSumm()));
-
-					}
-				}
-			}
-
 		}
 
+		for (List<CarClassCompetitionResult> ccrL : carClassCompetitionResults) {
+			List<Double> finalPoints = new ArrayList<Double>();
+			Map<Double, Integer> finalPointsAndPlaces = new LinkedHashMap<Double, Integer>();
+			boolean isSetResult = true;
+			for (CarClassCompetitionResult ccr : ccrL) {
+				if (ccr.getAbsolutePlace() > 0) {
+					int size = ccr.getRacerCarClassCompetitionNumber()
+							.getCarClassCompetition()
+							.getRacerCarClassCompetitionNumbers().size();
+					ccr.setAbsolutePointsByTableB(AdminSettings
+							.getPointFromTableB(ccr.getAbsolutePlace(), size));
+					ccr.setAbsoluteSumm(ccr.getAbsolutePointsByTableB()
+							+ ccr.getManeuverTime());
+					finalPoints.add(ccr.getAbsoluteSumm());
+				} else {
+					ccr.setAbsolutePlace(0);
+					ccr.setAbsolutePointsByTableB(0);
+					ccr.setAbsoluteSumm(0);
+					ccr.setFinalPlace(0);
+					isSetResult = false;
+				}
+				Collections.sort(finalPoints);
+				for (int i = 0; i < finalPoints.size(); i++) {
+					finalPointsAndPlaces.put(
+							finalPoints.get(finalPoints.size() - (i + 1)),
+							i + 1);
+				}
+			}
+			if (isSetResult) {
+				for (CarClassCompetitionResult ccr : ccrL) {
+					ccr.setFinalPlace(finalPointsAndPlaces.get(ccr
+							.getAbsoluteSumm()));
+				}
+			}
+		}
 		map.put("carClassCompetitions", carClassCompetitions);
 		map.put("raceResultsLists", raceResults);
 		map.put("absoluteResultsList", carClassCompetitionResults);
