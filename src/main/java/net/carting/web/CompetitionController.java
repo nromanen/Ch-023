@@ -1,24 +1,63 @@
 package net.carting.web;
 
-import com.itextpdf.text.PageSize;
-import net.carting.domain.*;
-import net.carting.service.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.carting.domain.AbsoluteTeamResults;
+import net.carting.domain.AdminSettings;
+import net.carting.domain.CarClass;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.CarClassCompetitionResult;
+import net.carting.domain.Competition;
+import net.carting.domain.File;
+import net.carting.domain.Leader;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.RacerCarClassNumber;
+import net.carting.domain.Team;
+import net.carting.service.AdminSettingsService;
+import net.carting.service.CarClassCompetitionResultService;
+import net.carting.service.CarClassCompetitionService;
+import net.carting.service.CarClassService;
+import net.carting.service.CompetitionService;
+import net.carting.service.FileService;
+import net.carting.service.LeaderService;
+import net.carting.service.RaceService;
+import net.carting.service.RacerCarClassCompetitionNumberService;
+import net.carting.service.RacerService;
+import net.carting.service.TeamInCompetitionService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
 import net.carting.validator.CompetitionValidator;
 import net.carting.util.DateUtil;
 import net.carting.util.GlobalData;
 import net.carting.util.PdfWriter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.itextpdf.text.PageSize;
 
 @Controller
 @RequestMapping(value = "/competition")
@@ -113,7 +152,7 @@ public class CompetitionController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView addCompetitionPage() {
+    public ModelAndView addCompetitionPage(Model model) {
         return new ModelAndView("competition_add_edit");
     }
 
@@ -155,7 +194,7 @@ public class CompetitionController {
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView editCompetitionPage(Model model,
-            @PathVariable("id") int id) {
+                                            @PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
 
         if (competition.isEnabled()) {
@@ -214,7 +253,7 @@ public class CompetitionController {
 
     @RequestMapping(value = "/{id}/mandat", method = RequestMethod.GET)
     public String competitionMandatStatementPage(@PathVariable("id") int id,
-            Map<String, Object> map) {
+                                                 Map<String, Object> map) {
 
         List<RacerCarClassCompetitionNumber> racerCarClassCompetitionNumbers = racerCarClassCompetitionNumberService
                 .getRacerCarClassCompetitionNumbersByCompetitionId(id);
@@ -243,24 +282,88 @@ public class CompetitionController {
 
     @RequestMapping(value = "/{id}/personal", method = RequestMethod.GET)
     public String personalOffsetPage(@PathVariable("id") int id,
-            Map<String, Object> map) {
+                                     Map<String, Object> map) {
         List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
                 .getCarClassCompetitionsByCompetitionId(id);
-    	List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
-    	List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
-    	List<Boolean>isSetQualifyingList = new ArrayList<Boolean>();
-    	for (CarClassCompetition carClassCompetition : carClassCompetitions) {
-    		raceResults.add(raceService.getRaceResultsByCarClassCompetition(carClassCompetition));
-    		carClassCompetitionResults.add(carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
-    		isSetQualifyingList.add(carClassCompetitionResultService.isSetQualifyingByCarClassCompetition(carClassCompetition));
-    	}
-    	map.put("carClassCompetitions", carClassCompetitions);
-    	map.put("raceResultsLists", raceResults);
-    	map.put("absoluteResultsList", carClassCompetitionResults);
-    	map.put("isSetQualifyingList",isSetQualifyingList);
-    	
+        List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
+        List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+        List<Boolean> isSetQualifyingList = new ArrayList<Boolean>();
+        for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+            raceResults.add(raceService
+                    .getRaceResultsByCarClassCompetition(carClassCompetition));
+            carClassCompetitionResults
+                    .add(carClassCompetitionResultService
+                            .getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+            isSetQualifyingList.add(carClassCompetitionResultService
+                    .isSetQualifyingByCarClassCompetition(carClassCompetition));
+        }
+        map.put("carClassCompetitions", carClassCompetitions);
+        map.put("raceResultsLists", raceResults);
+        map.put("absoluteResultsList", carClassCompetitionResults);
+        map.put("isSetQualifyingList", isSetQualifyingList);
 
         return "competition_personal_offset";
+    }
+
+    @RequestMapping(value = "/{id}/absolute_personal", method = RequestMethod.GET)
+    public String absolutePersonalOffsetPage(@PathVariable("id") int id,
+                                             Map<String, Object> map) {
+        List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
+                .getCarClassCompetitionsByCompetitionId(id);
+        List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
+        List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
+        List<Boolean> isSetQualifyingList = new ArrayList<Boolean>();
+        for (CarClassCompetition carClassCompetition : carClassCompetitions) {
+            raceResults.add(raceService
+                    .getRaceResultsByCarClassCompetition(carClassCompetition));
+            carClassCompetitionResults
+                    .add(carClassCompetitionResultService
+                            .getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+            isSetQualifyingList.add(carClassCompetitionResultService
+                    .isSetQualifyingByCarClassCompetition(carClassCompetition));
+        }
+
+        for (List<CarClassCompetitionResult> ccrL : carClassCompetitionResults) {
+            List<Double> finalPoints = new ArrayList<Double>();
+            Map<Double, Integer> finalPointsAndPlaces = new LinkedHashMap<Double, Integer>();
+            boolean isSetResult = true;
+            for (CarClassCompetitionResult ccr : ccrL) {
+                if (ccr.getAbsolutePlace() > 0) {
+                    int size = ccr.getRacerCarClassCompetitionNumber()
+                            .getCarClassCompetition()
+                            .getRacerCarClassCompetitionNumbers().size();
+                    ccr.setAbsolutePointsByTableB(AdminSettings
+                            .getPointFromTableB(ccr.getAbsolutePlace(), size));
+                    ccr.setAbsoluteSumm(ccr.getAbsolutePointsByTableB()
+                            + ccr.getManeuverTime());
+                    finalPoints.add(ccr.getAbsoluteSumm());
+                } else {
+                    ccr.setAbsolutePlace(0);
+                    ccr.setAbsolutePointsByTableB(0);
+                    ccr.setAbsoluteSumm(0);
+                    ccr.setFinalPlace(0);
+                    isSetResult = false;
+                }
+                Collections.sort(finalPoints);
+                for (int i = 0; i < finalPoints.size(); i++) {
+                    finalPointsAndPlaces.put(
+                            finalPoints.get(finalPoints.size() - (i + 1)),
+                            i + 1);
+                }
+            }
+            if (isSetResult) {
+                for (CarClassCompetitionResult ccr : ccrL) {
+                    ccr.setFinalPlace(finalPointsAndPlaces.get(ccr
+                            .getAbsoluteSumm()));
+                }
+            }
+        }
+        map.put("carClassCompetitions", carClassCompetitions);
+        map.put("raceResultsLists", raceResults);
+        map.put("absoluteResultsList", carClassCompetitionResults);
+        map.put("isSetQualifyingList", isSetQualifyingList);
+
+        return "absolute_competition_personal_offset";
     }
 
     @RequestMapping(value = "/setEnabled", method = RequestMethod.POST, headers = { "content-type=application/json" })
@@ -278,12 +381,13 @@ public class CompetitionController {
     @RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
     public @ResponseBody String unregisterRacerFromCompetitionAction(
             @RequestBody Map<String, Object> map, @PathVariable("id") int id) {
+        int competitonId = id;
         int racerId = Integer.parseInt(map.get("racerId").toString());
         racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
-                id, racerId);
+                competitonId, racerId);
         LOG.trace(
                 "Admin has unregistered racer(id = {}) from competition (id = {})",
-                racerId, id);
+                racerId, competitonId);
         return "success";
     }
 
@@ -303,7 +407,7 @@ public class CompetitionController {
     }
 
     // team registration view
-    /* TODO Remove HttpServletRequest */
+	/* TODO Remove HttpServletRequest */
     @RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
     public String registrationTeamOnCompetitionView(
             Map<String, Object> map,
@@ -350,8 +454,9 @@ public class CompetitionController {
             @RequestBody Map<String, Object> formMap) {
         racerCarClassCompetitionNumberService
                 .registrationTeamRacersOnCompetition(formMap);
-        return Integer.parseInt(formMap.get("competitionId")
+        int competitionId = Integer.parseInt(formMap.get("competitionId")
                 .toString());
+        return competitionId;
     }
 
     @RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })
@@ -376,34 +481,42 @@ public class CompetitionController {
         LOG.debug("End changePointsByPlaces method");
         return "success";
     }
-    
+
     @RequestMapping(value = "/{id}/teamsRanking", method = RequestMethod.GET)
-    public String teamRankingPage(@PathVariable("id") int id, Map<String, Object> map) {
+    public String teamRankingPage(@PathVariable("id") int id,
+                                  Map<String, Object> map) {
         Competition competition = competitionService.getCompetitionById(id);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        map.put("competitionDate", dateFormat.format(competition.getDateStart()) + " - "
+        map.put("competitionDate",
+                dateFormat.format(competition.getDateStart()) + " - "
                         + dateFormat.format(competition.getDateEnd()));
         map.put("competition", competition);
-        List<Team> teamList = teamInCompetitionService.getTeamsByCompetitionId(id);
+        List<Team> teamList = teamInCompetitionService
+                .getTeamsByCompetitionId(id);
         map.put("teamList", teamList);
-       List<AbsoluteTeamResults>absoluteTeamResultsList = new ArrayList<AbsoluteTeamResults>();
-       for (int i=0; i<teamList.size();i++) {
-           AbsoluteTeamResults absTeamRes = new AbsoluteTeamResults();
-           absTeamRes.setTeamId(teamList.get(i).getId());
-           absTeamRes.setShkpPoints(getShKPResultForTeamByCompetitionId(competition.getId(), teamList.get(i)));
-           absTeamRes.setManeuverPoints(getManResultForTeamByCompetitionId(competition.getId(), teamList.get(i)));
-           absTeamRes.setAbsolutePoints(absTeamRes.getShkpPointPlace().getPoints()+absTeamRes.getManeuverPointPlace().getPoints());
-           absoluteTeamResultsList.add(absTeamRes);
-       }
-       map.put("resultList", setPoints(absoluteTeamResultsList));
-            return "teams_ranking";
+        List<AbsoluteTeamResults> absoluteTeamResultsList = new ArrayList<AbsoluteTeamResults>();
+        for (int i = 0; i < teamList.size(); i++) {
+            AbsoluteTeamResults absTeamRes = new AbsoluteTeamResults();
+            absTeamRes.setTeamId(teamList.get(i).getId());
+            absTeamRes.setShkpPoints(getShKPResultForTeamByCompetitionId(
+                    competition.getId(), teamList.get(i)));
+            absTeamRes.setManeuverPoints(getManResultForTeamByCompetitionId(
+                    competition.getId(), teamList.get(i)));
+            absTeamRes.setAbsolutePoints(absTeamRes.getShkpPointPlace()
+                    .getPoints()
+                    + absTeamRes.getManeuverPointPlace().getPoints());
+            absoluteTeamResultsList.add(absTeamRes);
+        }
+        map.put("resultList", setPoints(absoluteTeamResultsList));
+        return "teams_ranking";
     }
-    
-    public List<AbsoluteTeamResults> setPoints(List<AbsoluteTeamResults>absoluteTeamResultsList) {
-        List<Integer>absPoints = new ArrayList<Integer>();
-        List<Integer>shkpPoints = new ArrayList<Integer>();
-        List<Integer>manPoints = new ArrayList<Integer>();
-        for (AbsoluteTeamResults absTeamRes:absoluteTeamResultsList) {
+
+    public List<AbsoluteTeamResults> setPoints(
+            List<AbsoluteTeamResults> absoluteTeamResultsList) {
+        List<Integer> absPoints = new ArrayList<Integer>();
+        List<Integer> shkpPoints = new ArrayList<Integer>();
+        List<Integer> manPoints = new ArrayList<Integer>();
+        for (AbsoluteTeamResults absTeamRes : absoluteTeamResultsList) {
             manPoints.add(absTeamRes.getManeuverPointPlace().getPoints());
             shkpPoints.add(absTeamRes.getShkpPointPlace().getPoints());
             absPoints.add(absTeamRes.getAbsolutePointPlace().getPoints());
@@ -411,41 +524,50 @@ public class CompetitionController {
         Collections.sort(manPoints);
         Collections.sort(shkpPoints);
         Collections.sort(absPoints);
-        if(manPoints.size()>1) {
-            for (int i=0; i<manPoints.size();i++) {
-                for (int j=0;j<manPoints.size();j++) {
-                    if (manPoints.get(i)==absoluteTeamResultsList.get(j).getManeuverPointPlace().getPoints()) {
-                        if (manPoints.get(i)==0) {
-                            absoluteTeamResultsList.get(j).setManeuverPlace(manPoints.get(i));
+        if (manPoints.size() > 1) {
+            for (int i = 0; i < manPoints.size(); i++) {
+                for (int j = 0; j < manPoints.size(); j++) {
+                    if (manPoints.get(i) == absoluteTeamResultsList.get(j)
+                            .getManeuverPointPlace().getPoints()) {
+                        if (manPoints.get(i) == 0) {
+                            absoluteTeamResultsList.get(j).setManeuverPlace(
+                                    manPoints.get(i));
                         } else {
-                            absoluteTeamResultsList.get(j).setManeuverPlace(manPoints.size()-i);
-                        }
-                    }
-                }
-            }
-        } 
-        if(shkpPoints.size()>1) {
-            for (int i=0; i<shkpPoints.size();i++) {
-                for (int j=0;j<shkpPoints.size();j++) {
-                    if (shkpPoints.get(i)==absoluteTeamResultsList.get(j).getShkpPointPlace().getPoints()) {
-                        if (shkpPoints.get(i)==0) {
-                            absoluteTeamResultsList.get(j).setShkpPlace(shkpPoints.get(i));
-                        } else {
-                            absoluteTeamResultsList.get(j).setShkpPlace(shkpPoints.size()-i);
+                            absoluteTeamResultsList.get(j).setManeuverPlace(
+                                    manPoints.size() - i);
                         }
                     }
                 }
             }
         }
-        if(absPoints.size()>1) {
-            for (int i=0; i<absPoints.size();i++) {
-                for (int j=0;j<absPoints.size();j++) {
-                    
-                    if (absPoints.get(i)==absoluteTeamResultsList.get(j).getAbsolutePointPlace().getPoints()) {
-                        if (absPoints.get(i)==0) {
-                            absoluteTeamResultsList.get(j).setAbsolutePlace(absPoints.get(i));
+        if (shkpPoints.size() > 1) {
+            for (int i = 0; i < shkpPoints.size(); i++) {
+                for (int j = 0; j < shkpPoints.size(); j++) {
+                    if (shkpPoints.get(i) == absoluteTeamResultsList.get(j)
+                            .getShkpPointPlace().getPoints()) {
+                        if (shkpPoints.get(i) == 0) {
+                            absoluteTeamResultsList.get(j).setShkpPlace(
+                                    shkpPoints.get(i));
                         } else {
-                            absoluteTeamResultsList.get(j).setAbsolutePlace(absPoints.size()-i);
+                            absoluteTeamResultsList.get(j).setShkpPlace(
+                                    shkpPoints.size() - i);
+                        }
+                    }
+                }
+            }
+        }
+        if (absPoints.size() > 1) {
+            for (int i = 0; i < absPoints.size(); i++) {
+                for (int j = 0; j < absPoints.size(); j++) {
+
+                    if (absPoints.get(i) == absoluteTeamResultsList.get(j)
+                            .getAbsolutePointPlace().getPoints()) {
+                        if (absPoints.get(i) == 0) {
+                            absoluteTeamResultsList.get(j).setAbsolutePlace(
+                                    absPoints.get(i));
+                        } else {
+                            absoluteTeamResultsList.get(j).setAbsolutePlace(
+                                    absPoints.size() - i);
                         }
                     }
                 }
@@ -453,16 +575,22 @@ public class CompetitionController {
         }
         return absoluteTeamResultsList;
     }
-    
-    public Integer getShKPResultForTeamByCompetitionId(int competitionId, Team team){
-       List<Integer> teamShKPRes = new ArrayList<Integer>();
-       Competition competition = competitionService.getCompetitionById(competitionId);
+
+    public Integer getShKPResultForTeamByCompetitionId(int competitionId,
+                                                       Team team) {
+        List<Integer> teamShKPRes = new ArrayList<Integer>();
+        Competition competition = competitionService
+                .getCompetitionById(competitionId);
         for (CarClassCompetition ccc : competition.getCarClassCompetitions()) {
             List<Integer> tempShKPRes = new ArrayList<Integer>();
-            for (CarClassCompetitionResult cccr : carClassCompetitionResultService.getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+            for (CarClassCompetitionResult cccr : carClassCompetitionResultService
+                    .getCarClassCompetitionResultsOrderedByPoints(ccc)) {
                 if (cccr.getAbsolutePoints() > 0) {
                     for (Racer racer : team.getRacers()) {
-                        if (racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
+                        if (racer
+                                .equals(cccr
+                                        .getRacerCarClassCompetitionNumber()
+                                        .getRacer())) {
                             tempShKPRes.add(cccr.getAbsolutePoints());
                         }
                     }
@@ -482,70 +610,80 @@ public class CompetitionController {
         }
         return getSumFromList(teamShKPRes);
     }
-    
-    public Integer getManResultForTeamByCompetitionId(int competitionId, Team team){
+
+    public Integer getManResultForTeamByCompetitionId(int competitionId,
+                                                      Team team) {
         List<Integer> teamManRes = new ArrayList<Integer>();
-         for (CarClassCompetition ccc : competitionService.getCompetitionById(competitionId).getCarClassCompetitions()) {
-             List<Integer> tempManRes = new ArrayList<Integer>();
-             for (CarClassCompetitionResult cccr : carClassCompetitionResultService
-                     .getCarClassCompetitionResultsOrderedByPoints(ccc)) {
-                 if (cccr.getManeuverTime() > 0) {
-                     for (Racer racer : team.getRacers()) {
-                         if (racer.equals(cccr.getRacerCarClassCompetitionNumber().getRacer())) {
-                             tempManRes.add(Double.valueOf(cccr.getManeuverTime()).intValue());
-                         }
-                     }
-                 }
-             }
-             if (!tempManRes.isEmpty()) {
-                 Integer max = tempManRes.get(0);
-                 if (tempManRes.size() > 1) {
-                     for (Integer j : tempManRes) {
-                         if (j > max) {
-                             max = j;
-                         }
-                     }
-                 }
-                 teamManRes.add(max);
-             }
-         }
-         return getSumFromList(teamManRes);
-     }
-    
-    public Integer getSumFromList(List<Integer>list){
-        if (list.size()==1) {
+        for (CarClassCompetition ccc : competitionService.getCompetitionById(
+                competitionId).getCarClassCompetitions()) {
+            List<Integer> tempManRes = new ArrayList<Integer>();
+            for (CarClassCompetitionResult cccr : carClassCompetitionResultService
+                    .getCarClassCompetitionResultsOrderedByPoints(ccc)) {
+                if (cccr.getManeuverTime() > 0) {
+                    for (Racer racer : team.getRacers()) {
+                        if (racer
+                                .equals(cccr
+                                        .getRacerCarClassCompetitionNumber()
+                                        .getRacer())) {
+                            tempManRes.add(Double.valueOf(
+                                    cccr.getManeuverTime()).intValue());
+                        }
+                    }
+                }
+            }
+            if (!tempManRes.isEmpty()) {
+                Integer max = tempManRes.get(0);
+                if (tempManRes.size() > 1) {
+                    for (Integer j : tempManRes) {
+                        if (j > max) {
+                            max = j;
+                        }
+                    }
+                }
+                teamManRes.add(max);
+            }
+        }
+        return getSumFromList(teamManRes);
+    }
+
+    public Integer getSumFromList(List<Integer> list) {
+        if (list.size() == 1) {
             return list.get(0);
         }
         Collections.sort(list);
         int sum = 0;
         if (list.size() > 5) {
             for (int i = list.size() - 1; i > list.size() - 6; i--) {
-                sum =sum +list.get(i);
+                sum = sum + list.get(i);
             }
         } else {
             for (int i = 0; i < list.size(); i++) {
-                sum =sum + list.get(i);
+                sum = sum + list.get(i);
             }
         }
         return sum;
     }
-    
+
     @RequestMapping(value = "absRanking", method = RequestMethod.POST)
     @ResponseBody
-    public int createAbsoluteRankingStatement(@RequestParam(value = "table") String table,
-                                          @RequestParam(value = "competitionId") int competitionId){
+    public int createAbsoluteRankingStatement(
+            @RequestParam(value = "table") String table,
+            @RequestParam(value = "competitionId") int competitionId) {
         int result;
         try {
-            Competition competition = competitionService.getCompetitionById(competitionId);
+            Competition competition = competitionService
+                    .getCompetitionById(competitionId);
             File absoluteCompetitionResults;
             if (competition.getAbsoluteResultsStatement() == null) {
                 absoluteCompetitionResults = new File();
             } else {
-                absoluteCompetitionResults = competition.getAbsoluteResultsStatement();
+                absoluteCompetitionResults = competition
+                        .getAbsoluteResultsStatement();
             }
-            absoluteCompetitionResults.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
-            String fileName = "AbsoluteTeamsRankingStatement_" + competitionId + "_"
-                    + Calendar.getInstance().getTimeInMillis();
+            absoluteCompetitionResults.setFile(PdfWriter.getFileBytes(table,
+                    PageSize.A4.rotate()));
+            String fileName = "AbsoluteTeamsRankingStatement_" + competitionId
+                    + "_" + Calendar.getInstance().getTimeInMillis();
             absoluteCompetitionResults.setName(fileName);
             competition.setAbsoluteResultsStatement(absoluteCompetitionResults);
             competitionService.updateCompetition(competition);
@@ -556,5 +694,5 @@ public class CompetitionController {
         }
         return result;
     }
-        
+
 }

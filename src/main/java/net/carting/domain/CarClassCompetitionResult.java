@@ -2,7 +2,15 @@ package net.carting.domain;
 
 import net.carting.util.DateUtil;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -68,6 +76,15 @@ public class CarClassCompetitionResult {
 
     @Column(name = "absolute_place")
     private int absolutePlace;
+    
+    @Transient
+    private int absolutePointsByTableB;
+    
+    @Transient
+    private double absoluteSumm;
+    
+    @Transient
+    private int finalPlace;
 
     @Column(name = "race2_points")
     private int race2points;
@@ -139,7 +156,32 @@ public class CarClassCompetitionResult {
         }
     }
 
-    public int getAbsolutePlace() {
+    public int getAbsolutePointsByTableB() {
+		return absolutePointsByTableB;
+	}
+
+	public void setAbsolutePointsByTableB(int absolutePointsByTableB) {
+        this.absolutePointsByTableB = absolutePointsByTableB;
+
+	}
+
+	public double getAbsoluteSumm() {
+		return absoluteSumm;
+	}
+
+	public void setAbsoluteSumm(double absoluteSumm) {
+		this.absoluteSumm = absoluteSumm;
+	}
+
+	public int getFinalPlace() {
+		return finalPlace;
+	}
+
+	public void setFinalPlace(int finalPlace) {
+		this.finalPlace = finalPlace;
+	}
+
+	public int getAbsolutePlace() {
         return absolutePlace;
     }
 

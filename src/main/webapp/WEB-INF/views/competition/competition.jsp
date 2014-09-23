@@ -135,6 +135,9 @@
 		<a href="<c:url value="/competition/${competition.id}/personal" />" class="btn btn-primary">
 			<spring:message code="label.personal_offset" />
 		</a>
+		<a href="<c:url value="/competition/${competition.id}/absolute_personal" />" class="btn btn-primary">
+			<spring:message code="label.absolute_personal_offset" />
+		</a>
 	</c:if>
 	<c:if test="${!empty carClassCompetitionList}">
 		<a href="<c:url value="/competition/${competition.id}/teamsRanking" />" class="btn btn-primary">
