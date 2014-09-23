@@ -271,10 +271,27 @@
 			</td>
 		</tr>
 	</table>
+	<br/><div align="center">
+		<label class="text-info" style="font-size: 20px;">
+			7.&nbsp;<spring:message code="label.db_imp_exp" />:
+		</label>
+	</div><br/>
+	<div style="text-align: center;">
+		<button type="button" class="btn btn-primary btn-sm" id="createDump">
+			<spring:message code="label.db_export" />
+		</button>
+		<button type="button" class="btn btn-warning btn-sm" id="saveAllFiles">
+			<spring:message code="label.db_save_files" />
+		</button>
+		<button type="button" class="btn btn-success btn-sm" id="importDump">
+			<spring:message code="label.db_import" />
+		</button>
+	</div><br/>
+	<div style="display: none" class="progress">
+		<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+		</div>
+	</div>
 </div>
-
-
-
 
 <!-- Delete car class modal -->
 <div id="carclass_delete_modal" class="modal fade">

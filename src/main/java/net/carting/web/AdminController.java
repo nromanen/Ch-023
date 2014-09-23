@@ -1,13 +1,9 @@
 package net.carting.web;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Map;
-
 import net.carting.domain.*;
+import net.carting.domain.File;
 import net.carting.service.*;
-
+import net.carting.util.DataBaseDumperUtil;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 
-    @Autowired
-    private DocumentService documentService;
     @Autowired
     private CarClassService carClassService;
     @Autowired
@@ -209,6 +209,65 @@ public class AdminController {
                 maneuverService.updateManeuver(updatedManeuver);
             }
         } catch (Exception e) {
+            result = "fail";
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "createDump", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String createDump() {
+        String result = "success";
+        Properties props = new Properties();
+        try {
+            props.load(this.getClass().getClassLoader().getResourceAsStream("jdbc.properties"));
+            java.io.File dir = new java.io.File("src/main/resources/documents/sql/");
+            if (!dir.exists()) {
+                    dir.mkdirs();
+            }
+            PrintWriter writer = new PrintWriter(dir.getAbsoluteFile() + java.io.File.separator + "dump.sql", "UTF-8");
+            writer.println(DataBaseDumperUtil.dumpDB(props));
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = "fail";
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "uploadDump", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String uploadDump() {
+        String result = "success";
+
+        return result;
+    }
+
+    @Autowired
+    FileService fileService;
+
+    @RequestMapping(value = "downloadFiles", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String downloadFiles() {
+        String result = "success";
+        try {
+            java.io.File dir = new java.io.File("src/main/resources/documents/files");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            for (File file : fileService.getAllFiles()) {
+                /*PrintWriter writer = new PrintWriter(dir.getAbsoluteFile() + file.getName(), "UTF-8");
+                writer.println(file.getFileBytes());
+                writer.close();*/
+                FileOutputStream fos = new FileOutputStream(dir.getAbsoluteFile() + java.io.File.separator + file.getName() + ".pdf");
+                fos.write(file.getFileBytes());
+                fos.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             result = "fail";
         }
         return result;

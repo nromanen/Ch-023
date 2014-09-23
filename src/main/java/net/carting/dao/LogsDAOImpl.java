@@ -2,9 +2,9 @@ package net.carting.dao;
 
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
 

@@ -22,7 +22,7 @@ import java.util.Properties;
  * This class connects to a database and dumps all the tables and contents out to stdout in the form of
  * a set of SQL executable statements
  */
-public class DataBaseDumper {
+public class DataBaseDumperUtil {
     /** Dump the whole database to an SQL string */
     public static String dumpDB(Properties props) {
         String driverClassName = props.getProperty("jdbc.driverClassName");

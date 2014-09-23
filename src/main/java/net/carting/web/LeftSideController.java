@@ -4,7 +4,6 @@ import net.carting.domain.Racer;
 import net.carting.service.CompetitionService;
 import net.carting.service.RacerService;
 import net.carting.util.GlobalData;
-
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
 import org.apache.tiles.preparer.ViewPreparerSupport;

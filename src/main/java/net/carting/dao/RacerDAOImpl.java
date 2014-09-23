@@ -1,22 +1,16 @@
 package net.carting.dao;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import net.carting.domain.Racer;
+import net.carting.domain.Team;
+import net.carting.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import net.carting.domain.Racer;
-import net.carting.domain.Team;
-import net.carting.util.DateUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import java.util.*;
 
 @Repository
 public class RacerDAOImpl implements RacerDAO {

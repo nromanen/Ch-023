@@ -1,19 +1,17 @@
 package net.carting.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.carting.domain.Role;
+import net.carting.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import net.carting.domain.Role;
-import net.carting.domain.User;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO {

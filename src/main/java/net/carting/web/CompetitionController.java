@@ -1,61 +1,24 @@
 package net.carting.web;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import net.carting.domain.AbsoluteTeamResults;
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.File;
-import net.carting.domain.Leader;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.RacerCarClassNumber;
-import net.carting.domain.Team;
-import net.carting.service.AdminSettingsService;
-import net.carting.service.CarClassCompetitionResultService;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.CarClassService;
-import net.carting.service.CompetitionService;
-import net.carting.service.FileService;
-import net.carting.service.LeaderService;
-import net.carting.service.RaceService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
-import net.carting.service.RacerService;
-import net.carting.service.TeamInCompetitionService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
-import net.carting.util.CompetitionValidator;
+import com.itextpdf.text.PageSize;
+import net.carting.domain.*;
+import net.carting.service.*;
+import net.carting.validator.CompetitionValidator;
 import net.carting.util.DateUtil;
 import net.carting.util.GlobalData;
 import net.carting.util.PdfWriter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.itextpdf.text.PageSize;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/competition")

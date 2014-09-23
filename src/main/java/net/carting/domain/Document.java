@@ -1,7 +1,6 @@
 package net.carting.domain;
 
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.Set;
 

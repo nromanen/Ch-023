@@ -1,9 +1,8 @@
 package net.carting.domain;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.util.Date;
 
 @MappedSuperclass
 public abstract class Person {

@@ -1,16 +1,15 @@
 package net.carting.scheduler;
 
-import java.util.Date;
-import java.util.List;
-
 import net.carting.domain.Competition;
 import net.carting.service.CompetitionService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Carting
@@ -24,6 +23,7 @@ public class CompetitionScheduler {
     @Autowired
     private CompetitionService competitionService;
 
+    //TODO: date after, date before
     private static boolean compareDate(Date first, Date second) {
         return first.compareTo(second) > 0;
     }

@@ -1,37 +1,22 @@
 package net.carting.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import net.carting.domain.AdminSettings;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.File;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.service.CarClassCompetitionResultService;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.DocumentService;
-import net.carting.service.ManeuverService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
+import com.itextpdf.text.PageSize;
+import net.carting.domain.*;
+import net.carting.service.*;
 import net.carting.util.PdfWriter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.itextpdf.text.PageSize;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 /**
     * Carting
     * Created by manson on 8/5/14.

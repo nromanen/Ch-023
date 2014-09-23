@@ -1,26 +1,15 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import net.carting.dao.CarClassCompetitionResultDAO;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.*;
 import net.carting.util.DateUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class CarClassCompetitionResultServiceImpl implements

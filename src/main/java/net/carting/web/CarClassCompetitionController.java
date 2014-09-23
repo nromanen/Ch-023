@@ -1,46 +1,20 @@
 package net.carting.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.Leader;
-import net.carting.domain.Race;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.RacerCarClassNumber;
-import net.carting.domain.Team;
-import net.carting.service.CarClassCompetitionResultService;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.CarClassService;
-import net.carting.service.CompetitionService;
-import net.carting.service.LeaderService;
-import net.carting.service.RaceService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
-import net.carting.service.RacerCarClassNumberService;
-import net.carting.service.RacerService;
-import net.carting.service.TeamInCompetitionService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
+import net.carting.domain.*;
+import net.carting.service.*;
 import net.carting.util.DateUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/carclass")

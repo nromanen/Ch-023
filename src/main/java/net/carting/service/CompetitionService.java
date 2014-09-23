@@ -1,12 +1,8 @@
 package net.carting.service;
 
-import java.util.List;
+import net.carting.domain.*;
 
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Competition;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.Team;
+import java.util.List;
 
 public interface CompetitionService {
 

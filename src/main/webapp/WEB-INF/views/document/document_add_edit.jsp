@@ -1,4 +1,3 @@
-<%@page import="net.carting.domain.Document"%>
 <%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -143,14 +142,15 @@
 					<div class="form-group">
 							<c:choose> 
 							<c:when test="${document ne null}">
-								<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)" />	
+								<input type="file" name="file" fileNum="1" class="form-control file fileUpload" id="upload_file" onchange="return ValidateFileUpload(this)" />
 							</c:when> 
 							<c:otherwise>
-								<input type="file" name="file" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)"
+								<input type="file" name="file" fileNum="1" class="form-control file fileUpload" id="upload_file" onchange="return ValidateFileUpload(this)"
 							data-bv-notempty="true"
 							data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
 							</c:otherwise> 
 						</c:choose>
+						<input type="text" fileNum="1" class="fileName" name="fileName"/>
 					</div>
 				</td>
 			</tr>

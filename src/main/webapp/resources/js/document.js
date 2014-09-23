@@ -1,6 +1,24 @@
 $(document).ready(function() {
 	
-	
+	$('#add_document').click(function() {
+		alert($('#upload_file').val());
+	});
+
+	$('.fileUpload').on('change', function() {
+		alert('change id = ' + $(this).attr('fileNum'));
+		/*$('.file').each(function() {
+			var fileNum = $(this).attr('fileNum');
+			//console.log(fileNum);
+			$('.fileName').each(function() {
+				console.log(fileNum + "\t" + $(this).attr('fileNum') === fileNum);
+				//console.log($(this).attr('fileNum') === fileNum);
+				if ($(this).attr('fileNum') === fileNum) {
+					$(this).val($('.file').val());
+				}
+			});
+		});*/
+	});
+
 	// Setup validator
 
 	if ($('#addDocument').length != 0) {
@@ -24,9 +42,13 @@ $(document).ready(function() {
 		var count = document.getElementsByClassName('file').length+parseInt($('#fileCount').val());
 		if(count<3){
 			$('#fileTable').append(
-					'<tr><td><div class="form-group">'+
-					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file"/>'+
-					'</div></td></tr>');
+					'<tr><td><div class="form-group">' +
+					"<input type='file' fileNum='" + Number(count + 1) + "' name='file' onchange='return ValidateFileUpload(this)' class='form-control file fileUpload'/>" +
+					"<input type='text' fileNum='" + Number(count + 1) + "' class='fileName' name='fileName'/>" +
+					"</div></td></tr>");
+			$('.fileName').on('change', 'yourSelector', function() {
+				//do something
+			});
 		} else {
 			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
 			$('#max_count_achieved').delay(2000).fadeOut('slow');

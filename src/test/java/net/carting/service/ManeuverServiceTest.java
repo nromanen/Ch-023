@@ -13,9 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -57,7 +55,6 @@ public class ManeuverServiceTest {
         assertFalse(maneuverService.getManeuverById(0).equals(new Maneuver()));
         assertTrue(maneuverService.getManeuverById(4).equals(m2));
         verify(maneuverDAO, times(1)).getManeuverById(4);
-        //verifyNoMoreInteractions(maneuverDAO);
     }
 
     @Test

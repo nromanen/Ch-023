@@ -1,8 +1,29 @@
 $(document).ready(function(){
-	
 
-    $('#add_car_class_form').bootstrapValidator();
-    $('#edit_car_class_form').bootstrapValidator();
+	$('#add_car_class_form').bootstrapValidator();
+	$('#edit_car_class_form').bootstrapValidator();
+
+	$('#createDump').click(function(){
+		alert('begin');
+		$.ajax({
+			url: "createDump",
+			type: "POST",
+			success: function(response) {
+				alert(response);
+			}
+		});
+	});
+
+	$('#saveAllFiles').click(function(){
+		alert('begin');
+		$.ajax({
+			url: "downloadFiles",
+			type: "POST",
+			success: function(response) {
+				alert(response);
+			}
+		});
+	});
 
 	
 	$("#change_pass_btn").click(function(){	

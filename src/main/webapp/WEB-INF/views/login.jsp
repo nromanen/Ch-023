@@ -2,12 +2,9 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter"%>
-<%@ page import="org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter"%>
-<%@ page import="org.springframework.security.core.AuthenticationException"%>
 
 <script>
-	$(document).ready(function(){
+	$(document).ready(function () {
 		$('#popover').popover({
 			placement: "bottom"
 		});

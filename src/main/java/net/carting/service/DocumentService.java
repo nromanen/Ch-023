@@ -1,11 +1,10 @@
 package net.carting.service;
 
+import net.carting.domain.Document;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
-
-import net.carting.domain.Document;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public interface DocumentService {
 
