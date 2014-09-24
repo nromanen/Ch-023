@@ -153,6 +153,7 @@ public class LeaderController {
         leader.setDocument(formMap.get("document").toString());
         leader.setAddress(formMap.get("address").toString());
         leader.setLicense(formMap.get("license").toString());
+        leader.getUser().setEmail(formMap.get("email").toString());
         leaderService.updateLeader(leader);
         LOG.trace("Leader {} {} had edited tracermation abut him",
                 leader.getFirstName(), leader.getLastName());
