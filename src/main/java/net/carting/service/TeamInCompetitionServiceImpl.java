@@ -60,6 +60,12 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
     public List<TeamInCompetition> getTeamInCompetitionListByTeamId(int teamId) {
         return teamInCompetitionDAO.getTeamInCompetitionListByTeamId(teamId);
     }
+    
+    @Override
+    @Transactional
+    public List<TeamInCompetition> getTeamInCompetitionListByTeamIdForCurrentYear(int teamId) {
+        return teamInCompetitionDAO.getTeamInCompetitionListByTeamIdForCurrentYear(teamId);
+    }
 
     @Override
     @Transactional

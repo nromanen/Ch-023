@@ -136,6 +136,9 @@
 						<td><spring:message code="label.problems" /></td>
 						<td><spring:message code="label.start_date" /></td>
 						<td><spring:message code="label.end_date" /></td>
+						<c:if test="${(authority == 'ROLE_TEAM_LEADER') && (needTeam.id == team.id) }">
+						    <td></td> 
+						</c:if>
 					</tr>
 					<c:if test="${!empty isValidTeamInCompetitionMap}">
 						<c:forEach items="${isValidTeamInCompetitionMap}"
@@ -164,6 +167,12 @@
 								<td><fmt:formatDate
 										value="${isValidTeamInCompetition.key.competition.dateEnd}"
 										pattern="dd-MM-yyyy" /></td>
+							    <c:if test="${(authority == 'ROLE_TEAM_LEADER') && (needTeam.id == team.id) }">
+                                    <td>
+                                        <button class="btn btn-danger btn-xs unregister_team" 
+                                            id="unregister_team_btn${isValidTeamInCompetition.key.competition.id }"><spring:message code="label.unregister" /></button>
+                                    </td>
+                                </c:if>
 							</tr>
 						</c:forEach>
 					</c:if>
@@ -210,4 +219,33 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="unregister_team_modal" tabindex="-1"
+    role="dialog">
+    <div class="modal-dialog" style="margin-top: 10%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">x</button>
+                <h4 class="modal-title"><spring:message code="label.unregister_team_from_competition" /></h4>
+            </div>
+            <div class="modal-body">
+                <label class="text-info">
+                    <spring:message code="label.unregister_team_from_competition_confirm" />
+                </label>
+                <input type="hidden" id="team_unregister_url" value="<c:url value="/competition/unregisterTeam" />">
+                <input type="hidden" id="team_unregister_id" value="${needTeam.id}">
+                <br><br>
+                <div class="alert alert-danger" id="unregister_error"
+                    style="display: none; padding: 0px 0px 0px 10px; height: 25px;">
+                    <spring:message code="message.unregister_team_from_competition_wrong" />
+                </div>
+                <img src='<c:url value="/resources/img/ajax-loader.gif" />' style="display: none;" id="ajax_loader_delete">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal"><spring:message code="label.cancel" /></button>
+                <button class="btn btn-primary" type="button" id="unregister_team"><spring:message code="label.accept" /></button>
+            </div>
+        </div>
+    </div>
 </div>
