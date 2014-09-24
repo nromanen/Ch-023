@@ -33,7 +33,7 @@ $(document).ready(function(){
 		if (page > 3) {
 			element = "..." + element;
 		}
-		if (countOfPages - page > 3) {
+		if (countOfPages - page > 2) {
 			element += "...";
 		}
 		if (page > 2) {

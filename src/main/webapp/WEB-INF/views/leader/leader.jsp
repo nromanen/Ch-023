@@ -50,7 +50,10 @@
 	<div>
 		<label class="text-info"><spring:message
 				code="label.license_number" />:&nbsp;</label>${currentLeader.license}</div>
-
+    <div>
+        <label class="text-info"><spring:message
+                code="label.email" />:&nbsp;</label>${currentLeader.user.email}</div>
+                
 	<c:if test="${isTeamByLeader==false}">
 		<br>
 		<a href='<c:url value="/team/add" />' class="btn btn-primary"> <spring:message
