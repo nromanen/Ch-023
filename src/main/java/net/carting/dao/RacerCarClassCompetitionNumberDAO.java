@@ -1,8 +1,8 @@
 package net.carting.dao;
 
-import net.carting.domain.RacerCarClassCompetitionNumber;
-
 import java.util.List;
+
+import net.carting.domain.RacerCarClassCompetitionNumber;
 
 public interface RacerCarClassCompetitionNumberDAO {
 
@@ -25,8 +25,6 @@ public interface RacerCarClassCompetitionNumberDAO {
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCompetitionId(int id);
 
     public void deleteByCarClassCompetitionIdAndRacerId(int carClassCompetitonId, int racerId);
-
-    public void deleteByCompetitionIdAndRacerId(int competitonId, int racerId);
 
     public List<RacerCarClassCompetitionNumber> getRacerCarClassCompetitionNumbersByCompetitionIdAndTeamId(int competitionId, int teamId);
 

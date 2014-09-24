@@ -128,22 +128,7 @@ public class RacerCarClassCompetitionNumberDAOImpl implements RacerCarClassCompe
         }
 
     }
-
-    @Override
-    public void deleteByCompetitionIdAndRacerId(int competitionId, int racerId) {
-        Query query = entityManager.
-                createQuery("DELETE FROM RacerCarClassCompetitionNumber rcccn "
-                        + "WHERE (rcccn.carClassCompetition.competition.id = :competitionId) AND "
-                        + "(rcccn.racer.id = :racerId)");
-        query.setParameter("competitionId", competitionId);
-        query.setParameter("racerId", racerId);
-        if (query.executeUpdate() != 0) {
-        	LOG.debug("Deleted racerCarClassCompetititonNumber by competititon(id = {}) and racer(id = {})", competitionId, racerId);
-        } else {
-        	LOG.warn("Tried to delete racerCarClassCompetititonNumber by competititon(id = {}) and racer(id = {})", competitionId, racerId);
-        }
-
-    }
+    
 
     @SuppressWarnings("unchecked")
     @Override
