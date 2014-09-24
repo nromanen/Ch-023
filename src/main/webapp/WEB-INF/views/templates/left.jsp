@@ -44,7 +44,7 @@
 								href='<c:url value="/racer/${racer.id}"/>'>
 									${racer.firstName} ${racer.lastName} </a></td>
 							<td>${dateString}</td>
-							<td>${racer.getAge()}</td>
+							<td>${racer.getAge(1)}</td>
 						</tr>
 						</c:forEach>
 				</table>
