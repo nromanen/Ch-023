@@ -1,5 +1,7 @@
 package net.carting.dao;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -57,6 +59,19 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                         + "WHERE team.id = :teamId "
                         + "ORDER BY competition.dateStart");
         query.setParameter("teamId", teamId);
+        LOG.debug("Get teamInCompetition list by team with id = {}", teamId);
+        return query.getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<TeamInCompetition> getTeamInCompetitionListByTeamIdForCurrentYear(int teamId) {
+        Query query = entityManager.
+                createQuery("FROM TeamInCompetition "
+                        + "WHERE team.id = :teamId AND YEAR(competition.dateEnd) >= :currentYear "
+                        + "ORDER BY competition.dateStart");
+        query.setParameter("teamId", teamId);
+        query.setParameter("currentYear", new GregorianCalendar().getInstance().get(Calendar.YEAR));
         LOG.debug("Get teamInCompetition list by team with id = {}", teamId);
         return query.getResultList();
     }

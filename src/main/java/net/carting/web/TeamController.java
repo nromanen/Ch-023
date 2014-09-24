@@ -1,15 +1,25 @@
 package net.carting.web;
 
+import java.util.List;
+import java.util.Map;
+
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
 import net.carting.domain.TeamInCompetition;
-import net.carting.service.*;
+import net.carting.service.DocumentService;
+import net.carting.service.LeaderService;
+import net.carting.service.RoleService;
+import net.carting.service.TeamInCompetitionService;
+import net.carting.service.TeamService;
+import net.carting.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/team")
@@ -49,7 +59,7 @@ public class TeamController {
         Team team = teamService.getTeamById(id);
         map.put("needTeam", team);
         List<TeamInCompetition> teamInCompetitionList = teamInCompetitionService
-                .getTeamInCompetitionListByTeamId(id);
+                .getTeamInCompetitionListByTeamIdForCurrentYear(id);
         Map<TeamInCompetition, Boolean> isValidTeamInCompetitionMap = teamInCompetitionService
                 .isValidTeamInCompetitionMap(teamInCompetitionList);
         map.put("isValidTeamInCompetitionMap", isValidTeamInCompetitionMap);

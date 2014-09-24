@@ -1,8 +1,8 @@
 package net.carting.dao;
 
-import net.carting.domain.TeamInCompetition;
-
 import java.util.List;
+
+import net.carting.domain.TeamInCompetition;
 
 public interface TeamInCompetitionDAO {
 
@@ -13,6 +13,8 @@ public interface TeamInCompetitionDAO {
     public void deleteTeamInCompetition(TeamInCompetition teamInCompetition);
 
     public List<TeamInCompetition> getTeamInCompetitionListByTeamId(int teamId);
+    
+    public List<TeamInCompetition> getTeamInCompetitionListByTeamIdForCurrentYear(int teamId);
 
     public void deleteTeamInCompetitionByTeamIdAndCompetitionId(int teamId, int competitionId);
 

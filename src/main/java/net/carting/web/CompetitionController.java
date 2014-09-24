@@ -3,18 +3,15 @@ package net.carting.web;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Collections;
+import java.util.Set;
 
 import net.carting.domain.AbsoluteTeamResults;
-import net.carting.domain.AbsoluteTeamResults.PointPlaces;
 import net.carting.domain.AdminSettings;
 import net.carting.domain.CarClass;
 import net.carting.domain.CarClassCompetition;
@@ -384,15 +381,36 @@ public class CompetitionController {
 	@RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody String unregisterRacerFromCompetitionAction(
 			@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-		int competitonId = id;
+		int competitionId = id;
 		int racerId = Integer.parseInt(map.get("racerId").toString());
 		racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
-				competitonId, racerId);
+				competitionId, racerId);
 		LOG.trace(
 				"Admin has unregistered racer(id = {}) from competition (id = {})",
-				racerId, competitonId);
+				racerId, competitionId);
 		return "success";
 	}
+	
+	@RequestMapping(value = "/unregisterTeam", method = RequestMethod.POST, headers = { "content-type=application/json" })
+    public @ResponseBody String unregisterTeamFromCompetitionAction(
+            @RequestBody Map<String, Object> map) {
+        int competitionId = Integer.parseInt(map.get("competitionId").toString());
+        int teamId = Integer.parseInt(map.get("teamId").toString());
+        
+        Set<CarClassCompetition> carClassCompetitions = competitionService.getCompetitionById(competitionId).getCarClassCompetitions();
+        for (CarClassCompetition ccc : carClassCompetitions) {
+            List<RacerCarClassCompetitionNumber> rcccnL = racerCarClassCompetitionNumberService.
+                    getRacerCarClassCompetitionNumbersByCarClassCompetitionIdAndTeamId(ccc.getId(), teamId);
+            for (RacerCarClassCompetitionNumber rcccn : rcccnL) {
+                racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(ccc.getId(), rcccn.getRacer().getId());
+            }
+        }
+        teamInCompetitionService.deleteTeamInCompetitionByTeamIdAndCompetitionId(teamId, competitionId);
+        LOG.trace(
+                "Admin has unregistered team(id = {}) from competition (id = {})",
+                teamId, competitionId);
+        return "success";
+    }
 
 	// team registration view
 	@RequestMapping(value = "/chooseCompetition", method = RequestMethod.GET)

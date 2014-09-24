@@ -128,24 +128,29 @@
 		
 	<br>
 	<div class="btn-group">
-	<a href="<c:url value="/competition/${competition.id}/mandat" />" class="btn btn-primary">
-		<spring:message code="label.competition.mandat_statement" />
-	</a>
-	<c:if test="${!empty carClassCompetitionList}">
-		<a href="<c:url value="/competition/${competition.id}/personal" />" class="btn btn-primary">
-			<spring:message code="label.personal_offset" />
-		</a>
-		<a href="<c:url value="/competition/${competition.id}/absolute_personal" />" class="btn btn-primary">
-			<spring:message code="label.absolute_personal_offset" />
-		</a>
-	</c:if>
-	<c:if test="${!empty carClassCompetitionList}">
-		<a href="<c:url value="/competition/${competition.id}/teamsRanking" />" class="btn btn-primary">
-			<spring:message code="ranking.teams_ranking" />
-		</a>
-		</c:if>
-		</div>
-		<br/>
+	    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+            <spring:message code="label.offsets" />
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="<c:url value="/competition/${competition.id}/mandat" />" >
+                <spring:message code="label.competition.mandat_statement" />
+            </a></li>
+            <c:if test="${!empty carClassCompetitionList}">
+            <li><a href="<c:url value="/competition/${competition.id}/personal" />" >
+                <spring:message code="label.personal_offset" />
+            </a></li>
+            <li><a href="<c:url value="/competition/${competition.id}/absolute_personal" />">
+                <spring:message code="label.absolute_personal_offset" />
+            </a></li>
+            <li><a href="<c:url value="/competition/${competition.id}/teamsRanking" />">
+                <spring:message code="ranking.teams_ranking" />
+            </a></li>
+            </c:if>
+        </ul>
+	
+	</div>
+	<br/>
 	<input type="hidden" id="getRacersCountUrl" value="<c:url value="/carclass/getRacersCountById" />">
 	<c:if test="${!empty carClassCompetitionList}">
 	
