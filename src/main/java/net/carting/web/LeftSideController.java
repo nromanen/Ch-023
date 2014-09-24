@@ -3,7 +3,7 @@ package net.carting.web;
 import net.carting.domain.Racer;
 import net.carting.service.CompetitionService;
 import net.carting.service.RacerService;
-import net.carting.util.GlobalData;
+import net.carting.util.DateUtil;
 
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
@@ -34,7 +34,7 @@ public class LeftSideController extends ViewPreparerSupport implements Serializa
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         Date today = new Date();
         List<Racer> racers = racerService.getBirthdayRacers(today);
-        currentYear = GlobalData.globalYear;
+        currentYear = DateUtil.globalYear;
         response.put("currentYear", currentYear);
         response.put("competitionListByCurrentYear", competitionService.getCompetitionsByYear(currentYear));
         response.put("racers", racers);
