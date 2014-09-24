@@ -520,7 +520,7 @@
 									<b>${carClassNumber.carClass.name}</b>(№${carClassNumber.number})
 								</c:forEach></td>
 							<td>${dateString}</td>
-							<td>${racer.getAge()}</td>
+							<td>${racer.getAge(1)}</td>
 						</tr>
 						</c:forEach>
 				</table>
