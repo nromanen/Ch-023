@@ -43,7 +43,6 @@ import net.carting.service.TeamService;
 import net.carting.service.UserService;
 import net.carting.util.CompetitionValidator;
 import net.carting.util.DateUtil;
-import net.carting.util.GlobalData;
 import net.carting.util.PdfWriter;
 
 import org.slf4j.Logger;
@@ -143,7 +142,7 @@ public class CompetitionController {
 			if (!competitionService.getCompetitionsYearsList().contains(year)) {
 				year = competitionService.getCompetitionsYearsList().get(0);
 			}
-			GlobalData.globalYear = year;
+			DateUtil.globalYear = year;
 			List<Competition> competitionList = competitionService
 					.getCompetitionsByYear(year);
 			model.addAttribute("competitionList", competitionList);

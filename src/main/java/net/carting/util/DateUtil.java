@@ -2,6 +2,7 @@ package net.carting.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class DateUtil {
     
     private static final Logger LOG = LoggerFactory.getLogger(DateUtil.class);
+    public static int globalYear = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final ThreadLocal<SimpleDateFormat> dateFormatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
