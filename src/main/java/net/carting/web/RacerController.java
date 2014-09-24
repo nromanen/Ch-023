@@ -16,6 +16,7 @@ import net.carting.domain.Leader;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
+import net.carting.service.AdminSettingsService;
 import net.carting.service.CarClassCompetitionService;
 import net.carting.service.CarClassService;
 import net.carting.service.LeaderService;
@@ -51,6 +52,9 @@ public class RacerController {
 
     @Autowired
     private RacerService racerService;
+    
+    @Autowired
+    private AdminSettingsService adminSettingsService;
     
     @Autowired
     private TeamService teamService;
@@ -214,9 +218,10 @@ public class RacerController {
     @RequestMapping(value = "/addRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    Integer addRacerAction(@RequestBody Map<String, Object> racerMap) {
+    Double addRacerAction(@RequestBody Map<String, Object> racerMap) {
     	
     	LOG.debug("Start addRacerAction method");
+    	double result=0;
         Racer racer = new Racer();
         racer.setFirstName(racerMap.get("firstName").toString());
         racer.setLastName(racerMap.get("lastName").toString());
@@ -245,13 +250,17 @@ public class RacerController {
             racerCarClassNumberService.addRacerCarClassNumber((RacerCarClassNumber) it.next());
         }
         // --------------------------------------
-
+        int parentalPermissionAge = adminSettingsService.getAdminSettings().getParentalPermissionYears();
         String username = userService.getCurrentUserName();
         LOG.trace("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
+        result=racer.getId();
+        if(racer.getAge()<parentalPermissionAge) {
+            result+=0.1;
+        }
         LOG.debug("End addRacerAction method");
-        return racer.getId();
+        return result;
     }
 
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})

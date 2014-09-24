@@ -423,7 +423,7 @@ public class DocumentController {
         String[]racersId={racerId};
         /* Getting current leader */
         Leader leader = leaderService.getLeaderByUserName(userService.getCurrentUserName());
-        String msg = "";
+        String msg = "problem";
            if (teamService.isTeamByLeaderId(leader.getId())) {
                Team team = teamService.getTeamByLeader(leader);
                for (Racer racer : team.getRacers()) {
@@ -449,18 +449,3 @@ public class DocumentController {
        return msg;
     }
 }
-    
-        /*List<MultipartFile>mpfList = new ArrayList<MultipartFile>();
-        Iterator<String> itr =  request.getFileNames();
-        while (itr.hasNext()) {
-            MultipartFile mpf = request.getFile(itr.next());
-            mpfList.add(mpf);
-            System.out.println(mpf.getOriginalFilename() +" uploaded!");
-        }
-        System.out.println("List: "+mpfList);
-        System.out.println("End of controller.");
-        return "Done.";
-    }*/
-
-
-

@@ -50,9 +50,17 @@ $(document).ready(function(){
 	        	        success: function(response) {  
 	        	        	disableInputRacerinfo()
 	        	        	$("#ajax_loader").css("display", "none");
+	        	        	$("#label_add_doc").css("display", "block");
 	        	        	$("#addDocumentsForm").css("display", "block").hide().fadeIn();
-	        	        	$("#racerId").val(response)
-	        	        	
+	        	        	var racerId=~~response
+	        	        	var x=(+response-racerId)*10;
+	        	        	$("#racerId").val(racerId)
+	        	        	$('#add_racer').hide();
+	        	        	$('#docNum1').focus();
+	        	        	if(parseInt(x)<1) {
+	        	        		$("#tab4").css("display", "none");
+	        	        		$("#permissionInfo").css("display", "none");
+	        	        	}
 	        	        } 
 	        	    });
 	        	    
@@ -71,7 +79,7 @@ $(document).ready(function(){
 		var racerId = $("#racerId").val()
 		if (racerId>0) {
 			window.location = '/Carting/racer/' + racerId
-		} else window.location = '/Carting'
+		} else window.location = '/Carting/'
 	})
 	
 	$('.addFile').click(function() {
@@ -99,6 +107,8 @@ $(document).ready(function(){
     	$("#add_class_modal").attr("disabled", "disabled");
     	$("#delete_classes").attr("disabled", "disabled");
     	$("#add_racer").attr("disabled", "disabled");
+    	$("#add_class_modal").hide();
+    	$("#delete_classes").hide();
 	}
 	
 	$('#edit_racer').submit(function(){
@@ -528,12 +538,12 @@ $(document).ready(function(){
 	$('#medical_certificate_expires').datepicker('setStartDate', (new Date()).yyyymmdd());
 	$('#insurance_expire').datepicker('setStartDate', (new Date()).yyyymmdd());
 	
-	$('#birthday, #medical_certificate_expires, #insurance_expire').on('changeDate', function() {
+	$('.datepicker').on('changeDate', function() {
 		$(this).datepicker('hide');
 	});
 		
-	if ($('#add_docs').length != 0) {
-		$('#add_docs').bootstrapValidator();
+	if ($('#addDocumentsForm').length != 0) {
+		$('#addDocumentsForm').bootstrapValidator();
 	}
 	
 	// Display ajax loader image if form pass validation
@@ -550,17 +560,19 @@ $(document).ready(function(){
     });
 	
 
-
+//adding documents to new added racer
 	$('.adding').click(function() {
 		var index = $(this).attr("doc_type");
 		$('#result').html('');
 		var fd = new FormData();
+//checking files
 		$.each($('.file'+index),function (x,val) {
 			fd.append("files[]",val.files[0]);
 		});
 		
 		fd.append("racerId", $('#racerId').val());
 		fd.append("docType",index)
+//checking document type
 		if (index=='1'||index=='2') {
 			fd.append("doc_number", $('#docNum'+index).val());
 		}
@@ -580,21 +592,7 @@ $(document).ready(function(){
 			type: 'POST',
 			success: function(data){
 				if (data=="added") {
-					$('#success-result').css("display", "block").hide().fadeIn();
-					$('#success-result').delay(2000).fadeOut('slow');
-					var next=+index+1;
-					if (next<6) {
-						if($('#add'+next).css('visibility') == 'hidden'){
-							$('#myTab a:first').tab('show')
-						} else {
-							$('#myTab a[id="a'+next+'"]').tab('show')
-						}
-					}
-					$('#a'+index).removeAttr("data-toggle");
-					$('#a'+index).attr({
-						style:"color: silver"
-					})
-					$('#add'+index).css({'visibility':'hidden'})
+					afterAdding(index);
 				} else if (data=="problem") {
 					$('#problem-result').css("display", "block").hide().fadeIn();
 					$('#problem-result').delay(2000).fadeOut('slow');
@@ -602,14 +600,34 @@ $(document).ready(function(){
 					$('#result').html(data);
 					$('#result').css("display", "block").hide().fadeIn();
 					$('#result').delay(2000).fadeOut('slow');
-					$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/');
+					//$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/');
 				}
-				
-				
 			}
 		});
 	});
 });
+
+//hiding buttons and disabling inputs to unable editing after adding data 
+//and going to the next tab
+function afterAdding(index) {
+	$('#success-result').css("display", "block").hide().fadeIn();
+	$('#success-result').delay(2000).fadeOut('slow');
+	var next=+index+1;
+	if (next<6)  {
+		$('#myTab a[id="a'+next+'"]').tab('show')
+	}
+	$('#a'+index).attr({
+		style:"color: silver"
+	})
+	$('#file'+index).attr('disabled',true)
+	$.each($('.docInput'+index),function(){
+		this.disabled="disabled";
+	})
+	$('#addFile'+index).hide()
+	$('#add'+index).hide()
+}
+
+//disabling add-button, when there is no filled all information
 function test() {
 	for (var index=1;index<5;index++) {
 		$.each($('.docInput'+index),function (x,v) {
