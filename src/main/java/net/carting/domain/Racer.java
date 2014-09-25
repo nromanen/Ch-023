@@ -13,7 +13,7 @@ import java.util.Set;
         @AttributeOverride(name = "document", column = @Column(name = "document", nullable = false)),
         @AttributeOverride(name = "address", column = @Column(name = "address", nullable = false)),
         @AttributeOverride(name = "birthday", column = @Column(name = "birthday", nullable = false)),
-        @AttributeOverride(name = "registrationDate", column = @Column(name = "registration_date", nullable = false))})
+        @AttributeOverride(name = "registrationDate", column = @Column(name = "registration_date", nullable = false)) })
 public class Racer extends Person {
 
     @Id
@@ -35,7 +35,7 @@ public class Racer extends Person {
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "racer_document", joinColumns = {@JoinColumn(name = "racer_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "document_id", nullable = false, updatable = false)})
+    @JoinTable(name = "racer_document", joinColumns = { @JoinColumn(name = "racer_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "document_id", nullable = false, updatable = false) })
     private Set<Document> documents;
 
     public Team getTeam() {
@@ -74,7 +74,8 @@ public class Racer extends Person {
 
     @Override
     public String toString() {
-        return String.format("Racer [id=%d, firstName=%s, lastName=%s]",id, firstName, lastName);
+        return String.format("Racer [id=%d, firstName=%s, lastName=%s]", id,
+                firstName, lastName);
     }
 
     public int getId() {
@@ -93,13 +94,29 @@ public class Racer extends Person {
         this.documents = documents;
     }
 
-    public int getAge() {
+    public int getAge(int... args) {
+        int age = 0;
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(birthday);
-        return currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
-                - (calendar.get(Calendar.MONTH) + 6) / 12;
+        if (args.length == 0) {
+            age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
+                    - (calendar.get(Calendar.MONTH) + 6) / 12;
+        } else {
+            age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+            int checkMonth = currentDate.get(Calendar.MONTH);
+            int birthMonth = calendar.get(Calendar.MONTH);
+            if (checkMonth < birthMonth) {
+                age--;
+            } else if (checkMonth == birthMonth
+                    && currentDate.get(Calendar.DAY_OF_MONTH) < calendar
+                    .get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+        }
+
+        return age;
     }
 
     public String getStringSportsCategory() {
@@ -151,9 +168,10 @@ public class Racer extends Person {
      * <p/>
      * 4 - racer's parental permission;
      *
-     * @param type a type from the set {1, 2, 3, 4}
+     * @param type
+     *            a type from the set {1, 2, 3, 4}
      * @return the document according to type or null if document don't exist or
-     * type incorrect
+     *         type incorrect
      */
     public Document getDocumentByType(int type) {
         if (this.documents != null && this.documents.size() != 0) {
@@ -167,8 +185,11 @@ public class Racer extends Person {
     }
 
     public boolean isRacerSuitableToCarClass(CarClass carClass) {
-        return getAge() >= carClass.getLowerYearsLimit()
-                && getAge() <= carClass.getUpperYearsLimit();
+        if (getAge() >= carClass.getLowerYearsLimit()
+                && getAge() <= carClass.getUpperYearsLimit()) {
+            return true;
+        }
+        return false;
     }
 
     public Racer() {

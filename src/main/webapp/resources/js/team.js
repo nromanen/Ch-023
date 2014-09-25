@@ -101,6 +101,40 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	var competitionUnregisterId;
+	$('.unregister_team').click(function(){
+		competitionUnregisterId = +$(this).attr('id').replace("unregister_team_btn", "");
+		$("#unregister_error").css("display", "none");
+		$('#unregister_team_modal').modal();
+	});
+	
+	$('#unregister_team').click(function(){
+		$("#ajax_loader_delete").css("display", "block");
+	    
+		var teamUnregisterId = $('#team_unregister_id').val();
+	    var json = { "teamId" : teamUnregisterId,
+	    			 "competitionId" : competitionUnregisterId};
+	    console.log($("#team_unregister_url").val());
+		$.ajax({
+	        url: $("#team_unregister_url").val(),
+	        data: JSON.stringify(json),
+	        contentType: 'application/json',
+	        type: "POST",
+	        success: function(response) {
+	        	$("#ajax_loader_delete").css("display", "none");
+	        	if(response == "success"){		        	
+		        	$('#unregister_team_modal').modal('hide');
+		        	location.reload();
+	        	} else {
+	        		$("#unregister_error").css("display", "block");
+	        	}	        	
+	        }
+	    });
+		return false;
+	});
+	
+	
+	
 	$('.enabled').change(function(){
 		var enabled = $(this).prop('checked');
 		var racer_id = $(this).attr('id').replace('enabled', '');

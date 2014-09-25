@@ -1,16 +1,19 @@
 package net.carting.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 public class DateUtil {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(DateUtil.class);
+    public static int globalYear = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final ThreadLocal<SimpleDateFormat> dateFormatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -45,49 +48,37 @@ public class DateUtil {
         }
         return date;
     }
+
     public static String getTimeStringFromInt(Integer intTime) {
-        if(intTime!=null){
-        String timeResult;
-        long h = TimeUnit.MILLISECONDS.toHours(intTime);
-        long m = TimeUnit.MILLISECONDS.toMinutes(intTime) - TimeUnit.HOURS.toMinutes(h);
-        long s = TimeUnit.MILLISECONDS.toSeconds(intTime) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h);
-        long S = intTime - TimeUnit.SECONDS.toMillis(s) - TimeUnit.MINUTES.toMillis(m) - TimeUnit.HOURS.toMillis(h);
-        if (S>0) {
-            int i=3;
-        	while (S%10==0) {
-        		S = S/10;
-        		i--;
-        	}
-        	if(i > 1){
-        	    timeResult = String.format("%02d:%02d:%02d,%0"+i+"d",h,m,s,S);
-        	} else {
-        	    timeResult = String.format("%02d:%02d:%02d,%d",h,m,s,S);
-        	}
-        } else {
-        	timeResult = String.format("%02d:%02d:%02d",h,m,s);
-        }
-        return timeResult; 
+        if (intTime != null) {
+            Date date = new Date();
+            date.setTime(intTime);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String dateAsText = simpleDateFormat.format(date);
+            return dateAsText;
         } else {
             return null;
         }
+
     }
-    
+
     public static Integer getIntFromTimeString(String timeString) {
         String[]str = timeString.split(":");
         int t = 0;
         switch(str.length) {
-        case 1:
-           t=getMsFromS(str[0]);
-           break;
-        case 2:
-            t=Integer.parseInt(str[0])*1000*60;
-            t=t+getMsFromS(str[1]);
-            break;
-        case 3:
-            t=Integer.parseInt(str[0])*1000*3600;
-            t=t+Integer.parseInt(str[1])*1000*60;
-            t=t+getMsFromS(str[2]);
-            break;
+            case 1:
+                t=getMsFromS(str[0]);
+                break;
+            case 2:
+                t=Integer.parseInt(str[0])*1000*60;
+                t=t+getMsFromS(str[1]);
+                break;
+            case 3:
+                t=Integer.parseInt(str[0])*1000*3600;
+                t=t+Integer.parseInt(str[1])*1000*60;
+                t=t+getMsFromS(str[2]);
+                break;
         }
         return t;
     }
@@ -96,30 +87,20 @@ public class DateUtil {
         s = s.replace(',', '.');
         String[] milisecs=s.split("\\.");
         if (milisecs.length>1) {
-	        if (milisecs[1].length()==3){
-	            t=t+Integer.parseInt(milisecs[1]);
-	        } else if (milisecs[1].length()==2) {
-	            t=t+(Integer.parseInt(milisecs[1])*10);
-	        } else if (milisecs[1].length()==1) {
-	            t=t+(Integer.parseInt(milisecs[1])*100);
-	        }
+            if (milisecs[1].length()==3){
+                t=t+Integer.parseInt(milisecs[1]);
+            } else if (milisecs[1].length()==2) {
+                t=t+(Integer.parseInt(milisecs[1])*10);
+            } else if (milisecs[1].length()==1) {
+                t=t+(Integer.parseInt(milisecs[1])*100);
+            }
         }
         t=t+(Integer.parseInt(milisecs[0])*1000);
         return t;
     }
 
-	public int getDaysCount(int year) {
-		int daysInYear;
-			if (year%4 == 0) {
-		        if (year%100 == 0) {
-		              daysInYear = (year%400 == 0) ? 366 : 365;
-		            } else {
-		                daysInYear = 366;
-		            }
-		        } else {
-		            daysInYear = 365;
-		        }
-		    	return daysInYear;
-		   }
-	
+    public int getDaysCount(int year) {
+        return ((new GregorianCalendar()).isLeapYear(year) ? 366 : 365);
+    }
+
 }

@@ -57,6 +57,19 @@ public class AdminSettingsTest {
     }
     
     @Test
+    public void testGetPointFromTableB() {
+    	int result = AdminSettings.getPointFromTableB(1, 1);
+    	int expectedResult = 10;
+    	assertEquals("Expected true", expectedResult, result);
+    	result = AdminSettings.getPointFromTableB(2, 2);
+    	expectedResult = 1;
+    	assertEquals("Expected true", expectedResult, result);
+    	result = AdminSettings.getPointFromTableB(1, 2);
+    	expectedResult = 20;
+    	assertEquals("Expected true", expectedResult, result);
+    }
+    
+    @Test
     public void testUpdatePerentalPermissionYears() throws Exception {
         AdminSettings expectedResult = new AdminSettings();
         int parentalPermissionYears = 20;

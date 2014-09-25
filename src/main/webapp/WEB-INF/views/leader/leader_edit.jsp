@@ -102,6 +102,18 @@
                 data-bv-regexp-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.max_length_is" />&nbsp;30." />
             <div class="help-block with-errors"></div>
         </div>
+        <div class="form-group col-sm-6">
+            <label class="text-info"><spring:message code="label.email" /><span
+                class="text-danger">*</span>:&nbsp;</label> <input type="email"
+                class="form-control" name="user.email"
+                placeholder="<spring:message code="placeholder.email" />"
+                value="${leader.user.email}"
+                id="email"
+                data-bv-notempty="true"
+                data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                data-bv-emailaddress-message="<spring:message code="dataerror.field_required" />&nbsp;<spring:message code="dataerror.email_example" />" />
+            <div class="help-block with-errors"></div>
+        </div>       
     </div>
     
     <br> <input type="submit" class="btn btn-primary"
@@ -110,4 +122,7 @@
         class="btn btn-default" value="<spring:message code="label.cancel" />" />
     </a> <img src='<c:url value="/resources/img/ajax-loader.gif" />'
         style="display: none;" id="ajax_loader">
+    <div class="alert alert-danger" id="email_exists" style="display: none; padding: 0px 0px 0px 20px; height: 25px; margin-top: 20px;">
+        <spring:message code="message.email_exist" />
+    </div> 
 </form>

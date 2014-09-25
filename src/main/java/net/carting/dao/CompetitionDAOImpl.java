@@ -54,6 +54,7 @@ public class CompetitionDAOImpl implements CompetitionDAO {
                 .createQuery("from Competition ORDER BY dateStart DESC");
         query.setFirstResult((page - 1) * competitionsPerPage);
         query.setMaxResults(competitionsPerPage);
+        LOG.debug("Get {} competitions for {} page", competitionsPerPage, page);
         return query.getResultList();
     }
 

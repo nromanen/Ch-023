@@ -82,12 +82,6 @@ public class RacerCarClassCompetitionNumberServiceImpl implements RacerCarClassC
 
     @Override
     @Transactional
-    public void deleteByCompetitionIdAndRacerId(int competitonId, int racerId) {
-        racerCarClassCompetitionNumberDAO.deleteByCompetitionIdAndRacerId(competitonId, racerId);
-    }
-
-    @Override
-    @Transactional
     public List<RacerCarClassCompetitionNumber>
     getRacerCarClassCompetitionNumbersByCompetitionIdAndTeamId(int competitionId, int teamId) {
         return racerCarClassCompetitionNumberDAO.getRacerCarClassCompetitionNumbersByCompetitionIdAndTeamId(competitionId, teamId);
