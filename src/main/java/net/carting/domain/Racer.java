@@ -94,17 +94,21 @@ public class Racer extends Person {
 		this.documents = documents;
 	}
 
-	public int getAge(int... args) {
-		int age = 0;
+	public int getAge() {
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setTime(new Date());
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(birthday);
-		if (args.length == 0) {
-			age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
+			return currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR)
 					- (calendar.get(Calendar.MONTH) + 6) / 12;
-		} else {
-			age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+	}
+	
+	public int getAge(int param) {
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setTime(new Date());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(birthday);
+		int age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
 			int checkMonth = currentDate.get(Calendar.MONTH);
 			int birthMonth = calendar.get(Calendar.MONTH);
 			if (checkMonth < birthMonth) {
@@ -114,7 +118,6 @@ public class Racer extends Person {
 							.get(Calendar.DAY_OF_MONTH)) {
 				age--;
 			}
-		}
 
 		return age;
 	}
