@@ -1,7 +1,6 @@
 package net.carting.web;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,7 +106,7 @@ public class SHKPController {
             }
             return result;
         }
-        
+        // create pdf for personal offset
         @RequestMapping(value = "/personal", method = RequestMethod.POST)
         @ResponseBody
         public int createPersonalOffsetStatement(Model model, @RequestParam(value = "table") String table,
@@ -121,13 +120,13 @@ public class SHKPController {
                 } else {
                     personalOffset = carClassCompetition.getPersonalOffset();
                 }
-                personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
+                personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate())); // create pdf file, created from valid xhtml data
                 String fileName = "PersonalOffset_" + carClassCompetitionId + "_"
                         + Calendar.getInstance().getTimeInMillis();
                 personalOffset.setName(fileName);
-                carClassCompetition.setPersonalOffset(personalOffset);
-                carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
-                result = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getPersonalOffset().getId();
+                carClassCompetition.setPersonalOffset(personalOffset); // set personal offset file to rhis car class competition
+                carClassCompetitionService.updateCarClassCompetition(carClassCompetition); // and update car class competition
+                result = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getPersonalOffset().getId(); 
             } catch (Exception e) {
                 result = 0;
                 LOG.error("Errors in creating PDF for personalOffset", e);

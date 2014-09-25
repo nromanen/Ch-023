@@ -118,11 +118,11 @@ public class CompetitionController {
 			@PathVariable("year") String yearString,
 			@PathVariable("page") int page,
 			@RequestParam(value = "competitionsPerPage", required = false, defaultValue = "10") int competitionsPerPage) {
-		if (yearString.equals("all")) {
+		if (yearString.equals("all")) { // if path variable equals "all" than
 			List<Competition> competitionList = competitionService
-					.getAllCompetitionsByPage(page, competitionsPerPage);
+					.getAllCompetitionsByPage(page, competitionsPerPage); // get competitions(count = competitionsPerPage) for page
 			long countOfCompetitions = competitionService
-					.getCountOfCompetitions();
+					.getCountOfCompetitions(); // get count of all competitions
 			model.addAttribute("competitionList", competitionList);
 			model.addAttribute("yearsList",
 					competitionService.getCompetitionsYearsList());
@@ -139,9 +139,9 @@ public class CompetitionController {
 			if (!competitionService.getCompetitionsYearsList().contains(year)) {
 				year = competitionService.getCompetitionsYearsList().get(0);
 			}
-			DateUtil.globalYear = year;
+			DateUtil.globalYear = year; // change global year to show competitions of this year on left sidebar
 			List<Competition> competitionList = competitionService
-					.getCompetitionsByYear(year);
+					.getCompetitionsByYear(year); // get all competitions for year
 			model.addAttribute("competitionList", competitionList);
 			model.addAttribute("yearsList",
 					competitionService.getCompetitionsYearsList());
@@ -284,18 +284,18 @@ public class CompetitionController {
 	public String personalOffsetPage(@PathVariable("id") int id,
 			Map<String, Object> map) {
 		List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
-				.getCarClassCompetitionsByCompetitionId(id);
+				.getCarClassCompetitionsByCompetitionId(id); // get list of carClassCompetitions for this competition
 		List<List<List<RaceResult>>> raceResults = new ArrayList<List<List<RaceResult>>>();
 		List<List<CarClassCompetitionResult>> carClassCompetitionResults = new ArrayList<List<CarClassCompetitionResult>>();
 		List<Boolean> isSetQualifyingList = new ArrayList<Boolean>();
 		for (CarClassCompetition carClassCompetition : carClassCompetitions) {
 			raceResults.add(raceService
-					.getRaceResultsByCarClassCompetition(carClassCompetition));
+					.getRaceResultsByCarClassCompetition(carClassCompetition)); // get all races results for this competition
 			carClassCompetitionResults
 					.add(carClassCompetitionResultService
-							.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition));
+							.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition)); //get absolute results for competition
 			isSetQualifyingList.add(carClassCompetitionResultService
-					.isSetQualifyingByCarClassCompetition(carClassCompetition));
+					.isSetQualifyingByCarClassCompetition(carClassCompetition)); 
 		}
 		map.put("carClassCompetitions", carClassCompetitions);
 		map.put("raceResultsLists", raceResults);
@@ -378,21 +378,22 @@ public class CompetitionController {
 		return "success";
 	}
 	
+	// unregister team from competition, available, when team's racers have not any results in this competition
 	@RequestMapping(value = "/unregisterTeam", method = RequestMethod.POST, headers = { "content-type=application/json" })
     public @ResponseBody String unregisterTeamFromCompetitionAction(
             @RequestBody Map<String, Object> map) {
         int competitionId = Integer.parseInt(map.get("competitionId").toString());
         int teamId = Integer.parseInt(map.get("teamId").toString());
         
-        Set<CarClassCompetition> carClassCompetitions = competitionService.getCompetitionById(competitionId).getCarClassCompetitions();
+        Set<CarClassCompetition> carClassCompetitions = competitionService.getCompetitionById(competitionId).getCarClassCompetitions(); // get all carClassCompetitions for this competition
         for (CarClassCompetition ccc : carClassCompetitions) {
             List<RacerCarClassCompetitionNumber> rcccnL = racerCarClassCompetitionNumberService.
-                    getRacerCarClassCompetitionNumbersByCarClassCompetitionIdAndTeamId(ccc.getId(), teamId);
+                    getRacerCarClassCompetitionNumbersByCarClassCompetitionIdAndTeamId(ccc.getId(), teamId); // get all racers from this team, registered in carClassCompetition
             for (RacerCarClassCompetitionNumber rcccn : rcccnL) {
-                racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(ccc.getId(), rcccn.getRacer().getId());
+                racerCarClassCompetitionNumberService.deleteByCarClassCompetitionIdAndRacerId(ccc.getId(), rcccn.getRacer().getId()); // delete all racers from carClassCompetition
             }
         }
-        teamInCompetitionService.deleteTeamInCompetitionByTeamIdAndCompetitionId(teamId, competitionId);
+        teamInCompetitionService.deleteTeamInCompetitionByTeamIdAndCompetitionId(teamId, competitionId); // delete team from competition
         LOG.trace(
                 "Admin has unregistered team(id = {}) from competition (id = {})",
                 teamId, competitionId);
@@ -415,7 +416,6 @@ public class CompetitionController {
 	}
 
 	// team registration view
-	/* TODO Remove HttpServletRequest */
 	@RequestMapping(value = "/teamRegistration", method = RequestMethod.GET)
 	public String registrationTeamOnCompetitionView(
 			Map<String, Object> map,
@@ -467,6 +467,7 @@ public class CompetitionController {
 		return competitionId;
 	}
 
+	// this method change points by places for choosed competition
 	@RequestMapping(value = "/{id}/changePointsByPlaces", method = RequestMethod.POST, headers = { "content-type=application/json" })
 	public @ResponseBody String changePointsByPlaces(
 			@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
@@ -476,7 +477,9 @@ public class CompetitionController {
 		competition.setPointsByPlaces(pointsByPlaces);
 		competitionService.updateCompetition(competition);
 		List<CarClassCompetition> carClassCompetitions = carClassCompetitionService
-				.getCarClassCompetitionsByCompetitionId(competition.getId());
+				.getCarClassCompetitionsByCompetitionId(competition.getId()); // get all car class competitions for choosed competition
+		
+		// change result table for all races and recalculate all results
 		for (CarClassCompetition carClassCompetition : carClassCompetitions) {
 			for (Race race : carClassCompetition.getRaces()) {
 				raceService
