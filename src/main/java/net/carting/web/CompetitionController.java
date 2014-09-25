@@ -377,19 +377,6 @@ public class CompetitionController {
 				: "disabled"), competitionId);
 		return "success";
 	}
-
-	@RequestMapping(value = "/{id}/unregisterRacer", method = RequestMethod.POST, headers = { "content-type=application/json" })
-	public @ResponseBody String unregisterRacerFromCompetitionAction(
-			@RequestBody Map<String, Object> map, @PathVariable("id") int id) {
-		int competitionId = id;
-		int racerId = Integer.parseInt(map.get("racerId").toString());
-		racerCarClassCompetitionNumberService.deleteByCompetitionIdAndRacerId(
-				competitionId, racerId);
-		LOG.trace(
-				"Admin has unregistered racer(id = {}) from competition (id = {})",
-				racerId, competitionId);
-		return "success";
-	}
 	
 	@RequestMapping(value = "/unregisterTeam", method = RequestMethod.POST, headers = { "content-type=application/json" })
     public @ResponseBody String unregisterTeamFromCompetitionAction(

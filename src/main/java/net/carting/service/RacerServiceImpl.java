@@ -181,6 +181,7 @@ public class RacerServiceImpl implements RacerService {
 
 	@Override
 	public List<Racer> getBirthdayRacers(Date checkdate) {
+		LOG.debug("Start of getBirthdayRacers method with input parameter checkdate = {}", checkdate);
 		List<Racer> racers = racerDAO.getAllRacers();
 		List<Racer> resultRacers = new ArrayList();
 		Calendar cal = Calendar.getInstance();
@@ -207,6 +208,7 @@ public class RacerServiceImpl implements RacerService {
 			}
 
 		}
+		LOG.debug("End of the method getBirthdayRacers. Returned result: {}", resultRacers);
 		return resultRacers;
 	}
 
