@@ -164,6 +164,16 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
     }
 
+    /** 
+     * This method send secure code to user during password recovery.
+     * <p/>
+     * Secure code is formed by username and password of this user.
+     * @param user - user, that want to get secure code
+     * @author Mykola Galchuk
+     *
+     *
+     */
+    
     @Override
     @Transactional
     public void sendSecureCode(User user) {
