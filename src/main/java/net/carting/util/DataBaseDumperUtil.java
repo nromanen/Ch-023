@@ -118,7 +118,7 @@ public class DataBaseDumperUtil {
                                     // and start a new primary key entry
                                     if (primaryKeyColumns.length() > 0) {
                                         // There's something to output
-                                        result.append(",\n    ");
+                                        result.append(",\n   ");
                                         if (primaryKeyName != null) { result.append(primaryKeyName); }
                                         result.append("("+primaryKeyColumns.toString()+")");
                                     }
@@ -153,7 +153,7 @@ public class DataBaseDumperUtil {
                 rs.close();
             }
             dbConn.close();
-            return result.toString();
+            return result.toString().replace("PRIMARY KEY PRIMARY", "PRIMARY KEY");
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use Options | File Templates.
         }
