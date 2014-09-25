@@ -127,14 +127,6 @@ public class RacerServiceImpl implements RacerService {
                 .getListOfRacersWithSetDocumentByDocumentType(documentType);
     }
 
-    /**
-     * This method get all racers of current team without documents of defined type.
-     * 
-     *  @param documentType Constant of {@link net.carting.domain.Document}, type of the document.
-     *  @param team Racers team
-     *  @return Set of racers without such document.
-     * 
-     * */
     @Override
     @Transactional
     public Set<Racer> getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
@@ -145,13 +137,6 @@ public class RacerServiceImpl implements RacerService {
         return allTeamRecersWithoutSetDocument;
     }
 
-    /**
-     * This method get all racers of the current team, that must have parental permission
-     * 
-     * @param team Object of the racers team
-     * @return Set of racers, that must have parental permission
-     * 
-     * */
     @Override
     @Transactional
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team) {
