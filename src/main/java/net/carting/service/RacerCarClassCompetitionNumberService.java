@@ -1,10 +1,10 @@
 package net.carting.service;
 
-import net.carting.domain.RacerCarClassCompetitionNumber;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import net.carting.domain.RacerCarClassCompetitionNumber;
 
 public interface RacerCarClassCompetitionNumberService {
 
@@ -69,15 +69,6 @@ public interface RacerCarClassCompetitionNumberService {
      * @author Ivan Kozub
      */
     public void deleteByCarClassCompetitionIdAndRacerId(int carClassCompetitonId, int racerId);
-
-    /**
-     * This method unregister racer from specific competition.
-     *
-     * @param competitonId - id of competition
-     * @param racerId      - id of racer
-     * @author Ivan Kozub
-     */
-    public void deleteByCompetitionIdAndRacerId(int competitonId, int racerId);
 
     /**
      * This method gets list of registered racers(with their numbers) by team on specific competition

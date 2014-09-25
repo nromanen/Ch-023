@@ -2,7 +2,12 @@ package net.carting.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -92,6 +97,19 @@ public class AdminSettings {
 
     public void setFeedbackEmail(String feedbackEmail) {
         this.feedbackEmail = feedbackEmail;
+    }
+    
+    public static int getPointFromTableB (int absolutePlace, int countOfRacers){
+    	List<String> pointsList = Arrays
+				.asList(AdminSettings.POINTS_BY_TABLE_B.get(countOfRacers)
+						.split(","));
+		List<Integer> intPointsList = new ArrayList<Integer>();
+		Map<Integer, Integer> placesAndPoints = new LinkedHashMap<Integer, Integer>();
+		for (int i = 0; i < pointsList.size(); i++) {
+			intPointsList.add(Integer.parseInt(pointsList.get(i)));
+			placesAndPoints.put(i + 1, intPointsList.get(i));
+		}
+    	return placesAndPoints.get(absolutePlace);
     }
 
 }

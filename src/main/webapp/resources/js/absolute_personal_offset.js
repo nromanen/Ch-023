@@ -13,7 +13,7 @@ $(document).ready(function(){
     			return +$(this).attr('colspan') + 2;
     		});
     	} 
-    	table = "<style>table{ font-size: 14;} .column-wide {width: 138px;} .column-mid {width: 130px;} .column-md {width: 40px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none} .hidden {height: 30px;}</style>" + table;
+    	table = "<style>table{ font-size: 12;} .column-wide {width: 100px;} .column-mid {width: 120px;} .column-md {width: 45px;} .column-sm {width: 20px;} a{color: #000000; cursor: text; text-decoration: none} .hidden {height: 30px;}</style>" + table;
     	$.ajax({
             url: url,
             type: "POST",

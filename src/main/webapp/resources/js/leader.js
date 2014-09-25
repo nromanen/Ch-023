@@ -99,9 +99,10 @@ $(document).ready(function(){
                var document = $('#document').val();
                var address = $('#address').val();
                var license = $('#license').val();
+               var email = $('#email').val();
                var json = {"id" : id, "firstName" : firstName, "lastName" : lastName,
                             "birthday" : birthday, "document" : document, 
-                            "address" : address, "license" : license
+                            "address" : address, "license" : license, "email" : email
                             };
                $.ajax({
                     url: $("#edit_leader").attr( "action"),
@@ -161,9 +162,11 @@ $(document).ready(function(){
             success: function(response) {  
                 if(response){
                    $('#email_exists').css("display", "block");
+                   $('input[type="submit"]').attr("disabled", "disabled");
                 }
                 else {
                     $('#email_exists').css("display", "none");
+                    $('input[type="submit"]').removeAttr("disabled");
                 }
             }
         });    

@@ -107,7 +107,7 @@ pageEncoding="utf-8"%>
                                     <td>
                                         <c:if test="${racerCarClassCompetitionNumber.racer.team.id==teamByLeader.id}">
                                             <a href="#" class="btn btn-danger btn-xs unreg_racer_btn"
-                                               id="unreg${racerCarClassCompetitionNumber.racer.id}">Unregister</a>
+                                               id="unreg${racerCarClassCompetitionNumber.racer.id}"><spring:message code="label.unregister" /></a>
                                         </c:if>
                                     </td>
                                 </c:if>

@@ -1,10 +1,10 @@
 package net.carting.service;
 
-import net.carting.domain.Team;
-import net.carting.domain.TeamInCompetition;
-
 import java.util.List;
 import java.util.Map;
+
+import net.carting.domain.Team;
+import net.carting.domain.TeamInCompetition;
 
 public interface TeamInCompetitionService {
 
@@ -15,6 +15,8 @@ public interface TeamInCompetitionService {
     public void deleteTeamInCompetition(TeamInCompetition teamInCompetition);
 
     public List<TeamInCompetition> getTeamInCompetitionListByTeamId(int teamId);
+    
+    public List<TeamInCompetition> getTeamInCompetitionListByTeamIdForCurrentYear(int teamId);
 
     /**
      * This method gets map(key - TeamInCompetition, value - is valid all racers from this team for this competition)
