@@ -127,6 +127,12 @@
 	</table>	
 		
 	<br>
+	<c:forEach items="${carClassCompetitionList}" var="carClassCompetition">
+        <c:if test="${!empty carClassCompetition.racerCarClassCompetitionNumbers }">
+            <c:set var="isSetRacers" value="${true }" />
+        </c:if> 
+    </c:forEach>
+    <c:if test="${isSetRacers }">
 	<div class="btn-group">
 	    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
             <spring:message code="label.offsets" />
@@ -136,20 +142,19 @@
             <li><a href="<c:url value="/competition/${competition.id}/mandat" />" >
                 <spring:message code="label.competition.mandat_statement" />
             </a></li>
-            <c:if test="${!empty carClassCompetitionList}">
+            
             <li><a href="<c:url value="/competition/${competition.id}/personal" />" >
-                <spring:message code="label.personal_offset" />
-            </a></li>
-            <li><a href="<c:url value="/competition/${competition.id}/absolute_personal" />">
-                <spring:message code="label.absolute_personal_offset" />
-            </a></li>
-            <li><a href="<c:url value="/competition/${competition.id}/teamsRanking" />">
-                <spring:message code="ranking.teams_ranking" />
-            </a></li>
-            </c:if>
+                    <spring:message code="label.personal_offset" />
+                </a></li>
+                <li><a href="<c:url value="/competition/${competition.id}/absolute_personal" />">
+                    <spring:message code="label.absolute_personal_offset" />
+                </a></li>
+                <li><a href="<c:url value="/competition/${competition.id}/teamsRanking" />">
+                    <spring:message code="ranking.teams_ranking" />
+                </a></li>
         </ul>
-	
 	</div>
+	</c:if>
 	<br/>
 	<input type="hidden" id="getRacersCountUrl" value="<c:url value="/carclass/getRacersCountById" />">
 	<c:if test="${!empty carClassCompetitionList}">
