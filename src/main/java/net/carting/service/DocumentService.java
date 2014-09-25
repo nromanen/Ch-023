@@ -69,8 +69,8 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      * @see net.carting.domain.File
      */
-    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
-                                           String startDate, String finishDate, MultipartFile[] files);
+    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
+                                           String startDate, String finishDate, MultipartFile[] files, String[] fileName);
 
     /**
      * <p/>
@@ -87,7 +87,7 @@ public interface DocumentService {
      * @see net.carting.domain.File
      */
     public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
-                             MultipartFile[] files) throws IOException;
+                             MultipartFile[] files, String[] fileName) throws IOException;
 
 
     /**

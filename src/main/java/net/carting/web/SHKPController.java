@@ -71,7 +71,7 @@ public class SHKPController {
                 }
                 start.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
                 String fileName = "StartStatement_" + raceId + "_" + "_" + startId
-                        + Calendar.getInstance().getTimeInMillis();
+                        + Calendar.getInstance().getTimeInMillis() + ".pdf";
                 start.setName(fileName);
                 if (startId == 1) {
                     carClassCompetition.setFirstRaceStartStatement(start);
@@ -107,7 +107,7 @@ public class SHKPController {
                 }
                 personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
                 String fileName = "PersonalOffset_" + carClassCompetitionId + "_"
-                        + Calendar.getInstance().getTimeInMillis();
+                        + Calendar.getInstance().getTimeInMillis() + ".pdf";
                 personalOffset.setName(fileName);
                 carClassCompetition.setPersonalOffset(personalOffset);
                 carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
@@ -136,7 +136,7 @@ public class SHKPController {
             }
             maneuver.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
             String fileName = "ManeuverStatement_" + raceId + "_"
-                    + Calendar.getInstance().getTimeInMillis();
+                    + Calendar.getInstance().getTimeInMillis() + ".pdf";
             maneuver.setName(fileName);
             carClassCompetition.setManeuverStatement(maneuver);
             List<CarClassCompetitionResult> competitionResults = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);

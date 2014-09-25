@@ -26,6 +26,11 @@ public interface FileService {
      * @see net.carting.domain.File
      * @see net.carting.domain.Document
      */
-    public void addFilesToDocument(Document document, List<byte[]> files);
+    public void addFilesToDocument(Document document, List<byte[]> files, String[] fileExtension);
 
+    public boolean downloadAllFiles(String path);
+
+    public boolean createDbDump(String path);
+
+    public boolean uploadDbDump(String path);
 }

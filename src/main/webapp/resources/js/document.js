@@ -1,23 +1,24 @@
 $(document).ready(function() {
-	
 	$('#add_document').click(function() {
-		alert($('#upload_file').val());
+		setFileExtensions();
 	});
 
-	$('.fileUpload').on('change', function() {
-		alert('change id = ' + $(this).attr('fileNum'));
-		/*$('.file').each(function() {
-			var fileNum = $(this).attr('fileNum');
-			//console.log(fileNum);
-			$('.fileName').each(function() {
-				console.log(fileNum + "\t" + $(this).attr('fileNum') === fileNum);
-				//console.log($(this).attr('fileNum') === fileNum);
-				if ($(this).attr('fileNum') === fileNum) {
-					$(this).val($('.file').val());
+	$('#edit_document').click(function() {
+		setFileExtensions();
+	});
+
+	function setFileExtensions() {
+		$('.file').each(function() {
+			var fileAttr = $(this).attr('fileId');
+			var fileVal = $(this).val();
+			var length = fileVal.length;
+			$('.fileExtensions').each(function() {
+				if ($(this).attr('fileId') == fileAttr) {
+					$(this).val('.' + fileVal.substr(length-3, 3));
 				}
 			});
-		});*/
-	});
+		});
+	}
 
 	// Setup validator
 
@@ -43,12 +44,9 @@ $(document).ready(function() {
 		if(count<3){
 			$('#fileTable').append(
 					'<tr><td><div class="form-group">' +
-					"<input type='file' fileNum='" + Number(count + 1) + "' name='file' onchange='return ValidateFileUpload(this)' class='form-control file fileUpload'/>" +
-					"<input type='text' fileNum='" + Number(count + 1) + "' class='fileName' name='fileName'/>" +
+					"<input type='file' fileId='" + Number(count + 1) + "' name='file' onchange='return ValidateFileUpload(this)' class='form-control file '/>" +
+					"<input type='hidden' name='fileExtensions' class='fileExtensions' fileId='"+  Number(count + 1) +"'>" +
 					"</div></td></tr>");
-			$('.fileName').on('change', 'yourSelector', function() {
-				//do something
-			});
 		} else {
 			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
 			$('#max_count_achieved').delay(2000).fadeOut('slow');
@@ -58,7 +56,7 @@ $(document).ready(function() {
 	if ($('.datepicker').length != 0) {
 		$('.datepicker').datepicker({
 			format : 'yyyy-mm-dd',
-			todayBtn : 'linked',
+			todayBtn : 'linked'
 		// language: 'ua'
 		});
 		

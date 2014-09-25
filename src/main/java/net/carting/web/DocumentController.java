@@ -142,12 +142,12 @@ public class DocumentController {
                               @RequestParam(value = "number", required = false) String number,
                               @RequestParam(value = "start_date", required = false) String startDate,
                               @RequestParam(value = "finish_date", required = false) String finishDate,
+                              @RequestParam(value = "fileExtensions") String[] fileNames,
                               @RequestParam("file") MultipartFile[] files,
                               Locale locale,
                               Map<String, Object> map) {
         /* Getting current leader */
-
-         String username = userService.getCurrentUserName();
+        String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
 
         if (teamService.isTeamByLeaderId(leader.getId())) {
@@ -165,7 +165,7 @@ public class DocumentController {
                   * 'Document'
                   */
                 try {
-                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files);
+                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, fileNames);
                 } catch (Exception e) {
                     map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
                     LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
@@ -265,12 +265,13 @@ public class DocumentController {
                                @RequestParam(value = "number", required = false) String number,
                                @RequestParam(value = "start_date", required = false) String startDate,
                                @RequestParam(value = "finish_date", required = false) String finishDate,
+                               @RequestParam(value = "fileExtensions") String[] fileExtensions,
                                @RequestParam("file") MultipartFile[] files,
                                Locale locale,
                                Map<String, Object> map) {
 
         try {
-            documentService.editDocument(documentId, number, startDate, finishDate, files);
+            documentService.editDocument(documentId, number, startDate, finishDate, files, fileExtensions);
             return "redirect:/document/" + documentId;
         } catch (IOException e) {
             String username = userService.getCurrentUserName();

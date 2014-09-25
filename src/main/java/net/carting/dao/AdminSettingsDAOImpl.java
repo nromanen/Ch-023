@@ -53,4 +53,17 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
         LOG.debug("Changed feedback email to {}", value);
     }
 
+    @Override
+    public boolean uploadDbDump(String sqlQuery) {
+        boolean result = true;
+        try {
+            Query query = entityManager.createNativeQuery(sqlQuery);
+            query.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
+
 }

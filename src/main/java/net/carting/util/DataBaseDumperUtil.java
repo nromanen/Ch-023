@@ -72,8 +72,8 @@ public class DataBaseDumperUtil {
                     String tableName = rs.getString("TABLE_NAME");
                     String tableType = rs.getString("TABLE_TYPE");
                     if ("TABLE".equalsIgnoreCase(tableType)) {
-                        result.append("\n\n-- "+tableName);
-                        result.append("\nCREATE TABLE "+tableName+" (\n");
+                        //result.append("\n\n-- "+tableName);
+                        result.append("\nCREATE TABLE IF NOT EXISTS "+tableName+" (\n");
                         ResultSet tableMetaData = dbMetaData.getColumns(null, null, tableName, "%");
                         boolean firstLine = true;
                         while (tableMetaData.next()) {
@@ -118,7 +118,7 @@ public class DataBaseDumperUtil {
                                     // and start a new primary key entry
                                     if (primaryKeyColumns.length() > 0) {
                                         // There's something to output
-                                        result.append(",\n    PRIMARY KEY ");
+                                        result.append(",\n    ");
                                         if (primaryKeyName != null) { result.append(primaryKeyName); }
                                         result.append("("+primaryKeyColumns.toString()+")");
                                     }
@@ -170,7 +170,7 @@ public class DataBaseDumperUtil {
             int columnCount = metaData.getColumnCount();
 
             // Now we can output the actual data
-            result.append("\n\n-- Data for "+tableName+"\n");
+            //result.append("\n\n-- Data for "+tableName+"\n");
             while (rs.next()) {
                 result.append("INSERT INTO "+tableName+" VALUES (");
                 for (int i=0; i<columnCount; i++) {

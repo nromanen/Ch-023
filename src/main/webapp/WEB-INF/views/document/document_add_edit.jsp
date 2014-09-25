@@ -39,7 +39,7 @@
 
 	<c:choose> 
 		<c:when test="${document ne null}">
-			<form method="POST" class="well " action="<c:url value="/document/confirmEdit" />" role="form" enctype="multipart/form-data" id="editDocument">
+			<form method="POST" class="well" action="<c:url value="/document/confirmEdit" />" role="form" enctype="multipart/form-data" id="editDocument">
 		</c:when> 
 		<c:otherwise>
 			<form method="POST" class="well" action="<c:url value="/document/addDocument" />" role="form" enctype="multipart/form-data" id="addDocument">
@@ -140,17 +140,17 @@
 			<tr>
 				<td>
 					<div class="form-group">
+							<input type="file" name="file" fileId="1" class="form-control file" id="upload_file" onchange="return ValidateFileUpload(this)"
 							<c:choose> 
 							<c:when test="${document ne null}">
-								<input type="file" name="file" fileNum="1" class="form-control file fileUpload" id="upload_file" onchange="return ValidateFileUpload(this)" />
+								/>
 							</c:when> 
 							<c:otherwise>
-								<input type="file" name="file" fileNum="1" class="form-control file fileUpload" id="upload_file" onchange="return ValidateFileUpload(this)"
-							data-bv-notempty="true"
-							data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
-							</c:otherwise> 
+								data-bv-notempty="true"
+								data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
+							</c:otherwise>
 						</c:choose>
-						<input type="text" fileNum="1" class="fileName" name="fileName"/>
+						<input type="hidden" name="fileExtensions" class="fileExtensions" fileId="1"/>
 					</div>
 				</td>
 			</tr>
@@ -207,10 +207,10 @@
 	<!-- Different submit buttons  -->
 	<c:choose> 
 		<c:when test="${document ne null}">
-			<input type="submit" class="btn btn-success" value="<spring:message code="label.accept" />" id="edit_document">
+			<input type="submit" class="btn btn-success" id="edit_document" value="<spring:message code="label.accept" />">
 		</c:when> 
 		<c:otherwise>
-			<button type="submit" class="btn btn-success" id="add_document"><spring:message code="label.accept" /></button>
+			<input type="submit" class="btn btn-success" id="add_document" value="<spring:message code="label.accept" />">
 		</c:otherwise> 
 	</c:choose>
 	
