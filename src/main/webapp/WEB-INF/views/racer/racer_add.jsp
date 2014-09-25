@@ -188,7 +188,7 @@
 					<tr>
 						<td>
 							<div class="form-group">
-								<input id="upload_file1" type="file" name="file" class="form-control file1"  onchange="return ValidateFileUpload(this)" data-doc="1"/>
+								<input id="file1" type="file" name="file" class="form-control file1"  onchange="return ValidateFileUpload(this)" data-doc="1"/>
 							</div>
 						</td>
 					</tr>
@@ -199,7 +199,7 @@
 					<div class="alert alert-danger" id="max_count_achieved1" style="display: none; padding: 0px 10px 0px 10px; height: 25px; margin-left: 10px;">
 						<spring:message code="dataerror.max_count_achieved" />
 					</div>
-					<input id="add1" type="submit" disabled class="btn btn-success btn-sm adding" doc_type="1" value="<spring:message code='label.add_document'/>" />
+					<input id="add1" type="button" disabled class="btn btn-success btn-sm adding" doc_type="1" value="<spring:message code='label.add_document'/>" />
 				</div>
 				
 			<%-- </form> --%>
@@ -232,7 +232,7 @@
 				<tr>
 					<td>
 						<div class="form-group">
-							<input type="file" name="file" class="form-control file2" id="upload_file" onchange="return ValidateFileUpload(this)" 
+							<input type="file" name="file" class="form-control file2" id="file2" onchange="return ValidateFileUpload(this)" 
 								data-bv-notempty="true"
 								data-bv-notempty-message="<spring:message code="dataerror.field_required" />"/>
 						</div>
