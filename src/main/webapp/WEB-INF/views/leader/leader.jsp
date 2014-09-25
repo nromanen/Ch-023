@@ -95,7 +95,8 @@
 						</label> <input type="password" class="form-control" id="new_password"
 							placeholder="<spring:message code="placeholder.admin_new_password" />"
 							data-minlength="5" required
-							data-error="<spring:message code="dataerror.mimimum_5_characters" />" />
+							pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[//@/./&/!#/$%/^/*/?])(?!.*\s).{5,20}$"
+							data-error="<spring:message code="dataerror.mimimum_5_characters" />. <spring:message code="label.password_pattern" />" />
 						<div class="help-block with-errors"></div>
 					</div>
 
