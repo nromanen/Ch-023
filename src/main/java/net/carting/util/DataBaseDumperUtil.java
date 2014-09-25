@@ -72,8 +72,9 @@ public class DataBaseDumperUtil {
                     String tableName = rs.getString("TABLE_NAME");
                     String tableType = rs.getString("TABLE_TYPE");
                     if ("TABLE".equalsIgnoreCase(tableType)) {
+                        // Uncomment to create tables
                         //result.append("\n\n-- "+tableName);
-                        result.append("\nCREATE TABLE IF NOT EXISTS "+tableName+" (\n");
+                       /* result.append("\nCREATE TABLE IF NOT EXISTS "+tableName+" (\n");
                         ResultSet tableMetaData = dbMetaData.getColumns(null, null, tableName, "%");
                         boolean firstLine = true;
                         while (tableMetaData.next()) {
@@ -144,10 +145,9 @@ public class DataBaseDumperUtil {
                             System.err.println("Unable to get primary keys for table "+tableName+" because "+e);
                         }
 
-                        result.append("\n);\n");
-
-                        // Right, we have a table, so we can go and dump it
+                        result.append("\n);\n");*/
                         dumpTable(dbConn, result, tableName);
+                        // Right, we have a table, so we can go and dump it
                     }
                 } while (rs.next());
                 rs.close();

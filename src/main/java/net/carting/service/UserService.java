@@ -50,6 +50,15 @@ public interface UserService {
     public void changePassword(User user, String password)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
     
+    /** 
+     * This method send secure code to user during password recovery.
+     * <p/>
+     * Secure code is formed by username and password of this user.
+     * @param user - user, that want to get secure code
+     * @author Mykola Galchuk
+     *
+     *
+     */
     public void sendSecureCode(User user);
 
 }

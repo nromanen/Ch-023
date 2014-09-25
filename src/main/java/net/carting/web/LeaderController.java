@@ -174,16 +174,18 @@ public class LeaderController {
         return "password_recovery";
     }
     
+    //send secure code, used in password recovery algorithm
     @RequestMapping(value = "/sendSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
     String sendSecureCode(@RequestBody Map<String, Object> map) {
     	String email = map.get("email").toString();
-    	User user = userService.getUserByEmail(email);
-    	userService.sendSecureCode(user);
+    	User user = userService.getUserByEmail(email); 
+    	userService.sendSecureCode(user); 
     	return "success";
     }
     
+    //check secure code, used in password recovery algorithm
     @RequestMapping(value = "/checkSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -191,7 +193,7 @@ public class LeaderController {
     	String email = map.get("email").toString();
     	String secureCode = map.get("secureCode").toString();
     	User user = userService.getUserByEmail(email);
-    	if (user.getResetPassLink().equals(secureCode)) {
+    	if (user.getResetPassLink().equals(secureCode)) { // if secureCode is right for this user 
         	return "success";
     	}
     	else {
@@ -199,6 +201,7 @@ public class LeaderController {
     	}
     }
     
+    // change password, used in password recovery algorithm
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -207,9 +210,9 @@ public class LeaderController {
     	String secureCode = map.get("secureCode").toString();
     	String password = map.get("password").toString();
     	User user = userService.getUserByEmail(email);
-    	if (user.getResetPassLink().equals(secureCode)) {
+    	if (user.getResetPassLink().equals(secureCode)) { // if secureCode is right for this user
     		try {
-				userService.changePassword(user, password);
+				userService.changePassword(user, password); // change password
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e ) {
 				LOG.error("Errors in changePassword method", e);
 			}
@@ -220,10 +223,11 @@ public class LeaderController {
     	}
     }
     
+    // used for Spring Validator in Leader registration method
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false)); // set in what format to get Date object from view 
     }
     
 
