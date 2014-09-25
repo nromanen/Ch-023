@@ -164,6 +164,7 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
     }
 
+    
     @Override
     @Transactional
     public void sendSecureCode(User user) {

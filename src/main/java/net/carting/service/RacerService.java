@@ -1,13 +1,13 @@
 package net.carting.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 import net.carting.domain.Document;
 import net.carting.domain.Racer;
 import net.carting.domain.RacerCarClassNumber;
 import net.carting.domain.Team;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 public interface RacerService {
 
@@ -32,9 +32,24 @@ public interface RacerService {
     public List<Racer> getListOfRacersWithSetDocumentByDocumentType(
             int documentType);
 
+    /**
+     * This method get all racers of current team without documents of defined type.
+     * 
+     *  @param documentType Constant of {@link net.carting.domain.Document}, type of the document.
+     *  @param team Racers team
+     *  @return Set of racers without such document.
+     * 
+     * */
     public Set<Racer> getSetOfRacersWithoutSetDocumentByDocumentTypeAndTeam(
             int documentType, Team team);
 
+    /**
+     * This method get all racers of the current team, that must have parental permission
+     * 
+     * @param team Object of the racers team
+     * @return Set of racers, that must have parental permission
+     * 
+     * */
     public Set<Racer> getSetOfRacersNeedingPerentalPermisionByTeam(Team team);
     
     public List<Racer> getBirthdayRacers(Date checkdate);
