@@ -105,6 +105,7 @@ public class RacerDAOImpl implements RacerDAO {
 
 	@Override
 	public List<Racer> getBirthdayRacers(Date checkdate) {
+	    LOG.debug("Start of getBirthdayRacers method with input parameter checkdate = {}", checkdate);
 		List<Racer> racers = entityManager.createQuery("from Racer").getResultList();
 		List<Racer> resultRacers = new ArrayList();
 		Calendar cal = Calendar.getInstance();
@@ -130,8 +131,9 @@ public class RacerDAOImpl implements RacerDAO {
 					resultRacers.add(racers.get(i));
 				}
 		 
-			}		
-			return resultRacers;
+			}	
+		LOG.debug("End of the method getBirthdayRacers. Returned result: {}", resultRacers);
+		return resultRacers;
 	}
 
 }
