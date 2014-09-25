@@ -220,20 +220,20 @@ public class AdminController {
     public
     @ResponseBody
     String createDump() {
-        return fileService.createDbDump("src/main/resources/documents/sql/") ? "success" : "fail";
+        return fileService.createDbDump("src/main/webapp/resources/documents/sql/") ? "success" : "fail";
     }
 
     @RequestMapping(value = "downloadFiles", method = RequestMethod.POST)
     public
     @ResponseBody
     String downloadFiles() {
-        return fileService.downloadAllFiles("src/main/resources/documents/files") ? "success" : "fail";
+        return fileService.downloadAllFiles("src/main/webapp/resources/documents/files") ? "success" : "fail";
     }
 
     @RequestMapping(value = "uploadDump", method = RequestMethod.POST)
     public
     @ResponseBody
     String uploadDump() {
-        return fileService.uploadDbDump("src/main/resources/documents/sql/dump.sql") ? "success" : "fail";
+        return fileService.uploadDbDump("src/main/webapp/resources/documents/sql/dump.sql") ? "success" : "fail";
     }
 }

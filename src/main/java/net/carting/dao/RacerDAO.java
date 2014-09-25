@@ -21,7 +21,5 @@ public interface RacerDAO {
 
     public List<Racer> getListOfRacersWithSetDocumentByDocumentType(
             int documentType);
-    
-    public List<Racer> getBirthdayRacers(Date checkdate);
 
 }

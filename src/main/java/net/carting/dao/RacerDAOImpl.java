@@ -2,7 +2,6 @@ package net.carting.dao;
 
 import net.carting.domain.Racer;
 import net.carting.domain.Team;
-import net.carting.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -96,38 +95,5 @@ public class RacerDAOImpl implements RacerDAO {
         LOG.debug("Get racers with documents(documentType = {})", documentType);
         return query.getResultList();
     }
-
-	@Override
-	public List<Racer> getBirthdayRacers(Date checkdate) {
-	    LOG.debug("Start of getBirthdayRacers method with input parameter checkdate = {}", checkdate);
-		List<Racer> racers = entityManager.createQuery("from Racer").getResultList();
-		List<Racer> resultRacers = new ArrayList();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(checkdate);
-		int checkYear = cal.get(Calendar.YEAR);
-		DateUtil dateUtil = new DateUtil();
-		int daysInCheckYear = dateUtil.getDaysCount(checkYear);
-		int checkday = cal.get(Calendar.DAY_OF_YEAR);
-		for (int i = 0; i < racers.size(); i++) {
-		cal.setTime(racers.get(i).getBirthday());
-		int racerBirthdayYear = cal.get(Calendar.YEAR);
-		int daysInRacerBirthdayYear = dateUtil
-				.getDaysCount(racerBirthdayYear);
-				int birthday = cal.get(Calendar.DAY_OF_YEAR);
-				if (daysInCheckYear != daysInRacerBirthdayYear) {
-					if (birthday >= 60) {
-						birthday = birthday - 1;
-					}
-				}			
-				int dayDifference = checkday - birthday;
-				if ((dayDifference == 0) || (dayDifference == 1)
-						|| (dayDifference == -1)) {				
-					resultRacers.add(racers.get(i));
-				}
-		 
-			}	
-		LOG.debug("End of the method getBirthdayRacers. Returned result: {}", resultRacers);
-		return resultRacers;
-	}
 
 }

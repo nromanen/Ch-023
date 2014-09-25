@@ -164,15 +164,20 @@ public class DataBaseDumperUtil {
     private static void dumpTable(Connection dbConn, StringBuffer result, String tableName) {
         try {
             // First we output the create table stuff
-            PreparedStatement stmt = dbConn.prepareStatement("SELECT * FROM "+tableName);
+            PreparedStatement stmt = dbConn.prepareStatement("SELECT * FROM " + tableName);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
 
             // Now we can output the actual data
-            //result.append("\n\n-- Data for "+tableName+"\n");
+            result.append("\n\n-- Data for "+tableName+"\n");
             while (rs.next()) {
-                result.append("INSERT INTO "+tableName+" VALUES (");
+                StringBuilder columnNames = new StringBuilder(" (");
+                for (int i = 0; i < columnCount; i++) {
+                    columnNames.append(metaData.getColumnName(i + 1) + ",");
+                }
+                columnNames.append(")");
+                result.append("INSERT INTO " + tableName + columnNames.toString().replace(",)", ")") + " VALUES (");
                 for (int i=0; i<columnCount; i++) {
                     if (i > 0) {
                         result.append(", ");

@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
@@ -20,6 +17,8 @@ import java.util.Properties;
 @Service
 public class FileServiceImpl implements FileService {
 
+    @Autowired
+    private AdminSettingsDAO adminSettingsDAO;
     @Autowired
     private FileDAO fileDAO;
 
@@ -109,9 +108,6 @@ public class FileServiceImpl implements FileService {
         }
         return result;
     }
-
-    @Autowired
-    private AdminSettingsDAO adminSettingsDAO;
 
     @Override
     @Transactional

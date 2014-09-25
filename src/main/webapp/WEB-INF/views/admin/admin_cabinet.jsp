@@ -283,9 +283,9 @@
 		<button type="button" class="btn btn-warning btn-sm" id="saveAllFiles">
 			<spring:message code="label.db_save_files" />
 		</button>
-		<button type="button" class="btn btn-success btn-sm" id="importDump">
-			<spring:message code="label.db_import" />
-		</button>
+		<%--<button type="button" class="btn btn-success btn-sm" id="importDump">--%>
+			<%--<spring:message code="label.db_import" />--%>
+		<%--</button>--%>
 	</div><br/>
 	<div style="display: none" class="progress" id="loading">
 		<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
