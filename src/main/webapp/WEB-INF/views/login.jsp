@@ -8,6 +8,13 @@
 		$('#popover').popover({
 			placement: "bottom"
 		});
+		$('#username, #password').on("change", function() {
+			if ($('#username').val() != 0 && $('#password').val() != 0) {
+				$('#submit_btn').removeAttr('disabled');
+			} else {
+				$('#submit_btn').attr("disabled", "disabled");
+			}
+		});
 	});
 </script>
 <script type="text/javascript">
@@ -52,7 +59,7 @@
 						id="password" placeholder="<spring:message
 							code="placeholder.password" />">
 				</div>
-				<button type="submit" class="btn btn-sm btn-success">
+				<button type="submit" class="btn btn-sm btn-success" disabled id="submit_btn">
 					<spring:message code="label.sign_in" />
 				</button>					
 				<a href='<c:url value="/leader" />' class="btn btn-sm btn-primary">
