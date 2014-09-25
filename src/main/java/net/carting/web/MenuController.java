@@ -43,11 +43,13 @@ public class MenuController extends ViewPreparerSupport implements Serializable 
 
             Leader leader = leaderService.getLeaderByUserName(username);
             response.put("leader", leader);
+            
             boolean isTeamByLeader = teamService.isTeamByLeaderId(leader.getId());
             response.put("isTeamByLeader", isTeamByLeader);
             if (isTeamByLeader) {
                 Team team = teamService.getTeamByLeader(leader);
                 response.put("team", team);
+                response.put("teamSize", team.getRacers().size());
             }
         }
         response.put("currentYear", Calendar.getInstance().get(Calendar.YEAR));
