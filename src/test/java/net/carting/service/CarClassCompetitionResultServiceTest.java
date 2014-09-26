@@ -1,7 +1,23 @@
 package net.carting.service;
 
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.carting.dao.CarClassCompetitionResultDAO;
-import net.carting.domain.*;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.CarClassCompetitionResult;
+import net.carting.domain.Competition;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.RacerCarClassCompetitionNumber;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,12 +25,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarClassCompetitionResultServiceTest {
@@ -30,6 +40,7 @@ public class CarClassCompetitionResultServiceTest {
     
     @Mock
     private CompetitionService competitionService;
+    
     @Mock
     private RaceResultService raceResultService;
     
@@ -138,17 +149,22 @@ public class CarClassCompetitionResultServiceTest {
                         .getPoints());
             }
         }
+        List<CarClassCompetitionResult> carClassCompetitionResultsList = new ArrayList<CarClassCompetitionResult>();
+        carClassCompetitionResultsList.add(carClassCompetitionResult);
         
+        when(carClassCompetitionResultDAO.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition)).thenReturn(carClassCompetitionResultsList);
         when(racerCarClassCompetitionNumberService.getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition.getId())).thenReturn(carClassCompetitionNumbers);
         doNothing().when(competitionService).updateCompetition(competition);
-        doNothing().when(carClassCompetitionResultDAO).addCarClassCompetitionResult(carClassCompetitionResult);
+        doNothing().when(carClassCompetitionResultDAO).updateCarClassCompetitionResult(carClassCompetitionResult);
         when(raceResultService.getRaceResultsByRace(race)).thenReturn(raceResults);
         
         carClassCompetitionResultServiceImpl.setAbsoluteResults(carClassCompetition, race);
-        verify(carClassCompetitionResultDAO, times(1)).addCarClassCompetitionResult(carClassCompetitionResult);
+        
+        verify(carClassCompetitionResultDAO, times(1)).updateCarClassCompetitionResult(carClassCompetitionResult);
         verify(competitionService, times(1)).updateCompetition(competition);
         verify(racerCarClassCompetitionNumberService, times(1)).getRacerCarClassCompetitionNumbersByCarClassCompetitionId(carClassCompetition.getId());
         verify(raceResultService, times(1)).getRaceResultsByRace(race);
+        verify(carClassCompetitionResultDAO, times(1)).getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         verifyNoMoreInteractions(racerCarClassCompetitionNumberService, competitionService, carClassCompetitionResultDAO, raceResultService);
         
         
