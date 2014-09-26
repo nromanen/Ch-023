@@ -138,6 +138,8 @@
                 id="password" 
                 data-bv-notempty="true"
                 data-bv-notempty-message="<spring:message code="dataerror.field_required" />"
+                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[//@/./&/!#/$%/^/*/?])(?!.*\s).{5,20}$"
+                data-bv-regexp-message="<spring:message code="label.password_pattern" />"
                 data-bv-stringlength="true"
                 data-bv-stringlength-min="5"
                 data-bv-stringlength-message="<spring:message code="dataerror.mimimum_5_characters" />"/>

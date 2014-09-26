@@ -1,15 +1,14 @@
 package net.carting.service.Util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import net.carting.domain.Leader;
 import net.carting.domain.User;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class TestDatabaseUtil {
     

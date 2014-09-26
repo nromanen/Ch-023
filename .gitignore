@@ -4,3 +4,4 @@
 target/*
 *.properties
 /target/
+/src/main/webapp/resources/documents/*

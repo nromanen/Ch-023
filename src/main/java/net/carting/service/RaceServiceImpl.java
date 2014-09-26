@@ -1,33 +1,17 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.persistence.PersistenceException;
-
 import net.carting.dao.RaceDAO;
 import net.carting.dao.RacerDAO;
-import net.carting.domain.AdminSettings;
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.RacerCarClassNumber;
-
+import net.carting.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.PersistenceException;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Service
 public class RaceServiceImpl implements RaceService {
@@ -198,9 +182,7 @@ public class RaceServiceImpl implements RaceService {
                     getRacerCarClassCompetitionNumbersByCarClassCompetitionId(race.getCarClassCompetition().getId());
 
             for (int lapIndex = race.getNumberOfLaps() - 1; lapIndex >= 0; lapIndex--) {
-                Iterator<Integer> it = chessRoll.get(lapIndex).iterator();
-                while (it.hasNext()) {
-                    Integer carNumber = (Integer) it.next();
+                for (Integer carNumber : chessRoll.get(lapIndex)) {
                     if (!resultFullLaps.containsKey(carNumber)) {
                         resultFullLaps.put(carNumber, lapIndex + 1);
                     }
@@ -236,7 +218,7 @@ public class RaceServiceImpl implements RaceService {
                 place++;
             }
 
-            List<RaceResult> resultsList = (ArrayList<RaceResult>) raceResultService.getRaceResultsByRace(race);
+            List<RaceResult> resultsList = raceResultService.getRaceResultsByRace(race);
             if (resultsList.size() == 0) {
                 for (Entry<Integer, Integer> entry : resultFullLaps.entrySet()) {
                     RaceResult raceResult = new RaceResult();
@@ -369,7 +351,7 @@ public class RaceServiceImpl implements RaceService {
 
         List<List<RaceResult>> raceResultsList = new ArrayList<List<RaceResult>>();
 
-        List<Race> raceList = (ArrayList<Race>) raceDAO
+        List<Race> raceList = raceDAO
                 .getRacesByCarClassCompetition(carClassCompetition);
 
         for (Race race : raceList) {
@@ -395,7 +377,7 @@ public class RaceServiceImpl implements RaceService {
     public List<List<Set<Integer>>> getChessRollsByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
         List<List<Set<Integer>>> chessRollsList = new ArrayList<List<Set<Integer>>>();
-        List<Race> raceList = (ArrayList<Race>) raceDAO.getRacesByCarClassCompetition(carClassCompetition);
+        List<Race> raceList = raceDAO.getRacesByCarClassCompetition(carClassCompetition);
 
         for (Race race : raceList) {
             chessRollsList.add(getChessRoll(race));
@@ -416,7 +398,7 @@ public class RaceServiceImpl implements RaceService {
     @Override
     @Transactional
     public void setRaceNumber(CarClassCompetition carClassCompetition, Race race) {
-        List<Race> raceList = (ArrayList<Race>) raceDAO
+        List<Race> raceList = raceDAO
                 .getRacesByCarClassCompetition(carClassCompetition);
         if (raceList.size() == 0) {
             race.setRaceNumber(1);

@@ -1,27 +1,17 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.carting.dao.AdminSettingsDAO;
 import net.carting.dao.RacerCarClassCompetitionNumberDAO;
 import net.carting.dao.TeamDAO;
 import net.carting.dao.TeamInCompetitionDAO;
-import net.carting.domain.Competition;
-import net.carting.domain.Document;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.Team;
-import net.carting.domain.TeamInCompetition;
-
+import net.carting.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {

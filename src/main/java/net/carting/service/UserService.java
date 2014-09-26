@@ -1,10 +1,10 @@
 package net.carting.service;
 
+import net.carting.domain.User;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-
-import net.carting.domain.User;
 
 public interface UserService {
 

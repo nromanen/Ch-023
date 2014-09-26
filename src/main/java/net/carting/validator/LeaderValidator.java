@@ -1,7 +1,6 @@
-package net.carting.util;
+package net.carting.validator;
 
 import net.carting.domain.Leader;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

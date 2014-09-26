@@ -16,8 +16,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(TeamInCompetitionDAOImpl.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(TeamInCompetitionDAOImpl.class);
 
     @PersistenceContext(unitName = "entityManager")
     private EntityManager entityManager;
@@ -45,11 +45,11 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
                 "DELETE FROM TeamInCompetition c WHERE c.id = :id");
         query.setParameter("id", teamInCompetition.getId());
         if (query.executeUpdate() != 0) {
-        	LOG.debug("Deleted teamInCompetition with id = {}", teamInCompetition.getId());
+            LOG.debug("Deleted teamInCompetition with id = {}", teamInCompetition.getId());
         } else {
-        	LOG.warn("Tried to delete teamInCompetition with id = {}", teamInCompetition.getId());
+            LOG.warn("Tried to delete teamInCompetition with id = {}", teamInCompetition.getId());
         }
-    } 
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -62,7 +62,7 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
         LOG.debug("Get teamInCompetition list by team with id = {}", teamId);
         return query.getResultList();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public List<TeamInCompetition> getTeamInCompetitionListByTeamIdForCurrentYear(int teamId) {
@@ -85,9 +85,9 @@ public class TeamInCompetitionDAOImpl implements TeamInCompetitionDAO {
         query.setParameter("teamId", teamId);
         query.setParameter("competitionId", competitionId);
         if (query.executeUpdate() != 0) {
-        	LOG.debug("Deleted teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
+            LOG.debug("Deleted teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
         } else {
-        	LOG.warn("Tried to delete teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
+            LOG.warn("Tried to delete teamInCompetition by teamId({}) and competitionId({})", teamId, competitionId);
         }
     }
 

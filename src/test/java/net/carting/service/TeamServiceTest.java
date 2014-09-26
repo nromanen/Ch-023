@@ -62,37 +62,37 @@ public class TeamServiceTest {
         Team team2 = new Team(5, "name 2", new Leader());
         when(teamDAO.getTeamById(0)).thenReturn(new Team(1, "name", new Leader()));
         when(teamDAO.getTeamById(1)).thenReturn(new Team(5, "name 2", new Leader()));
-        assertTrue(teamDAO.getTeamById(0).equals(team1));
-        assertFalse(teamDAO.getTeamById(0).equals(team2));
+        assertTrue(teamServiceImpl.getTeamById(0).equals(team1));
+        assertFalse(teamServiceImpl.getTeamById(0).equals(team2));
     }
 
     @Test
     public void testIsSetTeam() {
         when(teamDAO.isSetTeam("name")).thenReturn(true);
-        assertTrue(teamDAO.isSetTeam("name"));
-        assertFalse(teamDAO.isSetTeam("namfde"));
+        assertTrue(teamServiceImpl.isSetTeam("name"));
+        assertFalse(teamServiceImpl.isSetTeam("namfde"));
         // cause "namfde" is undefined && isSetTeam() will return default value for boolean == false
         when(teamDAO.isSetTeam(anyString())).thenReturn(false);
         // always returns false
-        assertFalse(teamDAO.isSetTeam("name"));
-        assertFalse(teamDAO.isSetTeam(null));
+        assertFalse(teamServiceImpl.isSetTeam("name"));
+        assertFalse(teamServiceImpl.isSetTeam(null));
         when(teamDAO.isSetTeam(anyString())).thenReturn(true);
-        assertTrue(teamDAO.isSetTeam(null));
+        assertTrue(teamServiceImpl.isSetTeam(null));
     }
 
     @Test
     public void testIsTeamByLeaderId() {
         when(teamDAO.isTeamByLeaderId(8)).thenReturn(true);
-        assertTrue(teamDAO.isTeamByLeaderId(8));
-        assertFalse(teamDAO.isTeamByLeaderId(5));
+        assertTrue(teamServiceImpl.isTeamByLeaderId(8));
+        assertFalse(teamServiceImpl.isTeamByLeaderId(5));
 
         when(teamDAO.isTeamByLeaderId(anyInt())).thenReturn(false);
-        assertFalse(teamDAO.isTeamByLeaderId(0));
-        assertFalse(teamDAO.isTeamByLeaderId(1));
+        assertFalse(teamServiceImpl.isTeamByLeaderId(0));
+        assertFalse(teamServiceImpl.isTeamByLeaderId(1));
 
         when(teamDAO.isTeamByLeaderId(anyInt())).thenReturn(true);
-        assertTrue(teamDAO.isTeamByLeaderId(5));
-        assertTrue(teamDAO.isTeamByLeaderId(2));
+        assertTrue(teamServiceImpl.isTeamByLeaderId(5));
+        assertTrue(teamServiceImpl.isTeamByLeaderId(2));
     }
 
     @Test

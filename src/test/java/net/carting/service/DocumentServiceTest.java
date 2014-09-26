@@ -4,7 +4,6 @@ import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
 import net.carting.domain.Racer;
 import net.carting.util.DateUtil;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,10 +1,58 @@
 $(document).ready(function(){
-	
 
-    $('#add_car_class_form').bootstrapValidator();
-    $('#edit_car_class_form').bootstrapValidator();
+	$('#add_car_class_form').bootstrapValidator();
+	$('#edit_car_class_form').bootstrapValidator();
 
-	
+	$('#createDump').click(function(){
+		fileProcessing("createDump", true);
+	});
+
+	$('#saveAllFiles').click(function(){
+		fileProcessing("downloadFiles", false);
+	});
+
+	/*$('#importDump').click(function(){
+		$("#loading").css("display", "block");
+		$.ajax({
+			url: "getDump",
+			type: "POST",
+			success: function(response) {
+				if(response == "success") {
+					$("#loading").css("display", "none");
+					$('#success').css("display", "inline-block").hide().fadeIn();
+					$('#success').delay(1000).fadeOut('slow');
+				} else {
+					$("#loading").css("display", "none");
+					$('#fail').css("display", "inline-block").hide().fadeIn();
+					$('#fail').delay(1000).fadeOut('slow');
+				}
+				document.location.href = response;
+			}
+		});
+	});*/
+
+	function fileProcessing(url, dump) {
+		$("#loading").css("display", "block");
+		$.ajax({
+			url: url,
+			type: "POST",
+			success: function(response) {
+				if(response == "success") {
+					$("#loading").css("display", "none");
+					$('#success').css("display", "inline-block").hide().fadeIn();
+					$('#success').delay(1000).fadeOut('slow');
+					if (dump) {
+						document.location.href = "/Carting/resources/documents/sql/dump.sql";
+					}
+				} else {
+					$("#loading").css("display", "none");
+					$('#fail').css("display", "inline-block").hide().fadeIn();
+					$('#fail').delay(1000).fadeOut('slow');
+				}
+			}
+		});
+	}
+
 	$("#change_pass_btn").click(function(){	
 		$('#change_password_modal').modal();
 	});

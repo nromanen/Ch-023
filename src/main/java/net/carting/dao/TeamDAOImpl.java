@@ -1,18 +1,16 @@
 package net.carting.dao;
 
-import java.util.List;
+import net.carting.domain.Leader;
+import net.carting.domain.Team;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import net.carting.domain.Leader;
-import net.carting.domain.Team;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class TeamDAOImpl implements TeamDAO {
@@ -65,7 +63,7 @@ public class TeamDAOImpl implements TeamDAO {
     public boolean isSetTeam(String teamName) {
         String hql = "FROM Team WHERE name = :name";
         Query query = entityManager.createQuery(hql).setParameter("name", teamName);
-        Team result = null;
+        Team result;
         try {
             result = (Team) query.getSingleResult();
             LOG.debug("Team {} {} exist", teamName, (result != null ? "" : "does not"));

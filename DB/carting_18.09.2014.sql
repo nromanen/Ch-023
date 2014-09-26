@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.25a, for Win64 (x86)
+﻿-- MySQL dump 10.13  Distrib 5.5.25a, for Win64 (x86)
 --
 -- Host: localhost    Database: carting
 -- ------------------------------------------------------

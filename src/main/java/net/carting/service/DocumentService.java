@@ -1,12 +1,10 @@
 package net.carting.service;
 
+import net.carting.domain.Document;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
-
-import net.carting.domain.Document;
-import net.carting.domain.Leader;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public interface DocumentService {
 
@@ -71,8 +69,8 @@ public interface DocumentService {
      * @see net.carting.domain.Document
      * @see net.carting.domain.File
      */
-    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number, 
-                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException;
+    public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
+                                           String startDate, String finishDate, MultipartFile[] files, String[] fileName);
 
     /**
      * <p/>
@@ -89,7 +87,7 @@ public interface DocumentService {
      * @see net.carting.domain.File
      */
     public void editDocument(Integer documentId, String number, String startDate, String finishDate, 
-                             MultipartFile[] files) throws IOException;
+                             MultipartFile[] files, String[] fileName) throws IOException;
 
 
     /**

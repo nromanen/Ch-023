@@ -1,6 +1,25 @@
 $(document).ready(function() {
-	
-	
+	$('#add_document').click(function() {
+		setFileExtensions();
+	});
+
+	$('#edit_document').click(function() {
+		setFileExtensions();
+	});
+
+	function setFileExtensions() {
+		$('.file').each(function() {
+			var fileAttr = $(this).attr('fileId');
+			var fileVal = $(this).val();
+			var length = fileVal.length;
+			$('.fileExtensions').each(function() {
+				if ($(this).attr('fileId') == fileAttr) {
+					$(this).val('.' + fileVal.substr(length-3, 3));
+				}
+			});
+		});
+	}
+
 	// Setup validator
 
 	if ($('#addDocument').length != 0) {
@@ -24,9 +43,10 @@ $(document).ready(function() {
 		var count = document.getElementsByClassName('file').length+parseInt($('#fileCount').val());
 		if(count<3){
 			$('#fileTable').append(
-					'<tr><td><div class="form-group">'+
-					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file"/>'+
-					'</div></td></tr>');
+					'<tr><td><div class="form-group">' +
+					"<input type='file' fileId='" + Number(count + 1) + "' name='file' onchange='return ValidateFileUpload(this)' class='form-control file '/>" +
+					"<input type='hidden' name='fileExtensions' class='fileExtensions' fileId='"+  Number(count + 1) +"'>" +
+					"</div></td></tr>");
 		} else {
 			$('#max_count_achieved').css("display", "inline-block").hide().fadeIn();
 			$('#max_count_achieved').delay(2000).fadeOut('slow');
@@ -36,7 +56,7 @@ $(document).ready(function() {
 	if ($('.datepicker').length != 0) {
 		$('.datepicker').datepicker({
 			format : 'yyyy-mm-dd',
-			todayBtn : 'linked',
+			todayBtn : 'linked'
 		// language: 'ua'
 		});
 		

@@ -1,23 +1,7 @@
 package net.carting.service;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.carting.dao.CarClassCompetitionResultDAO;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-
+import net.carting.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarClassCompetitionResultServiceTest {

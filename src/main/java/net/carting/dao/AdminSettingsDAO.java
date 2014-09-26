@@ -12,4 +12,6 @@ public interface AdminSettingsDAO {
 
     public void updateFeedbackEmail(String value);
 
+    public boolean uploadDbDump(String sqlQuery);
+
 }

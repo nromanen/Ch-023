@@ -1,44 +1,24 @@
 package net.carting.web;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
-
-import net.carting.domain.Document;
-import net.carting.domain.File;
-import net.carting.domain.Leader;
-import net.carting.domain.Racer;
-import net.carting.domain.Team;
-import net.carting.service.DocumentService;
-import net.carting.service.FileService;
-import net.carting.service.LeaderService;
-import net.carting.service.RacerService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
-
+import net.carting.domain.*;
+import net.carting.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/document")
@@ -162,12 +142,12 @@ public class DocumentController {
                               @RequestParam(value = "number", required = false) String number,
                               @RequestParam(value = "start_date", required = false) String startDate,
                               @RequestParam(value = "finish_date", required = false) String finishDate,
+                              @RequestParam(value = "fileExtensions") String[] fileNames,
                               @RequestParam("file") MultipartFile[] files,
                               Locale locale,
                               Map<String, Object> map) {
         /* Getting current leader */
-
-         String username = userService.getCurrentUserName();
+        String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
 
         if (teamService.isTeamByLeaderId(leader.getId())) {
@@ -185,8 +165,8 @@ public class DocumentController {
                   * 'Document'
                   */
                 try {
-                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, leader);
-                } catch (IOException e) {
+                    documentService.addDocumentAndUpdateRacers(documentType, racersId, number, startDate, finishDate, files, fileNames);
+                } catch (Exception e) {
                     map.put("message", messageSource.getMessage("dataerror.invalid_file_loading", null, locale));
                     LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
                             leader.getFirstName(), leader.getLastName());
@@ -285,12 +265,13 @@ public class DocumentController {
                                @RequestParam(value = "number", required = false) String number,
                                @RequestParam(value = "start_date", required = false) String startDate,
                                @RequestParam(value = "finish_date", required = false) String finishDate,
+                               @RequestParam(value = "fileExtensions") String[] fileExtensions,
                                @RequestParam("file") MultipartFile[] files,
                                Locale locale,
                                Map<String, Object> map) {
 
         try {
-            documentService.editDocument(documentId, number, startDate, finishDate, files);
+            documentService.editDocument(documentId, number, startDate, finishDate, files, fileExtensions);
             return "redirect:/document/" + documentId;
         } catch (IOException e) {
             String username = userService.getCurrentUserName();

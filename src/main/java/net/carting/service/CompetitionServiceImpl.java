@@ -1,22 +1,17 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.carting.dao.CompetitionDAO;
 import net.carting.dao.FileDAO;
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Competition;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.Team;
-
+import net.carting.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -136,8 +131,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public List<String> getPointsByPlacesList(Competition competition) {
         String pointsByPlacesStr = competition.getPointsByPlaces();
         LOG.debug("Get pointsByPlaces string and transformed it to the list of points by places");
-        List<String> pointsByPlacesList = Arrays.asList(pointsByPlacesStr.split(","));
-        return pointsByPlacesList;
+        return Arrays.asList(pointsByPlacesStr.split(","));
     }
     
 

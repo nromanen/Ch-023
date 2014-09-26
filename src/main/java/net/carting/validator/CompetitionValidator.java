@@ -1,4 +1,4 @@
-package net.carting.util;
+package net.carting.validator;
 
 import net.carting.domain.Competition;
 import org.springframework.validation.Errors;

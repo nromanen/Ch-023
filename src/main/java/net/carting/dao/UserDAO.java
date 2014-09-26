@@ -1,8 +1,8 @@
 package net.carting.dao;
 
-import java.util.List;
-
 import net.carting.domain.User;
+
+import java.util.List;
 
 public interface UserDAO {
 

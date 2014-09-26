@@ -1,4 +1,3 @@
-<%@ page import="java.io.*,java.util.Locale"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
