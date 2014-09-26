@@ -383,6 +383,7 @@ public class DocumentController {
             @RequestParam("files[]") MultipartFile[]  files,
             @RequestParam("docType") Integer docType,
             @RequestParam("racerId") String racerId,
+            @RequestParam("fileExtensions") String fileExtensions,
             @RequestParam(value = "doc_number", required = false) String number,
             @RequestParam(value = "start_date", required = false) String startDate,
             @RequestParam(value = "finish_date", required = false) String finishDate) { 
@@ -402,6 +403,7 @@ public class DocumentController {
             return "problem";
         }
         String[]racersId={racerId};
+        String[]fileExtensionsArray = fileExtensions.split(",");
         /* Getting current leader */
         Leader leader = leaderService.getLeaderByUserName(userService.getCurrentUserName());
         String msg = "problem";
@@ -410,7 +412,7 @@ public class DocumentController {
                for (Racer racer : team.getRacers()) {
                    if (racer.getId()==Integer.parseInt(racerId)) {
                        try {
-                           documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, leader);
+                           documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, fileExtensionsArray);
                            System.out.println("File added!");
                            msg="added";
                        } catch (Exception e) {

@@ -50,14 +50,16 @@
                         </c:when>
                         <c:when test="${isTeamByLeader==true}">
                             <li><a href="<c:url value="/team/${team.id}"/>"><spring:message code="label.my_team" /></a></li>
-                            <li class="dropdown-submenu"><a href="<c:url value="#" />"><spring:message code="label.add_document" /></a>
-                            <ul class="dropdown-menu">
-                                <li><a tabindex="-1" href="<c:url value="/document/add/1" />"><spring:message code="label.document_racer_license" /></a></li>
-                                <li><a href="<c:url value="/document/add/2" />"><spring:message code="label.document_racer_insurance" /></a></li>
-                                <li><a href="<c:url value="/document/add/3" />"><spring:message code="label.document_racer_medical_cerificate" /></a></li>
-                                <li><a href="<c:url value="/document/add/4" />"><spring:message code="label.document_racer_parental_permission" /></a></li>
-                            </ul>
-                            </li>
+                            <c:if test="${teamSize>0}">
+	                            <li class="dropdown-submenu"><a href="<c:url value="#" />"><spring:message code="label.add_document" /></a>
+	                            <ul class="dropdown-menu">
+	                                <li><a tabindex="-1" href="<c:url value="/document/add/1" />"><spring:message code="label.document_racer_license" /></a></li>
+	                                <li><a href="<c:url value="/document/add/2" />"><spring:message code="label.document_racer_insurance" /></a></li>
+	                                <li><a href="<c:url value="/document/add/3" />"><spring:message code="label.document_racer_medical_cerificate" /></a></li>
+	                                <li><a href="<c:url value="/document/add/4" />"><spring:message code="label.document_racer_parental_permission" /></a></li>
+	                            </ul>
+	                            </li>
+                            </c:if>
                         </c:when>
                         </c:choose>
                             <li><a href="<c:url value="/logout" />"><spring:message code="label.logout" /></a></li>

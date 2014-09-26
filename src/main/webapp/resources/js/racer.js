@@ -537,6 +537,8 @@ $(document).ready(function(){
 	$('#birthday').datepicker('setEndDate', (new Date()).yyyymmdd());
 	$('#medical_certificate_expires').datepicker('setStartDate', (new Date()).yyyymmdd());
 	$('#insurance_expire').datepicker('setStartDate', (new Date()).yyyymmdd());
+	$('.datepicker.docInput3').datepicker('setStartDate', (new Date()).yyyymmdd());
+	$('.datepicker.docInput2').datepicker('setStartDate', (new Date()).yyyymmdd());
 	
 	$('.datepicker').on('changeDate', function() {
 		$(this).datepicker('hide');
@@ -565,11 +567,15 @@ $(document).ready(function(){
 		var index = $(this).attr("doc_type");
 		$('#result').html('');
 		var fd = new FormData();
+		var fileExtensions = new Array();
 //checking files
 		$.each($('.file'+index),function (x,val) {
 			fd.append("files[]",val.files[0]);
+			var name=$(this).val();
+			var length=$(this).length;
+			fileExtensions.push('.' + name.substr(length-4, 3));
 		});
-		
+		fd.append("fileExtensions",fileExtensions);
 		fd.append("racerId", $('#racerId').val());
 		fd.append("docType",index)
 //checking document type
@@ -619,7 +625,9 @@ function afterAdding(index) {
 	$('#a'+index).attr({
 		style:"color: silver"
 	})
-	$('#file'+index).attr('disabled',true)
+	$.each($('.file'+index),function(){
+		$(this).attr('disabled',true)
+	})
 	$.each($('.docInput'+index),function(){
 		this.disabled="disabled";
 	})
