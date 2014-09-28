@@ -56,8 +56,8 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
 
     @Override
     @Transactional
-    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId) {
-        return carClassCompetitionDAO.getCarClassCompetitionsByCompetitionId(competitonId);
+    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId) {
+        return carClassCompetitionDAO.getCarClassCompetitionsByCompetitionId(competitionId);
     }
 
     @Override

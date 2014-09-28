@@ -23,6 +23,7 @@ public interface FileService {
      *
      * @param document
      * @param files    - list of names of files
+     * @param fileExtension    - list of names of file extensions
      * @see net.carting.domain.File
      * @see net.carting.domain.Document
      */
