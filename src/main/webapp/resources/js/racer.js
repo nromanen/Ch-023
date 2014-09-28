@@ -1,5 +1,7 @@
 $(document).ready(function(){
 	
+
+	
 	$(".datepicker").keydown(function(){
 		return false;
 	});
@@ -40,15 +42,25 @@ $(document).ready(function(){
 	        	    			 "address" : address, "sportCategory": sportCategory,
 	        	    			 "carClasses" : carClasses, "carClassNumbers" : carClassNumbers
 	        	    		   };
-	        	    	    
 	        	    $.ajax({  
 	        	        url: $("#new_racer").attr( "action"),  
 	        	        data: JSON.stringify(json),  
 	        	        contentType: 'application/json',
 	        	        type: "POST",
 	        	        success: function(response) {  
+	        	        	disableInputRacerinfo()
 	        	        	$("#ajax_loader").css("display", "none");
-	        	        	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/racer/' + response);
+	        	        	$("#label_add_doc").css("display", "block");
+	        	        	$("#addDocumentsForm").css("display", "block").hide().fadeIn();
+	        	        	var racerId=~~response
+	        	        	var x=(+response-racerId)*10;
+	        	        	$("#racerId").val(racerId)
+	        	        	$('#add_racer').hide();
+	        	        	$('#docNum1').focus();
+	        	        	if(parseInt(x)<1) {
+	        	        		$("#tab4").css("display", "none");
+	        	        		$("#permissionInfo").css("display", "none");
+	        	        	}
 	        	        } 
 	        	    });
 	        	    
@@ -62,9 +74,44 @@ $(document).ready(function(){
 		return false;
 		
 	});
-
+	
+	$("#finish").click(function (e) {
+		var racerId = $("#racerId").val()
+		if (racerId>0) {
+			window.location = '/Carting/racer/' + racerId
+		} else window.location = '/Carting/'
+	})
+	
+	$('.addFile').click(function() {
+		var index = $(this).attr("typeDocument");
+		var count = document.getElementsByClassName('file'+index).length
+		if(count<3){
+			$('#fileTable'+index).append(
+					'<tr><td><div class="form-group">'+
+					'<input type="file" name="file" onchange="return ValidateFileUpload(this)" class="form-control file'+index+'"/>'+
+					'</div></td></tr>');
+		} else {
+			$('#max_count_achieved'+index).css("display", "inline-block").hide().fadeIn();
+			$('#max_count_achieved'+index).delay(2000).fadeOut('slow');
+		}
+		
+	});
+	
+	function disableInputRacerinfo() {
+    	$("#first_name").attr("disabled", "disabled");
+    	$("#last_name").attr("disabled", "disabled");
+    	$("#birthday").attr("disabled", "disabled");
+    	$("#document").attr("disabled", "disabled");
+    	$("#address").attr("disabled", "disabled");
+    	$("#sport_category").attr("disabled", "disabled");
+    	$("#add_class_modal").attr("disabled", "disabled");
+    	$("#delete_classes").attr("disabled", "disabled");
+    	$("#add_racer").attr("disabled", "disabled");
+    	$("#add_class_modal").hide();
+    	$("#delete_classes").hide();
+	}
+	
 	$('#edit_racer').submit(function(){
-
         		$("#ajax_loader").css("display", "inline-block");
                             var id = $('#id').val();
                             var firstName = $('#first_name').val();
@@ -96,11 +143,9 @@ $(document).ready(function(){
         	        	        	$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/racer/' + response);
         	        	        }
         	        	    });
-
-
         		return false;
-
         	});
+	
 	$("#add_class_ER_modal").click(function(){
 		$('#addClassERModal').modal();
 	});
@@ -492,9 +537,114 @@ $(document).ready(function(){
 	$('#birthday').datepicker('setEndDate', (new Date()).yyyymmdd());
 	$('#medical_certificate_expires').datepicker('setStartDate', (new Date()).yyyymmdd());
 	$('#insurance_expire').datepicker('setStartDate', (new Date()).yyyymmdd());
+	$('.datepicker.docInput3').datepicker('setStartDate', (new Date()).yyyymmdd());
+	$('.datepicker.docInput2').datepicker('setStartDate', (new Date()).yyyymmdd());
 	
-	$('#birthday, #medical_certificate_expires, #insurance_expire').on('changeDate', function() {
+	$('.datepicker').on('changeDate', function() {
 		$(this).datepicker('hide');
 	});
 		
+	if ($('#addDocumentsForm').length != 0) {
+		$('#addDocumentsForm').bootstrapValidator();
+	}
+	
+	// Display ajax loader image if form pass validation
+	$('#add_docs').on('success.form.bv', function(e) {
+		$("#ajax_loader_docs").css("display", "inline-block");
+	});
+	
+	// reValidate the date when user change it  
+	$('#doc_date_picker').on('changeDate', function(e) {
+
+		var name = $('#doc_date_picker').attr('name')
+		$('#addDocument').bootstrapValidator('revalidateField', name); 
+		$('#doc_date_picker').datepicker('hide');
+    });
+	
+
+//adding documents to new added racer
+	$('.adding').click(function() {
+		var index = $(this).attr("doc_type");
+		$('#result').html('');
+		var fd = new FormData();
+		var fileExtensions = new Array();
+//checking files
+		$.each($('.file'+index),function (x,val) {
+			fd.append("files[]",val.files[0]);
+			var name=$(this).val();
+			var length=$(this).length;
+			fileExtensions.push('.' + name.substr(length-4, 3));
+		});
+		fd.append("fileExtensions",fileExtensions);
+		fd.append("racerId", $('#racerId').val());
+		fd.append("docType",index)
+//checking document type
+		if (index=='1'||index=='2') {
+			fd.append("doc_number", $('#docNum'+index).val());
+		}
+		if (index=='2'||index=='3') {
+			fd.append("finish_date", $('#doc_date_picker'+index).val())
+		} 
+		if (index=='4') {
+			var start_date = $('#doc_date_picker4').val();
+			fd.append("start_date",start_date)
+		}
+		$.ajax({
+			url: "/Carting/document/addDocs",
+			data: fd,
+			dataType: 'text',
+			processData: false,
+			contentType: false,
+			type: 'POST',
+			success: function(data){
+				if (data=="added") {
+					afterAdding(index);
+				} else if (data=="problem") {
+					$('#problem-result').css("display", "block").hide().fadeIn();
+					$('#problem-result').delay(2000).fadeOut('slow');
+				} else {
+					$('#result').html(data);
+					$('#result').css("display", "block").hide().fadeIn();
+					$('#result').delay(2000).fadeOut('slow');
+					//$(location).attr('href', window.location.protocol + "//" + window.location.host + '/Carting/');
+				}
+			}
+		});
+	});
 });
+
+//hiding buttons and disabling inputs to unable editing after adding data 
+//and going to the next tab
+function afterAdding(index) {
+	$('#success-result').css("display", "block").hide().fadeIn();
+	$('#success-result').delay(2000).fadeOut('slow');
+	var next=+index+1;
+	if (next<6)  {
+		$('#myTab a[id="a'+next+'"]').tab('show')
+	}
+	$('#a'+index).attr({
+		style:"color: silver"
+	})
+	$.each($('.file'+index),function(){
+		$(this).attr('disabled',true)
+	})
+	$.each($('.docInput'+index),function(){
+		this.disabled="disabled";
+	})
+	$('#addFile'+index).hide()
+	$('#add'+index).hide()
+}
+
+//disabling add-button, when there is no filled all information
+function test() {
+	for (var index=1;index<5;index++) {
+		$.each($('.docInput'+index),function (x,v) {
+			if (v.value==''){
+				document.getElementById('add'+index).disabled=true;
+				return false;
+			} else {
+				document.getElementById('add'+index).disabled=false;
+			}
+		});
+	}
+}

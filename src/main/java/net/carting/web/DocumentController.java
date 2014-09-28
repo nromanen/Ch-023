@@ -376,7 +376,59 @@ public class DocumentController {
         }
         return new ModelAndView("document_view");
     }
-
-
-
+    
+    
+    @RequestMapping(value = "/addDocs", method = RequestMethod.POST)
+    public @ResponseBody String addDocumentsForNewRacerAction(
+            @RequestParam("files[]") MultipartFile[]  files,
+            @RequestParam("docType") Integer docType,
+            @RequestParam("racerId") String racerId,
+            @RequestParam("fileExtensions") String fileExtensions,
+            @RequestParam(value = "doc_number", required = false) String number,
+            @RequestParam(value = "start_date", required = false) String startDate,
+            @RequestParam(value = "finish_date", required = false) String finishDate) { 
+        try {
+            if(Integer.parseInt(racerId)<1) {
+                /*
+                 * If team leader doesn't choose racers, he is redirected to
+                 * page of his team
+                 */
+               LOG.info("Team leader doesn't choose racers...");
+               return "Team leader doesn't choose racers";
+            }
+        } catch (Exception e) {
+            return "RacerId don't exist";
+        }
+        if (files == null || files.length <1) {
+            return "problem";
+        }
+        String[]racersId={racerId};
+        String[]fileExtensionsArray = fileExtensions.split(",");
+        /* Getting current leader */
+        Leader leader = leaderService.getLeaderByUserName(userService.getCurrentUserName());
+        String msg = "problem";
+           if (teamService.isTeamByLeaderId(leader.getId())) {
+               Team team = teamService.getTeamByLeader(leader);
+               for (Racer racer : team.getRacers()) {
+                   if (racer.getId()==Integer.parseInt(racerId)) {
+                       try {
+                           documentService.addDocumentAndUpdateRacers(docType, racersId, number, startDate, finishDate, files, fileExtensionsArray);
+                           System.out.println("File added!");
+                           msg="added";
+                       } catch (Exception e) {
+                           msg= "problem";
+                           LOG.error("Leader {} {} tried to add document, but happened some problem with writing files to server",
+                                   leader.getFirstName(), leader.getLastName());
+                           System.out.println("Something wrong with properties.");
+                           return msg;
+                       }
+                   }
+               }
+              
+           } else { 
+               LOG.error("Team leader doesn't exists...");
+               msg = "Relogin in, please!";
+           }
+       return msg;
+    }
 }

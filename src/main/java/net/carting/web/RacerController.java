@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,6 +27,9 @@ public class RacerController {
 
     @Autowired
     private RacerService racerService;
+    
+    @Autowired
+    private AdminSettingsService adminSettingsService;
     
     @Autowired
     private TeamService teamService;
@@ -188,15 +193,15 @@ public class RacerController {
     @RequestMapping(value = "/addRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    int addRacerAction(@RequestBody Map<String, Object> racerMap) {
+    Double addRacerAction(@RequestBody Map<String, Object> racerMap) {
     	
     	LOG.debug("Start addRacerAction method");
+    	double result=0;
         Racer racer = new Racer();
         racer.setFirstName(racerMap.get("firstName").toString());
         racer.setLastName(racerMap.get("lastName").toString());
         racer.setBirthday(DateUtil.getDateFromString(racerMap.get("birthday").toString()));
         racer.setDocument(racerMap.get("document").toString());
-        racer.setAddress(racerMap.get("address").toString());
         racer.setAddress(racerMap.get("address").toString());
         racer.setSportsCategory(Integer.parseInt(racerMap.get("sportCategory").toString()));
         racer.setRegistrationDate(new Date());
@@ -219,13 +224,17 @@ public class RacerController {
             racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
         }
         // --------------------------------------
-
+        int parentalPermissionAge = adminSettingsService.getAdminSettings().getParentalPermissionYears();
         String username = userService.getCurrentUserName();
         LOG.trace("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
+        result=racer.getId();
+        if(racer.getAge()<parentalPermissionAge) {
+            result+=0.1;
+        }
         LOG.debug("End addRacerAction method");
-        return racer.getId();
+        return result;
     }
 
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})

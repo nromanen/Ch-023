@@ -2,6 +2,6 @@
 *.idea/*
 *.log
 target/*
-src/main/webapp/WEB-INF/jdbc.properties
+*.properties
 /target/
 /src/main/webapp/resources/documents/*
