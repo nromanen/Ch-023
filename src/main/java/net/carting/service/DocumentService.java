@@ -46,7 +46,9 @@ public interface DocumentService {
      * the parameters will not be set
      *
      * @param document - the document in which parameters will be set
-     * @param request  - the request which was sent from the form of document_add.jsp
+     * @param number  - the document type id
+     * @param startDate  - the document start date
+     * @param finishDate  - the document finish date
      * @return the document with some new parameters*
      * @author Volodymyr Semaniv
      * @see net.carting.domain.Document

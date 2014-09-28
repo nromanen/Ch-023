@@ -54,7 +54,7 @@ public class CarClassCompetitionResultServiceImpl implements
      * This method gets the total result by car class competition result id
      * given as parameter.
      *
-     * @param carClassCompetitionResultId
+     * @param id
      *            Id of CarClassCompetitionResult by which we want to get the
      *            object.
      * @return Object of car class competition result.
@@ -150,7 +150,7 @@ public class CarClassCompetitionResultServiceImpl implements
      * @param carClassCompetition
      *            Car class competition in which we want to calculate summary
      *            results
-     * @param Race
+     * @param race
      *            Object that defines by what race we want to calculate results
      * @author Volodmyr Slobodian
      */
@@ -223,7 +223,7 @@ public class CarClassCompetitionResultServiceImpl implements
      * @param carClassCompetition
      *            Car class competition in which we want to recalculate summary
      *            results
-     * @param Race
+     * @param race
      *            Object that defines by what race we want to recalculate
      *            results
      * @author Volodmyr Slobodian
