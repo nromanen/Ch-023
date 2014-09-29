@@ -328,12 +328,13 @@ public class CompetitionController {
 			Map<Double, Integer> finalPointsAndPlaces = new LinkedHashMap<Double, Integer>();
 			boolean isSetResult = true;
 			for (CarClassCompetitionResult ccr : ccrL) {
-				if (ccr.getAbsolutePlace() > 0) {
+				if (ccr.getAbsolutePlace() > 0) { // checking for absolute results
 					int size = ccr.getRacerCarClassCompetitionNumber()
 							.getCarClassCompetition()
-							.getRacerCarClassCompetitionNumbers().size();
+							.getRacerCarClassCompetitionNumbers().size();//count of racers in carClassCompetition
 					ccr.setAbsolutePointsByTableB(AdminSettings
-							.getPointFromTableB(ccr.getAbsolutePlace(), size));
+							.getPointFromTableB(ccr.getAbsolutePlace(), size));//get point from AdminSettings.POINTS_BY_TABLE_B
+					//in accordance with absolute place and count of racers in carClassCompetition
 					ccr.setAbsoluteSumm(ccr.getAbsolutePointsByTableB()
 							+ ccr.getManeuverTime());
 					finalPoints.add(ccr.getAbsoluteSumm());

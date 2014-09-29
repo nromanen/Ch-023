@@ -188,7 +188,7 @@ public class RacerServiceImpl implements RacerService {
 		cal.setTime(checkdate);
 		int checkYear = cal.get(Calendar.YEAR);
 		DateUtil dateUtil = new DateUtil();
-		int daysInCheckYear = dateUtil.getDaysCount(checkYear);
+		int daysInCheckYear = dateUtil.getDaysCount(checkYear);// year is leap or not (daysCount == 366 or 365)
 		int checkday = cal.get(Calendar.DAY_OF_YEAR);
 		for (int i = 0; i < racers.size(); i++) {
 			cal.setTime(racers.get(i).getBirthday());
@@ -197,7 +197,7 @@ public class RacerServiceImpl implements RacerService {
 					.getDaysCount(racerBirthdayYear);
 			int birthday = cal.get(Calendar.DAY_OF_YEAR);
 			if (daysInCheckYear != daysInRacerBirthdayYear) {
-				if (birthday >= 60) {
+				if (birthday >= 60) {// birthday is 29 february or after 
 					birthday = birthday - 1;
 				}
 			}

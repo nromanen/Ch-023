@@ -98,7 +98,8 @@ public class AdminSettings {
     public void setFeedbackEmail(String feedbackEmail) {
         this.feedbackEmail = feedbackEmail;
     }
-    
+
+  //get point from AdminSettings.POINTS_BY_TABLE_B in according with absolute place and count of racers in carClassCompetition
     public static int getPointFromTableB (int absolutePlace, int countOfRacers){
     	List<String> pointsList = Arrays
 				.asList(AdminSettings.POINTS_BY_TABLE_B.get(countOfRacers)
