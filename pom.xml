@@ -448,6 +448,7 @@
                     <junitArtifactName>junit:junit</junitArtifactName>
                     <excludes>
                         <exclude>**/*_Roo_*</exclude>
+                        <exclude>**/TestDatabaseUtil*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
