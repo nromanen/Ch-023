@@ -27,11 +27,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class BirthdayRacerTest {
-	 @InjectMocks
-	    RacerServiceImpl racerService;
-
-	    @Mock
-	    private RacerDAO racerDAO;
+	@InjectMocks
+	RacerServiceImpl racerService;
+	@Mock
+	private RacerDAO racerDAO;
     
 	@Test
     public void testGetDaysCount() {
