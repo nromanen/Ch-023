@@ -1,19 +1,11 @@
 package net.carting.web;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import net.carting.domain.*;
+import net.carting.domain.CarClass;
+import net.carting.domain.Leader;
+import net.carting.domain.Maneuver;
+import net.carting.domain.User;
 import net.carting.service.*;
-
 import org.hibernate.exception.ConstraintViolationException;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 
-    @Autowired
-    private DocumentService documentService;
     @Autowired
     private CarClassService carClassService;
     @Autowired
@@ -40,6 +35,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private ManeuverService maneuverService;
+    @Autowired
+    FileService fileService;
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
 
@@ -217,5 +214,26 @@ public class AdminController {
             result = "fail";
         }
         return result;
+    }
+
+    @RequestMapping(value = "createDump", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String createDump() {
+        return fileService.createDbDump("src/main/webapp/resources/documents/sql/") ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "downloadFiles", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String downloadFiles() {
+        return fileService.downloadAllFiles("src/main/webapp/resources/documents/files") ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "uploadDump", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String uploadDump() {
+        return fileService.uploadDbDump("src/main/webapp/resources/documents/sql/dump.sql") ? "success" : "fail";
     }
 }

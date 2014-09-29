@@ -1,18 +1,8 @@
 package net.carting.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
 import net.carting.dao.DocumentDAO;
 import net.carting.domain.Document;
-import net.carting.domain.Leader;
 import net.carting.util.DateUtil;
-import net.carting.util.PdfWriter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.itextpdf.text.DocumentException;
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -85,7 +79,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @Transactional
     public void addDocumentAndUpdateRacers(Integer documentType, String[] racersId, String number,
-                                           String startDate, String finishDate, MultipartFile[] files, Leader leader) throws IOException {
+                                           String startDate, String finishDate, MultipartFile[] files, String[] fileNames) {
         LOG.debug("Start addDocumentAndUpdateRacers method");
 
         try {
@@ -109,7 +103,8 @@ public class DocumentServiceImpl implements DocumentService {
                     fileList.add(file.getBytes());
                 }
             }
-            fileService.addFilesToDocument(document, fileList);
+            //TODO: add file names
+            fileService.addFilesToDocument(document, fileList, fileNames);
             racerService.setDocumentToRacers(document, racersId);
         } catch (Exception e) {
             LOG.error("Error occured in addDocumentAndUpdateRacers method", e);
@@ -121,7 +116,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @Transactional
     public void editDocument(Integer documentId, String number, String startDate, String finishDate,
-                             MultipartFile[] files) throws IOException {
+                             MultipartFile[] files, String[] fileNames) throws IOException {
 
         Document document = getDocumentById(documentId);
         document.setApproved(false);
@@ -139,7 +134,7 @@ public class DocumentServiceImpl implements DocumentService {
         }
         //getPathsAndWriteFilesToServer(files, documentType,
         //document.getTeamOwner().getLeader().getId());
-        fileService.addFilesToDocument(document, fileList);
+        fileService.addFilesToDocument(document, fileList, fileNames);
         LOG.trace("Leader {} {} of team {} edited document {}",
                 document.getTeamOwner().getLeader().getFirstName(),
                 document.getTeamOwner().getLeader().getLastName(),

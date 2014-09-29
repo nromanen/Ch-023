@@ -1,38 +1,18 @@
 package net.carting.web;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Leader;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassNumber;
-import net.carting.domain.Team;
-import net.carting.service.CarClassCompetitionService;
-import net.carting.service.CarClassService;
-import net.carting.service.LeaderService;
-import net.carting.service.RacerCarClassCompetitionNumberService;
-import net.carting.service.RacerCarClassNumberService;
-import net.carting.service.RacerService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
+import net.carting.domain.*;
+import net.carting.service.*;
 import net.carting.util.DateUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/racer")
@@ -47,6 +27,9 @@ public class RacerController {
 
     @Autowired
     private RacerService racerService;
+    
+    @Autowired
+    private AdminSettingsService adminSettingsService;
     
     @Autowired
     private TeamService teamService;
@@ -210,15 +193,15 @@ public class RacerController {
     @RequestMapping(value = "/addRacer", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
-    int addRacerAction(@RequestBody Map<String, Object> racerMap) {
+    Double addRacerAction(@RequestBody Map<String, Object> racerMap) {
     	
     	LOG.debug("Start addRacerAction method");
+    	double result=0;
         Racer racer = new Racer();
         racer.setFirstName(racerMap.get("firstName").toString());
         racer.setLastName(racerMap.get("lastName").toString());
         racer.setBirthday(DateUtil.getDateFromString(racerMap.get("birthday").toString()));
         racer.setDocument(racerMap.get("document").toString());
-        racer.setAddress(racerMap.get("address").toString());
         racer.setAddress(racerMap.get("address").toString());
         racer.setSportsCategory(Integer.parseInt(racerMap.get("sportCategory").toString()));
         racer.setRegistrationDate(new Date());
@@ -237,18 +220,21 @@ public class RacerController {
         racerService.addRacer(racer);
 
         // add Racer CarClass Numbers
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
-            racerCarClassNumberService.addRacerCarClassNumber((RacerCarClassNumber) it.next());
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
+            racerCarClassNumberService.addRacerCarClassNumber(racerCarClassNumber);
         }
         // --------------------------------------
-
+        int parentalPermissionAge = adminSettingsService.getAdminSettings().getParentalPermissionYears();
         String username = userService.getCurrentUserName();
         LOG.trace("{} had added racer {} {} to team {} (id = {})",
                 username, racer.getFirstName(), racer.getLastName(), racer
                         .getTeam().getName(), racer.getTeam().getId());
+        result=racer.getId();
+        if(racer.getAge()<parentalPermissionAge) {
+            result+=0.1;
+        }
         LOG.debug("End addRacerAction method");
-        return racer.getId();
+        return result;
     }
 
     @RequestMapping(value = "/isSetNumberForCarClass", method = RequestMethod.POST, headers = {"content-type=application/json"})
@@ -268,7 +254,7 @@ public class RacerController {
         int carClassId = Integer.parseInt(map.get("carClassId").toString());
         try{
             List<RacerCarClassNumber> racers = racerCarClassNumberService.getNumbersByCarClassId(carClassId);
-            ArrayList<Integer> numbers = new ArrayList<Integer>();
+            List<Integer> numbers = new ArrayList<Integer>();
             for (RacerCarClassNumber racer : racers) {
                 numbers.add(racer.getNumber());
             }
@@ -318,10 +304,9 @@ public class RacerController {
                 "updatedRacerCarClassNumbers").toString();
         Set<RacerCarClassNumber> racerCarClassNumbers = racerService.parseUpdatedRacerCarClassNumbers(
                 updatedRacerCarClassNumbersStr, racer);
-        Iterator<RacerCarClassNumber> it = racerCarClassNumbers.iterator();
-        while (it.hasNext()) {
+        for (RacerCarClassNumber racerCarClassNumber : racerCarClassNumbers) {
             racerCarClassNumberService
-                    .updateRacerCarClassNumber((RacerCarClassNumber) it.next());
+                    .updateRacerCarClassNumber(racerCarClassNumber);
         }
         return "success";
     }

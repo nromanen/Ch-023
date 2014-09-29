@@ -1,14 +1,7 @@
 package net.carting.service;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
-import java.util.List;
-
 import net.carting.dao.UserDAO;
 import net.carting.domain.User;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +10,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -104,7 +103,7 @@ public class UserServiceImpl implements UserService {
         String authority = null;
         Iterator<GrantedAuthority> iterator = (Iterator<GrantedAuthority>) auth.getAuthorities().iterator();
         while (iterator.hasNext()) {
-            authority = (String) iterator.next().toString();
+            authority = iterator.next().toString();
         }
         LOG.debug("End getCurrentAuthority method");
         return authority;
@@ -164,6 +163,7 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
     }
 
+    
     @Override
     @Transactional
     public void sendSecureCode(User user) {
@@ -176,8 +176,7 @@ public class UserServiceImpl implements UserService {
             String to = user.getEmail();
             String from = adminSettingsService.getAdminSettings().getFeedbackEmail();
             String subject = "Password recovery on Carting";
-            String message = secureCode;
-            mailService.sendMail(to, from, subject, message);
+            mailService.sendMail(to, from, subject, secureCode);
             LOG.debug("Sent secure code to user(username = {})", user.getUsername());
 
         } catch (NoSuchAlgorithmException e) {

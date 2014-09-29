@@ -1,28 +1,11 @@
 package net.carting.web;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.validation.Valid;
-
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
 import net.carting.domain.User;
-import net.carting.service.AdminSettingsService;
-import net.carting.service.LeaderService;
-import net.carting.service.MailService;
-import net.carting.service.RoleService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
+import net.carting.service.*;
 import net.carting.util.DateUtil;
-import net.carting.util.LeaderValidator;
-
+import net.carting.validator.LeaderValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/leader")
@@ -73,7 +57,7 @@ public class LeaderController {
     };
     
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index(Map<String, Object> map) {
+    public String index() {
         String authority = userService.getCurrentAuthority();
         if (authority.equals(UserService.ROLE_ANONYMOUS)) {
             return "leader_registration";
@@ -122,11 +106,9 @@ public class LeaderController {
         }
         return "leader";
     }
-    
-    /* TODO Remove HttpServletRequest */
+
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editLeaderPage(Map<String, Object> map,
-                                 @PathVariable("id") int id) {
+    public String editLeaderPage(Map<String, Object> map) {
         String username = userService.getCurrentUserName();
         Leader leader = leaderService.getLeaderByUserName(username);
         map.put("leader", leader);
@@ -168,7 +150,7 @@ public class LeaderController {
         String userName = map.get("username").toString();
         return userService.isSetUser(userName);
     }
-    
+
     @RequestMapping(value = "/isSetEmail", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -188,20 +170,22 @@ public class LeaderController {
     }
     
     @RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
-    public String passwordRecovery(Map<String, Object> map) {
+    public String passwordRecovery() {
         return "password_recovery";
     }
     
+    //send secure code, used in password recovery algorithm
     @RequestMapping(value = "/sendSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
     String sendSecureCode(@RequestBody Map<String, Object> map) {
     	String email = map.get("email").toString();
-    	User user = userService.getUserByEmail(email);
-    	userService.sendSecureCode(user);
+    	User user = userService.getUserByEmail(email); 
+    	userService.sendSecureCode(user); 
     	return "success";
     }
     
+    //check secure code, used in password recovery algorithm
     @RequestMapping(value = "/checkSecureCode", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -209,7 +193,7 @@ public class LeaderController {
     	String email = map.get("email").toString();
     	String secureCode = map.get("secureCode").toString();
     	User user = userService.getUserByEmail(email);
-    	if (user.getResetPassLink().equals(secureCode)) {
+    	if (user.getResetPassLink().equals(secureCode)) { // if secureCode is right for this user 
         	return "success";
     	}
     	else {
@@ -217,6 +201,7 @@ public class LeaderController {
     	}
     }
     
+    // change password, used in password recovery algorithm
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, headers = {"content-type=application/json"})
     public
     @ResponseBody
@@ -225,9 +210,9 @@ public class LeaderController {
     	String secureCode = map.get("secureCode").toString();
     	String password = map.get("password").toString();
     	User user = userService.getUserByEmail(email);
-    	if (user.getResetPassLink().equals(secureCode)) {
+    	if (user.getResetPassLink().equals(secureCode)) { // if secureCode is right for this user
     		try {
-				userService.changePassword(user, password);
+				userService.changePassword(user, password); // change password
 			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e ) {
 				LOG.error("Errors in changePassword method", e);
 			}
@@ -238,10 +223,11 @@ public class LeaderController {
     	}
     }
     
+    // used for Spring Validator in Leader registration method
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false)); // set in what format to get Date object from view 
     }
     
 

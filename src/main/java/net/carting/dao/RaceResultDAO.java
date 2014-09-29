@@ -1,10 +1,10 @@
 package net.carting.dao;
 
-import java.util.List;
-
 import net.carting.domain.Race;
 import net.carting.domain.RaceResult;
 import net.carting.domain.Racer;
+
+import java.util.List;
 
 public interface RaceResultDAO {
     public List<RaceResult> getAllRaceResults();

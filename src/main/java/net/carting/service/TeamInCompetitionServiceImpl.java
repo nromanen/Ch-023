@@ -1,27 +1,17 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.carting.dao.AdminSettingsDAO;
 import net.carting.dao.RacerCarClassCompetitionNumberDAO;
 import net.carting.dao.TeamDAO;
 import net.carting.dao.TeamInCompetitionDAO;
-import net.carting.domain.Competition;
-import net.carting.domain.Document;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.Team;
-import net.carting.domain.TeamInCompetition;
-
+import net.carting.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
@@ -100,16 +90,9 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
         return result;
     }
 
-    /**
-     * This method gets is valid racers documents
-     *
-     * @param racer       - racer in which we want to check documents
-     * @param competition - competition in which we want to check racers documents
-     * @return <code>true</code> if all racers documents is valid,
-     * and <code>false</code> if one of documents is not valid
-     * @author Ivan Kozub
-     */
-    private boolean isValidRacerDocuments(Racer racer, Competition competition) {
+    @Override
+    @Transactional
+    public boolean isValidRacerDocuments(Racer racer, Competition competition) {
 
         int perentalPermissionsYears = adminSettingsDAO.getAdminSettings().getParentalPermissionYears();
 
@@ -130,16 +113,9 @@ public class TeamInCompetitionServiceImpl implements TeamInCompetitionService {
         return true;
     }
 
-    /**
-     * This method gets is valid document in competition
-     *
-     * @param document    - document which we want to check
-     * @param competition - competition in which we want to check document
-     * @return <code>true</code> if document is valid in competition,
-     * and <code>false</code> if document is not valid
-     * @author Ivan Kozub
-     */
-    private boolean isValidDocumentInCompetition(Document document, Competition competition) {
+    @Override
+    @Transactional
+    public boolean isValidDocumentInCompetition(Document document, Competition competition) {
         if (document == null) {
             return false;
         } else {

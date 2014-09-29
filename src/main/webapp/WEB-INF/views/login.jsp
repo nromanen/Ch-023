@@ -2,14 +2,18 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter"%>
-<%@ page import="org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter"%>
-<%@ page import="org.springframework.security.core.AuthenticationException"%>
 
 <script>
-	$(document).ready(function(){
+	$(document).ready(function () {
 		$('#popover').popover({
 			placement: "bottom"
+		});
+		$('#username, #password').on("change", function() {
+			if ($('#username').val() != 0 && $('#password').val() != 0) {
+				$('#submit_btn').removeAttr('disabled');
+			} else {
+				$('#submit_btn').attr("disabled", "disabled");
+			}
 		});
 	});
 </script>
@@ -55,7 +59,7 @@
 						id="password" placeholder="<spring:message
 							code="placeholder.password" />">
 				</div>
-				<button type="submit" class="btn btn-sm btn-success">
+				<button type="submit" class="btn btn-sm btn-success" disabled id="submit_btn">
 					<spring:message code="label.sign_in" />
 				</button>					
 				<a href='<c:url value="/leader" />' class="btn btn-sm btn-primary">

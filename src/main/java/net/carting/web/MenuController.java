@@ -2,11 +2,7 @@ package net.carting.web;
 
 import net.carting.domain.Leader;
 import net.carting.domain.Team;
-import net.carting.service.CompetitionService;
-import net.carting.service.DocumentService;
-import net.carting.service.LeaderService;
-import net.carting.service.TeamService;
-import net.carting.service.UserService;
+import net.carting.service.*;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
 import org.apache.tiles.preparer.ViewPreparerSupport;
@@ -48,6 +44,7 @@ public class MenuController extends ViewPreparerSupport implements Serializable 
             if (isTeamByLeader) {
                 Team team = teamService.getTeamByLeader(leader);
                 response.put("team", team);
+                response.put("teamSize", team.getRacers().size());
             }
         }
         response.put("currentYear", Calendar.getInstance().get(Calendar.YEAR));

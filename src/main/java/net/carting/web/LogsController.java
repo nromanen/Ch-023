@@ -1,6 +1,5 @@
 package net.carting.web;
 
-import net.carting.domain.Logs;
 import net.carting.service.LogsService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

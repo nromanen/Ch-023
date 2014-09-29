@@ -1,11 +1,6 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import net.carting.dao.UserDAO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 @Service
@@ -70,8 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
-        List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
-        return authList;
+        return getGrantedAuthorities(getRoles(role));
     }
 
     public List<String> getRoles(Integer role) {

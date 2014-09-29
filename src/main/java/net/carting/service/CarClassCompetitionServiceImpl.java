@@ -1,23 +1,17 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import net.carting.dao.CarClassCompetitionDAO;
 import net.carting.dao.RacerCarClassCompetitionNumberDAO;
-import net.carting.domain.CarClass;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
-import net.carting.domain.RacerCarClassNumber;
-import net.carting.domain.Team;
-
+import net.carting.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class CarClassCompetitionServiceImpl implements CarClassCompetitionService {
@@ -62,8 +56,8 @@ public class CarClassCompetitionServiceImpl implements CarClassCompetitionServic
 
     @Override
     @Transactional
-    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitonId) {
-        return carClassCompetitionDAO.getCarClassCompetitionsByCompetitionId(competitonId);
+    public List<CarClassCompetition> getCarClassCompetitionsByCompetitionId(int competitionId) {
+        return carClassCompetitionDAO.getCarClassCompetitionsByCompetitionId(competitionId);
     }
 
     @Override

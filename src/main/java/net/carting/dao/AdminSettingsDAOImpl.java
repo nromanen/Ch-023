@@ -1,14 +1,13 @@
 package net.carting.dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 import net.carting.domain.AdminSettings;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 @Repository
 public class AdminSettingsDAOImpl implements AdminSettingsDAO {
@@ -52,6 +51,19 @@ public class AdminSettingsDAOImpl implements AdminSettingsDAO {
         query.setParameter("feedbackEmail", value);
         query.executeUpdate();
         LOG.debug("Changed feedback email to {}", value);
+    }
+
+    @Override
+    public boolean uploadDbDump(String sqlQuery) {
+        boolean result = true;
+        try {
+            Query query = entityManager.createNativeQuery(sqlQuery);
+            query.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 
 }

@@ -271,10 +271,29 @@
 			</td>
 		</tr>
 	</table>
+	<br/><div align="center">
+		<label class="text-info" style="font-size: 20px;">
+			7.&nbsp;<spring:message code="label.db_imp_exp" />:
+		</label>
+	</div><br/>
+	<div style="text-align: center;">
+		<button type="button" class="btn btn-primary btn-sm" id="createDump">
+			<spring:message code="label.db_export" />
+		</button>
+		<button type="button" class="btn btn-warning btn-sm" id="saveAllFiles">
+			<spring:message code="label.db_save_files" />
+		</button>
+		<%--<button type="button" class="btn btn-success btn-sm" id="importDump">--%>
+			<%--<spring:message code="label.db_import" />--%>
+		<%--</button>--%>
+	</div><br/>
+	<div style="display: none" class="progress" id="loading">
+		<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+		</div>
+	</div>
+	<div style="display: none; width:100%;" id="success" class="alert alert-success" role="alert"><spring:message code="label.data_save_success" /></div>
+	<div style="display: none; width:100%;" id="fail" class="alert alert-danger" role="alert"><spring:message code="label.data_save_error" /></div>
 </div>
-
-
-
 
 <!-- Delete car class modal -->
 <div id="carclass_delete_modal" class="modal fade">

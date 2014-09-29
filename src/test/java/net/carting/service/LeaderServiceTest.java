@@ -1,23 +1,10 @@
 package net.carting.service;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import net.carting.dao.LeaderDAO;
 import net.carting.domain.Leader;
 import net.carting.domain.Role;
 import net.carting.domain.User;
-import net.carting.service.LeaderServiceImpl;
-import net.carting.service.MailService;
-import net.carting.service.RoleService;
-import net.carting.service.UserService;
 import net.carting.service.Util.TestDatabaseUtil;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LeaderServiceTest {

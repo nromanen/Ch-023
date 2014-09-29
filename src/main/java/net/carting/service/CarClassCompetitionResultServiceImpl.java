@@ -1,26 +1,15 @@
 package net.carting.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import net.carting.dao.CarClassCompetitionResultDAO;
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.CarClassCompetitionResult;
-import net.carting.domain.Competition;
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-import net.carting.domain.RacerCarClassCompetitionNumber;
+import net.carting.domain.*;
 import net.carting.util.DateUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class CarClassCompetitionResultServiceImpl implements
@@ -44,33 +33,11 @@ public class CarClassCompetitionResultServiceImpl implements
     @Autowired
     private CompetitionService competitionService;
 
-    /**
-     * This method returns all summary results.
-     * <p/>
-     * This method returns all summary results by all competitions
-     *
-     * @return List of car class competition result objects.
-     * @author Volodmyr Slobodian
-     */
-
     @Override
     @Transactional
     public List<CarClassCompetitionResult> getAllCarClassCompetitionResults() {
         return carClassCompetitionResultDAO.getAllCarClassCompetitionResults();
     }
-
-    /**
-     * This method gets the total result by car class competition result id.
-     * <p/>
-     * This method gets the total result by car class competition result id
-     * given as parameter.
-     *
-     * @param carClassCompetitionResultId
-     *            Id of CarClassCompetitionResult by which we want to get the
-     *            object.
-     * @return Object of car class competition result.
-     * @author Volodmyr Slobodian
-     */
 
     @Override
     @Transactional
@@ -79,15 +46,6 @@ public class CarClassCompetitionResultServiceImpl implements
                 .getCarClassCompetitionResultById(id);
     }
 
-    /**
-     * This method adds the total result.
-     * <p/>
-     * This method adds the total result given as a parameter.
-     *
-     * @param carClassCompetitionResult
-     *            Object of CarClassCompetitionResult which we want to add
-     * @author Volodmyr Slobodian
-     */
     @Override
     @Transactional
     public void addCarClassCompetitionResult(
@@ -96,15 +54,6 @@ public class CarClassCompetitionResultServiceImpl implements
                 .addCarClassCompetitionResult(carClassCompetitionResult);
     }
 
-    /**
-     * This method updates the total result.
-     * <p/>
-     * This method updates the total result given as a parameter.
-     *
-     * @param carClassCompetitionResult
-     *            Object of CarClassCompetitionResult which we want to update
-     * @author Volodmyr Slobodian
-     */
     @Override
     @Transactional
     public void updateCarClassCompetitionResult(
@@ -113,15 +62,6 @@ public class CarClassCompetitionResultServiceImpl implements
                 .updateCarClassCompetitionResult(carClassCompetitionResult);
     }
 
-    /**
-     * This method deletes the total result.
-     * <p/>
-     * This method deletes the total result given as a parameter.
-     *
-     * @param carClassCompetitionResult
-     *            Object of CarClassCompetitionResult which we want to delete
-     * @author Volodmyr Slobodian
-     */
     @Override
     @Transactional
     public void deleteCarClassCompetitionResult(
@@ -130,14 +70,6 @@ public class CarClassCompetitionResultServiceImpl implements
                 .deleteCarClassCompetitionResult(carClassCompetitionResult);
     }
 
-    /**
-     * This method gets the total results by specified car class competition.
-     *
-     * @param carClassCompetition
-     *            Car class competition by what we want to get total results
-     * @return Return the list of total results in this car class competition
-     * @author Volodmyr Slobodian
-     */
     @Override
     @Transactional
     public List<CarClassCompetitionResult> getCarClassCompetitionResultsByCarClassCompetition(
@@ -146,25 +78,6 @@ public class CarClassCompetitionResultServiceImpl implements
         return carClassCompetitionResultDAO
                 .getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
     }
-
-    /**
-     * This method calculates and records the total results.
-     * <p/>
-     * This method calculates and records the total results depending on race
-     * number. If the race number equals 1, the object is created and overall
-     * results recorded zero values​​. Then there are recorded the results of
-     * the first race. If the race number equals 2, we get the summary results
-     * by car class competition and add the results from second race. Then we
-     * use (@link #recalculateAbsoluteResults(CarClassCompetition)) method to
-     * recalculate places by summary points.
-     *
-     * @param carClassCompetition
-     *            Car class competition in which we want to calculate summary
-     *            results
-     * @param Race
-     *            Object that defines by what race we want to calculate results
-     * @author Volodmyr Slobodian
-     */
 
     @Override
     @Transactional
@@ -182,7 +95,7 @@ public class CarClassCompetitionResultServiceImpl implements
             for (int i=0;i<cccResList.size();i++) {
                 CarClassCompetitionResult cccRes = cccResList.get(i);
                 cccRes.setRacerCarClassCompetitionNumber(racerCarClassCompetitionNumberList.get(i));
-                List<RaceResult> raceResults = (ArrayList<RaceResult>) raceResultService
+                List<RaceResult> raceResults = raceResultService
                         .getRaceResultsByRace(race);
                 for (RaceResult raceResult : raceResults) {
                     if (raceResult.getCarNumber() == cccRes.getRacerCarClassCompetitionNumber()
@@ -199,8 +112,8 @@ public class CarClassCompetitionResultServiceImpl implements
         }
         // add results of race#2
         if (race.getRaceNumber() == 2) {
-            List<CarClassCompetitionResult> absoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
-            List<RaceResult> raceResults = (List<RaceResult>) raceResultService
+            List<CarClassCompetitionResult> absoluteResultsList = getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
+            List<RaceResult> raceResults = raceResultService
                     .getRaceResultsByRace(race);
 
             for (RaceResult raceResult : raceResults) {
@@ -224,28 +137,13 @@ public class CarClassCompetitionResultServiceImpl implements
         LOG.debug("End of setAbsoluteResults method");
     }
 
-    /**
-     * This method recalculates and updates the total results if one race was
-     * edited.
-     * <p/>
-     * This method recalculates and updates the total results if one race was
-     * edited.
-     *
-     * @param carClassCompetition
-     *            Car class competition in which we want to recalculate summary
-     *            results
-     * @param Race
-     *            Object that defines by what race we want to recalculate
-     *            results
-     * @author Volodmyr Slobodian
-     */
 
     @Override
     @Transactional
     public void recalculateAbsoluteResultsByEditedRace(
             CarClassCompetition carClassCompetition, Race race) {
         LOG.debug("Start of recalculateAbsoluteResultsByEditedRace method, that recalculate absolute results after race results was edited");
-        List<CarClassCompetitionResult> absoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
+        List<CarClassCompetitionResult> absoluteResultsList = getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);
         List<List<RaceResult>> raceResultsList = raceService
                 .getRaceResultsByCarClassCompetition(carClassCompetition);
         for (CarClassCompetitionResult carClassCompetitionResult : absoluteResultsList) {
@@ -284,20 +182,6 @@ public class CarClassCompetitionResultServiceImpl implements
                 .getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
     }
 
-    /**
-     * This method recalculates and updates the total results.
-     * <p/>
-     * This method recalculates and updates the total results. We must call this
-     * method if total points were changed. In this method, we have overrided
-     * Comprator to specify that the equality of the total points on the best
-     * place would be the one who in the second race got more points. After
-     * sorting by decay we recalculate places by points.
-     *
-     * @param carClassCompetition
-     *            Car class competition in which we want to recalculate summary
-     *            results
-     * @author Volodmyr Slobodian
-     */
 
     @Override
     @Transactional
@@ -305,7 +189,7 @@ public class CarClassCompetitionResultServiceImpl implements
             CarClassCompetition carClassCompetition) {
 
         LOG.debug("Start of recalculateAbsoluteResults method that overrides comparator for absolute results.");
-        List<CarClassCompetitionResult> orderedAbsoluteResultsList = (List<CarClassCompetitionResult>) getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
+        List<CarClassCompetitionResult> orderedAbsoluteResultsList = getCarClassCompetitionResultsOrderedByPoints(carClassCompetition);
         Collections.sort(orderedAbsoluteResultsList,
                 new Comparator<CarClassCompetitionResult>() {
                     @Override
@@ -464,7 +348,7 @@ public class CarClassCompetitionResultServiceImpl implements
     @Transactional
     public boolean setQualifyingTimeFromString(
             CarClassCompetitionResult cccRes, String timeString) {
-        int timeInt = 0;
+        int timeInt;
         if (!timeString
                 .matches("((\\d?\\d:)?[0-5]?\\d:)?[0-5]?\\d(\\.\\d{1,3})?")) {
             return false;
@@ -536,12 +420,8 @@ public class CarClassCompetitionResultServiceImpl implements
     @Override
     @Transactional
     public boolean isSetQualifyingByCarClassCompetition(CarClassCompetition ccc) {
-        if(getQualifyingPlacesByCarClassCompetition(ccc)==null||
-                getQualifyingTimesByCarClassCompetition(ccc).isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(getQualifyingPlacesByCarClassCompetition(ccc) == null ||
+                getQualifyingTimesByCarClassCompetition(ccc).isEmpty());
     }
     
     @Override

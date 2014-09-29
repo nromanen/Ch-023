@@ -1,18 +1,16 @@
 package net.carting.dao;
 
-import java.util.List;
+import net.carting.domain.Race;
+import net.carting.domain.RaceResult;
+import net.carting.domain.Racer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import net.carting.domain.Race;
-import net.carting.domain.RaceResult;
-import net.carting.domain.Racer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class RaceResultDAOImpl implements RaceResultDAO {
@@ -82,7 +80,7 @@ public class RaceResultDAOImpl implements RaceResultDAO {
     @SuppressWarnings("unchecked")
     @Override
     public List<RaceResult> getRaceResultsByRace(Race race) {
-        List<RaceResult> list = null;
+        List<RaceResult> list;
         list = entityManager
                 .createQuery("from RaceResult where race= :race order by place ")
                 .setParameter("race", race)

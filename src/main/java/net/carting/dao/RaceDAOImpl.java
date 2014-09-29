@@ -1,17 +1,15 @@
 package net.carting.dao;
 
-import java.util.List;
+import net.carting.domain.CarClassCompetition;
+import net.carting.domain.Race;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import net.carting.domain.CarClassCompetition;
-import net.carting.domain.Race;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class RaceDAOImpl implements RaceDAO {
@@ -82,7 +80,7 @@ public class RaceDAOImpl implements RaceDAO {
     @Override
     public List<Race> getRacesByCarClassCompetition(
             CarClassCompetition carClassCompetition) {
-        List<Race> races = null;
+        List<Race> races;
         Query query = entityManager
                 .createQuery("from Race " +
                         "where carClassCompetition = :carClassCompetition " +

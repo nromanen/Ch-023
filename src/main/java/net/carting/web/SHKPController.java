@@ -1,12 +1,12 @@
 package net.carting.web;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.itextpdf.text.PageSize;
 import net.carting.domain.AdminSettings;
 import net.carting.domain.CarClassCompetition;
 import net.carting.domain.CarClassCompetitionResult;
@@ -18,21 +18,16 @@ import net.carting.service.CarClassCompetitionService;
 import net.carting.service.DocumentService;
 import net.carting.service.ManeuverService;
 import net.carting.service.RacerCarClassCompetitionNumberService;
-import net.carting.util.PdfWriter;
 
+import net.carting.util.PdfWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.itextpdf.text.PageSize;
 /**
     * Carting
     * Created by manson on 8/5/14.
@@ -65,7 +60,7 @@ public class SHKPController {
 
         @RequestMapping(value = "start", method = RequestMethod.POST)
         @ResponseBody
-        public int createStartStatement(Model model, @RequestParam(value = "table") String table,
+        public int createStartStatement(@RequestParam(value = "table") String table,
                                          @RequestParam(value = "raceId") int raceId,
                                          @RequestParam(value = "startId") int startId) {
             int result;
@@ -87,7 +82,7 @@ public class SHKPController {
                 }
                 start.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
                 String fileName = "StartStatement_" + raceId + "_" + "_" + startId
-                        + Calendar.getInstance().getTimeInMillis();
+                        + Calendar.getInstance().getTimeInMillis() + ".pdf";
                 start.setName(fileName);
                 if (startId == 1) {
                     carClassCompetition.setFirstRaceStartStatement(start);
@@ -107,10 +102,10 @@ public class SHKPController {
             }
             return result;
         }
-        
+        // create pdf for personal offset
         @RequestMapping(value = "/personal", method = RequestMethod.POST)
         @ResponseBody
-        public int createPersonalOffsetStatement(Model model, @RequestParam(value = "table") String table,
+        public int createPersonalOffsetStatement(@RequestParam(value = "table") String table,
                                          @RequestParam(value = "carClassCompetitionId") int carClassCompetitionId) {
             int result;
             try {
@@ -121,13 +116,13 @@ public class SHKPController {
                 } else {
                     personalOffset = carClassCompetition.getPersonalOffset();
                 }
-                personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
+                personalOffset.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate())); // create pdf file, created from valid xhtml data
                 String fileName = "PersonalOffset_" + carClassCompetitionId + "_"
-                        + Calendar.getInstance().getTimeInMillis();
+                        + Calendar.getInstance().getTimeInMillis() + ".pdf";
                 personalOffset.setName(fileName);
-                carClassCompetition.setPersonalOffset(personalOffset);
-                carClassCompetitionService.updateCarClassCompetition(carClassCompetition);
-                result = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getPersonalOffset().getId();
+                carClassCompetition.setPersonalOffset(personalOffset); // set personal offset file to rhis car class competition
+                carClassCompetitionService.updateCarClassCompetition(carClassCompetition); // and update car class competition
+                result = carClassCompetitionService.getCarClassCompetitionById(carClassCompetitionId).getPersonalOffset().getId(); 
             } catch (Exception e) {
                 result = 0;
                 LOG.error("Errors in creating PDF for personalOffset", e);
@@ -152,7 +147,7 @@ public class SHKPController {
             }
             maneuver.setFile(PdfWriter.getFileBytes(table, PageSize.A4.rotate()));
             String fileName = "ManeuverStatement_" + raceId + "_"
-                    + Calendar.getInstance().getTimeInMillis();
+                    + Calendar.getInstance().getTimeInMillis() + ".pdf";
             maneuver.setName(fileName);
             carClassCompetition.setManeuverStatement(maneuver);
             List<CarClassCompetitionResult> competitionResults = carClassCompetitionResultService.getCarClassCompetitionResultsByCarClassCompetition(carClassCompetition);

@@ -1,13 +1,12 @@
 package net.carting.service.racer;
 
-import java.util.concurrent.TimeUnit;
-
 import net.carting.service.Util.Locale;
 import net.carting.service.Util.SeleniumUtil;
-import org.junit.*;
-import static org.junit.Assert.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
 public class RegisterRacerFromOtherCommand {
