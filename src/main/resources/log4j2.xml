@@ -11,13 +11,14 @@
             </Filters>
         </Console>
         <!-- FILE appender -->
-        <File name="developer" fileName="../dev_logs/dev_log.log">
+        <RollingFile name="developer" fileName="../dev_logs/dev_log.log" filePattern="../dev_logs/dev_log-%d{MM-dd-yyyy}.log">
             <PatternLayout pattern="%d{ISO8601} %-5p [%l] - %m%n"/>
             <Filters>
                 <ThresholdFilter level="TRACE"/>
                 <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
             </Filters>
-        </File>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
         <!-- DATABASE appender -->
         <JDBC name="database" tableName="logs">
             <ConnectionFactory class="net.carting.util.ConnectionFactory" method="getDatabaseConnection" />
